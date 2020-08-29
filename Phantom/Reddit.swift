@@ -18,14 +18,24 @@ import Foundation
 struct Reddit {
     enum UserResponse { case none, allow, decline }
     
-    static let AUTH_CLIENT_ID = "XTWjw2332iSmmQ"
-    static let AUTH_RESPONSE_TYPE = "code"
-    static let AUTH_REDIRECT_URI = "https://localhost/phantomdev"
-    static let AUTH_DURATION = "permanent"
-    static let AUTH_SCOPE = "identity submit"
+    static let PARAM_CLIENT_ID = "XTWjw2332iSmmQ"
+    static let PARAM_REDIRECT_URI = "https://localhost/phantomdev"
+    static let PARAM_DURATION = "permanent"
+    static let PARAM_SCOPE = "identity submit"
     
-    static let AUTHORIZE_ENDPOINT = "https://www.reddit.com/api/v1/authorize.compact"
-    static let ACCESS_TOKEN_ENDPOINT = "https://www.reddit.com/api/v1/access_token"
+    static let SYMBOL_CLIENT_SECRET = ""
+    static let SYMBOL_CODE = "code"
+    static let SYMBOL_CLIENT_ID = "client_id"
+    static let SYMBOL_RESPONSE_TYPE = "response_type"
+    static let SYMBOL_STATE = "state"
+    static let SYMBOL_REDIRECT_URI = "redirect_uri"
+    static let SYMBOL_DURATION = "duration"
+    static let SYMBOL_SCOPE = "scope"
+    static let SYMBOL_GRANT_TYPE = "grant_type"
+    static let SYMBOL_AUTHORIZATION_CODE = "authorization_code"
+    
+    static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
+    static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
     
     static let RANDOM_STATE_LENGTH = 10
     
@@ -39,45 +49,45 @@ struct Reddit {
          
         authState = randomState
         
-        let params = ["client_id": Reddit.AUTH_CLIENT_ID,
-                      "response_type": Reddit.AUTH_RESPONSE_TYPE,
-                      "state": authState!,
-                      "redirect_uri": Reddit.AUTH_REDIRECT_URI,
-                      "duration": Reddit.AUTH_DURATION,
-                      "scope": Reddit.AUTH_SCOPE]
+        let params = [Reddit.SYMBOL_CLIENT_ID: Reddit.PARAM_CLIENT_ID,
+                      Reddit.SYMBOL_RESPONSE_TYPE: Reddit.SYMBOL_CODE,
+                      Reddit.SYMBOL_STATE: authState!,
+                      Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI,
+                      Reddit.SYMBOL_DURATION: Reddit.PARAM_DURATION,
+                      Reddit.SYMBOL_SCOPE: Reddit.PARAM_SCOPE]
         
-        var urlc = URLComponents(string: Reddit.AUTHORIZE_ENDPOINT)!
+        var urlc = URLComponents(string: Reddit.ENDPOINT_AUTH)!
         urlc.queryItems = params.toUrlQueryItems
         return urlc.url!
     }
     
     mutating func getUserResponse(to url: URL) -> UserResponse {
-        guard url.absoluteString.hasPrefix(Reddit.AUTH_REDIRECT_URI) && authState != nil else { return .none }
+        guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
         let urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         let params = urlc.queryItems!.reduce(into: [String:String]()) { $0[$1.name] = $1.value }
         
-        let state = params["state"]
+        let state = params[Reddit.SYMBOL_STATE]
         guard state != nil && state == authState else { return .none }
         
         authState = nil
-        authCode = params["code"]
+        authCode = params[Reddit.SYMBOL_CODE]
         return authCode == nil ? .decline : .allow
     }
     
     mutating func fetchAuthTokens() {
         assert(authCode != nil)
         
-        let params = ["grant_type": "authorization_code",
-                      "code": authCode!,
-                      "redirect_uri": Reddit.AUTH_REDIRECT_URI]
+        let params = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
+                      Reddit.SYMBOL_CODE: authCode!,
+                      Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
         
-        let username = Reddit.AUTH_CLIENT_ID
-        let password = ""
+        let username = Reddit.PARAM_CLIENT_ID
+        let password = Reddit.SYMBOL_CLIENT_SECRET
         
         let auth = (username: username, password: password)
         
-        Requests.post(to: URL(string: Reddit.ACCESS_TOKEN_ENDPOINT)!, with: params, auth: auth) { (data, response, error) in
+        Requests.post(to: URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!, with: params, auth: auth) { (data, response, error) in
             if let response = response {
                 Util.p("response", response)
             }

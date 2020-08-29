@@ -43,7 +43,7 @@ struct Requests {
         
         if let auth = auth {
             let authString = String(format: "%@:%@", auth.username, auth.password)
-            let authBase64 = authString.data(using: String.Encoding.utf8)!.base64EncodedString()
+            let authBase64 = authString.data(using: .utf8)!.base64EncodedString()
             let authBasic = "Basic \(authBase64)"
             
             request.setValue(authBasic, forHTTPHeaderField: "Authorization")
