@@ -15,6 +15,8 @@
 		71C031BE24FA6B5700D6E19F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */; };
 		71C031C724FA6FF400D6E19F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71C031C624FA6FF400D6E19F /* WebKit.framework */; };
 		71C031C924FA705B00D6E19F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031C824FA705B00D6E19F /* LoginViewController.swift */; };
+		71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CA24FA8B4E00D6E19F /* Reddit.swift */; };
+		71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CC24FA95CB00D6E19F /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		71C031BF24FA6B5700D6E19F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71C031C624FA6FF400D6E19F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		71C031C824FA705B00D6E19F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		71C031CA24FA8B4E00D6E19F /* Reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reddit.swift; sourceTree = "<group>"; };
+		71C031CC24FA95CB00D6E19F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +74,8 @@
 				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
 				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
+				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
+				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
 			);
 			path = Phantom;
 			sourceTree = "<group>";
@@ -153,6 +159,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
+				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
 				71C031C924FA705B00D6E19F /* LoginViewController.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,

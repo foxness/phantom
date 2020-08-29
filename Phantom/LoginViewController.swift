@@ -12,36 +12,64 @@ import WebKit
 class LoginViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var webView: WKWebView!
     
+    var reddit = Reddit()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         webView.navigationDelegate = self
 
-        let url = getAuthUrl()
-        webView.load(URLRequest(url: url))
+        let url = reddit.getAuthUrl()
+        print("!!! URL: \(url)")
+        
+        let rememberLogin = true
+        if rememberLogin {
+            webView.load(URLRequest(url: url))
+        } else {
+            deleteCookies {
+                self.webView.load(URLRequest(url: url))
+            }
+        }
+    }
+    
+    func deleteCookies(completion: @escaping () -> Void) {
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records.filter { $0.displayName.contains("reddit") }, completionHandler: completion )}
     }
             
-    func getAuthUrl() -> URL {
-        // https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
+
+    
+//    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+//        print("didCommit url: \(webView.url?.absoluteString ?? "null")")
+//    }
+//
+//    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+//        print("didFinish url: \(webView.url?.absoluteString ?? "null")")
+//    }
+//
+//    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+//        print("didStartProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
+//    }
+//
+//    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+//        print("didFail url: \(webView.url?.absoluteString ?? "null")")
+//    }
+//
+//    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+//        print("didReceiveServerRedirectForProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
+//    }
+//
+//    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+//        print("didFailProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
+//    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url!
+        let response = reddit.getUserResponse(to: url)
+        if response == .allow {
+            print("AUTH COMPLETE, CODE: \(reddit.authCode!)")
+        }
         
-        let clientId = "XTWjw2332iSmmQ"
-        let isCompact = false
-        let responseType = "code"
-        let state = "asd"
-        let redirectUri = "https://localhost/phantomdev"
-        let duration = "permanent"
-        let scope = "identity submit"
-            
-        var urlc = URLComponents(string: "https://www.reddit.com/api/v1/authorize\(isCompact ? ".compact" : "")")!
-        
-        let params = ["client_id": clientId,
-                      "response_type": responseType,
-                      "state": state,
-                      "redirect_uri": redirectUri,
-                      "duration": duration,
-                      "scope": scope]
-        
-        urlc.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
-        return urlc.url!
+        decisionHandler(.allow)
     }
 }
