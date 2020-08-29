@@ -20,7 +20,6 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()
-        print("!!! URL: \(url)")
         
         let rememberLogin = true
         if rememberLogin {
@@ -67,7 +66,9 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         let url = navigationAction.request.url!
         let response = reddit.getUserResponse(to: url)
         if response == .allow {
-            print("AUTH COMPLETE, CODE: \(reddit.authCode!)")
+            Util.p("auth complete, code", reddit.authCode!)
+            Util.p("fetching tokens")
+            reddit.fetchAuthTokens()
         }
         
         decisionHandler(.allow)
