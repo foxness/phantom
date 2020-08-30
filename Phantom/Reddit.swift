@@ -39,6 +39,16 @@ class Reddit {
     static let SYMBOL_ACCESS_TOKEN = "access_token"
     static let SYMBOL_REFRESH_TOKEN = "refresh_token"
     static let SYMBOL_EXPIRES_IN = "expires_in"
+    static let SYMBOL_API_TYPE = "api_type"
+    static let SYMBOL_JSON = "json"
+    static let SYMBOL_KIND = "kind"
+    static let SYMBOL_SELF = "self"
+    static let SYMBOL_RESUBMIT = "resubmit"
+    static let SYMBOL_SEND_REPLIES = "sendreplies"
+    static let SYMBOL_SUBREDDIT = "sr"
+    static let SYMBOL_TEXT = "text"
+    static let SYMBOL_TITLE = "title"
+    static let SYMBOL_BEARER = "bearer"
     
     static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
     static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
@@ -213,15 +223,15 @@ class Reddit {
         let contentString = post.content
         let titleString = post.title
         
-        let data = ["api_type": "json",
-                    "kind": "self",
-                    "resubmit": resubmitString,
-                    "sendreplies": sendRepliesString,
-                    "sr": subredditString,
-                    "text": contentString,
-                    "title": titleString]
+        let data = [Reddit.SYMBOL_API_TYPE: Reddit.SYMBOL_JSON,
+                    Reddit.SYMBOL_KIND: Reddit.SYMBOL_SELF,
+                    Reddit.SYMBOL_RESUBMIT: resubmitString,
+                    Reddit.SYMBOL_SEND_REPLIES: sendRepliesString,
+                    Reddit.SYMBOL_SUBREDDIT: subredditString,
+                    Reddit.SYMBOL_TEXT: contentString,
+                    Reddit.SYMBOL_TITLE: titleString]
         
-        let username = "bearer"
+        let username = Reddit.SYMBOL_BEARER
         let password = accessToken!
         
         let auth = (username: username, password: password)
@@ -245,8 +255,6 @@ class Reddit {
                 
                 if let data = data {
                     do {
-                        let str = String(data: data, encoding: .utf8)
-                        Util.p("str", str)
                         let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                         Util.p("json", json)
                     } catch {
