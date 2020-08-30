@@ -17,6 +17,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        webView.customUserAgent = Requests.USER_AGENT
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()

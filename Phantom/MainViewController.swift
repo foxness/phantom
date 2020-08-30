@@ -25,7 +25,11 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func submitButtonPressed(_ sender: Any) {
-        Util.p("submitting post...")
-        // todo
+        submitPost()
+    }
+    
+    func submitPost() {
+        let post = Post(title: "testy is besty", content: "content mccontentface", subreddit: "test")
+        reddit.submitPost(post) { }
     }
 }

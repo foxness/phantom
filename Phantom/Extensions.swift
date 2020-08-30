@@ -31,6 +31,9 @@ struct Util {
 
 struct Requests {
     typealias Params = (url: URL, data: [String : String], auth: (username: String, password: String)?)
+    
+    static let USER_AGENT = "ios:me.rivershy.Phantom:v0.0.1 (by /u/DeepSpaceSignal)"
+    
     static let session = URLSession.shared
     
     static func formRequest(with params: Params) -> URLRequest {
@@ -43,19 +46,24 @@ struct Requests {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = Data(query.utf8)
+        request.setValue(Requests.USER_AGENT, forHTTPHeaderField: "User-Agent")
         
         if let auth = auth {
-            let authString = String(format: "%@:%@", auth.username, auth.password)
-            let authBase64 = authString.data(using: .utf8)!.base64EncodedString()
-            let authBasic = "Basic \(authBase64)"
+            let authHeader: String
+            if auth.username == "bearer" {
+                authHeader = "\(auth.username) \(auth.password)"
+            } else {
+                let authString = String(format: "%@:%@", auth.username, auth.password)
+                let authBase64 = authString.data(using: .utf8)!.base64EncodedString()
+                authHeader = "Basic \(authBase64)"
+            }
             
-            request.setValue(authBasic, forHTTPHeaderField: "Authorization")
+            request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }
         
         return request
     }
     
-    // todo: set useragent
     static func post(with params: Params, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         let request = formRequest(with: params)
         session.dataTask(with: request, completionHandler: completionHandler).resume()

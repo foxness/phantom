@@ -42,6 +42,7 @@ class Reddit {
     
     static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
     static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
+    static let ENDPOINT_SUBMIT = "https://oauth.reddit.com/api/submit"
     
     static let RANDOM_STATE_LENGTH = 10
     
@@ -97,8 +98,8 @@ class Reddit {
     
     func getAuthTokenFetchParams() -> Requests.Params {
         let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
-                      Reddit.SYMBOL_CODE: authCode!,
-                      Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
+                    Reddit.SYMBOL_CODE: authCode!,
+                    Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
         
         let (url, auth) = getAccessTokenRequestUrlAuth()
         return (url, data, auth)
@@ -202,6 +203,61 @@ class Reddit {
             }
             
             callback()
+        }
+    }
+    
+    func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
+        let resubmitString = resubmit.description
+        let sendRepliesString = sendReplies.description
+        let subredditString = post.subreddit
+        let contentString = post.content
+        let titleString = post.title
+        
+        let data = ["api_type": "json",
+                    "kind": "self",
+                    "resubmit": resubmitString,
+                    "sendreplies": sendRepliesString,
+                    "sr": subredditString,
+                    "text": contentString,
+                    "title": titleString]
+        
+        let username = "bearer"
+        let password = accessToken!
+        
+        let auth = (username: username, password: password)
+        let url = URL(string: Reddit.ENDPOINT_SUBMIT)!
+        return (url, data, auth)
+    }
+    
+    func submitPost(_ post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping () -> Void) {
+        ensureValidAccessToken {
+            let params = self.getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
+            Requests.post(with: params) { (data, response, error) in
+                if let response = response as? HTTPURLResponse {
+                    if 200..<300 ~= response.statusCode { // HTTP OK
+                        Util.p("post submit: http ok")
+                    } else {
+                        Util.p("post submit: http not ok, status code: \(response.statusCode), response", response)
+                    }
+                } else {
+                    Util.p("post submit: something's fucky")
+                }
+                
+                if let data = data {
+                    do {
+                        let str = String(data: data, encoding: .utf8)
+                        Util.p("str", str)
+                        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                        Util.p("json", json)
+                    } catch {
+                        Util.p("post submit error", error)
+                    }
+                } else if let error = error {
+                    Util.p("post submit error 2", error)
+                }
+                
+                callback()
+            }
         }
     }
 }
