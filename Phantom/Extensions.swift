@@ -30,11 +30,14 @@ struct Util {
 }
 
 struct Requests {
+    typealias Params = (url: URL, data: [String : String], auth: (username: String, password: String)?)
     static let session = URLSession.shared
     
-    static func formRequest(to url: URL, with params: [String:String], auth: (username: String, password: String)?) -> URLRequest {
+    static func formRequest(with params: Params) -> URLRequest {
+        let (url, data, auth) = params
+        
         var urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        urlc.queryItems = params.toUrlQueryItems
+        urlc.queryItems = data.toUrlQueryItems
         let query = urlc.url!.query!
         
         var request = URLRequest(url: url)
@@ -52,8 +55,9 @@ struct Requests {
         return request
     }
     
-    static func post(to url: URL, with params: [String:String], auth: (username: String, password: String)?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        let request = formRequest(to: url, with: params, auth: auth)
+    // todo: set useragent
+    static func post(with params: Params, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let request = formRequest(with: params)
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
 }

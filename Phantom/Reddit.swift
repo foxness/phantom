@@ -82,8 +82,8 @@ class Reddit {
         return authCode == nil ? .decline : .allow
     }
     
-    func getAuthTokenFetchParams() -> (url: URL, params: [String : String], auth: (String, String)) {
-        let params = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
+    func getAuthTokenFetchParams() -> Requests.Params {
+        let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
                       Reddit.SYMBOL_CODE: authCode!,
                       Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
         
@@ -93,22 +93,22 @@ class Reddit {
         let auth = (username: username, password: password)
         let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
         
-        return (url, params, auth)
+        return (url, data, auth)
     }
     
-    func fetchAuthTokens() {
+    func fetchAuthTokens(callback: @escaping () -> Void) {
         assert(authCode != nil)
         
-        let (url, params, auth) = getAuthTokenFetchParams()
-        Requests.post(to: url, with: params, auth: auth) { (data, response, error) in
+        let params = getAuthTokenFetchParams()
+        Requests.post(with: params) { (data, response, error) in
             if let response = response as? HTTPURLResponse {
                 if 200..<300 ~= response.statusCode { // HTTP OK
-                    Util.p("http ok")
+                    Util.p("auth token fetch: http ok")
                 } else {
-                    Util.p("http not ok, status code: \(response.statusCode), response", response)
+                    Util.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
                 }
             } else {
-                Util.p("something's fucky")
+                Util.p("auth token fetch: something's fucky")
             }
             
             if let data = data {
@@ -124,17 +124,81 @@ class Reddit {
                     self.refreshToken = newRefreshToken
                     self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
                     
-                    Util.p("all good")
+                    Util.p("auth token fetch: all good")
                 } catch {
-                    Util.p("error", error)
+                    Util.p("auth token fetch error", error)
                 }
             } else if let error = error {
-                Util.p("error", error)
+                Util.p("auth token fetch error 2", error)
             }
+            
+            callback()
         }
     }
     
     static func convertExpiresIn(_ expiresIn: Int) -> Date {
         Date(timeIntervalSinceNow: TimeInterval(expiresIn))
+    }
+    
+    func ensureValidAccessToken(callback: @escaping () -> Void) {
+        guard accessToken == nil || accessTokenExpirationDate == nil || accessTokenExpirationDate! < Date() else {
+            callback()
+            return
+        }
+        
+        refreshAccessToken(callback: callback)
+    }
+    
+    func getAccessTokenRefreshParams() -> Requests.Params {
+        let data = [Reddit.SYMBOL_GRANT_TYPE: "refresh_token",
+                    "refresh_token": refreshToken!]
+        
+        let username = Reddit.PARAM_CLIENT_ID
+        let password = Reddit.SYMBOL_CLIENT_SECRET
+        
+        let auth = (username: username, password: password)
+        let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
+        
+        return (url, data, auth)
+    }
+    
+    func refreshAccessToken(callback: @escaping () -> Void) {
+        assert(refreshToken != nil)
+        
+        let params = getAccessTokenRefreshParams()
+        Requests.post(with: params) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if 200..<300 ~= response.statusCode { // HTTP OK
+                    Util.p("access token refresh: http ok")
+                } else {
+                    Util.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
+                }
+            } else {
+                Util.p("access token refresh: something's fucky")
+            }
+            
+            if let data = data {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                    Util.p("json", json)
+                    
+                    let newAccessToken = json["access_token"] as! String
+                    let newExpiresIn = json["expires_in"] as! Int
+                    
+                    self.accessToken = newAccessToken
+                    self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
+                    
+                    Util.p("access token refresh: all good")
+                    Util.p("accesstoken", newAccessToken)
+                    Util.p("expiration", self.accessTokenExpirationDate!)
+                } catch {
+                    Util.p("access token refresh error", error)
+                }
+            } else if let error = error {
+                Util.p("access token refresh error 2", error)
+            }
+            
+            callback()
+        }
     }
 }

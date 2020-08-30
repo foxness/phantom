@@ -68,7 +68,9 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         if response == .allow {
             Util.p("auth complete, code", reddit.authCode!)
             Util.p("fetching tokens")
-            reddit.fetchAuthTokens()
+            reddit.fetchAuthTokens() {
+                self.reddit.refreshAccessToken() { }
+            }
         }
         
         decisionHandler(.allow)
