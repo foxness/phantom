@@ -15,7 +15,10 @@ import Foundation
 // - The app can submit posts & get user identity [provide: access token]
 // - The app can refresh the access token [provide: refresh token, get: acesss token]
 
-struct Reddit {
+// why is Reddit a class: because I need a mutable self in a capture list of a closure in fetchAuthTokens()
+// and mutable self in capture lists is impossible with structs
+
+class Reddit {
     enum UserResponse { case none, allow, decline }
     
     static let PARAM_CLIENT_ID = "XTWjw2332iSmmQ"
@@ -42,9 +45,13 @@ struct Reddit {
     var authState: String?
     var authCode: String?
     
+    var accessToken: String?
+    var refreshToken: String?
+    var accessTokenExpirationDate: Date?
+    
     var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
     
-    mutating func getAuthUrl() -> URL {
+    func getAuthUrl() -> URL {
          // https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
          
         authState = randomState
@@ -61,7 +68,7 @@ struct Reddit {
         return urlc.url!
     }
     
-    mutating func getUserResponse(to url: URL) -> UserResponse {
+    func getUserResponse(to url: URL) -> UserResponse {
         guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
         let urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
@@ -75,9 +82,7 @@ struct Reddit {
         return authCode == nil ? .decline : .allow
     }
     
-    mutating func fetchAuthTokens() {
-        assert(authCode != nil)
-        
+    func getAuthTokenFetchParams() -> (url: URL, params: [String : String], auth: (String, String)) {
         let params = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
                       Reddit.SYMBOL_CODE: authCode!,
                       Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
@@ -86,20 +91,50 @@ struct Reddit {
         let password = Reddit.SYMBOL_CLIENT_SECRET
         
         let auth = (username: username, password: password)
+        let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
         
-        Requests.post(to: URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!, with: params, auth: auth) { (data, response, error) in
-            if let response = response {
-                Util.p("response", response)
+        return (url, params, auth)
+    }
+    
+    func fetchAuthTokens() {
+        assert(authCode != nil)
+        
+        let (url, params, auth) = getAuthTokenFetchParams()
+        Requests.post(to: url, with: params, auth: auth) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if 200..<300 ~= response.statusCode { // HTTP OK
+                    Util.p("http ok")
+                } else {
+                    Util.p("http not ok, status code: \(response.statusCode), response", response)
+                }
+            } else {
+                Util.p("something's fucky")
             }
             
             if let data = data {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                     Util.p("json", json)
+                    
+                    let newAccessToken = json["access_token"] as! String
+                    let newRefreshToken = json["refresh_token"] as! String
+                    let newExpiresIn = json["expires_in"] as! Int
+                    
+                    self.accessToken = newAccessToken
+                    self.refreshToken = newRefreshToken
+                    self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
+                    
+                    Util.p("all good")
                 } catch {
                     Util.p("error", error)
                 }
+            } else if let error = error {
+                Util.p("error", error)
             }
         }
+    }
+    
+    static func convertExpiresIn(_ expiresIn: Int) -> Date {
+        Date(timeIntervalSinceNow: TimeInterval(expiresIn))
     }
 }
