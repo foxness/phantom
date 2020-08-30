@@ -64,11 +64,41 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
+                        <segue destination="npb-aq-zMg" kind="show" identifier="loginToMain" id="0dw-PA-tbe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="974" y="116"/>
+        </scene>
+        <!--Main View Controller-->
+        <scene sceneID="U3y-Be-Sg9">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="npb-aq-zMg" customClass="MainViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ICN-dW-pNn">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E2B-B8-LX6">
+                                <rect key="frame" x="165.5" y="433" width="83" height="30"/>
+                                <state key="normal" title="Submit Post"/>
+                                <connections>
+                                    <action selector="submitButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="FHV-xh-f1L"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="E2B-B8-LX6" firstAttribute="centerY" secondItem="ICN-dW-pNn" secondAttribute="centerY" id="1pf-8L-bS1"/>
+                            <constraint firstItem="E2B-B8-LX6" firstAttribute="centerX" secondItem="ICN-dW-pNn" secondAttribute="centerX" id="cQX-Zl-d2n"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="jZk-7C-55N"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Ls-Pd-2zn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1803" y="116"/>
         </scene>
     </scenes>
 </document>

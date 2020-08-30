@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		718181DA24FBE01D00059658 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181D924FBE01D00059658 /* MainViewController.swift */; };
 		71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B124FA6B5600D6E19F /* AppDelegate.swift */; };
 		71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B324FA6B5600D6E19F /* SceneDelegate.swift */; };
 		71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		718181D924FBE01D00059658 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		71C031AE24FA6B5600D6E19F /* Phantom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phantom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71C031B124FA6B5600D6E19F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71C031B324FA6B5600D6E19F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
 				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
+				718181D924FBE01D00059658 /* MainViewController.swift */,
 			);
 			path = Phantom;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				718181DA24FBE01D00059658 /* MainViewController.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
 				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
 				71C031C924FA705B00D6E19F /* LoginViewController.swift in Sources */,

@@ -69,10 +69,17 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
             Util.p("auth complete, code", reddit.authCode!)
             Util.p("fetching tokens")
             reddit.fetchAuthTokens() {
-                self.reddit.refreshAccessToken() { }
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "loginToMain", sender: nil)
+                }
             }
         }
         
         decisionHandler(.allow)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let dest = segue.destination as! MainViewController
+        dest.initialize(with: reddit)
     }
 }
