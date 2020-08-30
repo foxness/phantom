@@ -36,6 +36,9 @@ class Reddit {
     static let SYMBOL_SCOPE = "scope"
     static let SYMBOL_GRANT_TYPE = "grant_type"
     static let SYMBOL_AUTHORIZATION_CODE = "authorization_code"
+    static let SYMBOL_ACCESS_TOKEN = "access_token"
+    static let SYMBOL_REFRESH_TOKEN = "refresh_token"
+    static let SYMBOL_EXPIRES_IN = "expires_in"
     
     static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
     static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
@@ -82,17 +85,22 @@ class Reddit {
         return authCode == nil ? .decline : .allow
     }
     
-    func getAuthTokenFetchParams() -> Requests.Params {
-        let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
-                      Reddit.SYMBOL_CODE: authCode!,
-                      Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
-        
+    func getAccessTokenRequestUrlAuth() -> (url: URL, auth: (username: String, password: String)) {
         let username = Reddit.PARAM_CLIENT_ID
         let password = Reddit.SYMBOL_CLIENT_SECRET
         
         let auth = (username: username, password: password)
         let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
         
+        return (url, auth)
+    }
+    
+    func getAuthTokenFetchParams() -> Requests.Params {
+        let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
+                      Reddit.SYMBOL_CODE: authCode!,
+                      Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
+        
+        let (url, auth) = getAccessTokenRequestUrlAuth()
         return (url, data, auth)
     }
     
@@ -116,9 +124,9 @@ class Reddit {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                     Util.p("json", json)
                     
-                    let newAccessToken = json["access_token"] as! String
-                    let newRefreshToken = json["refresh_token"] as! String
-                    let newExpiresIn = json["expires_in"] as! Int
+                    let newAccessToken = json[Reddit.SYMBOL_ACCESS_TOKEN] as! String
+                    let newRefreshToken = json[Reddit.SYMBOL_REFRESH_TOKEN] as! String
+                    let newExpiresIn = json[Reddit.SYMBOL_EXPIRES_IN] as! Int
                     
                     self.accessToken = newAccessToken
                     self.refreshToken = newRefreshToken
@@ -150,15 +158,10 @@ class Reddit {
     }
     
     func getAccessTokenRefreshParams() -> Requests.Params {
-        let data = [Reddit.SYMBOL_GRANT_TYPE: "refresh_token",
-                    "refresh_token": refreshToken!]
+        let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_REFRESH_TOKEN,
+                    Reddit.SYMBOL_REFRESH_TOKEN: refreshToken!]
         
-        let username = Reddit.PARAM_CLIENT_ID
-        let password = Reddit.SYMBOL_CLIENT_SECRET
-        
-        let auth = (username: username, password: password)
-        let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
-        
+        let (url, auth) = getAccessTokenRequestUrlAuth()
         return (url, data, auth)
     }
     
@@ -182,8 +185,8 @@ class Reddit {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                     Util.p("json", json)
                     
-                    let newAccessToken = json["access_token"] as! String
-                    let newExpiresIn = json["expires_in"] as! Int
+                    let newAccessToken = json[Reddit.SYMBOL_ACCESS_TOKEN] as! String
+                    let newExpiresIn = json[Reddit.SYMBOL_EXPIRES_IN] as! Int
                     
                     self.accessToken = newAccessToken
                     self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
