@@ -11,7 +11,7 @@ import Foundation
 struct Requests {
     typealias Params = (url: URL, data: [String : String], auth: (username: String, password: String)?)
     
-    static let USER_AGENT = "ios:me.rivershy.Phantom:v0.0.1 (by /u/DeepSpaceSignal)"
+    static let USER_AGENT = "iOS:me.rivershy.Phantom:v0.0.1 (by /u/DeepSpaceSignal)"
     
     static let session = URLSession.shared
     

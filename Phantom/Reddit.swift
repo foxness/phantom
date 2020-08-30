@@ -239,10 +239,12 @@ class Reddit {
         return (url, data, auth)
     }
     
-    func submitPost(_ post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping () -> Void) {
+    func submitPost(_ post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping (String?) -> Void) {
         ensureValidAccessToken {
             let params = self.getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
             Requests.post(with: params) { (data, response, error) in
+                var url: String? = nil
+                
                 if let response = response as? HTTPURLResponse {
                     if 200..<300 ~= response.statusCode { // HTTP OK
                         Util.p("post submit: http ok")
@@ -257,6 +259,11 @@ class Reddit {
                     do {
                         let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                         Util.p("json", json)
+                        
+                        let jsonDeeper = json["json"] as! [String: Any]
+                        let deeperData = jsonDeeper["data"] as! [String: Any]
+                        let postUrl = deeperData["url"] as! String
+                        url = postUrl
                     } catch {
                         Util.p("post submit error", error)
                     }
@@ -264,7 +271,7 @@ class Reddit {
                     Util.p("post submit error 2", error)
                 }
                 
-                callback()
+                callback(url)
             }
         }
     }

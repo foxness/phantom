@@ -30,6 +30,9 @@ class MainViewController: UIViewController {
     
     func submitPost() {
         let post = Post(title: "testy is besty", content: "content mccontentface", subreddit: "test")
-        reddit.submitPost(post) { }
+        reddit.submitPost(post) { (url) in
+            let url = url!
+            Util.p("url", url)
+        }
     }
 }

@@ -20,6 +20,14 @@ extension Dictionary where Key == String, Value == String {
 }
 
 struct Util {
+    static func dp(_ string: String, _ obj: Any) {
+        debugPrint("!!! \(string.uppercased()): \(obj)")
+    }
+    
+    static func dp(_ string: String) {
+        debugPrint("!!! \(string.uppercased())")
+    }
+    
     static func p(_ string: String, _ obj: Any) {
         print("!!! \(string.uppercased()): \(obj)")
     }
