@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension Int {
     var randomString: String {
@@ -17,6 +18,21 @@ extension Int {
 
 extension Dictionary where Key == String, Value == String {
     var toUrlQueryItems: [URLQueryItem] { map { URLQueryItem(name: $0.key, value: $0.value) } }
+}
+
+extension UIViewController {
+    func showToast(_ message: String, seconds: Double = 2) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        alert.view.backgroundColor = UIColor.black
+        alert.view.alpha = 0.6
+        alert.view.layer.cornerRadius = 15
+        
+        present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+        }
+    }
 }
 
 struct Util {

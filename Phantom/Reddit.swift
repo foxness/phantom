@@ -49,6 +49,8 @@ class Reddit {
     static let SYMBOL_TEXT = "text"
     static let SYMBOL_TITLE = "title"
     static let SYMBOL_BEARER = "bearer"
+    static let SYMBOL_DATA = "data"
+    static let SYMBOL_URL = "url"
     
     static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
     static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
@@ -260,9 +262,9 @@ class Reddit {
                         let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                         Util.p("json", json)
                         
-                        let jsonDeeper = json["json"] as! [String: Any]
-                        let deeperData = jsonDeeper["data"] as! [String: Any]
-                        let postUrl = deeperData["url"] as! String
+                        let jsonDeeper = json[Reddit.SYMBOL_JSON] as! [String: Any]
+                        let deeperData = jsonDeeper[Reddit.SYMBOL_DATA] as! [String: Any]
+                        let postUrl = deeperData[Reddit.SYMBOL_URL] as! String
                         url = postUrl
                     } catch {
                         Util.p("post submit error", error)

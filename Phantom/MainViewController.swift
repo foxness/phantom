@@ -9,6 +9,10 @@
 import UIKit
 
 class MainViewController: UIViewController {
+    @IBOutlet weak var titleField: UITextField!
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var subredditField: UITextField!
+    
     var reddit: Reddit!
 
     override func viewDidLoad() {
@@ -29,9 +33,15 @@ class MainViewController: UIViewController {
     }
     
     func submitPost() {
-        let post = Post(title: "testy is besty", content: "content mccontentface", subreddit: "test")
+        let title = titleField.text!
+        let content = textField.text!
+        let subreddit = subredditField.text!
+        
+        let post = Post(title: title, content: content, subreddit: subreddit)
         reddit.submitPost(post) { (url) in
             let url = url!
+            
+            DispatchQueue.main.async { self.showToast(url) }
             Util.p("url", url)
         }
     }
