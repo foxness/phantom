@@ -13,14 +13,10 @@ class MainViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     
+    var database: Database = .instance
+    
     var reddit: Reddit!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        //
-    }
-    
     func initialize(with reddit: Reddit) {
         self.reddit = reddit
         Util.p("i was initialized with reddit")
@@ -28,11 +24,15 @@ class MainViewController: UIViewController {
         // todo: remove the previous view controllers from the navigation stack
     }
     
-    @IBAction func submitButtonPressed(_ sender: Any) {
-        submitPost()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        titleField.text = database.postTitle
+        textField.text = database.postText
+        subredditField.text = database.postSubreddit
     }
     
-    func submitPost() {
+    @IBAction func submitPostButtonPressed(_ sender: Any) {
         let title = titleField.text!
         let content = textField.text!
         let subreddit = subredditField.text!
@@ -44,5 +44,17 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async { self.showToast(url) }
             Util.p("url", url)
         }
+    }
+    
+    @IBAction func titleEditingEnded(_ sender: Any) {
+        database.postTitle = titleField.text!
+    }
+    
+    @IBAction func textEditingEnded(_ sender: Any) {
+        database.postText = textField.text!
+    }
+    
+    @IBAction func subredditEditingEnded(_ sender: Any) {
+        database.postSubreddit = subredditField.text!
     }
 }

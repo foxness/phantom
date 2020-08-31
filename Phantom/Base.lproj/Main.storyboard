@@ -89,16 +89,25 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="titleEditingEnded:" destination="npb-aq-zMg" eventType="editingDidEnd" id="mTi-JJ-M7u"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="contenty mccontentface" borderStyle="roundedRect" placeholder="Text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
                                                 <rect key="frame" x="0.0" y="52" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="textEditingEnded:" destination="npb-aq-zMg" eventType="editingDidEnd" id="fEk-lA-T90"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="test" borderStyle="roundedRect" placeholder="Subreddit" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
                                                 <rect key="frame" x="0.0" y="104" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="subredditEditingEnded:" destination="npb-aq-zMg" eventType="editingDidEnd" id="wVg-iB-JwY"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                     </stackView>
@@ -106,7 +115,7 @@
                                         <rect key="frame" x="95.5" y="158" width="83" height="30"/>
                                         <state key="normal" title="Submit Post"/>
                                         <connections>
-                                            <action selector="submitButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="FHV-xh-f1L"/>
+                                            <action selector="submitPostButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="FHV-xh-f1L"/>
                                         </connections>
                                     </button>
                                 </subviews>
