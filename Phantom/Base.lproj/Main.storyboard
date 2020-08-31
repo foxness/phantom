@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="npb-aq-zMg">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -10,7 +10,7 @@
         <!--Introduction View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="IntroductionViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="IntroductionViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -30,6 +30,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="zFP-WB-yXr"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -64,10 +65,11 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
-                        <segue destination="npb-aq-zMg" kind="show" identifier="loginToMain" id="0dw-PA-tbe"/>
+                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="loginToMain" unwindAction="unwindToMainWithUnwindSegue:" id="Mfu-d5-iqT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="rbg-DY-9xX" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="974" y="116"/>
         </scene>
@@ -139,11 +141,12 @@
                         <outlet property="subredditField" destination="WKp-cX-yYf" id="RUi-dQ-9aj"/>
                         <outlet property="textField" destination="DXl-Eb-uh3" id="4R3-ej-e5E"/>
                         <outlet property="titleField" destination="L7F-hX-VAI" id="DiR-fT-Qde"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="mainToIntroduction" animates="NO" id="WyV-mF-vfA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ls-Pd-2zn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1803" y="116"/>
+            <point key="canvasLocation" x="-719" y="116"/>
         </scene>
     </scenes>
 </document>

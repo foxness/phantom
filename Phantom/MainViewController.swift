@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     
+    var initialized = false
     var database: Database = .instance
     
     var reddit: Reddit!
@@ -22,6 +23,8 @@ class MainViewController: UIViewController {
         Util.p("i was initialized with reddit")
         
         // todo: remove the previous view controllers from the navigation stack
+        
+        initialized = true
     }
     
     override func viewDidLoad() {
@@ -30,6 +33,15 @@ class MainViewController: UIViewController {
         titleField.text = database.postTitle
         textField.text = database.postText
         subredditField.text = database.postSubreddit
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if !initialized {
+            performSegue(withIdentifier: "mainToIntroduction", sender: nil)
+            Util.p("segue from main to introduction")
+        }
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {
@@ -56,5 +68,9 @@ class MainViewController: UIViewController {
     
     @IBAction func subredditEditingEnded(_ sender: Any) {
         database.postSubreddit = subredditField.text!
+    }
+    
+    @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {
+        Util.p("unwind to main")
     }
 }
