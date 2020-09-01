@@ -132,14 +132,11 @@ class Reddit {
         
         let params = getAuthTokenFetchParams()
         Requests.post(with: params) { (data, response, error) in
-            if let response = response as? HTTPURLResponse {
-                if 200..<300 ~= response.statusCode { // HTTP OK
-                    Log.p("auth token fetch: http ok")
-                } else {
-                    Log.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
-                }
+            let response = response as! HTTPURLResponse
+            if Requests.isResponseOk(response) {
+                Log.p("auth token fetch: http ok")
             } else {
-                Log.p("auth token fetch: something's fucky")
+                Log.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
             }
             
             if let data = data {
@@ -193,14 +190,11 @@ class Reddit {
         
         let params = getAccessTokenRefreshParams()
         Requests.post(with: params) { (data, response, error) in
-            if let response = response as? HTTPURLResponse {
-                if 200..<300 ~= response.statusCode { // HTTP OK
-                    Log.p("access token refresh: http ok")
-                } else {
-                    Log.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
-                }
+            let response = response as! HTTPURLResponse
+            if Requests.isResponseOk(response) {
+                Log.p("access token refresh: http ok")
             } else {
-                Log.p("access token refresh: something's fucky")
+                Log.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
             }
             
             if let data = data {
@@ -256,15 +250,12 @@ class Reddit {
             let params = self.getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
             Requests.post(with: params) { (data, response, error) in
                 var url: String? = nil
+                let response = response as! HTTPURLResponse
                 
-                if let response = response as? HTTPURLResponse {
-                    if 200..<300 ~= response.statusCode { // HTTP OK
-                        Log.p("post submit: http ok")
-                    } else {
-                        Log.p("post submit: http not ok, status code: \(response.statusCode), response", response)
-                    }
+                if Requests.isResponseOk(response) {
+                    Log.p("post submit: http ok")
                 } else {
-                    Log.p("post submit: something's fucky")
+                    Log.p("post submit: http not ok, status code: \(response.statusCode), response", response)
                 }
                 
                 if let data = data {
