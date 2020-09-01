@@ -17,7 +17,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.customUserAgent = Requests.USER_AGENT
+        webView.customUserAgent = Requests.getUserAgent()
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()
@@ -36,39 +36,12 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         let dataStore = WKWebsiteDataStore.default()
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records.filter { $0.displayName.contains("reddit") }, completionHandler: completion )}
     }
-            
-
-    
-//    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-//        print("didCommit url: \(webView.url?.absoluteString ?? "null")")
-//    }
-//
-//    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-//        print("didFinish url: \(webView.url?.absoluteString ?? "null")")
-//    }
-//
-//    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-//        print("didStartProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
-//    }
-//
-//    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-//        print("didFail url: \(webView.url?.absoluteString ?? "null")")
-//    }
-//
-//    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-//        print("didReceiveServerRedirectForProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
-//    }
-//
-//    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-//        print("didFailProvisionalNavigation url: \(webView.url?.absoluteString ?? "null")")
-//    }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = reddit.getUserResponse(to: url)
         if response == .allow {
-            Util.p("auth complete, code", reddit.authCode!)
-            Util.p("fetching tokens")
+            Log.p("fetching tokens")
             reddit.fetchAuthTokens() {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "loginToMain", sender: nil)

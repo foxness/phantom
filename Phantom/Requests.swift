@@ -11,9 +11,16 @@ import Foundation
 struct Requests {
     typealias Params = (url: URL, data: [String : String], auth: (username: String, password: String)?)
     
-    static let USER_AGENT = "iOS:me.rivershy.Phantom:v0.0.1 (by /u/DeepSpaceSignal)"
+    private static let session = URLSession.shared
     
-    static let session = URLSession.shared
+    static func getUserAgent() -> String {
+        let identifier = Bundle.main.bundleIdentifier!
+        let version = Bundle.main.releaseVersionNumber
+        
+        let userAgent = "iOS:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
+        Log.p("useragent", userAgent)
+        return userAgent
+    }
     
     static func formRequest(with params: Params) -> URLRequest {
         let (url, data, auth) = params
@@ -25,7 +32,9 @@ struct Requests {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = Data(query.utf8)
-        request.setValue(Requests.USER_AGENT, forHTTPHeaderField: "User-Agent")
+        
+        let userAgent = getUserAgent()
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         if let auth = auth {
             let authHeader: String

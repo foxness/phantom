@@ -35,7 +35,17 @@ extension UIViewController {
     }
 }
 
-struct Util {
+extension Bundle {
+    private static let KEY_RELEASE_VERSION_NUMBER = "CFBundleShortVersionString"
+    private static let KEY_BUILD_VERSION_NUMBER = "CFBundleVersion"
+    
+    var releaseVersionNumber: String { getString(Bundle.KEY_RELEASE_VERSION_NUMBER) }
+    var buildVersionNumber: String { getString(Bundle.KEY_BUILD_VERSION_NUMBER) }
+    
+    private func getString(_ key: String) -> String { infoDictionary?[key] as! String }
+}
+
+struct Log {
     static func dp(_ string: String, _ obj: Any) {
         debugPrint("!!! \(string.uppercased()): \(obj)")
     }

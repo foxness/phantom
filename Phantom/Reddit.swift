@@ -21,51 +21,51 @@ import Foundation
 class Reddit {
     enum UserResponse { case none, allow, decline }
     
-    static let PARAM_CLIENT_ID = "XTWjw2332iSmmQ"
-    static let PARAM_REDIRECT_URI = "https://localhost/phantomdev"
-    static let PARAM_DURATION = "permanent"
-    static let PARAM_SCOPE = "identity submit"
+    private static let PARAM_CLIENT_ID = "XTWjw2332iSmmQ"
+    private static let PARAM_REDIRECT_URI = "https://localhost/phantomdev"
+    private static let PARAM_DURATION = "permanent"
+    private static let PARAM_SCOPE = "identity submit"
     
-    static let SYMBOL_CLIENT_SECRET = ""
-    static let SYMBOL_CODE = "code"
-    static let SYMBOL_CLIENT_ID = "client_id"
-    static let SYMBOL_RESPONSE_TYPE = "response_type"
-    static let SYMBOL_STATE = "state"
-    static let SYMBOL_REDIRECT_URI = "redirect_uri"
-    static let SYMBOL_DURATION = "duration"
-    static let SYMBOL_SCOPE = "scope"
-    static let SYMBOL_GRANT_TYPE = "grant_type"
-    static let SYMBOL_AUTHORIZATION_CODE = "authorization_code"
-    static let SYMBOL_ACCESS_TOKEN = "access_token"
-    static let SYMBOL_REFRESH_TOKEN = "refresh_token"
-    static let SYMBOL_EXPIRES_IN = "expires_in"
-    static let SYMBOL_API_TYPE = "api_type"
-    static let SYMBOL_JSON = "json"
-    static let SYMBOL_KIND = "kind"
-    static let SYMBOL_SELF = "self"
-    static let SYMBOL_RESUBMIT = "resubmit"
-    static let SYMBOL_SEND_REPLIES = "sendreplies"
-    static let SYMBOL_SUBREDDIT = "sr"
-    static let SYMBOL_TEXT = "text"
-    static let SYMBOL_TITLE = "title"
-    static let SYMBOL_BEARER = "bearer"
-    static let SYMBOL_DATA = "data"
-    static let SYMBOL_URL = "url"
+    private static let SYMBOL_CLIENT_SECRET = ""
+    private static let SYMBOL_CODE = "code"
+    private static let SYMBOL_CLIENT_ID = "client_id"
+    private static let SYMBOL_RESPONSE_TYPE = "response_type"
+    private static let SYMBOL_STATE = "state"
+    private static let SYMBOL_REDIRECT_URI = "redirect_uri"
+    private static let SYMBOL_DURATION = "duration"
+    private static let SYMBOL_SCOPE = "scope"
+    private static let SYMBOL_GRANT_TYPE = "grant_type"
+    private static let SYMBOL_AUTHORIZATION_CODE = "authorization_code"
+    private static let SYMBOL_ACCESS_TOKEN = "access_token"
+    private static let SYMBOL_REFRESH_TOKEN = "refresh_token"
+    private static let SYMBOL_EXPIRES_IN = "expires_in"
+    private static let SYMBOL_API_TYPE = "api_type"
+    private static let SYMBOL_JSON = "json"
+    private static let SYMBOL_KIND = "kind"
+    private static let SYMBOL_SELF = "self"
+    private static let SYMBOL_RESUBMIT = "resubmit"
+    private static let SYMBOL_SEND_REPLIES = "sendreplies"
+    private static let SYMBOL_SUBREDDIT = "sr"
+    private static let SYMBOL_TEXT = "text"
+    private static let SYMBOL_TITLE = "title"
+    private static let SYMBOL_BEARER = "bearer"
+    private static let SYMBOL_DATA = "data"
+    private static let SYMBOL_URL = "url"
     
-    static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
-    static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
-    static let ENDPOINT_SUBMIT = "https://oauth.reddit.com/api/submit"
+    private static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
+    private static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
+    private static let ENDPOINT_SUBMIT = "https://oauth.reddit.com/api/submit"
     
-    static let RANDOM_STATE_LENGTH = 10
+    private static let RANDOM_STATE_LENGTH = 10
     
-    var authState: String?
-    var authCode: String?
+    private var authState: String?
+    private var authCode: String?
     
-    var accessToken: String?
-    var refreshToken: String?
-    var accessTokenExpirationDate: Date?
+    private var accessToken: String?
+    private var refreshToken: String?
+    private var accessTokenExpirationDate: Date?
     
-    var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
+    private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
     
     func getAuthUrl() -> URL {
          // https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
@@ -98,7 +98,7 @@ class Reddit {
         return authCode == nil ? .decline : .allow
     }
     
-    func getAccessTokenRequestUrlAuth() -> (url: URL, auth: (username: String, password: String)) {
+    private func getAccessTokenRequestUrlAuth() -> (url: URL, auth: (username: String, password: String)) {
         let username = Reddit.PARAM_CLIENT_ID
         let password = Reddit.SYMBOL_CLIENT_SECRET
         
@@ -108,7 +108,7 @@ class Reddit {
         return (url, auth)
     }
     
-    func getAuthTokenFetchParams() -> Requests.Params {
+    private func getAuthTokenFetchParams() -> Requests.Params {
         let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_AUTHORIZATION_CODE,
                     Reddit.SYMBOL_CODE: authCode!,
                     Reddit.SYMBOL_REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
@@ -124,18 +124,18 @@ class Reddit {
         Requests.post(with: params) { (data, response, error) in
             if let response = response as? HTTPURLResponse {
                 if 200..<300 ~= response.statusCode { // HTTP OK
-                    Util.p("auth token fetch: http ok")
+                    Log.p("auth token fetch: http ok")
                 } else {
-                    Util.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
+                    Log.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
                 }
             } else {
-                Util.p("auth token fetch: something's fucky")
+                Log.p("auth token fetch: something's fucky")
             }
             
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    Util.p("json", json)
+                    Log.p("json", json)
                     
                     let newAccessToken = json[Reddit.SYMBOL_ACCESS_TOKEN] as! String
                     let newRefreshToken = json[Reddit.SYMBOL_REFRESH_TOKEN] as! String
@@ -145,23 +145,23 @@ class Reddit {
                     self.refreshToken = newRefreshToken
                     self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
                     
-                    Util.p("auth token fetch: all good")
+                    Log.p("auth token fetch: all good")
                 } catch {
-                    Util.p("auth token fetch error", error)
+                    Log.p("auth token fetch error", error)
                 }
             } else if let error = error {
-                Util.p("auth token fetch error 2", error)
+                Log.p("auth token fetch error 2", error)
             }
             
             callback()
         }
     }
     
-    static func convertExpiresIn(_ expiresIn: Int) -> Date {
+    private static func convertExpiresIn(_ expiresIn: Int) -> Date {
         Date(timeIntervalSinceNow: TimeInterval(expiresIn))
     }
     
-    func ensureValidAccessToken(callback: @escaping () -> Void) {
+    private func ensureValidAccessToken(callback: @escaping () -> Void) {
         guard accessToken == nil || accessTokenExpirationDate == nil || accessTokenExpirationDate! < Date() else {
             callback()
             return
@@ -170,7 +170,7 @@ class Reddit {
         refreshAccessToken(callback: callback)
     }
     
-    func getAccessTokenRefreshParams() -> Requests.Params {
+    private func getAccessTokenRefreshParams() -> Requests.Params {
         let data = [Reddit.SYMBOL_GRANT_TYPE: Reddit.SYMBOL_REFRESH_TOKEN,
                     Reddit.SYMBOL_REFRESH_TOKEN: refreshToken!]
         
@@ -178,25 +178,25 @@ class Reddit {
         return (url, data, auth)
     }
     
-    func refreshAccessToken(callback: @escaping () -> Void) {
+    private func refreshAccessToken(callback: @escaping () -> Void) {
         assert(refreshToken != nil)
         
         let params = getAccessTokenRefreshParams()
         Requests.post(with: params) { (data, response, error) in
             if let response = response as? HTTPURLResponse {
                 if 200..<300 ~= response.statusCode { // HTTP OK
-                    Util.p("access token refresh: http ok")
+                    Log.p("access token refresh: http ok")
                 } else {
-                    Util.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
+                    Log.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
                 }
             } else {
-                Util.p("access token refresh: something's fucky")
+                Log.p("access token refresh: something's fucky")
             }
             
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    Util.p("json", json)
+                    Log.p("json", json)
                     
                     let newAccessToken = json[Reddit.SYMBOL_ACCESS_TOKEN] as! String
                     let newExpiresIn = json[Reddit.SYMBOL_EXPIRES_IN] as! Int
@@ -204,21 +204,21 @@ class Reddit {
                     self.accessToken = newAccessToken
                     self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
                     
-                    Util.p("access token refresh: all good")
-                    Util.p("accesstoken", newAccessToken)
-                    Util.p("expiration", self.accessTokenExpirationDate!)
+                    Log.p("access token refresh: all good")
+                    Log.p("accesstoken", newAccessToken)
+                    Log.p("expiration", self.accessTokenExpirationDate!)
                 } catch {
-                    Util.p("access token refresh error", error)
+                    Log.p("access token refresh error", error)
                 }
             } else if let error = error {
-                Util.p("access token refresh error 2", error)
+                Log.p("access token refresh error 2", error)
             }
             
             callback()
         }
     }
     
-    func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
+    private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
         let subredditString = post.subreddit
@@ -241,7 +241,7 @@ class Reddit {
         return (url, data, auth)
     }
     
-    func submitPost(_ post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping (String?) -> Void) {
+    func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping (String?) -> Void) {
         ensureValidAccessToken {
             let params = self.getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
             Requests.post(with: params) { (data, response, error) in
@@ -249,28 +249,28 @@ class Reddit {
                 
                 if let response = response as? HTTPURLResponse {
                     if 200..<300 ~= response.statusCode { // HTTP OK
-                        Util.p("post submit: http ok")
+                        Log.p("post submit: http ok")
                     } else {
-                        Util.p("post submit: http not ok, status code: \(response.statusCode), response", response)
+                        Log.p("post submit: http not ok, status code: \(response.statusCode), response", response)
                     }
                 } else {
-                    Util.p("post submit: something's fucky")
+                    Log.p("post submit: something's fucky")
                 }
                 
                 if let data = data {
                     do {
                         let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                        Util.p("json", json)
+                        Log.p("json", json)
                         
                         let jsonDeeper = json[Reddit.SYMBOL_JSON] as! [String: Any]
                         let deeperData = jsonDeeper[Reddit.SYMBOL_DATA] as! [String: Any]
                         let postUrl = deeperData[Reddit.SYMBOL_URL] as! String
                         url = postUrl
                     } catch {
-                        Util.p("post submit error", error)
+                        Log.p("post submit error", error)
                     }
                 } else if let error = error {
-                    Util.p("post submit error 2", error)
+                    Log.p("post submit error 2", error)
                 }
                 
                 callback(url)

@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
 
     func initialize(with reddit: Reddit) {
         self.reddit = reddit
-        Util.p("i was initialized with reddit")
+        Log.p("i was initialized with reddit")
         
         // todo: remove the previous view controllers from the navigation stack
         
@@ -29,6 +29,12 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // next todo: determine if reddit is logged in and if so initialize reddit here
+        
+        Log.p("BuildVersionNumber", Bundle.main.buildVersionNumber)
+        Log.p("Release", Bundle.main.releaseVersionNumber)
+        Log.p("identifier", Bundle.main.bundleIdentifier!)
         
         titleField.text = database.postTitle
         textField.text = database.postText
@@ -40,7 +46,7 @@ class MainViewController: UIViewController {
         
         if !initialized {
             performSegue(withIdentifier: "mainToIntroduction", sender: nil)
-            Util.p("segue from main to introduction")
+            Log.p("segue from main to introduction")
         }
     }
     
@@ -50,11 +56,11 @@ class MainViewController: UIViewController {
         let subreddit = subredditField.text!
         
         let post = Post(title: title, content: content, subreddit: subreddit)
-        reddit.submitPost(post) { (url) in
+        reddit.submit(post: post) { (url) in
             let url = url!
             
             DispatchQueue.main.async { self.showToast(url) }
-            Util.p("url", url)
+            Log.p("url", url)
         }
     }
     
@@ -71,6 +77,6 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {
-        Util.p("unwind to main")
+        Log.p("unwind to main")
     }
 }
