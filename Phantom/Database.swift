@@ -12,6 +12,9 @@ struct Database {
     private static let KEY_POST_TITLE = "post_title"
     private static let KEY_POST_TEXT = "post_text"
     private static let KEY_POST_SUBREDDIT = "post_subreddit"
+    private static let KEY_REDDIT_REFRESH_TOKEN = "reddit_refresh_token"
+    private static let KEY_REDDIT_ACCESS_TOKEN = "reddit_access_token"
+    private static let KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE = "reddit_access_token_expiration_date"
     
     private static let DEFAULT_POST_TITLE = "testy is besty"
     private static let DEFAULT_POST_TEXT = "contenty mccontentface"
@@ -23,6 +26,16 @@ struct Database {
     @UserDefaultsBacked(key: Database.KEY_POST_TEXT, defaultValue: Database.DEFAULT_POST_TEXT) var postText: String
     @UserDefaultsBacked(key: Database.KEY_POST_SUBREDDIT, defaultValue: Database.DEFAULT_POST_SUBREDDIT) var postSubreddit: String
     
+    @UserDefaultsBacked(key: Database.KEY_REDDIT_REFRESH_TOKEN) var redditRefreshToken: String?
+    @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN) var redditAccessToken: String?
+    
+    @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE) private var redditAccessTokenExpirationDateString: String?
+    
+    var redditAccessTokenExpirationDate: Date? {
+        get { deserializeDate(redditAccessTokenExpirationDateString) }
+        set { redditAccessTokenExpirationDateString = serializeDate(newValue) }
+    }
+    
     private init() {
         // setDefaults()
     }
@@ -31,6 +44,14 @@ struct Database {
         postTitle = Database.DEFAULT_POST_TITLE
         postText = Database.DEFAULT_POST_TEXT
         postSubreddit = Database.DEFAULT_POST_SUBREDDIT
+    }
+    
+    private func serializeDate(_ date: Date?) -> String? {
+        date == nil ? nil : String(date!.timeIntervalSinceReferenceDate)
+    }
+    
+    private func deserializeDate(_ string: String?) -> Date? {
+        string == nil ? nil : Date(timeIntervalSinceReferenceDate: TimeInterval(string!)!)
     }
 }
 

@@ -61,11 +61,21 @@ class Reddit {
     private var authState: String?
     private var authCode: String?
     
-    private var accessToken: String?
-    private var refreshToken: String?
-    private var accessTokenExpirationDate: Date?
+    private(set) var refreshToken: String?
+    private(set) var accessToken: String?
+    private(set) var accessTokenExpirationDate: Date?
     
     private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
+    
+    var isLoggedIn: Bool { refreshToken != nil }
+    
+    init() { }
+    
+    init(refreshToken: String?, accessToken: String?, accessTokenExpirationDate: Date?) {
+        self.refreshToken = refreshToken
+        self.accessToken = accessToken
+        self.accessTokenExpirationDate = accessTokenExpirationDate
+    }
     
     func getAuthUrl() -> URL {
          // https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING

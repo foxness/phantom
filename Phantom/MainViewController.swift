@@ -13,28 +13,47 @@ class MainViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     
-    var initialized = false
+    var redditLoggedIn = false
     var database: Database = .instance
     
-    var reddit: Reddit!
+    var reddit: Reddit?
 
-    func initialize(with reddit: Reddit) {
+    func loginReddit(with reddit: Reddit) {
         self.reddit = reddit
-        Log.p("i was initialized with reddit")
+        Log.p("i logged in reddit")
         
         // todo: remove the previous view controllers from the navigation stack
         
-        initialized = true
+        redditLoggedIn = true
+    }
+    
+    func saveData() {
+        database.postTitle = titleField.text!
+        database.postText = textField.text!
+        database.postSubreddit = subredditField.text!
+        
+        if reddit != nil {
+            database.redditRefreshToken = reddit?.refreshToken
+            database.redditAccessToken = reddit?.accessToken
+            database.redditAccessTokenExpirationDate = reddit?.accessTokenExpirationDate
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // next todo: determine if reddit is logged in and if so initialize reddit here
+        let refreshToken = database.redditRefreshToken
+        let accessToken = database.redditAccessToken
+        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
         
-        Log.p("BuildVersionNumber", Bundle.main.buildVersionNumber)
-        Log.p("Release", Bundle.main.releaseVersionNumber)
-        Log.p("identifier", Bundle.main.bundleIdentifier!)
+        if refreshToken != nil {
+            reddit = Reddit(refreshToken: refreshToken,
+                            accessToken: accessToken,
+                            accessTokenExpirationDate: accessTokenExpirationDate)
+            
+            redditLoggedIn = true
+            Log.p("found logged reddit in database")
+        }
         
         titleField.text = database.postTitle
         textField.text = database.postText
@@ -44,10 +63,15 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if !initialized {
+        if !redditLoggedIn {
             performSegue(withIdentifier: "mainToIntroduction", sender: nil)
             Log.p("segue from main to introduction")
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveData()
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {
@@ -56,24 +80,12 @@ class MainViewController: UIViewController {
         let subreddit = subredditField.text!
         
         let post = Post(title: title, content: content, subreddit: subreddit)
-        reddit.submit(post: post) { (url) in
+        reddit!.submit(post: post) { (url) in
             let url = url!
             
             DispatchQueue.main.async { self.showToast(url) }
             Log.p("url", url)
         }
-    }
-    
-    @IBAction func titleEditingEnded(_ sender: Any) {
-        database.postTitle = titleField.text!
-    }
-    
-    @IBAction func textEditingEnded(_ sender: Any) {
-        database.postText = textField.text!
-    }
-    
-    @IBAction func subredditEditingEnded(_ sender: Any) {
-        database.postSubreddit = subredditField.text!
     }
     
     @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {

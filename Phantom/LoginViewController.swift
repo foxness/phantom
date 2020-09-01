@@ -54,6 +54,6 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let dest = segue.destination as! MainViewController
-        dest.initialize(with: reddit)
+        dest.loginReddit(with: reddit)
     }
 }
