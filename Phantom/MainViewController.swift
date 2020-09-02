@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Schedule
 
 class MainViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
@@ -18,6 +17,7 @@ class MainViewController: UIViewController {
     var database: Database = .instance
     
     var reddit: Reddit?
+    var scheduler = PostScheduler()
 
     func loginReddit(with reddit: Reddit) {
         self.reddit = reddit
@@ -75,19 +75,6 @@ class MainViewController: UIViewController {
         saveData()
     }
     
-    var task: Task?
-    
-    func scheduleTask() {
-        let work = {
-            let notification = Notifications.make(title: "hello there, I'm doing work", body: "asd")
-            Notifications.send(notification)
-        }
-        
-        let plan = Plan.after(10.seconds)
-        task = plan.do(action: work)
-        
-    }
-    
     @IBAction func notificationButtonPressed(_ sender: Any) {
         Notifications.requestPermissions {
             Notifications.send(Notifications.make())
@@ -95,7 +82,7 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func scheduleButtonPressed(_ sender: Any) {
-        scheduleTask()
+        scheduler.scheduleTask()
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {

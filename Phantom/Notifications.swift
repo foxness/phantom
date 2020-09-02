@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 
 struct Notifications {
+    static var center: UNUserNotificationCenter = .current()
+    
     static func runIfNotificationsAllowed(callback: @escaping () -> Void) {
-        let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { settings in
             guard settings.authorizationStatus == .authorized else { return }
             callback()
@@ -35,7 +36,6 @@ struct Notifications {
     
     static func send(_ notification: UNNotificationRequest) {
         runIfNotificationsAllowed {
-            let center = UNUserNotificationCenter.current()
             center.add(notification) { error in
                 if error != nil {
                     Log.p("notif error", error)
@@ -49,7 +49,6 @@ struct Notifications {
     }
     
     static func requestPermissions(callback: @escaping () -> Void) {
-        let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 Log.p("notifications error", error)
