@@ -79,68 +79,18 @@ class MainViewController: UIViewController {
     
     func scheduleTask() {
         let work = {
-            let notification = MainViewController.makeNotification(title: "hello there, I'm doing work", body: "asd")
-            MainViewController.sendNotification(notification)
+            let notification = Notifications.make(title: "hello there, I'm doing work", body: "asd")
+            Notifications.send(notification)
         }
         
         let plan = Plan.after(10.seconds)
         task = plan.do(action: work)
-    }
-    
-    static func runIfNotificationsAllowed(callback: @escaping () -> Void) {
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { settings in
-            guard settings.authorizationStatus == .authorized else { return }
-            callback()
-        }
-    }
-    
-    static func makeNotification(title: String = "Asdy title", body: String = "Asdy body") -> UNNotificationRequest {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        //content.subtitle = "asdy sub"
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
-        
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString,
-                                            content: content, trigger: trigger)
-        
-        return request
-    }
-    
-    static func sendNotification(_ notification: UNNotificationRequest) {
-        MainViewController.runIfNotificationsAllowed {
-            let center = UNUserNotificationCenter.current()
-            center.add(notification) { error in
-                if error != nil {
-                    Log.p("notif error", error)
-                } else {
-                    Log.p("no error")
-                }
-            }
-            
-            Log.p("notif request sent")
-        }
-    }
-    
-    static func askToAllowNotifications(callback: @escaping () -> Void) {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if let error = error {
-                Log.p("notifications error", error)
-            }
-            
-            Log.p("notifications \(granted ? "" : "not ")granted")
-            
-            callback()
-        }
     }
     
     @IBAction func notificationButtonPressed(_ sender: Any) {
-        MainViewController.askToAllowNotifications {
-            MainViewController.sendNotification(MainViewController.makeNotification())
+        Notifications.requestPermissions {
+            Notifications.send(Notifications.make())
         }
     }
     

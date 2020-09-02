@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -16,8 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
+        /*let scheduler = BGTaskScheduler.shared
+        scheduler.register(forTaskWithIdentifier: "redditPostSubmissionTask", using: nil) { task in
+            self.handleRedditPostSubmissionTask(task)
+        }*/
+        
         return true
     }
+    
+    /*func handleRedditPostSubmissionTask(_ task: BGTask) {
+        
+    }*/
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Log.p("got notification", notification)
