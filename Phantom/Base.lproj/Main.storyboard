@@ -45,7 +45,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q4O-dH-oVP">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="580"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -82,7 +82,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="70" y="354" width="274" height="188"/>
+                                <rect key="frame" x="70" y="304" width="274" height="288"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
                                         <rect key="frame" x="0.0" y="0.0" width="274" height="138"/>
@@ -109,6 +109,20 @@
                                         <state key="normal" title="Submit Post"/>
                                         <connections>
                                             <action selector="submitPostButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="FHV-xh-f1L"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yXU-px-Z6l">
+                                        <rect key="frame" x="97.5" y="208" width="79" height="30"/>
+                                        <state key="normal" title="Notification"/>
+                                        <connections>
+                                            <action selector="notificationButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="Eqb-Ps-aqh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Yg-b6-UQO">
+                                        <rect key="frame" x="87" y="258" width="100" height="30"/>
+                                        <state key="normal" title="Schedule Task"/>
+                                        <connections>
+                                            <action selector="scheduleButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="g2I-hQ-b0D"/>
                                         </connections>
                                     </button>
                                 </subviews>

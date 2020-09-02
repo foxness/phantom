@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		718181DA24FBE01D00059658 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181D924FBE01D00059658 /* MainViewController.swift */; };
 		718181DC24FBEDF500059658 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181DB24FBEDF500059658 /* Post.swift */; };
 		718181DE24FBFEE200059658 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181DD24FBFEE200059658 /* Requests.swift */; };
+		71B79BA124FFA7A200CF672F /* Schedule in Frameworks */ = {isa = PBXBuildFile; productRef = 71B79BA024FFA7A200CF672F /* Schedule */; };
 		71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B124FA6B5600D6E19F /* AppDelegate.swift */; };
 		71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B324FA6B5600D6E19F /* SceneDelegate.swift */; };
 		71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */; };
@@ -48,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71C031C724FA6FF400D6E19F /* WebKit.framework in Frameworks */,
+				71B79BA124FFA7A200CF672F /* Schedule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +118,9 @@
 			dependencies = (
 			);
 			name = Phantom;
+			packageProductDependencies = (
+				71B79BA024FFA7A200CF672F /* Schedule */,
+			);
 			productName = Phantom;
 			productReference = 71C031AE24FA6B5600D6E19F /* Phantom.app */;
 			productType = "com.apple.product-type.application";
@@ -144,6 +149,9 @@
 				Base,
 			);
 			mainGroup = 71C031A524FA6B5600D6E19F;
+			packageReferences = (
+				71B79B9F24FFA7A200CF672F /* XCRemoteSwiftPackageReference "Schedule" */,
+			);
 			productRefGroup = 71C031AF24FA6B5600D6E19F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -380,6 +388,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		71B79B9F24FFA7A200CF672F /* XCRemoteSwiftPackageReference "Schedule" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/luoxiu/Schedule.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		71B79BA024FFA7A200CF672F /* Schedule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 71B79B9F24FFA7A200CF672F /* XCRemoteSwiftPackageReference "Schedule" */;
+			productName = Schedule;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 71C031A624FA6B5600D6E19F /* Project object */;
 }

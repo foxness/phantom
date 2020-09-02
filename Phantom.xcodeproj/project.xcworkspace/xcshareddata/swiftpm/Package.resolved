@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Schedule",
+        "repositoryURL": "https://github.com/luoxiu/Schedule.git",
+        "state": {
+          "branch": null,
+          "revision": "1744af9459dc6cbacf1800308154268998a2f5ff",
+          "version": "2.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

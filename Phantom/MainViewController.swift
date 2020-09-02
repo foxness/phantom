@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Schedule
 
 class MainViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
@@ -72,6 +73,83 @@ class MainViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         saveData()
+    }
+    
+    var task: Task?
+    
+    func scheduleTask() {
+        let work = {
+            Log.p("hello there, I'm doing work")
+        }
+        
+        let plan = Plan.after(10.seconds)
+        
+        //TEST3 : working
+        task = plan.do(queue: .global(), action: work)
+        
+    }
+    
+    func runIfNotificationsAllowed(callback: @escaping () -> Void) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            guard settings.authorizationStatus == .authorized else { return }
+            callback()
+        }
+    }
+    
+    func makeNotification() -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = "Asdy title"
+        content.body = "Asdy body"
+        //content.subtitle = "asdy sub"
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString,
+                                            content: content, trigger: trigger)
+        
+        return request
+    }
+    
+    func sendNotification() {
+        runIfNotificationsAllowed {
+            let notif = self.makeNotification()
+            
+            let center = UNUserNotificationCenter.current()
+            center.add(notif) { error in
+                if error != nil {
+                    Log.p("notif error", error)
+                } else {
+                    Log.p("no error")
+                }
+            }
+            
+            Log.p("notif request sent")
+        }
+    }
+    
+    func askToAllowNotifications(callback: @escaping () -> Void) {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                Log.p("notifications error", error)
+            }
+            
+            Log.p("notifications \(granted ? "" : "not ")granted")
+            
+            callback()
+        }
+    }
+    
+    @IBAction func notificationButtonPressed(_ sender: Any) {
+        askToAllowNotifications {
+            self.sendNotification()
+        }
+    }
+    
+    @IBAction func scheduleButtonPressed(_ sender: Any) {
+        scheduleTask()
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {
