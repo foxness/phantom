@@ -16,11 +16,11 @@ class MainViewController: UIViewController {
     var redditLoggedIn = false
     var database: Database = .instance
     
-    var reddit: Reddit?
+    var submitter: PostSubmitter?
     var scheduler = PostScheduler()
 
     func loginReddit(with reddit: Reddit) {
-        self.reddit = reddit
+        self.submitter = PostSubmitter(reddit: reddit)
         Log.p("i logged in reddit")
         
         // todo: remove the previous view controllers from the navigation stack
@@ -33,10 +33,10 @@ class MainViewController: UIViewController {
         database.postText = textField.text!
         database.postSubreddit = subredditField.text!
         
-        if reddit != nil {
-            database.redditRefreshToken = reddit?.refreshToken
-            database.redditAccessToken = reddit?.accessToken
-            database.redditAccessTokenExpirationDate = reddit?.accessTokenExpirationDate
+        if submitter != nil {
+            database.redditRefreshToken = submitter?.reddit.refreshToken
+            database.redditAccessToken = submitter?.reddit.accessToken
+            database.redditAccessTokenExpirationDate = submitter?.reddit.accessTokenExpirationDate
         }
     }
     
@@ -48,9 +48,11 @@ class MainViewController: UIViewController {
         let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
         
         if refreshToken != nil {
-            reddit = Reddit(refreshToken: refreshToken,
+            let reddit = Reddit(refreshToken: refreshToken,
                             accessToken: accessToken,
                             accessTokenExpirationDate: accessTokenExpirationDate)
+            
+            submitter = PostSubmitter(reddit: reddit)
             
             redditLoggedIn = true
             Log.p("found logged reddit in database")
@@ -82,7 +84,7 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func scheduleButtonPressed(_ sender: Any) {
-        scheduler.scheduleTask()
+        //scheduler.scheduleTask()
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {
@@ -91,7 +93,8 @@ class MainViewController: UIViewController {
         let subreddit = subredditField.text!
         
         let post = Post(title: title, content: content, subreddit: subreddit)
-        reddit!.submit(post: post) { (url) in
+        
+        submitter?.submitPost(post) { (url) in
             let url = url!
             
             DispatchQueue.main.async { self.showToast(url) }

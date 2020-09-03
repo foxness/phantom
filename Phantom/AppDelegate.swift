@@ -11,23 +11,17 @@ import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
-        /*let scheduler = BGTaskScheduler.shared
-        scheduler.register(forTaskWithIdentifier: "redditPostSubmissionTask", using: nil) { task in
-            self.handleRedditPostSubmissionTask(task)
-        }*/
+        PostScheduler.registerPostTask()
         
         return true
     }
-    
-    /*func handleRedditPostSubmissionTask(_ task: BGTask) {
-        
-    }*/
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Log.p("got notification", notification)

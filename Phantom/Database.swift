@@ -8,6 +8,9 @@
 
 import Foundation
 
+// todo: refactor reddit symbol into own struct
+// todo: make database a class because its being passed around and is a singleton
+
 struct Database {
     private static let KEY_POST_TITLE = "post_title"
     private static let KEY_POST_TEXT = "post_text"
