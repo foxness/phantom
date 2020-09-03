@@ -39,6 +39,10 @@ class PostScheduler {
         }
     }
     
+    //init(submitter: PostSubmitter) {
+    //    self.submitter = submitter
+    //}
+    
     static func sendNotification() {
         let notification = Notifications.make(title: "hello there, I'm doing work", body: "asd")
         Notifications.send(notification)
@@ -52,15 +56,16 @@ class PostScheduler {
         }
     }
     
-    private static func schedulePostTask() {
+    static func schedulePostTask(earliestBeginDate: Date) {
         let request = BGProcessingTaskRequest(identifier: PostScheduler.TASK_REDDIT_POST_SUBMISSION)
         request.requiresNetworkConnectivity = true
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 10)
+        request.earliestBeginDate = earliestBeginDate
         
         do {
+            // this throws an error when run on simulator
             try BGTaskScheduler.shared.submit(request)
         } catch {
-            print("Could not schedule app refresh: \(error)")
+            Log.p("Could not schedule processing task", error)
         }
     }
     
@@ -73,6 +78,8 @@ class PostScheduler {
             let success = url != nil
             task.setTaskCompleted(success: success)
             Log.p("submitted a post from beyond the grave")
+            
+            PostScheduler.sendNotification()
         }
     }
 }

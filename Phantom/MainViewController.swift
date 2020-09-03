@@ -17,7 +17,6 @@ class MainViewController: UIViewController {
     var database: Database = .instance
     
     var submitter: PostSubmitter?
-    var scheduler = PostScheduler()
 
     func loginReddit(with reddit: Reddit) {
         self.submitter = PostSubmitter(reddit: reddit)
@@ -84,7 +83,8 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func scheduleButtonPressed(_ sender: Any) {
-        //scheduler.scheduleTask()
+        let date = Date(timeIntervalSinceNow: 12)
+        PostScheduler.schedulePostTask(earliestBeginDate: date)
     }
     
     @IBAction func submitPostButtonPressed(_ sender: Any) {
