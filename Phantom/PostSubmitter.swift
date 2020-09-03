@@ -83,4 +83,8 @@ struct PostSubmitter {
         let submission = PostSubmission(reddit: reddit, database: database, callback: callback)
         addToQueue(submission: submission)
     }
+    
+    mutating func cancelEverything() {
+        submitQueue.cancelAllOperations()
+    }
 }

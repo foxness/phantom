@@ -7,26 +7,37 @@
 //
 
 import Foundation
+
+// !!!
 //import Schedule
+// !!!
+
 import BackgroundTasks
 
-struct PostScheduler {
-    static let TASK_REDDIT_POST_SUBMISSION = "redditPostSubmissionTask"
+// struct is impossible because performPostTask() requires mutating self in escaped closure
+
+class PostScheduler {
+    private static let TASK_REDDIT_POST_SUBMISSION = "redditPostSubmissionTask"
     
-//    var task: Task?
+    private var submitter: PostSubmitter
+    private let database: Database = .instance
     
-    /*mutating func scheduleTask() {
-        let work = {
-            PostScheduler.doWork()
-        }
+    init?() {
+        let refreshToken = database.redditRefreshToken
+        let accessToken = database.redditAccessToken
+        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
         
-        let plan = Plan.after(10.seconds)
-        task = plan.do(action: work)
+        if refreshToken == nil {
+            Log.p("didnt find good reddit in database")
+            return nil
+        } else {
+            let reddit = Reddit(refreshToken: refreshToken,
+                            accessToken: accessToken,
+                            accessTokenExpirationDate: accessTokenExpirationDate)
+            
+            submitter = PostSubmitter(reddit: reddit)
+        }
     }
-    
-    static func doWork() {
-        sendNotification()
-    }*/
     
     static func sendNotification() {
         let notification = Notifications.make(title: "hello there, I'm doing work", body: "asd")
@@ -35,11 +46,13 @@ struct PostScheduler {
     
     static func registerPostTask() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: PostScheduler.TASK_REDDIT_POST_SUBMISSION, using: nil) { task in
-            PostScheduler.performPostTask(task as! BGProcessingTask)
+            if let scheduler = PostScheduler() {
+                scheduler.performPostTask(task as! BGProcessingTask)
+            }
         }
     }
     
-    static func schedulePostTask() {
+    private static func schedulePostTask() {
         let request = BGProcessingTaskRequest(identifier: PostScheduler.TASK_REDDIT_POST_SUBMISSION)
         request.requiresNetworkConnectivity = true
         request.earliestBeginDate = Date(timeIntervalSinceNow: 10)
@@ -51,19 +64,15 @@ struct PostScheduler {
         }
     }
     
-    static func performPostTask(_ task: BGProcessingTask) {
-        /*
-        let operation = Operation() // next todo: inherit from operation
-        
+    private func performPostTask(_ task: BGProcessingTask) {
         task.expirationHandler = {
-            operation.cancel()
+            self.submitter.cancelEverything()
         }
         
-        operation.completionBlock = {
-            task.setTaskCompleted(success: !operation.isCancelled)
+        submitter.submitPostInDatabase(database) { url in
+            let success = url != nil
+            task.setTaskCompleted(success: success)
+            Log.p("submitted a post from beyond the grave")
         }
-        
-        operationQueue.addOperation(operation) // next todo: get operation queue from somewhere
-        */
     }
 }

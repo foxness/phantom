@@ -9,6 +9,7 @@
 import Foundation
 
 // todo: make database a class because its being passed around and is a singleton
+// todo^^^: should singletons be structs or classes??!?!?
 
 struct Database {
     private static let KEY_POST_TITLE = "post_title"
