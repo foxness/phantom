@@ -41,6 +41,8 @@ struct Database {
     
     private init() {
         // setDefaults()
+        
+        //redditRefreshToken = nil
     }
     
     mutating func setDefaults() {

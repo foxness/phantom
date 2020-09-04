@@ -9,14 +9,26 @@
 import UIKit
 
 class IntroductionViewController: UIViewController {
+    private let hideNavBar = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        
     }
-
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavbar(start: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setNavbar(start: false)
+    }
+    
+    func setNavbar(start: Bool) {
+        if hideNavBar {
+            navigationController?.navigationBar.isHidden = start
+        }
+    }
 }
 

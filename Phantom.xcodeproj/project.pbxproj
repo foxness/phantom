@@ -10,7 +10,7 @@
 		71614EF124FD195C00FA8B76 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71614EF024FD195C00FA8B76 /* Database.swift */; };
 		71684AD125024D83005BA857 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71684AD025024D83005BA857 /* PostCell.swift */; };
 		7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7179EF392501037000BDA598 /* PostSubmitter.swift */; };
-		718181DA24FBE01D00059658 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181D924FBE01D00059658 /* MainViewController.swift */; };
+		718181DA24FBE01D00059658 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181D924FBE01D00059658 /* PostViewController.swift */; };
 		718181DC24FBEDF500059658 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181DB24FBEDF500059658 /* Post.swift */; };
 		718181DE24FBFEE200059658 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718181DD24FBFEE200059658 /* Requests.swift */; };
 		7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7192A40924FFD76500CB54A8 /* Notifications.swift */; };
@@ -33,7 +33,7 @@
 		71614EF024FD195C00FA8B76 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		71684AD025024D83005BA857 /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		7179EF392501037000BDA598 /* PostSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmitter.swift; sourceTree = "<group>"; };
-		718181D924FBE01D00059658 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		718181D924FBE01D00059658 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		718181DB24FBEDF500059658 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		718181DD24FBFEE200059658 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
 		7192A40924FFD76500CB54A8 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
 				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
-				718181D924FBE01D00059658 /* MainViewController.swift */,
+				718181D924FBE01D00059658 /* PostViewController.swift */,
 				718181DB24FBEDF500059658 /* Post.swift */,
 				718181DD24FBFEE200059658 /* Requests.swift */,
 				71614EF024FD195C00FA8B76 /* Database.swift */,
@@ -195,7 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
-				718181DA24FBE01D00059658 /* MainViewController.swift in Sources */,
+				718181DA24FBE01D00059658 /* PostViewController.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
 				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
 				718181DE24FBFEE200059658 /* Requests.swift in Sources */,
