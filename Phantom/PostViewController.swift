@@ -12,22 +12,18 @@ class PostViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    var post: Post!
+    var post: Post?
     
-    func newPost() {
-        let title = ""
-        let text = ""
-        let subreddit = "test"
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
         
-        post = Post(title: title, content: text, subreddit: subreddit)
-    }
-    
-    func setPost(_ post: Post) {
-        self.post = post
-    }
-    
-    func saveData() {
+        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+            Log.p("this didnt work")
+            return
+        }
+        
         let title = titleField.text!
         let text = textField.text!
         let subreddit = subredditField.text!
@@ -38,14 +34,21 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleField.text = post.title
-        textField.text = post.content
-        subredditField.text = post.subreddit
+        if post == nil {
+            let title = ""
+            let text = ""
+            let subreddit = "test"
+            
+            post = Post(title: title, content: text, subreddit: subreddit)
+        }
+        
+        titleField.text = post!.title
+        textField.text = post!.content
+        subredditField.text = post!.subreddit
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        saveData()
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func notificationButtonPressed(_ sender: Any) {

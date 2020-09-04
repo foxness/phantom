@@ -65,7 +65,7 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
-                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="loginToTable" unwindAction="unwindToTableWithUnwindSegue:" id="VLj-SV-va7"/>
+                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="loginToPostList" unwindAction="unwindToPostListWithUnwindSegue:" id="E6H-4H-Nlk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -73,16 +73,16 @@
             </objects>
             <point key="canvasLocation" x="187" y="1615"/>
         </scene>
-        <!--Post View Controller-->
+        <!--New Post-->
         <scene sceneID="U3y-Be-Sg9">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="npb-aq-zMg" customClass="PostViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="npb-aq-zMg" customClass="PostViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ICN-dW-pNn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="70" y="304" width="274" height="288"/>
+                                <rect key="frame" x="70" y="277" width="274" height="288"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
                                         <rect key="frame" x="0.0" y="0.0" width="274" height="138"/>
@@ -141,16 +141,29 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
                     </view>
-                    <navigationItem key="navigationItem" id="jZk-7C-55N"/>
+                    <navigationItem key="navigationItem" title="New Post" id="jZk-7C-55N">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="fBx-8V-NP3">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="npb-aq-zMg" id="IEY-pF-wmc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7uj-8O-RgY">
+                            <connections>
+                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="detailToPostList" unwindAction="unwindToPostListWithUnwindSegue:" id="IYh-4B-QPD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="saveButton" destination="7uj-8O-RgY" id="pHE-Ac-rHZ"/>
                         <outlet property="subredditField" destination="WKp-cX-yYf" id="RUi-dQ-9aj"/>
                         <outlet property="textField" destination="DXl-Eb-uh3" id="4R3-ej-e5E"/>
                         <outlet property="titleField" destination="L7F-hX-VAI" id="DiR-fT-Qde"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ls-Pd-2zn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="fU7-SM-d0T" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1125" y="116"/>
+            <point key="canvasLocation" x="1981.1594202898552" y="115.84821428571428"/>
         </scene>
         <!--Posts-->
         <scene sceneID="LUZ-Gs-Lty">
@@ -217,12 +230,12 @@
                     <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
                             <connections>
-                                <segue destination="npb-aq-zMg" kind="show" identifier="tableToDetail" id="oSq-yP-0Vy"/>
+                                <segue destination="aXe-y4-pS3" kind="presentation" identifier="postListToDetail" id="dSw-7p-822"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="tableToIntroduction" id="smv-r4-N41"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="postListToIntroduction" animates="NO" id="smv-r4-N41"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -249,6 +262,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mDn-Vt-RP8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-723.1884057971015" y="115.84821428571428"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="iSB-4U-oxl">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aXe-y4-pS3" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="SMa-xF-bkO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5po-mJ-tfx">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="npb-aq-zMg" kind="relationship" relationship="rootViewController" id="qXM-qT-tiC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FfM-Iw-xV5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1071.0144927536232" y="115.84821428571428"/>
         </scene>
     </scenes>
 </document>

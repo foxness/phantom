@@ -56,13 +56,14 @@ class PostTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         
         if !redditLoggedIn {
-            performSegue(withIdentifier: "tableToIntroduction", sender: nil)
+            performSegue(withIdentifier: "postListToIntroduction", sender: nil)
             Log.p("segue from main to introduction")
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        Log.p("view will disappear")
         saveData()
     }
     
@@ -72,19 +73,14 @@ class PostTableViewController: UITableViewController {
             database.redditAccessToken = submitter?.reddit.accessToken
             database.redditAccessTokenExpirationDate = submitter?.reddit.accessTokenExpirationDate
         }
+        
+        database.posts = posts
+        database.save()
+        Log.p("i saved data")
     }
     
     func loadPostsFromDatabase() {
         posts = database.posts
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        
-        if segue.identifier == "tableToDetail" {
-            let pvc = segue.destination as! PostViewController
-            pvc.newPost()
-        }
     }
 
     // MARK: - Table view data source
@@ -101,8 +97,20 @@ class PostTableViewController: UITableViewController {
         return cell
     }
     
-    @IBAction func unwindToTable(unwindSegue: UIStoryboardSegue) {
-        Log.p("unwind to table")
+    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
+        if unwindSegue.identifier == "detailToPostList" {
+            let dest = unwindSegue.source as! PostViewController
+            let post = dest.post
+            
+            if let post = post {
+                let newIndexPath = IndexPath(row: posts.count, section: 0)
+                posts.append(post)
+                tableView.insertRows(at: [newIndexPath], with: .automatic)
+            }
+        }
+        
+        saveData()
+        Log.p("unwind to post list")
     }
     
     /*

@@ -40,8 +40,6 @@ struct Database {
         }
         
         //setDefaults()
-        
-        //redditRefreshToken = nil
     }
     
     mutating func save() {
@@ -49,10 +47,14 @@ struct Database {
     }
     
     mutating func setDefaults() {
+        redditRefreshToken = nil
+        redditAccessToken = nil
+        redditAccessTokenExpirationDateString = nil
+        
         let p1 = Post(title: "Post1", content: "Post1Text", subreddit: "subrediy")
         let p2 = Post(title: "post 2", content: "yolo", subreddit: "lmao")
-        
         posts = [p1, p2]
+        
         save()
     }
     
