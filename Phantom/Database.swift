@@ -12,50 +12,71 @@ import Foundation
 // todo^^^: should singletons be structs or classes??!?!?
 
 struct Database {
-    private static let KEY_POST_TITLE = "post_title"
-    private static let KEY_POST_TEXT = "post_text"
-    private static let KEY_POST_SUBREDDIT = "post_subreddit"
+    private static let KEY_POSTS = "posts"
     private static let KEY_REDDIT_REFRESH_TOKEN = "reddit_refresh_token"
     private static let KEY_REDDIT_ACCESS_TOKEN = "reddit_access_token"
     private static let KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE = "reddit_access_token_expiration_date"
     
-    private static let DEFAULT_POST_TITLE = "testy is besty"
-    private static let DEFAULT_POST_TEXT = "contenty mccontentface"
-    private static let DEFAULT_POST_SUBREDDIT = "test"
-    
     static let instance = Database()
-    
-    @UserDefaultsBacked(key: Database.KEY_POST_TITLE, defaultValue: Database.DEFAULT_POST_TITLE) var postTitle: String
-    @UserDefaultsBacked(key: Database.KEY_POST_TEXT, defaultValue: Database.DEFAULT_POST_TEXT) var postText: String
-    @UserDefaultsBacked(key: Database.KEY_POST_SUBREDDIT, defaultValue: Database.DEFAULT_POST_SUBREDDIT) var postSubreddit: String
     
     @UserDefaultsBacked(key: Database.KEY_REDDIT_REFRESH_TOKEN) var redditRefreshToken: String?
     @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN) var redditAccessToken: String?
     
     @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE) private var redditAccessTokenExpirationDateString: String?
+    @UserDefaultsBacked(key: Database.KEY_POSTS) private var postsString: String?
     
     var redditAccessTokenExpirationDate: Date? {
-        get { deserializeDate(redditAccessTokenExpirationDateString) }
-        set { redditAccessTokenExpirationDateString = serializeDate(newValue) }
+        get { Database.deserializeDate(redditAccessTokenExpirationDateString) }
+        set { redditAccessTokenExpirationDateString = Database.serializeDate(newValue) }
     }
     
+    var posts: [Post]
+    
     private init() {
-        // setDefaults()
+        posts = []
+        
+        if let postsString = postsString {
+            posts = Database.deserializePosts(serialized: postsString)
+        }
+        
+        //setDefaults()
         
         //redditRefreshToken = nil
     }
     
-    mutating func setDefaults() {
-        postTitle = Database.DEFAULT_POST_TITLE
-        postText = Database.DEFAULT_POST_TEXT
-        postSubreddit = Database.DEFAULT_POST_SUBREDDIT
+    mutating func save() {
+        postsString = Database.serializePosts(posts)
     }
     
-    private func serializeDate(_ date: Date?) -> String? {
+    mutating func setDefaults() {
+        let p1 = Post(title: "Post1", content: "Post1Text", subreddit: "subrediy")
+        let p2 = Post(title: "post 2", content: "yolo", subreddit: "lmao")
+        
+        posts = [p1, p2]
+        save()
+    }
+    
+    private static func serializePosts(_ posts: [Post]) -> String {
+        let encoder = JSONEncoder()
+        let data = try! encoder.encode(posts)
+        let serialized = data.base64EncodedString() // String(data: data, encoding: .utf8)!
+
+        return serialized
+    }
+    
+    private static func deserializePosts(serialized: String) -> [Post] {
+        let decoder = JSONDecoder()
+        let data = Data(base64Encoded: serialized)!
+        let posts = try! decoder.decode([Post].self, from: data)
+        
+        return posts
+    }
+    
+    private static func serializeDate(_ date: Date?) -> String? {
         date == nil ? nil : String(date!.timeIntervalSinceReferenceDate)
     }
     
-    private func deserializeDate(_ string: String?) -> Date? {
+    private static func deserializeDate(_ string: String?) -> Date? {
         string == nil ? nil : Date(timeIntervalSinceReferenceDate: TimeInterval(string!)!)
     }
 }

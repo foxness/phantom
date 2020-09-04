@@ -15,6 +15,18 @@ class PostViewController: UIViewController {
     
     var post: Post!
     
+    func newPost() {
+        let title = ""
+        let text = ""
+        let subreddit = "test"
+        
+        post = Post(title: title, content: text, subreddit: subreddit)
+    }
+    
+    func setPost(_ post: Post) {
+        self.post = post
+    }
+    
     func saveData() {
         let title = titleField.text!
         let text = textField.text!

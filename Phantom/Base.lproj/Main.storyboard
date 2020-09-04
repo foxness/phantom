@@ -152,7 +152,7 @@
             </objects>
             <point key="canvasLocation" x="1125" y="116"/>
         </scene>
-        <!--Post Table View Controller-->
+        <!--Posts-->
         <scene sceneID="LUZ-Gs-Lty">
             <objects>
                 <tableViewController modalPresentationStyle="fullScreen" id="1Tx-rk-0aO" customClass="PostTableViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
@@ -177,13 +177,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="15.5" width="288" height="59.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="29"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="39" width="288" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -214,7 +214,13 @@
                             <outlet property="delegate" destination="1Tx-rk-0aO" id="fAe-Ph-PQO"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="WFb-kc-Gr2"/>
+                    <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
+                            <connections>
+                                <segue destination="npb-aq-zMg" kind="show" identifier="tableToDetail" id="oSq-yP-0Vy"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="tableToIntroduction" id="smv-r4-N41"/>
                     </connections>

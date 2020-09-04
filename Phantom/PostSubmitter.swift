@@ -29,12 +29,7 @@ struct PostSubmitter {
         }
         
         private static func getPost(database: Database) -> Post {
-            let title = database.postTitle
-            let text = database.postText
-            let subreddit = database.postSubreddit
-            
-            let post = Post(title: title, content: text, subreddit: subreddit)
-            return post
+            return database.posts.last!
         }
         
         override func main() {

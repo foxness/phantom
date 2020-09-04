@@ -49,7 +49,7 @@ class PostTableViewController: UITableViewController {
             Log.p("found logged reddit in database")
         }
         
-        populateSampleMeals()
+        loadPostsFromDatabase()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -74,11 +74,17 @@ class PostTableViewController: UITableViewController {
         }
     }
     
-    func populateSampleMeals() {
-        let p1 = Post(title: "Post1", content: "Post1Text", subreddit: "subrediy")
-        let p2 = Post(title: "post 2", content: "yolo", subreddit: "lmao")
+    func loadPostsFromDatabase() {
+        posts = database.posts
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
         
-        posts += [p1, p2]
+        if segue.identifier == "tableToDetail" {
+            let pvc = segue.destination as! PostViewController
+            pvc.newPost()
+        }
     }
 
     // MARK: - Table view data source
