@@ -9,23 +9,73 @@
 import UIKit
 
 class PostTableViewController: UITableViewController {
+    var redditLoggedIn = false
+    var database: Database = .instance
+    
+    var submitter: PostSubmitter?
+
+    func loginReddit(with reddit: Reddit) {
+        self.submitter = PostSubmitter(reddit: reddit)
+        Log.p("i logged in reddit")
+        
+        // todo: remove the previous view controllers from the navigation stack
+        
+        redditLoggedIn = true
+    }
+    
     var posts: [Post] = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        let refreshToken = database.redditRefreshToken
+        let accessToken = database.redditAccessToken
+        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
+        
+        if refreshToken != nil {
+            let reddit = Reddit(refreshToken: refreshToken,
+                            accessToken: accessToken,
+                            accessTokenExpirationDate: accessTokenExpirationDate)
+            
+            submitter = PostSubmitter(reddit: reddit)
+            
+            redditLoggedIn = true
+            Log.p("found logged reddit in database")
+        }
+        
         populateSampleMeals()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if !redditLoggedIn {
+            performSegue(withIdentifier: "tableToIntroduction", sender: nil)
+            Log.p("segue from main to introduction")
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveData()
+    }
+    
+    func saveData() {
+        if submitter != nil {
+            database.redditRefreshToken = submitter?.reddit.refreshToken
+            database.redditAccessToken = submitter?.reddit.accessToken
+            database.redditAccessTokenExpirationDate = submitter?.reddit.accessTokenExpirationDate
+        }
     }
     
     func populateSampleMeals() {
         let p1 = Post(title: "Post1", content: "Post1Text", subreddit: "subrediy")
-        
         let p2 = Post(title: "post 2", content: "yolo", subreddit: "lmao")
         
         posts += [p1, p2]
@@ -44,7 +94,11 @@ class PostTableViewController: UITableViewController {
         cell.set(post: post)
         return cell
     }
-
+    
+    @IBAction func unwindToTable(unwindSegue: UIStoryboardSegue) {
+        Log.p("unwind to table")
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

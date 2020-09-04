@@ -44,7 +44,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
             Log.p("fetching tokens")
             reddit.fetchAuthTokens() {
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "loginToMain", sender: nil)
+                    self.performSegue(withIdentifier: "loginToTable", sender: nil)
                 }
             }
         }
@@ -53,7 +53,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dest = segue.destination as! MainViewController
+        let dest = segue.destination as! PostTableViewController
         dest.loginReddit(with: reddit)
     }
 }
