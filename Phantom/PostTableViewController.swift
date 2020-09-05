@@ -9,6 +9,10 @@
 import UIKit
 
 class PostTableViewController: UITableViewController {
+    static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
+    static let SEGUE_ADD_POST = "addPost"
+    static let SEGUE_EDIT_POST = "editPost"
+    
     var redditLoggedIn = false
     var database: Database = .instance
     
@@ -56,8 +60,7 @@ class PostTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         
         if !redditLoggedIn {
-            performSegue(withIdentifier: "postListToIntroduction", sender: nil)
-            Log.p("segue from main to introduction")
+            performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
         }
     }
     
@@ -151,18 +154,21 @@ class PostTableViewController: UITableViewController {
         super.prepare(for: segue, sender: sender)
         
         switch segue.identifier ?? "" {
-        case "addItem":
-            Log.p("adding item")
+        case PostTableViewController.SEGUE_ADD_POST:
+            Log.p("adding post")
             
-        case "showDetail":
+        case PostTableViewController.SEGUE_EDIT_POST:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = posts[indexPath.row]
             dest.post = selectedPost
             
+        case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
+            Log.p("showing introduction")
+            
         default:
-            fatalError("Unexpected segue identifier: \(segue.identifier)")
+            fatalError()
         }
     }
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 class IntroductionViewController: UIViewController {
+    static let SEGUE_SHOW_LOGIN = "showLogin"
+    
     private let hideNavBar = true
 
     override func viewDidLoad() {

@@ -9,6 +9,8 @@
 import UIKit
 
 class PostViewController: UIViewController {
+    static let SEGUE_BACK_POST_TO_LIST = "backSavePost"
+    
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!

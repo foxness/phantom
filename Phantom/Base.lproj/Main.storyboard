@@ -19,7 +19,7 @@
                                 <rect key="frame" x="186" y="433" width="42" height="30"/>
                                 <state key="normal" title="Log In"/>
                                 <connections>
-                                    <segue destination="cuc-xd-yKa" kind="presentation" id="Fmp-8g-UON"/>
+                                    <segue destination="cuc-xd-yKa" kind="presentation" identifier="showLogin" id="Fmp-8g-UON"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -65,7 +65,7 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
-                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="loginToPostList" unwindAction="unwindToPostListWithUnwindSegue:" id="E6H-4H-Nlk"/>
+                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="backLoginToList" unwindAction="unwindToPostListWithUnwindSegue:" id="E6H-4H-Nlk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -149,7 +149,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="7uj-8O-RgY">
                             <connections>
-                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="detailToPostList" unwindAction="unwindToPostListWithUnwindSegue:" id="IYh-4B-QPD"/>
+                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="backSavePost" unwindAction="unwindToPostListWithUnwindSegue:" id="IYh-4B-QPD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -190,13 +190,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="15.5" width="288" height="59.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="29"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="39" width="288" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -219,7 +219,7 @@
                                     <outlet property="postImage" destination="3Pq-EV-aRF" id="YWv-oc-NRD"/>
                                     <outlet property="postText" destination="TVV-O9-k3g" id="827-aD-dmf"/>
                                     <outlet property="postTitle" destination="Ofh-Fe-P2l" id="M3V-7X-Uo8"/>
-                                    <segue destination="npb-aq-zMg" kind="show" identifier="showDetail" id="I6c-Og-Mxs"/>
+                                    <segue destination="npb-aq-zMg" kind="show" identifier="editPost" id="I6c-Og-Mxs"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -231,12 +231,12 @@
                     <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
                             <connections>
-                                <segue destination="aXe-y4-pS3" kind="presentation" identifier="addItem" id="dSw-7p-822"/>
+                                <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="postListToIntroduction" animates="NO" id="smv-r4-N41"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showIntroduction" animates="NO" id="smv-r4-N41"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

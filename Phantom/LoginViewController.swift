@@ -10,6 +10,8 @@ import UIKit
 import WebKit
 
 class LoginViewController: UIViewController, WKNavigationDelegate {
+    static let SEGUE_BACK_LOGIN_TO_LIST = "backLoginToList"
+    
     @IBOutlet weak var webView: WKWebView!
     
     var reddit = Reddit()
@@ -44,7 +46,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
             Log.p("fetching tokens")
             reddit.fetchAuthTokens() {
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "loginToPostList", sender: nil)
+                    self.performSegue(withIdentifier: LoginViewController.SEGUE_BACK_LOGIN_TO_LIST, sender: nil)
                 }
             }
         }
