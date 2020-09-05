@@ -40,6 +40,8 @@ class PostViewController: UIViewController {
             let subreddit = "test"
             
             post = Post(title: title, content: text, subreddit: subreddit)
+        } else {
+            navigationItem.title = "Post"
         }
         
         titleField.text = post!.title
@@ -48,7 +50,16 @@ class PostViewController: UIViewController {
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        let animated = true
+        
+        let presentingInAddMode = presentingViewController is UINavigationController
+        if presentingInAddMode {
+            dismiss(animated: animated, completion: nil)
+        } else if let owningNavigationController = navigationController {
+            owningNavigationController.popViewController(animated: animated)
+        } else {
+            fatalError("The PostViewController is not inside a navigation controller")
+        }
     }
     
     @IBAction func notificationButtonPressed(_ sender: Any) {

@@ -61,12 +61,6 @@ class PostTableViewController: UITableViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        Log.p("view will disappear")
-        saveData()
-    }
-    
     func saveData() {
         if submitter != nil {
             database.redditRefreshToken = submitter?.reddit.refreshToken
@@ -98,19 +92,20 @@ class PostTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
-        if unwindSegue.identifier == "detailToPostList" {
-            let dest = unwindSegue.source as! PostViewController
-            let post = dest.post
-            
-            if let post = post {
+        if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
+            if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
+                posts[selectedIndexPath.row] = post
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            } else { // user added a new post
                 let newIndexPath = IndexPath(row: posts.count, section: 0)
                 posts.append(post)
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
+        } else { // used returned from introduction/login
+            //
         }
         
         saveData()
-        Log.p("unwind to post list")
     }
     
     /*
@@ -148,14 +143,26 @@ class PostTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        
+        switch segue.identifier ?? "" {
+        case "addItem":
+            Log.p("adding item")
+            
+        case "showDetail":
+            let dest = segue.destination as! PostViewController
+            let selectedCell = sender as! PostCell
+            let indexPath = tableView.indexPath(for: selectedCell)!
+            let selectedPost = posts[indexPath.row]
+            dest.post = selectedPost
+            
+        default:
+            fatalError("Unexpected segue identifier: \(segue.identifier)")
+        }
     }
-    */
-
 }
