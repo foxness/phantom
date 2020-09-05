@@ -42,7 +42,7 @@ struct Database {
         //setDefaults()
     }
     
-    mutating func save() {
+    mutating func savePosts() {
         postsString = Database.serializePosts(posts)
     }
     
@@ -55,7 +55,7 @@ struct Database {
         let p2 = Post(title: "post 2", content: "yolo", subreddit: "lmao")
         posts = [p1, p2]
         
-        save()
+        savePosts()
     }
     
     private static func serializePosts(_ posts: [Post]) -> String {

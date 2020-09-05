@@ -67,15 +67,21 @@ class PostTableViewController: UITableViewController {
     }
     
     func saveData() {
+        saveRedditAuth()
+        savePosts()
+    }
+    
+    func saveRedditAuth() {
         if submitter != nil {
             database.redditRefreshToken = submitter?.reddit.refreshToken
             database.redditAccessToken = submitter?.reddit.accessToken
             database.redditAccessTokenExpirationDate = submitter?.reddit.accessTokenExpirationDate
         }
-        
+    }
+    
+    func savePosts() {
         database.posts = posts
-        database.save()
-        Log.p("i saved data")
+        database.savePosts()
     }
     
     func loadPostsFromDatabase() {
@@ -97,20 +103,26 @@ class PostTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
-        if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
-            if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
-                posts[selectedIndexPath.row] = post
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
-            } else { // user added a new post
-                let newIndexPath = IndexPath(row: posts.count, section: 0)
-                posts.append(post)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
+        switch unwindSegue.identifier ?? "" {
+        case PostViewController.SEGUE_BACK_POST_TO_LIST:
+            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
+                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
+                    posts[selectedIndexPath.row] = post
+                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                } else { // user added a new post
+                    let newIndexPath = IndexPath(row: posts.count, section: 0)
+                    posts.append(post)
+                    tableView.insertRows(at: [newIndexPath], with: .automatic)
+                }
+                savePosts()
+            } else {
+                fatalError()
             }
-        } else { // used returned from introduction/login
-            //
+        case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
+            saveRedditAuth()
+        default:
+            fatalError()
         }
-        
-        saveData()
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { true }
@@ -119,7 +131,7 @@ class PostTableViewController: UITableViewController {
         if editingStyle == .delete {
             posts.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            saveData()
+            savePosts()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
