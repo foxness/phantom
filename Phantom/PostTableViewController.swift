@@ -102,32 +102,11 @@ class PostTableViewController: UITableViewController {
         return cell
     }
     
-    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
-        switch unwindSegue.identifier ?? "" {
-        case PostViewController.SEGUE_BACK_POST_TO_LIST:
-            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
-                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
-                    posts[selectedIndexPath.row] = post
-                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
-                } else { // user added a new post
-                    let newIndexPath = IndexPath(row: posts.count, section: 0)
-                    posts.append(post)
-                    tableView.insertRows(at: [newIndexPath], with: .automatic)
-                }
-                savePosts()
-            } else {
-                fatalError()
-            }
-        case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
-            saveRedditAuth()
-        default:
-            fatalError()
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { true }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        super.tableView(tableView, commit: editingStyle, forRowAt: indexPath)
+        
         if editingStyle == .delete {
             posts.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
@@ -151,7 +130,23 @@ class PostTableViewController: UITableViewController {
         return true
     }
     */
-
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let submitAction = UIContextualAction(style: .normal, title: "Submit", handler: { action, sourceView, completion in
+            let post = self.posts[indexPath.row]
+            
+            self.submitter!.submitPost(post) { url in
+                self.showToast("url: \(String(describing: url))")
+                Log.p("url: \(String(describing: url))")
+            }
+            
+            let actionPerformed = true
+            completion(actionPerformed)
+        })
+        
+        let config = UISwipeActionsConfiguration(actions: [submitAction])
+        return config
+    }
     
     // MARK: - Navigation
 
@@ -172,6 +167,29 @@ class PostTableViewController: UITableViewController {
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
             Log.p("showing introduction")
             
+        default:
+            fatalError()
+        }
+    }
+    
+    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
+        switch unwindSegue.identifier ?? "" {
+        case PostViewController.SEGUE_BACK_POST_TO_LIST:
+            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
+                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
+                    posts[selectedIndexPath.row] = post
+                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                } else { // user added a new post
+                    let newIndexPath = IndexPath(row: posts.count, section: 0)
+                    posts.append(post)
+                    tableView.insertRows(at: [newIndexPath], with: .automatic)
+                }
+                savePosts()
+            } else {
+                fatalError()
+            }
+        case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
+            saveRedditAuth()
         default:
             fatalError()
         }

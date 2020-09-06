@@ -21,7 +21,7 @@ extension Dictionary where Key == String, Value == String {
 }
 
 extension UIViewController {
-    func showToast(_ message: String, seconds: Double = 2) {
+    func showToastUnwrapped(_ message: String, seconds: Double = 2) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         
         alert.view.backgroundColor = UIColor.black
@@ -31,6 +31,12 @@ extension UIViewController {
         present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
             alert.dismiss(animated: true)
+        }
+    }
+    
+    func showToast(_ message: String, seconds: Double = 2) {
+        DispatchQueue.main.async {
+            self.showToastUnwrapped(message, seconds: seconds)
         }
     }
 }
