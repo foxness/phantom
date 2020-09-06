@@ -82,7 +82,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="70" y="304" width="274" height="288"/>
+                                <rect key="frame" x="70" y="158" width="274" height="138"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
                                         <rect key="frame" x="0.0" y="0.0" width="274" height="138"/>
@@ -104,27 +104,6 @@
                                             </textField>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E2B-B8-LX6">
-                                        <rect key="frame" x="95.5" y="158" width="83" height="30"/>
-                                        <state key="normal" title="Submit Post"/>
-                                        <connections>
-                                            <action selector="submitPostButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="FHV-xh-f1L"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yXU-px-Z6l">
-                                        <rect key="frame" x="97.5" y="208" width="79" height="30"/>
-                                        <state key="normal" title="Notification"/>
-                                        <connections>
-                                            <action selector="notificationButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="Eqb-Ps-aqh"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Yg-b6-UQO">
-                                        <rect key="frame" x="87" y="258" width="100" height="30"/>
-                                        <state key="normal" title="Schedule Task"/>
-                                        <connections>
-                                            <action selector="scheduleButtonPressed:" destination="npb-aq-zMg" eventType="touchUpInside" id="g2I-hQ-b0D"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" id="0WH-zB-Rb2"/>
@@ -135,9 +114,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="centerX" secondItem="ICN-dW-pNn" secondAttribute="centerX" id="7OJ-aN-sEt"/>
+                            <constraint firstItem="92X-IH-g8H" firstAttribute="top" secondItem="aDG-4v-KJD" secondAttribute="top" constant="70" id="CNF-tu-4OP"/>
                             <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="70" id="DXB-pk-tPI"/>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="70" id="FU3-VH-zDP"/>
-                            <constraint firstItem="92X-IH-g8H" firstAttribute="centerY" secondItem="ICN-dW-pNn" secondAttribute="centerY" id="cwm-eV-BM7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
                     </view>
@@ -190,13 +169,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="15.5" width="288" height="59.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="29"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="39" width="288" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
