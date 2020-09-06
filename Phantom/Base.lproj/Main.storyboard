@@ -91,16 +91,25 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="titleChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="UBN-8t-msx"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="contenty mccontentface" borderStyle="roundedRect" placeholder="Text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
                                                 <rect key="frame" x="0.0" y="52" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="textChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="ZwJ-fl-JLy"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="test" borderStyle="roundedRect" placeholder="Subreddit" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
                                                 <rect key="frame" x="0.0" y="104" width="274" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="subredditChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="Pwj-Gp-nvb"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                     </stackView>

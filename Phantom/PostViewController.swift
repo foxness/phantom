@@ -33,6 +33,18 @@ class PostViewController: UIViewController {
         post = Post(title: title, content: text, subreddit: subreddit)
     }
     
+    func updateSaveButton() {
+        saveButton.isEnabled = isPostValid()
+    }
+    
+    func isPostValid() -> Bool {
+        let title = titleField.text!
+        let text = textField.text!
+        let subreddit = subredditField.text!
+        
+        return !title.isEmpty && !text.isEmpty && !subreddit.isEmpty
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,25 +76,7 @@ class PostViewController: UIViewController {
         }
     }
     
-    @IBAction func notificationButtonPressed(_ sender: Any) {
-        //Notifications.requestPermissions {
-        //    Notifications.send(Notifications.make())
-        //}
-    }
-    
-    @IBAction func scheduleButtonPressed(_ sender: Any) {
-        //let date = Date(timeIntervalSinceNow: 12)
-        //PostScheduler.schedulePostTask(earliestBeginDate: date)
-    }
-    
-    @IBAction func submitPostButtonPressed(_ sender: Any) {
-        /*saveData()
-        
-        submitter?.submitPost(post) { (url) in
-            let url = url!
-            
-            DispatchQueue.main.async { self.showToast(url) }
-            Log.p("url", url)
-        }*/
-    }
+    @IBAction func titleChanged(_ sender: Any) { updateSaveButton() }
+    @IBAction func textChanged(_ sender: Any) { updateSaveButton() }
+    @IBAction func subredditChanged(_ sender: Any) { updateSaveButton() }
 }
