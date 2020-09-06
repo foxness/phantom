@@ -30,19 +30,16 @@ class PostViewController: UIViewController {
         let text = textField.text!
         let subreddit = subredditField.text!
         
-        post = Post(title: title, content: text, subreddit: subreddit)
+        post = Post(title: title, text: text, subreddit: subreddit)
     }
     
     func updateSaveButton() {
-        saveButton.isEnabled = isPostValid()
-    }
-    
-    func isPostValid() -> Bool {
         let title = titleField.text!
         let text = textField.text!
         let subreddit = subredditField.text!
         
-        return !title.isEmpty && !text.isEmpty && !subreddit.isEmpty
+        let isPostValid = Post.isValid(title: title, text: text, subreddit: subreddit)
+        saveButton.isEnabled = isPostValid
     }
     
     override func viewDidLoad() {
@@ -53,14 +50,16 @@ class PostViewController: UIViewController {
             let text = ""
             let subreddit = "test"
             
-            post = Post(title: title, content: text, subreddit: subreddit)
+            post = Post(title: title, text: text, subreddit: subreddit)
         } else {
             navigationItem.title = "Post"
         }
         
         titleField.text = post!.title
-        textField.text = post!.content
+        textField.text = post!.text
         subredditField.text = post!.subreddit
+        
+        updateSaveButton()
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {

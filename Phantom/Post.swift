@@ -10,6 +10,26 @@ import Foundation
 
 struct Post: Codable {
     let title: String
-    let content: String
+    let text: String
     let subreddit: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case title, text, subreddit // coding keys default to their name, title = "title" etc
+    }
+    
+    func isValid() -> Bool {
+        Post.isValid(title: title, text: text, subreddit: subreddit)
+    }
+    
+    static func isValid(title: String, text: String, subreddit: String) -> Bool {
+        let goodTitle = !title.isEmpty && title.count < Reddit.LIMIT_TITLE_LENGTH
+        let goodText = text.count < Reddit.LIMIT_TEXT_LENGTH
+        let goodSubreddit = !subreddit.isEmpty && subreddit.count < Reddit.LIMIT_SUBREDDIT_LENGTH
+        
+        return goodTitle && goodText && goodSubreddit
+    }
+    
+    static func isValid(post: Post) -> Bool {
+        isValid(title: post.title, text: post.text, subreddit: post.subreddit)
+    }
 }

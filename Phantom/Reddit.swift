@@ -60,6 +60,10 @@ class Reddit {
     
     private static let RANDOM_STATE_LENGTH = 10
     
+    static let LIMIT_TITLE_LENGTH = 300
+    static let LIMIT_TEXT_LENGTH = 40000
+    static let LIMIT_SUBREDDIT_LENGTH = 21
+    
     private var authState: String?
     private var authCode: String?
     
@@ -228,7 +232,7 @@ class Reddit {
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
         let subredditString = post.subreddit
-        let contentString = post.content
+        let textString = post.text
         let titleString = post.title
         
         let data = [Symbols.API_TYPE: Symbols.JSON,
@@ -236,7 +240,7 @@ class Reddit {
                     Symbols.RESUBMIT: resubmitString,
                     Symbols.SEND_REPLIES: sendRepliesString,
                     Symbols.SUBREDDIT: subredditString,
-                    Symbols.TEXT: contentString,
+                    Symbols.TEXT: textString,
                     Symbols.TITLE: titleString]
         
         let username = Symbols.BEARER

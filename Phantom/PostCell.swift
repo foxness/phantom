@@ -28,6 +28,6 @@ class PostCell: UITableViewCell {
     
     func set(post: Post) {
         postTitle.text = post.title
-        postText.text = post.content
+        postText.text = post.text
     }
 }
