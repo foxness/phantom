@@ -29,33 +29,63 @@ class PostTableViewController: UITableViewController {
     
     var posts: [Post] = [Post]()
     
+    @IBOutlet var submissionIndicatorView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        addSubmissionIndicatorView()
         
         navigationItem.leftBarButtonItem = editButtonItem
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        setupPostSubmitter()
+        loadPostsFromDatabase()
+    }
+    
+    func setupPostSubmitter() {
         let refreshToken = database.redditRefreshToken
         let accessToken = database.redditAccessToken
         let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
         
         if refreshToken != nil {
             let reddit = Reddit(refreshToken: refreshToken,
-                            accessToken: accessToken,
-                            accessTokenExpirationDate: accessTokenExpirationDate)
+                                accessToken: accessToken,
+                                accessTokenExpirationDate: accessTokenExpirationDate)
             
             submitter = PostSubmitter(reddit: reddit)
             
             redditLoggedIn = true
             Log.p("found logged reddit in database")
         }
+    }
+    
+    func addSubmissionIndicatorView() {
+        // used: https://stackoverflow.com/questions/4641879/how-to-add-a-uiview-above-the-current-uitableviewcontroller
         
-        loadPostsFromDatabase()
+        let navController = navigationController!
+        let navBar = navController.navigationBar
+        
+        // why take navigation controller's view?
+        // because if I use self.view for some reason the subview is interaction-transparent
+        // it means touches go through it making it unable to be interacted with
+        let superview = navController.view!
+        
+        superview.addSubview(submissionIndicatorView)
+        submissionIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        let constraints = [submissionIndicatorView.widthAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.widthAnchor),
+                           submissionIndicatorView.heightAnchor.constraint(equalToConstant: submissionIndicatorView.bounds.size.height),
+                           submissionIndicatorView.centerXAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.centerXAnchor),
+                           submissionIndicatorView.topAnchor.constraint(equalTo: navBar.safeAreaLayoutGuide.bottomAnchor)]
+        NSLayoutConstraint.activate(constraints)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        //view.bringSubviewToFront(submissionIndicatorView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
