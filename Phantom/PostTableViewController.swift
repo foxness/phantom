@@ -16,6 +16,9 @@ class PostTableViewController: UITableViewController {
     static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     static let TEXT_INDICATOR_DONE = "Done!"
     
+    static let COLOR_INDICATOR_SUBMITTING = UIColor.systemBlue
+    static let COLOR_INDICATOR_DONE = UIColor.systemGreen
+    
     static let DURATION_INDICATOR_DONE = 1.5
     
     var redditLoggedIn = false
@@ -125,9 +128,11 @@ class PostTableViewController: UITableViewController {
         assert(submissionIndicatorView.isHidden == start)
         
         func setContent(start: Bool) {
-            submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
-                                                  : PostTableViewController.TEXT_INDICATOR_DONE
             submissionIndicatorActivity.isHidden = !start
+            submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
+                : PostTableViewController.TEXT_INDICATOR_DONE
+            submissionIndicatorView.backgroundColor = start ? PostTableViewController.COLOR_INDICATOR_SUBMITTING
+                : PostTableViewController.COLOR_INDICATOR_DONE
         }
         
         func set(show: Bool) { submissionIndicatorView.isHidden = !show }
