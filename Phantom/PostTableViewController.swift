@@ -13,6 +13,11 @@ class PostTableViewController: UITableViewController {
     static let SEGUE_ADD_POST = "addPost"
     static let SEGUE_EDIT_POST = "editPost"
     
+    static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
+    static let TEXT_INDICATOR_DONE = "Done!"
+    
+    static let DURATION_INDICATOR_DONE = 1.5
+    
     var redditLoggedIn = false
     var database: Database = .instance
     var submitter: PostSubmitter?
@@ -20,6 +25,7 @@ class PostTableViewController: UITableViewController {
     
     @IBOutlet var submissionIndicatorView: UIView!
     @IBOutlet weak var submissionIndicatorLabel: UILabel!
+    @IBOutlet weak var submissionIndicatorActivity: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,8 +120,26 @@ class PostTableViewController: UITableViewController {
         posts = database.posts
     }
     
-    func setSubmissionIndicator(show: Bool) {
-        submissionIndicatorView.isHidden = !show
+    func setSubmissionIndicator(start: Bool) {
+        // todo: handle multiple simultaneous submit actions
+        assert(submissionIndicatorView.isHidden == start)
+        
+        func setContent(start: Bool) {
+            submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
+                                                  : PostTableViewController.TEXT_INDICATOR_DONE
+            submissionIndicatorActivity.isHidden = !start
+        }
+        
+        func set(show: Bool) { submissionIndicatorView.isHidden = !show }
+        
+        setContent(start: start)
+        
+        if start {
+            set(show: true)
+        } else {
+            let disappearTime = DispatchTime.now() + PostTableViewController.DURATION_INDICATOR_DONE
+            DispatchQueue.main.asyncAfter(deadline: disappearTime) { set(show: false) }
+        }
     }
 
     // MARK: - Table view data source
@@ -165,7 +189,7 @@ class PostTableViewController: UITableViewController {
         let bgColor = UIColor.systemIndigo
         
         let handler = { (action: UIContextualAction, sourceView: UIView, completion: @escaping (Bool) -> Void) in
-            self.setSubmissionIndicator(show: true)
+            self.setSubmissionIndicator(start: true)
             
             let post = self.posts[indexPath.row]
             
@@ -174,7 +198,7 @@ class PostTableViewController: UITableViewController {
                 Log.p("url: \(String(describing: url))")
                 
                 DispatchQueue.main.async {
-                    self.setSubmissionIndicator(show: false)
+                    self.setSubmissionIndicator(start: false)
                 }
             }
             
