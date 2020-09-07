@@ -15,21 +15,11 @@ class PostTableViewController: UITableViewController {
     
     var redditLoggedIn = false
     var database: Database = .instance
-    
     var submitter: PostSubmitter?
-
-    func loginReddit(with reddit: Reddit) {
-        self.submitter = PostSubmitter(reddit: reddit)
-        Log.p("i logged in reddit")
-        
-        // todo: remove the previous view controllers from the navigation stack
-        
-        redditLoggedIn = true
-    }
-    
     var posts = [Post]()
     
     @IBOutlet var submissionIndicatorView: UIView!
+    @IBOutlet weak var submissionIndicatorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +30,15 @@ class PostTableViewController: UITableViewController {
         
         setupPostSubmitter()
         loadPostsFromDatabase()
+    }
+    
+    func loginReddit(with reddit: Reddit) {
+        self.submitter = PostSubmitter(reddit: reddit)
+        Log.p("i logged in reddit")
+        
+        // todo: remove the previous view controllers from the navigation stack
+        
+        redditLoggedIn = true
     }
     
     func setupPostSubmitter() {
@@ -114,6 +113,10 @@ class PostTableViewController: UITableViewController {
     func loadPostsFromDatabase() {
         posts = database.posts
     }
+    
+    func setSubmissionIndicator(show: Bool) {
+        submissionIndicatorView.isHidden = !show
+    }
 
     // MARK: - Table view data source
 
@@ -162,11 +165,17 @@ class PostTableViewController: UITableViewController {
         let bgColor = UIColor.systemIndigo
         
         let handler = { (action: UIContextualAction, sourceView: UIView, completion: @escaping (Bool) -> Void) in
+            self.setSubmissionIndicator(show: true)
+            
             let post = self.posts[indexPath.row]
             
             self.submitter!.submitPost(post) { url in
-                self.showToast("url: \(String(describing: url))")
+                //self.showToast("url: \(String(describing: url))")
                 Log.p("url: \(String(describing: url))")
+                
+                DispatchQueue.main.async {
+                    self.setSubmissionIndicator(show: false)
+                }
             }
             
             let actionPerformed = true

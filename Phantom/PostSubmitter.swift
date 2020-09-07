@@ -16,6 +16,9 @@ struct PostSubmitter {
         private let post: Post
         private let callback: UrlCallback
         
+        // debug
+        let simulateSubmission = true
+        
         init(reddit: Reddit, database: Database, callback: @escaping UrlCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
@@ -35,10 +38,17 @@ struct PostSubmitter {
         override func main() {
             guard !isCancelled else { return }
             
-            // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-            reddit.submit(post: post) { url in
-                guard !self.isCancelled else { return }
-                self.callback(url)
+            if simulateSubmission {
+                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
+                    guard !self.isCancelled else { return }
+                    self.callback("https://simulated-url-lolz.com/")
+                }
+            } else {
+                // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
+                reddit.submit(post: post) { url in
+                    guard !self.isCancelled else { return }
+                    self.callback(url)
+                }
             }
         }
     }
