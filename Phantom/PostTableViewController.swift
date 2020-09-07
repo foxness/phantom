@@ -27,7 +27,7 @@ class PostTableViewController: UITableViewController {
         redditLoggedIn = true
     }
     
-    var posts: [Post] = [Post]()
+    var posts = [Post]()
     
     @IBOutlet var submissionIndicatorView: UIView!
     
@@ -36,9 +36,6 @@ class PostTableViewController: UITableViewController {
         
         addSubmissionIndicatorView()
         
-        navigationItem.leftBarButtonItem = editButtonItem
-        
-        // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
         setupPostSubmitter()
