@@ -105,8 +105,6 @@ class PostTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { true }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        super.tableView(tableView, commit: editingStyle, forRowAt: indexPath)
-        
         if editingStyle == .delete {
             posts.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
@@ -132,7 +130,11 @@ class PostTableViewController: UITableViewController {
     */
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let submitAction = UIContextualAction(style: .normal, title: "Submit", handler: { action, sourceView, completion in
+        let style = UIContextualAction.Style.normal
+        let title = "Submit"
+        let bgColor = UIColor.systemIndigo
+        
+        let handler = { (action: UIContextualAction, sourceView: UIView, completion: @escaping (Bool) -> Void) in
             let post = self.posts[indexPath.row]
             
             self.submitter!.submitPost(post) { url in
@@ -142,7 +144,10 @@ class PostTableViewController: UITableViewController {
             
             let actionPerformed = true
             completion(actionPerformed)
-        })
+        }
+        
+        let submitAction = UIContextualAction(style: style, title: title, handler: handler)
+        submitAction.backgroundColor = bgColor
         
         let config = UISwipeActionsConfiguration(actions: [submitAction])
         return config
