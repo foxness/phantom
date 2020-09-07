@@ -127,17 +127,13 @@ class PostTableViewController: UITableViewController {
         // todo: handle multiple simultaneous submit actions
         assert(submissionIndicatorView.isHidden == start)
         
-        func setContent(start: Bool) {
-            submissionIndicatorActivity.isHidden = !start
-            submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
-                : PostTableViewController.TEXT_INDICATOR_DONE
-            submissionIndicatorView.backgroundColor = start ? PostTableViewController.COLOR_INDICATOR_SUBMITTING
-                : PostTableViewController.COLOR_INDICATOR_DONE
-        }
-        
         func set(show: Bool) { submissionIndicatorView.isHidden = !show }
         
-        setContent(start: start)
+        submissionIndicatorActivity.isHidden = !start
+        submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
+            : PostTableViewController.TEXT_INDICATOR_DONE
+        submissionIndicatorView.backgroundColor = start ? PostTableViewController.COLOR_INDICATOR_SUBMITTING
+            : PostTableViewController.COLOR_INDICATOR_DONE
         
         if start {
             set(show: true)
