@@ -14,6 +14,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
+    @IBOutlet weak var datePicker: UIDatePicker!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -30,7 +31,7 @@ class PostViewController: UIViewController {
         let title = titleField.text!
         let text = textField.text!
         let subreddit = subredditField.text!
-        let date = Date.random
+        let date = datePicker.date
         
         post = Post(title: title, text: text, subreddit: subreddit, date: date)
     }
@@ -51,7 +52,7 @@ class PostViewController: UIViewController {
             let title = ""
             let text = ""
             let subreddit = "test"
-            let date = Date.random
+            let date = Date() + 5 * 60
             
             post = Post(title: title, text: text, subreddit: subreddit, date: date)
         } else {
@@ -61,6 +62,7 @@ class PostViewController: UIViewController {
         titleField.text = post!.title
         textField.text = post!.text
         subredditField.text = post!.subreddit
+        datePicker.date = post!.date
         
         updateSaveButton()
     }

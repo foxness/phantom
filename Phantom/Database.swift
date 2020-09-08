@@ -33,13 +33,22 @@ struct Database {
     var posts: [Post] = []
     
     private init() {
-        let wipe = true // debug
+        // DEBUG VARIABLES
+        let wipe = false
+        let wipeAuth = false
+        let samplePosts = false
         
         if wipe {
             setDefaults()
         } else {
-            if let postsString = postsString {
-                posts = Database.deserializePosts(serialized: postsString)
+            if wipeAuth {
+                wipeReddit()
+            }
+            
+            if samplePosts {
+                setSamplePosts()
+            } else {
+                loadPosts()
             }
         }
     }
@@ -49,20 +58,33 @@ struct Database {
     }
     
     mutating func setDefaults() {
-        let wipeReddit = false // debug
+        redditRefreshToken = nil
+        redditAccessToken = nil
+        redditAccessTokenExpirationDateString = nil
         
-        if wipeReddit {
-            redditRefreshToken = nil
-            redditAccessToken = nil
-            redditAccessTokenExpirationDateString = nil
+        posts = []
+        savePosts()
+    }
+    
+    private mutating func loadPosts() {
+        if let postsString = postsString {
+            posts = Database.deserializePosts(serialized: postsString)
         }
-        
+    }
+    
+    private mutating func setSamplePosts() { // debug
         posts.removeAll()
         20.times { i in
             posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
         }
         
         savePosts()
+    }
+    
+    private mutating func wipeReddit() {
+        redditRefreshToken = nil
+        redditAccessToken = nil
+        redditAccessTokenExpirationDateString = nil
     }
     
     private static func serializePosts(_ posts: [Post]) -> String {

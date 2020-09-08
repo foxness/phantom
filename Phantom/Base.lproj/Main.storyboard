@@ -82,10 +82,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="70" y="158" width="274" height="138"/>
+                                <rect key="frame" x="40" y="158" width="334" height="374"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
-                                        <rect key="frame" x="0.0" y="0.0" width="274" height="138"/>
+                                        <rect key="frame" x="30" y="0.0" width="274" height="138"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="testy is besty" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
                                                 <rect key="frame" x="0.0" y="0.0" width="274" height="34"/>
@@ -113,10 +113,13 @@
                                             </textField>
                                         </subviews>
                                     </stackView>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
+                                        <rect key="frame" x="7" y="158" width="320" height="216"/>
+                                    </datePicker>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" id="0WH-zB-Rb2"/>
-                                    <constraint firstAttribute="trailing" secondItem="6Td-yy-gaf" secondAttribute="trailing" id="PSj-wR-5Ue"/>
+                                    <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" constant="30" id="0WH-zB-Rb2"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Td-yy-gaf" secondAttribute="trailing" constant="30" id="PSj-wR-5Ue"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -124,8 +127,8 @@
                         <constraints>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="centerX" secondItem="ICN-dW-pNn" secondAttribute="centerX" id="7OJ-aN-sEt"/>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="top" secondItem="aDG-4v-KJD" secondAttribute="top" constant="70" id="CNF-tu-4OP"/>
-                            <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="70" id="DXB-pk-tPI"/>
-                            <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="70" id="FU3-VH-zDP"/>
+                            <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="40" id="DXB-pk-tPI"/>
+                            <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="40" id="FU3-VH-zDP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
                     </view>
@@ -142,6 +145,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="datePicker" destination="ikv-Dr-6WC" id="MlJ-8H-MUT"/>
                         <outlet property="saveButton" destination="7uj-8O-RgY" id="pHE-Ac-rHZ"/>
                         <outlet property="subredditField" destination="WKp-cX-yYf" id="RUi-dQ-9aj"/>
                         <outlet property="textField" destination="DXl-Eb-uh3" id="4R3-ej-e5E"/>
@@ -178,13 +182,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="15.5" width="288" height="59.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="29"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="39" width="288" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
