@@ -164,9 +164,12 @@ class PostTableViewController: UITableViewController {
         }    
     }
     
-    // prevents post deletion while a post is being submitted
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { !disableSubmission }
+    // prevents post submission and deletion while a post is being submitted
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath != disabledPostIndex
+    }
     
+    // prevents post editing segue while a post is being submitted
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return indexPath == disabledPostIndex ? nil : indexPath
     }
