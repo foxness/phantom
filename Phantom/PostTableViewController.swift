@@ -27,7 +27,7 @@ class PostTableViewController: UITableViewController {
     
     var disableSubmission = false // needed to prevent multiple post submission
     
-    // todo: move from index to post id because adding a post can mess this up?
+    // todo: move from index to post id because adding/editing a post can mess this up because of sorting changing indices
     var disabledPostIndex: IndexPath? // needed to disable editing segues for submitting post
     
     var posts = [Post]()
@@ -167,18 +167,14 @@ class PostTableViewController: UITableViewController {
     // prevents post deletion while a post is being submitted
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { !disableSubmission }
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return indexPath == disabledPostIndex ? nil : indexPath
+    }
+    
     func submitPressed(postIndex: IndexPath) {
-        func setSubmittingPost(editable: Bool) {
-            // enable/disable visual feedback
-            let cell = tableView.cellForRow(at: postIndex)!
-            cell.selectionStyle = editable ? .default : .none
-            
-            // enable/disable editing segue
-            disabledPostIndex = editable ? nil : postIndex
-        }
-        
         disableSubmission = true
-        setSubmittingPost(editable: false)
+        
+        disabledPostIndex = postIndex // make uneditable
         setSubmissionIndicator(start: true)
         
         let post = posts[postIndex.row]
@@ -188,7 +184,7 @@ class PostTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.setSubmissionIndicator(start: false) {
                     // when the indicator disappears:
-                    setSubmittingPost(editable: true)
+                    self.disabledPostIndex = nil // make editable
                     self.disableSubmission = false
                 }
             }
@@ -217,15 +213,6 @@ class PostTableViewController: UITableViewController {
     }
     
     // MARK: - Navigation
-    
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == PostTableViewController.SEGUE_EDIT_POST {
-            let selectedPostIndex = tableView!.indexPathForSelectedRow!
-            return selectedPostIndex != disabledPostIndex // disale editing the currently submitting post
-        } else {
-            return true
-        }
-    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
