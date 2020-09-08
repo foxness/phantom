@@ -24,6 +24,12 @@ class PostTableViewController: UITableViewController {
     var redditLoggedIn = false
     var database: Database = .instance
     var submitter: PostSubmitter?
+    
+    var disableSubmission = false // needed to prevent multiple post submission
+    
+    // todo: move from index to post id because adding a post can mess this up?
+    var disabledPostIndex: IndexPath? // needed to disable editing segues for submitting post
+    
     var posts = [Post]()
     
     @IBOutlet var submissionIndicatorView: UIView!
@@ -34,9 +40,6 @@ class PostTableViewController: UITableViewController {
         super.viewDidLoad()
         
         addSubmissionIndicatorView()
-        
-        // self.clearsSelectionOnViewWillAppear = false
-        
         setupPostSubmitter()
         loadPostsFromDatabase()
     }
@@ -87,23 +90,12 @@ class PostTableViewController: UITableViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        //view.bringSubviewToFront(submissionIndicatorView)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if !redditLoggedIn {
             performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
         }
-    }
-    
-    func saveData() {
-        saveRedditAuth()
-        savePosts()
     }
     
     func saveRedditAuth() {
@@ -128,10 +120,7 @@ class PostTableViewController: UITableViewController {
         posts.sort { $0.date < $1.date }
     }
     
-    func setSubmissionIndicator(start: Bool) {
-        // todo: handle multiple simultaneous submit actions
-        assert(submissionIndicatorView.isHidden == start)
-        
+    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)? = nil) {
         func set(show: Bool) { submissionIndicatorView.isHidden = !show }
         
         submissionIndicatorActivity.isHidden = !start
@@ -144,7 +133,10 @@ class PostTableViewController: UITableViewController {
             set(show: true)
         } else {
             let disappearTime = DispatchTime.now() + PostTableViewController.DURATION_INDICATOR_DONE
-            DispatchQueue.main.asyncAfter(deadline: disappearTime) { set(show: false) }
+            DispatchQueue.main.asyncAfter(deadline: disappearTime) {
+                set(show: false)
+                onDisappear?()
+            }
         }
     }
 
@@ -161,8 +153,6 @@ class PostTableViewController: UITableViewController {
         cell.set(post: post)
         return cell
     }
-    
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { true }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -173,40 +163,47 @@ class PostTableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    // prevents post deletion while a post is being submitted
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool { !disableSubmission }
+    
+    func submitPressed(postIndex: IndexPath) {
+        func setSubmittingPost(editable: Bool) {
+            // enable/disable visual feedback
+            let cell = tableView.cellForRow(at: postIndex)!
+            cell.selectionStyle = editable ? .default : .none
+            
+            // enable/disable editing segue
+            disabledPostIndex = editable ? nil : postIndex
+        }
+        
+        disableSubmission = true
+        setSubmittingPost(editable: false)
+        setSubmissionIndicator(start: true)
+        
+        let post = posts[postIndex.row]
+        submitter!.submitPost(post) { url in
+            Log.p("url: \(String(describing: url))")
+            
+            DispatchQueue.main.async {
+                self.setSubmissionIndicator(start: false) {
+                    // when the indicator disappears:
+                    setSubmittingPost(editable: true)
+                    self.disableSubmission = false
+                }
+            }
+        }
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard !disableSubmission else { return nil } // this prevents multiple post submission
+        
         let style = UIContextualAction.Style.normal
         let title = "Submit"
         let bgColor = UIColor.systemIndigo
         
         let handler = { (action: UIContextualAction, sourceView: UIView, completion: @escaping (Bool) -> Void) in
-            self.setSubmissionIndicator(start: true)
-            
-            let post = self.posts[indexPath.row]
-            
-            self.submitter!.submitPost(post) { url in
-                //self.showToast("url: \(String(describing: url))")
-                Log.p("url: \(String(describing: url))")
-                
-                DispatchQueue.main.async {
-                    self.setSubmissionIndicator(start: false)
-                }
-            }
+            self.submitPressed(postIndex: indexPath)
             
             let actionPerformed = true
             completion(actionPerformed)
@@ -220,6 +217,15 @@ class PostTableViewController: UITableViewController {
     }
     
     // MARK: - Navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == PostTableViewController.SEGUE_EDIT_POST {
+            let selectedPostIndex = tableView!.indexPathForSelectedRow!
+            return selectedPostIndex != disabledPostIndex // disale editing the currently submitting post
+        } else {
+            return true
+        }
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
