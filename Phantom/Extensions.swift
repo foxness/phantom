@@ -14,6 +14,30 @@ extension Int {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<self).map { _ in letters.randomElement()! })
     }
+    
+    func times(_ block: @autoclosure () -> Void) {
+        guard self > 0 else { return }
+        
+        for _ in 0..<self {
+            block()
+        }
+    }
+    
+    func times(_ block: () -> Void) {
+        guard self > 0 else { return }
+        
+        for _ in 0..<self {
+            block()
+        }
+    }
+    
+    func times(_ block: (Int) -> Void) {
+        guard self > 0 else { return }
+        
+        for i in 0..<self {
+            block(i)
+        }
+    }
 }
 
 extension Dictionary where Key == String, Value == String {

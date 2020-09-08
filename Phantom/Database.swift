@@ -51,9 +51,10 @@ struct Database {
         redditAccessToken = nil
         redditAccessTokenExpirationDateString = nil
         
-        let p1 = Post(title: "Post1", text: "Post1Text", subreddit: "subrediy")
-        let p2 = Post(title: "post 2", text: "yolo", subreddit: "lmao")
-        posts = [p1, p2]
+        posts.removeAll()
+        20.times { i in
+            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test"))
+        }
         
         savePosts()
     }
