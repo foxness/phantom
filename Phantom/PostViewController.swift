@@ -14,6 +14,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
+    
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var post: Post?
@@ -29,8 +30,9 @@ class PostViewController: UIViewController {
         let title = titleField.text!
         let text = textField.text!
         let subreddit = subredditField.text!
+        let date = Date.random
         
-        post = Post(title: title, text: text, subreddit: subreddit)
+        post = Post(title: title, text: text, subreddit: subreddit, date: date)
     }
     
     func updateSaveButton() {
@@ -49,8 +51,9 @@ class PostViewController: UIViewController {
             let title = ""
             let text = ""
             let subreddit = "test"
+            let date = Date.random
             
-            post = Post(title: title, text: text, subreddit: subreddit)
+            post = Post(title: title, text: text, subreddit: subreddit, date: date)
         } else {
             navigationItem.title = "Post"
         }

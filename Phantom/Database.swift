@@ -30,16 +30,18 @@ struct Database {
         set { redditAccessTokenExpirationDateString = Database.serializeDate(newValue) }
     }
     
-    var posts: [Post]
+    var posts: [Post] = []
     
     private init() {
-        posts = []
+        let wipe = true // debug
         
-        if let postsString = postsString {
-            posts = Database.deserializePosts(serialized: postsString)
+        if wipe {
+            setDefaults()
+        } else {
+            if let postsString = postsString {
+                posts = Database.deserializePosts(serialized: postsString)
+            }
         }
-        
-        //setDefaults()
     }
     
     mutating func savePosts() {
@@ -47,13 +49,17 @@ struct Database {
     }
     
     mutating func setDefaults() {
-        redditRefreshToken = nil
-        redditAccessToken = nil
-        redditAccessTokenExpirationDateString = nil
+        let wipeReddit = false // debug
+        
+        if wipeReddit {
+            redditRefreshToken = nil
+            redditAccessToken = nil
+            redditAccessTokenExpirationDateString = nil
+        }
         
         posts.removeAll()
         20.times { i in
-            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test"))
+            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
         }
         
         savePosts()

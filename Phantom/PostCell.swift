@@ -11,9 +11,10 @@ import UIKit
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     
-    @IBOutlet weak var postTitle: UILabel!
-    @IBOutlet weak var postText: UILabel!
-    @IBOutlet weak var postImage: UIImageView!
+    @IBOutlet weak var ptitle: UILabel!
+    @IBOutlet weak var ptext: UILabel!
+    @IBOutlet weak var pimage: UIImageView!
+    @IBOutlet weak var pdate: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,7 +28,14 @@ class PostCell: UITableViewCell {
     }
     
     func set(post: Post) {
-        postTitle.text = post.title
-        postText.text = post.text
+        ptitle.text = post.title
+        ptext.text = post.text
+        pdate.text = PostCell.dateToString(post.date)
+    }
+    
+    static func dateToString(_ date: Date) -> String { // in X hours
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: date, relativeTo: Date())
     }
 }

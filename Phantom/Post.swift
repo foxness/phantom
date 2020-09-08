@@ -12,9 +12,10 @@ struct Post: Codable {
     let title: String
     let text: String
     let subreddit: String
+    let date: Date
     
     private enum CodingKeys: String, CodingKey {
-        case title, text, subreddit // coding keys default to their name, title = "title" etc
+        case title, text, subreddit, date // coding keys default to their name, title = "title" etc
     }
     
     func isValid() -> Bool {
