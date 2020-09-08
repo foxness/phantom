@@ -31,6 +31,20 @@ class PostCell: UITableViewCell {
         ptitle.text = post.title
         ptext.text = post.text
         pdate.text = PostCell.dateToString(post.date)
+        
+        pimage.image = UIImage(named: "thumbnail_text_post")!
+        
+        /*let f = UIScreen.main.scale
+        let w = pimage.bounds.width * f
+        let h = pimage.bounds.height * f
+        
+        Log.p("viewW: \(w), viewH: \(h)")
+        
+        let ss = pimage.image!.scale
+        let ww = pimage.image!.size.width * ss
+        let hh = pimage.image!.size.height * ss
+        
+        Log.p("imgW: \(ww), imgH: \(hh)")*/
     }
     
     static func dateToString(_ date: Date) -> String { // in X hours
