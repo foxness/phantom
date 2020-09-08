@@ -121,6 +121,11 @@ class PostTableViewController: UITableViewController {
     
     func loadPostsFromDatabase() {
         posts = database.posts
+        sortPosts()
+    }
+    
+    func sortPosts() {
+        posts.sort { $0.date < $1.date }
     }
     
     func setSubmissionIndicator(start: Bool) {
@@ -241,13 +246,18 @@ class PostTableViewController: UITableViewController {
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier ?? "" {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
-            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post { //
-                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user was editing a post
+            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
+                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user edited a post
                     posts[selectedIndexPath.row] = post
-                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
+                    sortPosts()
+                    
+                    tableView.reloadData()
                 } else { // user added a new post
-                    let newIndexPath = IndexPath(row: posts.count, section: 0)
                     posts.append(post)
+                    sortPosts()
+                    
+                    let row = posts.firstIndex(of: post)!
+                    let newIndexPath = IndexPath(row: row, section: 0)
                     tableView.insertRows(at: [newIndexPath], with: .automatic)
                 }
                 savePosts()

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Post: Codable {
+struct Post: Equatable, Codable {
     let title: String
     let text: String
     let subreddit: String
