@@ -11,6 +11,8 @@ import UIKit
 class PostViewController: UIViewController {
     static let SEGUE_BACK_POST_TO_LIST = "backSavePost"
     
+    static let TEXT_NEW_POST_TITLE = "New Post"
+    
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
@@ -55,8 +57,8 @@ class PostViewController: UIViewController {
             let date = Date() + 5 * 60
             
             post = Post(title: title, text: text, subreddit: subreddit, date: date)
-        } else {
-            navigationItem.title = "Post"
+            
+            navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
         }
         
         titleField.text = post!.title
