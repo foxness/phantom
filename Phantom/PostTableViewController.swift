@@ -139,6 +139,32 @@ class PostTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
+    
+    func addNewPost(_ post: Post, with animation: UITableView.RowAnimation = .top) {
+        posts.append(post)
+        sortPosts()
+        
+        let row = posts.firstIndex(of: post)!
+        let newIndexPath = IndexPath(row: row, section: 0)
+        
+        tableView.insertRows(at: [newIndexPath], with: animation)
+        savePosts()
+    }
+    
+    func editPost(index: IndexPath, post: Post) {
+        posts[index.row] = post
+        sortPosts()
+        
+        tableView.reloadData()
+        savePosts()
+    }
+    
+    func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none) {
+        posts.remove(at: index.row)
+        
+        tableView.deleteRows(at: [index], with: animation)
+        savePosts()
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
@@ -154,9 +180,7 @@ class PostTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            posts.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            savePosts()
+            deletePost(index: indexPath)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -181,19 +205,22 @@ class PostTableViewController: UITableViewController {
     func submitPressed(postIndex: IndexPath) {
         disableSubmission = true
         
-        let postId = posts[postIndex.row].id
-        disabledPostId = postId // make the post uneditable
-        
-        setSubmissionIndicator(start: true)
-        
         let post = posts[postIndex.row]
+        disabledPostId = post.id // make the post uneditable
+        setSubmissionIndicator(start: true) // let the user know
+        
         submitter!.submitPost(post) { url in
             Log.p("url: \(String(describing: url))")
             
             DispatchQueue.main.async {
+                let success = url != nil
+                if success {
+                    self.deletePost(index: postIndex, with: .right)
+                }
+                
+                self.disabledPostId = nil // make editable
                 self.setSubmissionIndicator(start: false) {
                     // when the indicator disappears:
-                    self.disabledPostId = nil // make editable
                     self.disableSubmission = false
                 }
             }
@@ -250,19 +277,10 @@ class PostTableViewController: UITableViewController {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
             if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
                 if let selectedIndexPath = tableView.indexPathForSelectedRow { // user edited a post
-                    posts[selectedIndexPath.row] = post
-                    sortPosts()
-                    
-                    tableView.reloadData()
+                    editPost(index: selectedIndexPath, post: post)
                 } else { // user added a new post
-                    posts.append(post)
-                    sortPosts()
-                    
-                    let row = posts.firstIndex(of: post)!
-                    let newIndexPath = IndexPath(row: row, section: 0)
-                    tableView.insertRows(at: [newIndexPath], with: .automatic)
+                    addNewPost(post)
                 }
-                savePosts()
             } else {
                 fatalError()
             }

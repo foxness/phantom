@@ -74,7 +74,7 @@ struct Database {
     
     private mutating func setSamplePosts() { // debug
         posts.removeAll()
-        20.times { i in
+        40.times { i in
             posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
         }
         
