@@ -9,13 +9,22 @@
 import Foundation
 
 struct Post: Equatable, Codable {
+    let id: UUID
     let title: String
     let text: String
     let subreddit: String
     let date: Date
     
     private enum CodingKeys: String, CodingKey {
-        case title, text, subreddit, date // coding keys default to their name, title = "title" etc
+        case id, title, text, subreddit, date // coding keys default to their name, title = "title" etc
+    }
+    
+    init(title: String, text: String, subreddit: String, date: Date) {
+        self.id = UUID()
+        self.title = title
+        self.text = text
+        self.subreddit = subreddit
+        self.date = date
     }
     
     func isValid() -> Bool {

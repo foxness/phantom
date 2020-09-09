@@ -26,9 +26,7 @@ class PostTableViewController: UITableViewController {
     var submitter: PostSubmitter?
     
     var disableSubmission = false // needed to prevent multiple post submission
-    
-    // todo: move from index to post id because adding/editing a post can mess this up because of sorting changing indices
-    var disabledPostIndex: IndexPath? // needed to disable editing segues for submitting post
+    var disabledPostId: UUID? // needed to disable editing segues for submitting post
     
     var posts = [Post]()
     
@@ -166,18 +164,26 @@ class PostTableViewController: UITableViewController {
     
     // prevents post submission and deletion while a post is being submitted
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath != disabledPostIndex
+        guard let disabledPostId = disabledPostId else { return true }
+        
+        let postId = posts[indexPath.row].id
+        return postId != disabledPostId
     }
     
     // prevents post editing segue while a post is being submitted
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        return indexPath == disabledPostIndex ? nil : indexPath
+        guard let disabledPostId = disabledPostId else { return indexPath }
+        
+        let postId = posts[indexPath.row].id
+        return postId == disabledPostId ? nil : indexPath
     }
     
     func submitPressed(postIndex: IndexPath) {
         disableSubmission = true
         
-        disabledPostIndex = postIndex // make uneditable
+        let postId = posts[postIndex.row].id
+        disabledPostId = postId // make the post uneditable
+        
         setSubmissionIndicator(start: true)
         
         let post = posts[postIndex.row]
@@ -187,7 +193,7 @@ class PostTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.setSubmissionIndicator(start: false) {
                     // when the indicator disappears:
-                    self.disabledPostIndex = nil // make editable
+                    self.disabledPostId = nil // make editable
                     self.disableSubmission = false
                 }
             }
@@ -195,7 +201,7 @@ class PostTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !disableSubmission else { return nil } // this prevents multiple post submission
+        guard !disableSubmission else { return UISwipeActionsConfiguration() } // this prevents multiple post submission
         
         let style = UIContextualAction.Style.normal
         let title = "Submit"
