@@ -34,6 +34,10 @@ class PostCell: UITableViewCell {
         
         pimage.image = UIImage(named: "thumbnail_text_post")!
         
+        let overdue = post.date < Date()
+        let bg: UIColor = overdue ? .secondarySystemBackground : .systemBackground
+        contentView.backgroundColor = bg
+        
         /*let f = UIScreen.main.scale
         let w = pimage.bounds.width * f
         let h = pimage.bounds.height * f
