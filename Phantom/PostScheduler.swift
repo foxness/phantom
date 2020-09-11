@@ -39,15 +39,6 @@ class PostScheduler {
         }
     }
     
-    //init(submitter: PostSubmitter) {
-    //    self.submitter = submitter
-    //}
-    
-    static func sendNotification() {
-        let notification = Notifications.make(title: "hello there, I'm doing work", body: "asd")
-        Notifications.send(notification)
-    }
-    
     static func registerPostTask() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: PostScheduler.TASK_REDDIT_POST_SUBMISSION, using: nil) { task in
             if let scheduler = PostScheduler() {
@@ -79,7 +70,7 @@ class PostScheduler {
             task.setTaskCompleted(success: success)
             Log.p("submitted a post from beyond the grave")
             
-            PostScheduler.sendNotification()
+            //PostScheduler.sendNotification()
         }
     }
 }
