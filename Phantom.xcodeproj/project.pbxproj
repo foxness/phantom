@@ -27,6 +27,7 @@
 		71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CA24FA8B4E00D6E19F /* Reddit.swift */; };
 		71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CC24FA95CB00D6E19F /* Extensions.swift */; };
 		71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C646A8250254A4005C28B1 /* PostTableViewController.swift */; };
+		96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96886AE2250BCFBE004FDE30 /* PostNotifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		71C031CA24FA8B4E00D6E19F /* Reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reddit.swift; sourceTree = "<group>"; };
 		71C031CC24FA95CB00D6E19F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		71C646A8250254A4005C28B1 /* PostTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewController.swift; sourceTree = "<group>"; };
+		96886AE2250BCFBE004FDE30 /* PostNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNotifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				7192A40B24FFD9FD00CB54A8 /* PostScheduler.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
 				71684AD025024D83005BA857 /* PostCell.swift */,
+				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 			);
 			path = Phantom;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
 				718181DA24FBE01D00059658 /* PostViewController.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
+				96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */,
 				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
 				718181DE24FBFEE200059658 /* Requests.swift in Sources */,
 				718181DC24FBEDF500059658 /* Post.swift in Sources */,

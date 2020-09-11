@@ -91,6 +91,18 @@ class PostTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        Notifications.requestPermissions { granted, error in
+            if granted {
+                Log.p("permissions granted")
+            } else {
+                Log.p("permissions not granted")
+            }
+            
+            if let error = error {
+                Log.p("permissions error", error)
+            }
+        }
+        
         if !redditLoggedIn {
             performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
         }
@@ -149,6 +161,8 @@ class PostTableViewController: UITableViewController {
         
         tableView.insertRows(at: [newIndexPath], with: animation)
         savePosts()
+        
+        PostNotifier.notify(for: post)
     }
     
     func editPost(index: IndexPath, post: Post) {
@@ -157,6 +171,8 @@ class PostTableViewController: UITableViewController {
         
         tableView.reloadData()
         savePosts()
+        
+        PostNotifier.notify(for: post)
     }
     
     func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none) {

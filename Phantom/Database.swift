@@ -38,6 +38,7 @@ struct Database {
         let wipe = false
         let wipeAuth = false
         let samplePosts = false
+        let wipePosts = false
         
         if wipe {
             setDefaults()
@@ -46,11 +47,15 @@ struct Database {
                 wipeReddit()
             }
             
-            if samplePosts {
+            if wipePosts {
+                posts = []
+            } else if samplePosts {
                 setSamplePosts()
             } else {
                 loadPosts()
             }
+            
+            savePosts()
         }
     }
     
