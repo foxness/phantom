@@ -92,10 +92,8 @@ class PostTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         
         Notifications.requestPermissions { granted, error in
-            if granted {
-                Log.p("permissions granted")
-            } else {
-                Log.p("permissions not granted")
+            if !granted {
+                Log.p("permissions not granted :0")
             }
             
             if let error = error {
@@ -175,9 +173,12 @@ class PostTableViewController: UITableViewController {
         savePosts()
     }
     
-    func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none) {
+    func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
         let post = posts.remove(at: index.row)
-        PostNotifier.cancel(for: post)
+        
+        if cancelNotify {
+            PostNotifier.cancel(for: post)
+        }
         
         tableView.deleteRows(at: [index], with: animation)
         savePosts()
@@ -223,6 +224,8 @@ class PostTableViewController: UITableViewController {
         disableSubmission = true
         
         let post = posts[postIndex.row]
+        PostNotifier.cancel(for: post)
+        
         disabledPostId = post.id // make the post uneditable
         setSubmissionIndicator(start: true) // let the user know
         
@@ -232,7 +235,9 @@ class PostTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 let success = url != nil
                 if success {
-                    self.deletePost(index: postIndex, with: .right)
+                    self.deletePost(index: postIndex, with: .right, cancelNotify: false) // because already cancelled
+                } else {
+                    PostNotifier.notify(for: post)
                 }
                 
                 self.disabledPostId = nil // make editable
