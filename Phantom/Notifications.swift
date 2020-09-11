@@ -69,4 +69,8 @@ struct Notifications {
         let request = makeRequest(id: id, title: title, body: body, dateComponents: dateComponents)
         sendRequest(request, callback: callback)
     }
+    
+    static func cancel(ids: String...) {
+        center.removePendingNotificationRequests(withIdentifiers: ids)
+    }
 }

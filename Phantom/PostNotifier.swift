@@ -27,4 +27,9 @@ struct PostNotifier {
             }
         }
     }
+    
+    static func cancel(for post: Post) {
+        let id = post.id.uuidString
+        Notifications.cancel(ids: id)
+    }
 }

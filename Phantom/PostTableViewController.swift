@@ -153,6 +153,8 @@ class PostTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     func addNewPost(_ post: Post, with animation: UITableView.RowAnimation = .top) {
+        PostNotifier.notify(for: post)
+        
         posts.append(post)
         sortPosts()
         
@@ -161,22 +163,21 @@ class PostTableViewController: UITableViewController {
         
         tableView.insertRows(at: [newIndexPath], with: animation)
         savePosts()
-        
-        PostNotifier.notify(for: post)
     }
     
     func editPost(index: IndexPath, post: Post) {
+        PostNotifier.notify(for: post)
+        
         posts[index.row] = post
         sortPosts()
         
         tableView.reloadData()
         savePosts()
-        
-        PostNotifier.notify(for: post)
     }
     
     func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none) {
-        posts.remove(at: index.row)
+        let post = posts.remove(at: index.row)
+        PostNotifier.cancel(for: post)
         
         tableView.deleteRows(at: [index], with: animation)
         savePosts()
