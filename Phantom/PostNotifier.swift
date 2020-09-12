@@ -65,7 +65,9 @@ struct PostNotifier {
         let refreshToken = database.redditRefreshToken
         let accessToken = database.redditAccessToken
         let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
-        let post = database.posts.first { $0.id == postId }!
+        
+        let postIndex = database.posts.firstIndex { $0.id == postId }!
+        let post = database.posts[postIndex]
         
         let reddit = Reddit(refreshToken: refreshToken, accessToken: accessToken, accessTokenExpirationDate: accessTokenExpirationDate)
         var submitter = PostSubmitter(reddit: reddit)
@@ -74,6 +76,14 @@ struct PostNotifier {
             let success = url != nil
             Log.p("success", success)
             Log.p("url", url)
+            
+            if success {
+                database.posts.remove(at: postIndex)
+                database.savePosts()
+            } else {
+                // todo: issue submission error notification
+            }
+            
             callback()
         }
     }
