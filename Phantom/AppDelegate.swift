@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
-        //let categories = Set(arrayLiteral: PostNotifier.getNotificationCategory())
-        //center.setNotificationCategories(categories)
+        let categories = Set(arrayLiteral: PostNotifier.getNotificationCategory())
+        center.setNotificationCategories(categories)
         
         PostScheduler.registerPostTask()
         
@@ -27,6 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // Log.p("got notification", notification)
         completionHandler(.alert)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        PostNotifier.didReceiveResponse(response, callback: completionHandler)
     }
 
     // MARK: UISceneSession Lifecycle
