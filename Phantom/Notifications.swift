@@ -10,6 +10,21 @@ import Foundation
 import UIKit
 
 struct Notifications {
+    struct ContentParams {
+        let title: String
+        let body: String
+        let subtitle: String?
+        let userInfo: [AnyHashable: Any]?
+        let categoryId: String?
+        let sound: UNNotificationSound?
+    }
+    
+    struct RequestParams {
+        let id: String
+        let dc: DateComponents
+        let content: ContentParams
+    }
+    
     private static var center: UNUserNotificationCenter = .current()
     
     private init() { }
@@ -32,11 +47,28 @@ struct Notifications {
         center.requestAuthorization(options: [.alert, .sound, .badge], completionHandler: callback)
     }
     
-    private static func makeContent(title: String, body: String) -> UNNotificationContent {
+    private static func makeContent(params: ContentParams) -> UNNotificationContent {
         let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = UNNotificationSound.default
+        content.title = params.title
+        content.body = params.body
+        
+        if let subtitle = params.subtitle {
+            content.subtitle = subtitle
+        }
+        
+        if let userInfo = params.userInfo {
+            content.userInfo = userInfo
+        }
+        
+        if let categoryId = params.categoryId {
+            content.categoryIdentifier = categoryId
+        }
+        
+        if let sound = params.sound {
+            content.sound = sound
+        } else {
+            content.sound = .default
+        }
         
         return content
     }
@@ -46,17 +78,14 @@ struct Notifications {
     }
     
     private static func makeTrigger(for dateComponents: DateComponents) -> UNNotificationTrigger {
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        return trigger
+        UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
     }
     
-    private static func makeRequest(id: String, content: UNNotificationContent, trigger: UNNotificationTrigger) -> UNNotificationRequest {
-        UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-    }
-    
-    private static func makeRequest(id: String, title: String, body: String, dateComponents: DateComponents) -> UNNotificationRequest {
-        let content = makeContent(title: title, body: body)
-        let trigger = makeTrigger(for: dateComponents)
+    private static func makeRequest(params: RequestParams) -> UNNotificationRequest {
+        let id = params.id
+        let content = makeContent(params: params.content)
+        let trigger = makeTrigger(for: params.dc)
+        
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         return request
     }
@@ -67,8 +96,8 @@ struct Notifications {
         }
     }
     
-    static func request(id: String, title: String, body: String, dateComponents: DateComponents, callback: ((Error?) -> Void)? = nil) {
-        let request = makeRequest(id: id, title: title, body: body, dateComponents: dateComponents)
+    static func request(params: RequestParams, callback: ((Error?) -> Void)? = nil) {
+        let request = makeRequest(params: params)
         sendRequest(request, callback: callback)
     }
     

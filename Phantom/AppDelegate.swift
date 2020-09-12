@@ -11,12 +11,13 @@ import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self
+        
+        //let categories = Set(arrayLiteral: PostNotifier.getNotificationCategory())
+        //center.setNotificationCategories(categories)
         
         PostScheduler.registerPostTask()
         
