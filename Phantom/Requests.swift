@@ -13,6 +13,8 @@ struct Requests {
     
     private static let session = URLSession.shared
     
+    private init() { }
+    
     static func getUserAgent() -> String {
         let identifier = Bundle.main.bundleIdentifier!
         let version = Bundle.main.releaseVersionNumber

@@ -8,11 +8,8 @@
 
 import Foundation
 
-// todo: make database a class because its being passed around and is a singleton
-// todo^^^: should singletons be structs or classes??!?!?
-
 // entirely UserDefaults-backed
-struct Database {
+class Database {
     private static let KEY_POSTS = "posts"
     private static let KEY_REDDIT_REFRESH_TOKEN = "reddit_refresh_token"
     private static let KEY_REDDIT_ACCESS_TOKEN = "reddit_access_token"
@@ -59,11 +56,11 @@ struct Database {
         }
     }
     
-    mutating func savePosts() {
+    func savePosts() {
         postsString = Database.serializePosts(posts)
     }
     
-    mutating func setDefaults() {
+    func setDefaults() {
         redditRefreshToken = nil
         redditAccessToken = nil
         redditAccessTokenExpirationDateString = nil
@@ -72,13 +69,13 @@ struct Database {
         savePosts()
     }
     
-    private mutating func loadPosts() {
+    private func loadPosts() {
         if let postsString = postsString {
             posts = Database.deserializePosts(serialized: postsString)
         }
     }
     
-    private mutating func setSamplePosts() { // debug
+    private func setSamplePosts() { // debug
         posts.removeAll()
         40.times { i in
             posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
@@ -87,7 +84,7 @@ struct Database {
         savePosts()
     }
     
-    private mutating func wipeReddit() {
+    private func wipeReddit() {
         redditRefreshToken = nil
         redditAccessToken = nil
         redditAccessTokenExpirationDateString = nil

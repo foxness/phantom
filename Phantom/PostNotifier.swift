@@ -9,6 +9,8 @@
 import Foundation
 
 struct PostNotifier {
+    private init() { }
+    
     static func notify(for post: Post) {
         let date = post.date
         guard date > Date() else { return }
@@ -17,9 +19,9 @@ struct PostNotifier {
         let body = "Time to submit has come"
         
         let id = post.id.uuidString
-        let dc = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: post.date)
+        let dc = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         
-        Notifications.send(id: id, title: title, body: body, dateComponents: dc) { error in
+        Notifications.request(id: id, title: title, body: body, dateComponents: dc) { error in
             if let error = error {
                 Log.p("notify error", error)
             } else {

@@ -12,6 +12,8 @@ import UIKit
 struct Notifications {
     private static var center: UNUserNotificationCenter = .current()
     
+    private init() { }
+    
     private static func notificationsAllowed(callback: @escaping (Bool) -> Void) {
         center.getNotificationSettings { settings in
             let allowed = settings.authorizationStatus == .authorized
@@ -65,7 +67,7 @@ struct Notifications {
         }
     }
     
-    static func send(id: String, title: String, body: String, dateComponents: DateComponents, callback: ((Error?) -> Void)? = nil) {
+    static func request(id: String, title: String, body: String, dateComponents: DateComponents, callback: ((Error?) -> Void)? = nil) {
         let request = makeRequest(id: id, title: title, body: body, dateComponents: dateComponents)
         sendRequest(request, callback: callback)
     }
