@@ -30,7 +30,7 @@ class PostTableViewController: UITableViewController {
     
     var posts = [Post]()
     
-    @IBOutlet var submissionIndicatorView: UIView!
+    @IBOutlet weak var submissionIndicatorView: UIView!
     @IBOutlet weak var submissionIndicatorLabel: UILabel!
     @IBOutlet weak var submissionIndicatorActivity: UIActivityIndicatorView!
     
@@ -65,13 +65,32 @@ class PostTableViewController: UITableViewController {
         saveData()
     }
     
+    @objc func zombieWokeUp(notification: Notification) {
+        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        Log.p("zombie woke up, id", postId)
+    }
+    
+    @objc func zombieSubmitted(notification: Notification) {
+        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        Log.p("zombie submitted, id", postId)
+        
+        DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
+            self.reloadPosts()
+        }
+    }
+    
+    @objc func zombieFailed(notification: Notification) {
+        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        Log.p("zombie failed, id", postId)
+    }
+    
     func reloadPosts() {
         Log.p("loaded posts")
         loadPostsFromDatabase()
         
-        UIView.performWithoutAnimation { // I'm actually not sure this wrap does anything though
+        //UIView.performWithoutAnimation { // I'm actually not sure this wrap does anything though
             tableView.reloadData()
-        }
+        //}
     }
     
     func loginReddit(with reddit: Reddit) {
@@ -183,7 +202,7 @@ class PostTableViewController: UITableViewController {
     
     func addNewPost(_ post: Post, with animation: UITableView.RowAnimation = .top) {
         Log.p("user added new post")
-        PostNotifier.notify(for: post)
+        PostNotifier.notifyUser(about: post)
         
         posts.append(post)
         sortPosts()
@@ -197,7 +216,7 @@ class PostTableViewController: UITableViewController {
     // todo edit post by post id because index will change after submitting from beyond the grave
     func editPost(index: IndexPath, post: Post) {
         Log.p("user edited a post")
-        PostNotifier.notify(for: post)
+        PostNotifier.notifyUser(about: post)
         
         posts[index.row] = post
         sortPosts()
@@ -269,7 +288,7 @@ class PostTableViewController: UITableViewController {
                 if success {
                     self.deletePost(index: postIndex, with: .right, cancelNotify: false) // because already cancelled
                 } else {
-                    PostNotifier.notify(for: post)
+                    PostNotifier.notifyUser(about: post)
                 }
                 
                 self.disabledPostId = nil // make editable
@@ -355,6 +374,10 @@ class PostTableViewController: UITableViewController {
         center.addObserver(self, selector: #selector(sceneDidActivate), name: UIScene.didActivateNotification, object: nil)
         center.addObserver(self, selector: #selector(sceneDidEnterBackground), name: UIScene.didEnterBackgroundNotification, object: nil)
         center.addObserver(self, selector: #selector(sceneWillDeactivate), name: UIScene.willDeactivateNotification, object: nil)
+        
+        center.addObserver(self, selector: #selector(zombieWokeUp), name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
+        center.addObserver(self, selector: #selector(zombieSubmitted), name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
+        center.addObserver(self, selector: #selector(zombieFailed), name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
     }
     
     func unsubscribeFromNotifications() {
@@ -364,5 +387,9 @@ class PostTableViewController: UITableViewController {
         center.removeObserver(self, name: UIScene.didActivateNotification, object: nil)
         center.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
         center.removeObserver(self, name: UIScene.willDeactivateNotification, object: nil)
+        
+        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
+        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
+        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
     }
 }

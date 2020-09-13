@@ -54,7 +54,7 @@ class PostViewController: UIViewController {
             let title = ""
             let text = ""
             let subreddit = "test"
-            let date = Date() + 5 * 60
+            let date = Date() + 1 * 60
             
             post = Post(title: title, text: text, subreddit: subreddit, date: date)
             

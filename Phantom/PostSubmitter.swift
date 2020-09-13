@@ -70,11 +70,13 @@ struct PostSubmitter {
     }
     
     private mutating func addToQueue(submission: PostSubmission) {
-        submission.completionBlock = {
+        /*submission.completionBlock = {
             guard !submission.isCancelled else { return }
             
             Log.p("submission complete")
-        }
+        }*/
+        
+        // ^ this actually doesn't indicate submission completion, because reddit submit is async
         
         submitQueue.addOperation(submission)
     }

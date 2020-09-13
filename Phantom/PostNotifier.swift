@@ -10,21 +10,25 @@ import Foundation
 import UIKit
 
 struct PostNotifier {
+    static let NOTIFICATION_ZOMBIE_WOKE_UP = Notification.Name("zombieWokeUp")
+    static let NOTIFICATION_ZOMBIE_SUBMITTED = Notification.Name("zombieSubmittedFromBeyondTheGrave")
+    static let NOTIFICATION_ZOMBIE_FAILED = Notification.Name("zombieFailed")
+    
     private static let ACTION_SUBMIT = "submit"
     private static let CATEGORY_DUE_POST = "duePost"
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
-    private static let INFO_POST_ID = "postID"
+    private static let KEY_POST_ID = "postId"
     
     private init() { }
     
-    static func notify(for post: Post) {
+    static func notifyUser(about post: Post) {
         let date = post.date
         guard date > Date() else { return }
         
         let title = post.title
         let body = "Time to submit has come"
         let subtitle: String? = nil
-        let userInfo = [INFO_POST_ID: post.id.uuidString]
+        let userInfo = [KEY_POST_ID: post.id.uuidString]
         let categoryId = CATEGORY_DUE_POST
         let sound = UNNotificationSound.default
         
@@ -51,17 +55,40 @@ struct PostNotifier {
     
     static func didReceiveResponse(_ response: UNNotificationResponse, callback: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        let postIdString = userInfo[INFO_POST_ID] as! String
+        let postIdString = userInfo[KEY_POST_ID] as! String
         let postId = UUID(uuidString: postIdString)!
         
         let actionId = response.actionIdentifier
-        assert(actionId == ACTION_SUBMIT)
+        assert(actionId == ACTION_SUBMIT) // todo: handle just opening the up instead of crashing
         
         submitPost(postId: postId, callback: callback)
     }
     
+    static func getPostId(zombieNotification: Notification) -> UUID {
+        return zombieNotification.userInfo![KEY_POST_ID]! as! UUID
+    }
+    
+    private static func notify(name: Notification.Name, postId: UUID) {
+        let userInfo = [KEY_POST_ID: postId]
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
+    }
+    
+    private static func notifyZombieWokeUp(postId: UUID) {
+        notify(name: NOTIFICATION_ZOMBIE_WOKE_UP, postId: postId)
+    }
+    
+    private static func notifyZombieSubmitted(postId: UUID) {
+        notify(name: NOTIFICATION_ZOMBIE_SUBMITTED, postId: postId)
+    }
+    
+    private static func notifyZombieFailed(postId: UUID) { // todo: utilize this
+        notify(name: NOTIFICATION_ZOMBIE_FAILED, postId: postId)
+    }
+    
     // submit from beyond the grave
     private static func submitPost(postId: UUID, callback: @escaping () -> Void) {
+        notifyZombieWokeUp(postId: postId)
+        
         let database = Database.instance
         let redditAuth = database.redditAuth!
         
@@ -69,12 +96,13 @@ struct PostNotifier {
             // if we get to this situation it means:
             // - the notification banner popped up
             // - the user deleted the post of the notification in app while the notification banned was still popped up
-            // - the user pressed on the submit button of the notification banned while it was still popped up
+            // - the user pressed on the submit button of the notification banner while it was still popped up
             // the popped up notification banner can't be removed by removing the notification upon post deletion
             // post deletion removes the notification only in the notification center
             // so we have to account for that niche situation here
             
             Log.p("post wasnt found")
+            notifyZombieFailed(postId: postId)
             callback()
             return
         }
@@ -92,13 +120,15 @@ struct PostNotifier {
             if success {
                 database.posts.remove(at: postIndex)
                 database.savePosts()
+                
+                let redditAuth = reddit.auth
+                database.redditAuth = redditAuth
+                
+                notifyZombieSubmitted(postId: postId)
             } else {
-                // todo: issue submission error notification
+                notifyZombieFailed(postId: postId)
+                // todo: issue submission error user notification
             }
-            
-            // save auth
-            let redditAuth = reddit.auth
-            database.redditAuth = redditAuth
             
             callback()
         }
