@@ -23,20 +23,15 @@ class PostScheduler {
     private let database: Database = .instance
     
     init?() {
-        let refreshToken = database.redditRefreshToken
-        let accessToken = database.redditAccessToken
-        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
-        
-        if refreshToken == nil {
+        if let redditAuth = database.redditAuth {
+            let reddit = Reddit(auth: redditAuth)
+            submitter = PostSubmitter(reddit: reddit)
+        } else {
             Log.p("didnt find good reddit in database")
             return nil
-        } else {
-            let reddit = Reddit(refreshToken: refreshToken,
-                            accessToken: accessToken,
-                            accessTokenExpirationDate: accessTokenExpirationDate)
-            
-            submitter = PostSubmitter(reddit: reddit)
         }
+        
+        // todo: save reddit auth after every submission
     }
     
     static func registerPostTask() {

@@ -19,6 +19,16 @@ import Foundation
 // and mutable self in capture lists is impossible with structs
 
 class Reddit {
+    struct AuthParams: Codable {
+        let refreshToken: String
+        let accessToken: String
+        let accessTokenExpirationDate: Date
+        
+        private enum CodingKeys: String, CodingKey {
+            case refreshToken, accessToken, accessTokenExpirationDate
+        }
+    }
+    
     enum UserResponse { case none, allow, decline }
     
     private struct Symbols {
@@ -67,9 +77,15 @@ class Reddit {
     private var authState: String?
     private var authCode: String?
     
-    private(set) var refreshToken: String?
-    private(set) var accessToken: String?
-    private(set) var accessTokenExpirationDate: Date?
+    private var refreshToken: String?
+    private var accessToken: String?
+    private var accessTokenExpirationDate: Date?
+    
+    var auth: AuthParams {
+        AuthParams(refreshToken: refreshToken!,
+                   accessToken: accessToken!,
+                   accessTokenExpirationDate: accessTokenExpirationDate!)
+    }
     
     private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
     
@@ -77,10 +93,10 @@ class Reddit {
     
     init() { }
     
-    init(refreshToken: String?, accessToken: String?, accessTokenExpirationDate: Date?) {
-        self.refreshToken = refreshToken
-        self.accessToken = accessToken
-        self.accessTokenExpirationDate = accessTokenExpirationDate
+    init(auth: AuthParams) {
+        self.refreshToken = auth.refreshToken
+        self.accessToken = auth.accessToken
+        self.accessTokenExpirationDate = auth.accessTokenExpirationDate
     }
     
     func getAuthUrl() -> URL {

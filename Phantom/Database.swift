@@ -11,21 +11,19 @@ import Foundation
 // entirely UserDefaults-backed
 class Database {
     private static let KEY_POSTS = "posts"
-    private static let KEY_REDDIT_REFRESH_TOKEN = "reddit_refresh_token"
-    private static let KEY_REDDIT_ACCESS_TOKEN = "reddit_access_token"
-    private static let KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE = "reddit_access_token_expiration_date"
+    private static let KEY_REDDIT_AUTH = "reddit_auth"
     
     static let instance = Database()
     
-    @UserDefaultsBacked(key: Database.KEY_REDDIT_REFRESH_TOKEN) var redditRefreshToken: String?
-    @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN) var redditAccessToken: String?
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
     
-    @UserDefaultsBacked(key: Database.KEY_REDDIT_ACCESS_TOKEN_EXPIRATION_DATE) private var redditAccessTokenExpirationDateString: String?
+    @UserDefaultsBacked(key: Database.KEY_REDDIT_AUTH) private var redditAuthString: String?
     @UserDefaultsBacked(key: Database.KEY_POSTS) private var postsString: String?
     
-    var redditAccessTokenExpirationDate: Date? {
-        get { Database.deserializeDate(redditAccessTokenExpirationDateString) }
-        set { redditAccessTokenExpirationDateString = Database.serializeDate(newValue) }
+    var redditAuth: Reddit.AuthParams? {
+        get { deserializeRedditAuth(redditAuthString) }
+        set { redditAuthString = serializeRedditAuth(newValue) }
     }
     
     var posts: [Post] = []
@@ -57,13 +55,11 @@ class Database {
     }
     
     func savePosts() {
-        postsString = Database.serializePosts(posts)
+        postsString = serializePosts(posts)
     }
     
     func setDefaults() {
-        redditRefreshToken = nil
-        redditAccessToken = nil
-        redditAccessTokenExpirationDateString = nil
+        redditAuthString = nil
         
         posts = []
         savePosts()
@@ -71,7 +67,7 @@ class Database {
     
     private func loadPosts() {
         if let postsString = postsString {
-            posts = Database.deserializePosts(serialized: postsString)
+            posts = deserializePosts(serialized: postsString)
         }
     }
     
@@ -85,33 +81,39 @@ class Database {
     }
     
     private func wipeReddit() {
-        redditRefreshToken = nil
-        redditAccessToken = nil
-        redditAccessTokenExpirationDateString = nil
+        redditAuthString = nil
     }
     
-    private static func serializePosts(_ posts: [Post]) -> String {
-        let encoder = JSONEncoder()
+    private func serializePosts(_ posts: [Post]) -> String {
         let data = try! encoder.encode(posts)
         let serialized = data.base64EncodedString() // String(data: data, encoding: .utf8)!
 
         return serialized
     }
     
-    private static func deserializePosts(serialized: String) -> [Post] {
-        let decoder = JSONDecoder()
+    private func deserializePosts(serialized: String) -> [Post] {
         let data = Data(base64Encoded: serialized)!
         let posts = try! decoder.decode([Post].self, from: data)
         
         return posts
     }
     
-    private static func serializeDate(_ date: Date?) -> String? {
-        date == nil ? nil : String(date!.timeIntervalSinceReferenceDate)
+    private func serializeRedditAuth(_ auth: Reddit.AuthParams?) -> String? {
+        guard let auth = auth else { return nil }
+        
+        let data = try! encoder.encode(auth)
+        let serialized = data.base64EncodedString()
+        
+        return serialized
     }
     
-    private static func deserializeDate(_ string: String?) -> Date? {
-        string == nil ? nil : Date(timeIntervalSinceReferenceDate: TimeInterval(string!)!)
+    private func deserializeRedditAuth(_ serialized: String?) -> Reddit.AuthParams? {
+        guard let serialized = serialized else { return nil }
+        
+        let data = Data(base64Encoded: serialized)!
+        let redditAuth = try! decoder.decode(Reddit.AuthParams.self, from: data)
+        
+        return redditAuth
     }
 }
 

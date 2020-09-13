@@ -58,14 +58,8 @@ class PostTableViewController: UITableViewController {
     }
     
     func setupPostSubmitter() {
-        let refreshToken = database.redditRefreshToken
-        let accessToken = database.redditAccessToken
-        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
-        
-        if refreshToken != nil {
-            let reddit = Reddit(refreshToken: refreshToken,
-                                accessToken: accessToken,
-                                accessTokenExpirationDate: accessTokenExpirationDate)
+        if let redditAuth = database.redditAuth {
+            let reddit = Reddit(auth: redditAuth)
             
             submitter = PostSubmitter(reddit: reddit)
             
@@ -114,9 +108,8 @@ class PostTableViewController: UITableViewController {
     
     func saveRedditAuth() {
         if submitter != nil {
-            database.redditRefreshToken = submitter?.reddit.refreshToken
-            database.redditAccessToken = submitter?.reddit.accessToken
-            database.redditAccessTokenExpirationDate = submitter?.reddit.accessTokenExpirationDate
+            let redditAuth = submitter!.reddit.auth
+            database.redditAuth = redditAuth
         }
     }
     

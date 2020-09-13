@@ -62,14 +62,12 @@ struct PostNotifier {
     // submit from beyond the grave
     private static func submitPost(postId: UUID, callback: @escaping () -> Void) {
         let database = Database.instance
-        let refreshToken = database.redditRefreshToken
-        let accessToken = database.redditAccessToken
-        let accessTokenExpirationDate = database.redditAccessTokenExpirationDate
+        let redditAuth = database.redditAuth!
         
         let postIndex = database.posts.firstIndex { $0.id == postId }!
         let post = database.posts[postIndex]
         
-        let reddit = Reddit(refreshToken: refreshToken, accessToken: accessToken, accessTokenExpirationDate: accessTokenExpirationDate)
+        let reddit = Reddit(auth: redditAuth)
         var submitter = PostSubmitter(reddit: reddit)
         
         submitter.submitPost(post) { url in
@@ -85,9 +83,8 @@ struct PostNotifier {
             }
             
             // save auth
-            database.redditRefreshToken = reddit.refreshToken
-            database.redditAccessToken = reddit.accessToken
-            database.redditAccessTokenExpirationDate = reddit.accessTokenExpirationDate
+            let redditAuth = reddit.auth
+            database.redditAuth = redditAuth
             
             callback()
         }
