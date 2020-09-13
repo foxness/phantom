@@ -37,15 +37,32 @@ class PostTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        subscribeToWillEnterForegroundNotification()
         addSubmissionIndicatorView()
         setupPostSubmitter()
+        loadPostsFromDatabase()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func subscribeToWillEnterForegroundNotification() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(appWillEnterForeground),
+                                               name: UIScene.willEnterForegroundNotification,
+                                               object: nil)
+    }
+    
+    @objc func appWillEnterForeground() {
+        Log.p("app entered foreground")
         
+        reloadPosts()
+    }
+    
+    func reloadPosts() {
         Log.p("loaded posts")
         loadPostsFromDatabase()
+        
+        UIView.performWithoutAnimation { // I'm actually not sure this wrap does anything though
+            tableView.reloadData()
+        }
     }
     
     func loginReddit(with reddit: Reddit) {
@@ -305,8 +322,10 @@ class PostTableViewController: UITableViewController {
             } else {
                 fatalError()
             }
+            
         case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
             saveRedditAuth()
+            
         default:
             fatalError()
         }
