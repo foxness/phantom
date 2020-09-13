@@ -49,7 +49,6 @@ class PostTableViewController: UITableViewController {
     
     @objc func sceneWillEnterForeground() {
         Log.p("scene will enter foreground")
-        
         reloadPosts()
     }
     
@@ -183,6 +182,7 @@ class PostTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     func addNewPost(_ post: Post, with animation: UITableView.RowAnimation = .top) {
+        Log.p("user added new post")
         PostNotifier.notify(for: post)
         
         posts.append(post)
@@ -196,6 +196,7 @@ class PostTableViewController: UITableViewController {
     
     // todo edit post by post id because index will change after submitting from beyond the grave
     func editPost(index: IndexPath, post: Post) {
+        Log.p("user edited a post")
         PostNotifier.notify(for: post)
         
         posts[index.row] = post
@@ -308,7 +309,7 @@ class PostTableViewController: UITableViewController {
         
         switch segue.identifier ?? "" {
         case PostTableViewController.SEGUE_ADD_POST:
-            Log.p("adding post")
+            Log.p("add post segue")
             
         case PostTableViewController.SEGUE_EDIT_POST:
             let dest = segue.destination as! PostViewController
@@ -316,9 +317,10 @@ class PostTableViewController: UITableViewController {
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = posts[indexPath.row]
             dest.post = selectedPost
+            Log.p("edit post segue")
             
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
-            Log.p("showing introduction")
+            Log.p("introduction segue")
             
         default:
             fatalError()

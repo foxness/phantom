@@ -46,6 +46,7 @@ struct PostNotifier {
     static func cancel(for post: Post) {
         let id = post.id.uuidString
         Notifications.cancel(ids: id)
+        Notifications.removeDelivered(ids: id)
     }
     
     static func didReceiveResponse(_ response: UNNotificationResponse, callback: @escaping () -> Void) {
@@ -64,7 +65,20 @@ struct PostNotifier {
         let database = Database.instance
         let redditAuth = database.redditAuth!
         
-        let postIndex = database.posts.firstIndex { $0.id == postId }!
+        guard let postIndex = database.posts.firstIndex(where: { $0.id == postId }) else {
+            // if we get to this situation it means:
+            // - the notification banner popped up
+            // - the user deleted the post of the notification in app while the notification banned was still popped up
+            // - the user pressed on the submit button of the notification banned while it was still popped up
+            // the popped up notification banner can't be removed by removing the notification upon post deletion
+            // post deletion removes the notification only in the notification center
+            // so we have to account for that niche situation here
+            
+            Log.p("post wasnt found")
+            callback()
+            return
+        }
+        
         let post = database.posts[postIndex]
         
         let reddit = Reddit(auth: redditAuth)

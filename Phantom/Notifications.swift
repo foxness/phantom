@@ -105,4 +105,8 @@ struct Notifications {
     static func cancel(ids: String...) {
         center.removePendingNotificationRequests(withIdentifiers: ids)
     }
+    
+    static func removeDelivered(ids: String...) {
+        center.removeDeliveredNotifications(withIdentifiers: ids)
+    }
 }
