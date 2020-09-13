@@ -64,12 +64,7 @@ class PostTableViewController: UITableViewController {
         sceneActivated = true
         
         if let postIdToBeDeleted = postIdToBeDeleted { // todo: move this to sceneWillEnterForeground!?
-            let index = posts.firstIndex { $0.id == postIdToBeDeleted }!
-            posts.remove(at: index)
-            
-            let indexPath = IndexPath(row: index, section: 0)
-            tableView.deleteRows(at: [indexPath], with: .right)
-            
+            deletePost(id: postIdToBeDeleted, withAnimation: .right, cancelNotify: false)
             self.postIdToBeDeleted = nil
         }
     }
@@ -96,7 +91,7 @@ class PostTableViewController: UITableViewController {
         // we're reloading only when app is currently visible
         if sceneActivated {
             DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
-                self.reloadPosts() // todo: reload/delete only the changed/updated post
+                self.reloadPostsFromDatabase() // todo: reload/delete only the changed/updated post
             }
         } else {
             let submittedPostId = PostNotifier.getPostId(notification: notification)
@@ -108,12 +103,12 @@ class PostTableViewController: UITableViewController {
         Log.p("zombie failed")
     }
     
-    func reloadPosts() {
+    func reloadPostsFromDatabase() {
         Log.p("loaded posts")
         loadPostsFromDatabase()
         
         //UIView.performWithoutAnimation { // I'm actually not sure this wrap does anything though
-            tableView.reloadData()
+            tableView.reloadData() // todo: read section instead
         //}
     }
     
@@ -237,26 +232,30 @@ class PostTableViewController: UITableViewController {
         tableView.insertRows(at: [newIndexPath], with: animation)
     }
     
-    // todo edit post by post id because index will change after submitting from beyond the grave
-    func editPost(index: IndexPath, post: Post) {
+    func editPost(post: Post, with animation: UITableView.RowAnimation = .none) {
         Log.p("user edited a post")
         PostNotifier.notifyUser(about: post)
         
-        posts[index.row] = post
+        // todo: handle situation where it doesnt exist
+        // it can happen when user submits a post from notification banner while editing a post
+        
+        let index = posts.firstIndex { $0.id == post.id }!
+        posts[index] = post
         sortPosts()
         
-        tableView.reloadData()
+        tableView.reloadSections([0], with: animation)
     }
     
-    // todo delete post by id too!?
-    func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
-        let post = posts.remove(at: index.row)
+    func deletePost(id postId: UUID, withAnimation animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
+        let index = posts.firstIndex { $0.id == postId }!
+        let deletedPost = posts.remove(at: index)
         
         if cancelNotify {
-            PostNotifier.cancel(for: post)
+            PostNotifier.cancel(for: deletedPost)
         }
         
-        tableView.deleteRows(at: [index], with: animation)
+        let indexPath = IndexPath(row: index, section: 0)
+        tableView.deleteRows(at: [indexPath], with: animation)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
@@ -273,12 +272,14 @@ class PostTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            deletePost(index: indexPath)
+            let postId = posts[indexPath.row].id // todo: make delete post by indexPath just for this case?
+            deletePost(id: postId, withAnimation: .top, cancelNotify: true)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
     
+    // todo: disable editing while zombie is awake/submitting?
     // prevents post submission and deletion while a post is being submitted
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         guard let disabledPostId = disabledPostId else { return true }
@@ -287,6 +288,7 @@ class PostTableViewController: UITableViewController {
         return postId != disabledPostId
     }
     
+    // todo: disable editing segue while zombie is awake/submitting?
     // prevents post editing segue while a post is being submitted
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         guard let disabledPostId = disabledPostId else { return indexPath }
@@ -310,9 +312,10 @@ class PostTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 let success = url != nil
                 if success {
-                    self.deletePost(index: postIndex, with: .right, cancelNotify: false) // because already cancelled
+                    self.deletePost(id: post.id, withAnimation: .right, cancelNotify: false) // because already cancelled
                 } else {
                     PostNotifier.notifyUser(about: post)
+                    // todo: notify user it's gone wrong
                 }
                 
                 self.disabledPostId = nil // make editable
@@ -374,10 +377,10 @@ class PostTableViewController: UITableViewController {
         switch unwindSegue.identifier ?? "" {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
             if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
-                if let selectedIndexPath = tableView.indexPathForSelectedRow { // user edited a post
-                    editPost(index: selectedIndexPath, post: post)
-                } else { // user added a new post
+                if pvc.newPost {
                     addNewPost(post)
+                } else { // user edited a post
+                    editPost(post: post, with: .automatic)
                 }
             } else {
                 fatalError()

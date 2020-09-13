@@ -20,6 +20,7 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
+    var newPost = false
     var post: Post?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -51,6 +52,8 @@ class PostViewController: UIViewController {
         super.viewDidLoad()
         
         if post == nil {
+            newPost = true
+            
             let title = ""
             let text = ""
             let subreddit = "test"
