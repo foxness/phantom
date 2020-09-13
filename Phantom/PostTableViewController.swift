@@ -37,33 +37,33 @@ class PostTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        subscribeToWillEnterForegroundNotification()
+        subscribeToNotifications()
         addSubmissionIndicatorView()
         setupPostSubmitter()
         loadPostsFromDatabase()
     }
     
-    func subscribeToWillEnterForegroundNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(appWillEnterForeground),
-                                               name: UIScene.willEnterForegroundNotification,
-                                               object: nil)
-    }
-    
-    func unsubscribeFromWillEnterForegroundNotification() {
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIScene.willEnterForegroundNotification,
-                                                  object: nil)
-    }
-    
     deinit {
-        unsubscribeFromWillEnterForegroundNotification()
+        unsubscribeFromNotifications()
     }
     
-    @objc func appWillEnterForeground() {
-        Log.p("app entered foreground")
+    @objc func sceneWillEnterForeground() {
+        Log.p("scene will enter foreground")
         
         reloadPosts()
+    }
+    
+    @objc func sceneDidActivate() {
+        Log.p("scene did activate")
+    }
+    
+    @objc func sceneDidEnterBackground() {
+        Log.p("scene did enter background")
+    }
+    
+    @objc func sceneWillDeactivate() {
+        Log.p("scene will deactivate")
+        saveData()
     }
     
     func reloadPosts() {
@@ -133,6 +133,12 @@ class PostTableViewController: UITableViewController {
         }
     }
     
+    func saveData() {
+        savePosts()
+        saveRedditAuth()
+        Log.p("saved data")
+    }
+    
     func saveRedditAuth() {
         if submitter != nil {
             let redditAuth = submitter!.reddit.auth
@@ -186,9 +192,9 @@ class PostTableViewController: UITableViewController {
         let newIndexPath = IndexPath(row: row, section: 0)
         
         tableView.insertRows(at: [newIndexPath], with: animation)
-        savePosts()
     }
     
+    // todo edit post by post id because index will change after submitting from beyond the grave
     func editPost(index: IndexPath, post: Post) {
         PostNotifier.notify(for: post)
         
@@ -196,9 +202,9 @@ class PostTableViewController: UITableViewController {
         sortPosts()
         
         tableView.reloadData()
-        savePosts()
     }
     
+    // todo delete post by id too!?
     func deletePost(index: IndexPath, with animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
         let post = posts.remove(at: index.row)
         
@@ -207,7 +213,6 @@ class PostTableViewController: UITableViewController {
         }
         
         tableView.deleteRows(at: [index], with: animation)
-        savePosts()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
@@ -334,10 +339,28 @@ class PostTableViewController: UITableViewController {
             }
             
         case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
-            saveRedditAuth()
+            break
             
         default:
             fatalError()
         }
+    }
+    
+    func subscribeToNotifications() {
+        let center = NotificationCenter.default
+        
+        center.addObserver(self, selector: #selector(sceneWillEnterForeground), name: UIScene.willEnterForegroundNotification, object: nil)
+        center.addObserver(self, selector: #selector(sceneDidActivate), name: UIScene.didActivateNotification, object: nil)
+        center.addObserver(self, selector: #selector(sceneDidEnterBackground), name: UIScene.didEnterBackgroundNotification, object: nil)
+        center.addObserver(self, selector: #selector(sceneWillDeactivate), name: UIScene.willDeactivateNotification, object: nil)
+    }
+    
+    func unsubscribeFromNotifications() {
+        let center = NotificationCenter.default
+        
+        center.removeObserver(self, name: UIScene.willEnterForegroundNotification, object: nil)
+        center.removeObserver(self, name: UIScene.didActivateNotification, object: nil)
+        center.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
+        center.removeObserver(self, name: UIScene.willDeactivateNotification, object: nil)
     }
 }
