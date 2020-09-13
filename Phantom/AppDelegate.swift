@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
-        let categories = Set(arrayLiteral: PostNotifier.getNotificationCategory())
+        let categories = Set(arrayLiteral: PostNotifier.getDuePostCategory())
         center.setNotificationCategories(categories)
         
         PostScheduler.registerPostTask()

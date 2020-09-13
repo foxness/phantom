@@ -84,26 +84,31 @@ struct PostNotifier {
                 // todo: issue submission error notification
             }
             
+            // save auth
+            database.redditRefreshToken = reddit.refreshToken
+            database.redditAccessToken = reddit.accessToken
+            database.redditAccessTokenExpirationDate = reddit.accessTokenExpirationDate
+            
             callback()
         }
     }
     
-    static func getNotificationCategory() -> UNNotificationCategory {
-        let actionIdentifier = ACTION_SUBMIT
+    static func getDuePostCategory() -> UNNotificationCategory {
+        let actionId = ACTION_SUBMIT
         let actionTitle = TITLE_SUBMIT_ACTION
         let actionOptions: UNNotificationActionOptions = []
         
-        let submitAction = UNNotificationAction(identifier: actionIdentifier,
+        let submitAction = UNNotificationAction(identifier: actionId,
                                                 title: actionTitle,
                                                 options: actionOptions)
         
-        let categoryIdentifier = CATEGORY_DUE_POST
+        let categoryId = CATEGORY_DUE_POST
         let categoryActions = [submitAction]
         let categoryIntents: [String] = []
         let categoryPlaceholder = ""
         let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]
         
-        let duePostCategory = UNNotificationCategory(identifier: categoryIdentifier,
+        let duePostCategory = UNNotificationCategory(identifier: categoryId,
                                                      actions: categoryActions,
                                                      intentIdentifiers: categoryIntents,
                                                      hiddenPreviewsBodyPlaceholder: categoryPlaceholder,

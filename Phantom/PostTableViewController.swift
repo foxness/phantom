@@ -39,6 +39,12 @@ class PostTableViewController: UITableViewController {
         
         addSubmissionIndicatorView()
         setupPostSubmitter()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Log.p("loaded posts")
         loadPostsFromDatabase()
     }
     

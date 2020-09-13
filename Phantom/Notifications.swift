@@ -74,7 +74,7 @@ struct Notifications {
     }
     
     private static func makeNowTrigger() -> UNNotificationTrigger {
-        UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
     }
     
     private static func makeTrigger(for dateComponents: DateComponents) -> UNNotificationTrigger {
@@ -85,6 +85,7 @@ struct Notifications {
         let id = params.id
         let content = makeContent(params: params.content)
         let trigger = makeTrigger(for: params.dc)
+        //let trigger = makeNowTrigger()
         
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         return request
