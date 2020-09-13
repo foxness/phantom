@@ -50,6 +50,16 @@ class PostTableViewController: UITableViewController {
                                                object: nil)
     }
     
+    func unsubscribeFromWillEnterForegroundNotification() {
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UIScene.willEnterForegroundNotification,
+                                                  object: nil)
+    }
+    
+    deinit {
+        unsubscribeFromWillEnterForegroundNotification()
+    }
+    
     @objc func appWillEnterForeground() {
         Log.p("app entered foreground")
         
