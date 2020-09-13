@@ -66,12 +66,12 @@ class PostTableViewController: UITableViewController {
     }
     
     @objc func zombieWokeUp(notification: Notification) {
-        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        let postId = PostNotifier.getPostId(notification: notification)
         Log.p("zombie woke up, id", postId)
     }
     
     @objc func zombieSubmitted(notification: Notification) {
-        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        let postId = PostNotifier.getPostId(notification: notification)
         Log.p("zombie submitted, id", postId)
         
         DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
@@ -80,7 +80,7 @@ class PostTableViewController: UITableViewController {
     }
     
     @objc func zombieFailed(notification: Notification) {
-        let postId = PostNotifier.getPostId(zombieNotification: notification)
+        let postId = PostNotifier.getPostId(notification: notification)
         Log.p("zombie failed, id", postId)
     }
     

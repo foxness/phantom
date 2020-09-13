@@ -28,6 +28,7 @@
 		71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CC24FA95CB00D6E19F /* Extensions.swift */; };
 		71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C646A8250254A4005C28B1 /* PostTableViewController.swift */; };
 		96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96886AE2250BCFBE004FDE30 /* PostNotifier.swift */; };
+		969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		71C031CC24FA95CB00D6E19F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		71C646A8250254A4005C28B1 /* PostTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewController.swift; sourceTree = "<group>"; };
 		96886AE2250BCFBE004FDE30 /* PostNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNotifier.swift; sourceTree = "<group>"; };
+		969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieSubmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				7192A40924FFD76500CB54A8 /* Notifications.swift */,
 				7192A40B24FFD9FD00CB54A8 /* PostScheduler.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
+				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
 				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 				71684AD025024D83005BA857 /* PostCell.swift */,
 				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
@@ -210,6 +213,7 @@
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
+				969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
 				71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */,
 				7192A40C24FFD9FD00CB54A8 /* PostScheduler.swift in Sources */,
