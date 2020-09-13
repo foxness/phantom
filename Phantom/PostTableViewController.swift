@@ -28,6 +28,11 @@ class PostTableViewController: UITableViewController {
     var disableSubmission = false // needed to prevent multiple post submission
     var disabledPostId: UUID? // needed to disable editing segues for submitting post
     
+    var postIdToBeDeleted: UUID? // todo: make this a list because there can be multiple
+    
+    var sceneActivated = true
+    var sceneInForeground = true
+    
     var posts = [Post]()
     
     @IBOutlet weak var submissionIndicatorView: UIView!
@@ -49,39 +54,58 @@ class PostTableViewController: UITableViewController {
     
     @objc func sceneWillEnterForeground() {
         Log.p("scene will enter foreground")
-        reloadPosts()
+        sceneInForeground = true
+        
+        //reloadPosts()
     }
     
     @objc func sceneDidActivate() {
         Log.p("scene did activate")
+        sceneActivated = true
+        
+        if let postIdToBeDeleted = postIdToBeDeleted { // todo: move this to sceneWillEnterForeground!?
+            let index = posts.firstIndex { $0.id == postIdToBeDeleted }!
+            posts.remove(at: index)
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .right)
+            
+            self.postIdToBeDeleted = nil
+        }
     }
     
     @objc func sceneDidEnterBackground() {
         Log.p("scene did enter background")
+        sceneInForeground = false
     }
     
     @objc func sceneWillDeactivate() {
         Log.p("scene will deactivate")
+        sceneActivated = false
+        
         saveData()
     }
     
     @objc func zombieWokeUp(notification: Notification) {
-        let postId = PostNotifier.getPostId(notification: notification)
-        Log.p("zombie woke up, id", postId)
+        Log.p("zombie woke up")
     }
     
     @objc func zombieSubmitted(notification: Notification) {
-        let postId = PostNotifier.getPostId(notification: notification)
-        Log.p("zombie submitted, id", postId)
+        Log.p("zombie submitted")
         
-        DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
-            self.reloadPosts()
+        // we're reloading only when app is currently visible
+        if sceneActivated {
+            DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
+                self.reloadPosts() // todo: reload/delete only the changed/updated post
+            }
+        } else {
+            let submittedPostId = PostNotifier.getPostId(notification: notification)
+            postIdToBeDeleted = submittedPostId
         }
     }
     
     @objc func zombieFailed(notification: Notification) {
-        let postId = PostNotifier.getPostId(notification: notification)
-        Log.p("zombie failed, id", postId)
+        Log.p("zombie failed")
     }
     
     func reloadPosts() {
