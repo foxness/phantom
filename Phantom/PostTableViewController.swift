@@ -222,18 +222,24 @@ class PostTableViewController: UITableViewController {
         tableView.insertRows(at: [newIndexPath], with: animation)
     }
     
+    // todo: do not update table view when user is looking at another view controller (shows warnings in console)
+    
     func editPost(post: Post, with animation: UITableView.RowAnimation = .none) {
-        Log.p("user edited a post")
-        PostNotifier.notifyUser(about: post)
-        
-        // todo: handle situation where it doesnt exist
-        // it can happen when user submits a post from notification banner while editing a post
-        
-        let index = posts.firstIndex { $0.id == post.id }!
-        posts[index] = post
-        sortPosts()
-        
-        tableView.reloadSections([0], with: animation)
+        if let index = posts.firstIndex(where: { $0.id == post.id }) {
+            Log.p("user edited a post")
+            PostNotifier.notifyUser(about: post)
+            
+            posts[index] = post
+            sortPosts()
+            
+            tableView.reloadSections([0], with: animation)
+        } else {
+            // this situation can happen when user submits a post
+            // from notification banner while editing the same post
+            // in that case we just discard it since it has already been posted
+            
+            Log.p("edited post discarded because already posted")
+        }
     }
     
     func deletePosts(ids postIds: [UUID], withAnimation animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
