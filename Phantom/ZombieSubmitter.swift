@@ -40,14 +40,22 @@ struct ZombieSubmitter {
         let post = database.posts[postIndex]
         
         let submitter = PostSubmitter.instance
-        let reddit: Reddit!
+        var reddit: Reddit!
         
+        var shouldGrabRedditFromSubmitter = true
         if submitter.reddit == nil {
             let redditAuth = database.redditAuth!
             reddit = Reddit(auth: redditAuth)
-            submitter.reddit = reddit
-        } else {
+            
+            if submitter.reddit == nil { // this will almost certainly be true but you never know
+                submitter.reddit = reddit
+                shouldGrabRedditFromSubmitter = false
+            }
+        }
+        
+        if shouldGrabRedditFromSubmitter {
             reddit = submitter.reddit
+            Log.p("zombie: used existing reddit")
         }
         
         submitter.submitPost(post) { url in

@@ -48,7 +48,7 @@ class PostSubmitter {
             dispatchGroup.enter()
             
             if simulateSubmission {
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
+                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
                     guard !self.isCancelled else { return }
                     self.callback("https://simulated-url-lolz.com/")
                     dispatchGroup.leave()
@@ -73,6 +73,7 @@ class PostSubmitter {
     var reddit: Reddit? {
         get { dq.sync { unsafeReddit } }
         set { dq.async(flags: .barrier) { [unowned self] in
+            assert(self.unsafeReddit == nil)
             self.unsafeReddit = newValue
             }
         }
@@ -87,8 +88,6 @@ class PostSubmitter {
     }()
     
     private init() { }
-    
-    
     
     private func addToQueue(submission: PostSubmission) {
         submission.completionBlock = {

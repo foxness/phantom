@@ -25,7 +25,6 @@ class PostTableViewController: UITableViewController {
     let database: Database = .instance
     let submitter: PostSubmitter = .instance
     
-    // todo: make postsubmitter a singleton and the only resource to submit posts
     // todo: disable submission / freeze ui during zombie submission
     var disableSubmission = false // needed to prevent multiple post submission
     var disabledPostId: UUID? // needed to disable editing segues for submitting post
@@ -115,16 +114,19 @@ class PostTableViewController: UITableViewController {
     }
     
     func setupPostSubmitter() {
-        guard submitter.reddit == nil else { return }
-        
-        if let redditAuth = database.redditAuth {
-            let reddit = Reddit(auth: redditAuth)
-            
-            submitter.reddit = reddit
-            
-            redditLoggedIn = true
-            Log.p("found logged reddit in database")
+        if submitter.reddit == nil {
+            if let redditAuth = database.redditAuth {
+                let reddit = Reddit(auth: redditAuth)
+                
+                if submitter.reddit == nil { // this is almost certainly true but you never know
+                    submitter.reddit = reddit
+                }
+            } else {
+                fatalError() // I dont see how this could happen
+            }
         }
+        
+        redditLoggedIn = true
     }
     
     func addSubmissionIndicatorView() {
