@@ -57,11 +57,16 @@ struct PostNotifier {
         let userInfo = response.notification.request.content.userInfo
         let postIdString = userInfo[KEY_POST_ID] as! String
         let postId = UUID(uuidString: postIdString)!
-        
         let actionId = response.actionIdentifier
-        assert(actionId == ACTION_SUBMIT) // todo: handle just opening the up instead of crashing
         
-        ZombieSubmitter.submitPost(postId: postId, callback: callback)
+        switch actionId {
+        case ACTION_SUBMIT:
+            ZombieSubmitter.submitPost(postId: postId, callback: callback)
+        case UNNotificationDefaultActionIdentifier:
+            break
+        default:
+            fatalError()
+        }
     }
     
     static func getDuePostCategory() -> UNNotificationCategory {
