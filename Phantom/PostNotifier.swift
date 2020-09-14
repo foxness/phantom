@@ -2,7 +2,7 @@
 //  PostNotifier.swift
 //  Phantom
 //
-//  Created by user179838 on 9/11/20.
+//  Created by Rivershy on 2020/09/11.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

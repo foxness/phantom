@@ -2,7 +2,7 @@
 //  Reddit.swift
 //  Phantom
 //
-//  Created by user179800 on 8/29/20.
+//  Created by Rivershy on 2020/08/29.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  Database.swift
 //  Phantom
 //
-//  Created by user179800 on 8/31/20.
+//  Created by Rivershy on 2020/08/31.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

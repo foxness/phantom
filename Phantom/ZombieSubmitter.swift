@@ -2,7 +2,7 @@
 //  ZombieSubmitter.swift
 //  Phantom
 //
-//  Created by user179838 on 9/13/20.
+//  Created by Rivershy on 2020/09/13.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

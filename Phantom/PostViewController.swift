@@ -1,8 +1,8 @@
 //
-//  MainViewController.swift
+//  PostViewController.swift
 //  Phantom
 //
-//  Created by user179800 on 8/30/20.
+//  Created by Rivershy on 2020/08/30.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

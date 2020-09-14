@@ -2,13 +2,11 @@
 //  PostSubmitter.swift
 //  Phantom
 //
-//  Created by user179800 on 9/3/20.
+//  Created by Rivershy on 2020/09/03.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 
 import Foundation
-
-// todo: fix the info comment at the top of every source file
 
 class PostSubmitter {
     typealias UrlCallback = (String?) -> Void

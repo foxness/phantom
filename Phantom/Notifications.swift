@@ -2,7 +2,7 @@
 //  Notifications.swift
 //  Phantom
 //
-//  Created by user179800 on 9/2/20.
+//  Created by Rivershy on 2020/09/02.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 

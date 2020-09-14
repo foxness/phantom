@@ -2,7 +2,7 @@
 //  PostTableViewController.swift
 //  Phantom
 //
-//  Created by user179800 on 9/4/20.
+//  Created by Rivershy on 2020/09/04.
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 
