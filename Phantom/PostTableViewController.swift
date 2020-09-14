@@ -28,12 +28,12 @@ class PostTableViewController: UITableViewController {
     var disableSubmission = false // needed to prevent multiple post submission
     var disabledPostId: UUID? // needed to disable editing segues for submitting post
     
-    var postIdToBeDeleted: UUID? // todo: make this a list because there can be multiple
+    var postIdsToBeDeleted: [UUID] = []
     
     var sceneActivated = true
     var sceneInForeground = true
     
-    var posts = [Post]()
+    var posts: [Post] = []
     
     @IBOutlet weak var submissionIndicatorView: UIView!
     @IBOutlet weak var submissionIndicatorLabel: UILabel!
@@ -63,9 +63,9 @@ class PostTableViewController: UITableViewController {
         Log.p("scene did activate")
         sceneActivated = true
         
-        if let postIdToBeDeleted = postIdToBeDeleted { // todo: move this to sceneWillEnterForeground!?
-            deletePost(id: postIdToBeDeleted, withAnimation: .right, cancelNotify: false)
-            self.postIdToBeDeleted = nil
+        if !postIdsToBeDeleted.isEmpty { // todo: move this to sceneWillEnterForeground!?
+            deletePosts(ids: postIdsToBeDeleted, withAnimation: .right, cancelNotify: false)
+            postIdsToBeDeleted.removeAll()
         }
     }
     
@@ -95,7 +95,7 @@ class PostTableViewController: UITableViewController {
             }
         } else {
             let submittedPostId = PostNotifier.getPostId(notification: notification)
-            postIdToBeDeleted = submittedPostId
+            postIdsToBeDeleted.append(submittedPostId)
         }
     }
     
@@ -246,16 +246,19 @@ class PostTableViewController: UITableViewController {
         tableView.reloadSections([0], with: animation)
     }
     
-    func deletePost(id postId: UUID, withAnimation animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
-        let index = posts.firstIndex { $0.id == postId }!
-        let deletedPost = posts.remove(at: index)
+    func deletePosts(ids postIds: [UUID], withAnimation animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
+        let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
+        assert(!indicesToDelete.isEmpty)
         
-        if cancelNotify {
-            PostNotifier.cancel(for: deletedPost)
+        for index in indicesToDelete {
+            let deletedPost = posts.remove(at: index)
+            if cancelNotify {
+                PostNotifier.cancel(for: deletedPost)
+            }
         }
         
-        let indexPath = IndexPath(row: index, section: 0)
-        tableView.deleteRows(at: [indexPath], with: animation)
+        let indexPaths = indicesToDelete.map { IndexPath(row: $0, section: 0) }
+        tableView.deleteRows(at: indexPaths, with: animation)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
@@ -273,7 +276,7 @@ class PostTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let postId = posts[indexPath.row].id // todo: make delete post by indexPath just for this case?
-            deletePost(id: postId, withAnimation: .top, cancelNotify: true)
+            deletePosts(ids: [postId], withAnimation: .top, cancelNotify: true)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -312,7 +315,7 @@ class PostTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 let success = url != nil
                 if success {
-                    self.deletePost(id: post.id, withAnimation: .right, cancelNotify: false) // because already cancelled
+                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
                 } else {
                     PostNotifier.notifyUser(about: post)
                     // todo: notify user it's gone wrong
