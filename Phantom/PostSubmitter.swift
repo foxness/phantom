@@ -40,18 +40,31 @@ class PostSubmitter {
         override func main() {
             guard !isCancelled else { return }
             
+            Log.p("submission task started")
+            
+            // why use dispatch group?
+            // to make reddit async tasks sync
+            // so that it works nicely with operation queue
+            
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.enter()
+            
             if simulateSubmission {
                 DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
                     guard !self.isCancelled else { return }
                     self.callback("https://simulated-url-lolz.com/")
+                    dispatchGroup.leave()
                 }
             } else {
                 // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
                 reddit.submit(post: post) { url in
                     guard !self.isCancelled else { return }
                     self.callback(url)
+                    dispatchGroup.leave()
                 }
             }
+            
+            dispatchGroup.wait()
         }
     }
     
@@ -80,13 +93,11 @@ class PostSubmitter {
     
     
     private func addToQueue(submission: PostSubmission) {
-        /*submission.completionBlock = {
+        submission.completionBlock = {
             guard !submission.isCancelled else { return }
             
-            Log.p("submission complete")
-        }*/
-        
-        // ^ this actually doesn't indicate submission completion, because reddit submit is async
+            Log.p("submission task complete")
+        }
         
         submitQueue.addOperation(submission)
     }
