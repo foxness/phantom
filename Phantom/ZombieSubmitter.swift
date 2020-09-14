@@ -21,7 +21,6 @@ struct ZombieSubmitter {
         notifyZombieWokeUp(postId: postId)
         
         let database = Database.instance
-        let redditAuth = database.redditAuth!
         
         guard let postIndex = database.posts.firstIndex(where: { $0.id == postId }) else {
             // if we get to this situation it means:
@@ -40,8 +39,16 @@ struct ZombieSubmitter {
         
         let post = database.posts[postIndex]
         
-        let reddit = Reddit(auth: redditAuth)
-        var submitter = PostSubmitter(reddit: reddit)
+        let submitter = PostSubmitter.instance
+        let reddit: Reddit!
+        
+        if submitter.reddit == nil {
+            let redditAuth = database.redditAuth!
+            reddit = Reddit(auth: redditAuth)
+            submitter.reddit = reddit
+        } else {
+            reddit = submitter.reddit
+        }
         
         submitter.submitPost(post) { url in
             let success = url != nil

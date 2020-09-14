@@ -8,7 +8,9 @@
 
 import Foundation
 
-struct PostSubmitter {
+// todo: fix the info comment at the top of every source file
+
+class PostSubmitter {
     typealias UrlCallback = (String?) -> Void
     
     private class PostSubmission: Operation {
@@ -53,23 +55,31 @@ struct PostSubmitter {
         }
     }
     
-    let reddit: Reddit
+    static let instance = PostSubmitter()
     
-    private lazy var submitQueue: OperationQueue = PostSubmitter.getSubmitQueue()
+    private let dq = DispatchQueue(label: "postSubmitter", qos: .default, attributes: .concurrent)
+    private var unsafeReddit: Reddit?
+    var reddit: Reddit? {
+        get { dq.sync { unsafeReddit } }
+        set { dq.async(flags: .barrier) { [unowned self] in
+            self.unsafeReddit = newValue
+            }
+        }
+    }
     
-    private static func getSubmitQueue() -> OperationQueue {
+    private lazy var submitQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = "Submit queue"
         queue.maxConcurrentOperationCount = 1
         
         return queue
-    }
+    }()
     
-    init(reddit: Reddit) {
-        self.reddit = reddit
-    }
+    private init() { }
     
-    private mutating func addToQueue(submission: PostSubmission) {
+    
+    
+    private func addToQueue(submission: PostSubmission) {
         /*submission.completionBlock = {
             guard !submission.isCancelled else { return }
             
@@ -81,17 +91,21 @@ struct PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    mutating func submitPost(_ post: Post, callback: @escaping UrlCallback) {
-        let submission = PostSubmission(reddit: reddit, post: post, callback: callback)
+    func submitPost(_ post: Post, callback: @escaping UrlCallback) {
+        guard let unsafeReddit = unsafeReddit else { fatalError() }
+        
+        let submission = PostSubmission(reddit: unsafeReddit, post: post, callback: callback)
         addToQueue(submission: submission)
     }
     
-    mutating func submitPostInDatabase(_ database: Database, callback: @escaping UrlCallback) {
-        let submission = PostSubmission(reddit: reddit, database: database, callback: callback)
+    func submitPostInDatabase(_ database: Database, callback: @escaping UrlCallback) {
+        guard let unsafeReddit = unsafeReddit else { fatalError() }
+        
+        let submission = PostSubmission(reddit: unsafeReddit, database: database, callback: callback)
         addToQueue(submission: submission)
     }
     
-    mutating func cancelEverything() {
+    func cancelEverything() {
         submitQueue.cancelAllOperations()
     }
 }

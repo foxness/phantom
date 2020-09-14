@@ -22,9 +22,10 @@ class PostTableViewController: UITableViewController {
     static let DURATION_INDICATOR_DONE = 1.5
     
     var redditLoggedIn = false
-    var database: Database = .instance
-    var submitter: PostSubmitter?
+    let database: Database = .instance
+    let submitter: PostSubmitter = .instance
     
+    // todo: make postsubmitter a singleton and the only resource to submit posts
     // todo: disable submission / freeze ui during zombie submission
     var disableSubmission = false // needed to prevent multiple post submission
     var disabledPostId: UUID? // needed to disable editing segues for submitting post
@@ -103,7 +104,9 @@ class PostTableViewController: UITableViewController {
     }
     
     func loginReddit(with reddit: Reddit) {
-        self.submitter = PostSubmitter(reddit: reddit)
+        assert(submitter.reddit == nil)
+        
+        submitter.reddit = reddit
         Log.p("i logged in reddit")
         
         // todo: remove the previous view controllers from the navigation stack
@@ -112,10 +115,12 @@ class PostTableViewController: UITableViewController {
     }
     
     func setupPostSubmitter() {
+        guard submitter.reddit == nil else { return }
+        
         if let redditAuth = database.redditAuth {
             let reddit = Reddit(auth: redditAuth)
             
-            submitter = PostSubmitter(reddit: reddit)
+            submitter.reddit = reddit
             
             redditLoggedIn = true
             Log.p("found logged reddit in database")
@@ -167,8 +172,7 @@ class PostTableViewController: UITableViewController {
     }
     
     func saveRedditAuth() {
-        if submitter != nil {
-            let redditAuth = submitter!.reddit.auth
+        if let redditAuth = submitter.reddit?.auth {
             database.redditAuth = redditAuth
         }
     }
@@ -305,7 +309,7 @@ class PostTableViewController: UITableViewController {
         disabledPostId = post.id // make the post uneditable
         setSubmissionIndicator(start: true) // let the user know
         
-        submitter!.submitPost(post) { url in
+        submitter.submitPost(post) { url in
             Log.p("url: \(String(describing: url))")
             
             DispatchQueue.main.async {
