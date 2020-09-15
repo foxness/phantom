@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+// todo: remove postscheduler?
+// todo: revoke backgroundtasks persmissions?
+
 struct PostNotifier {
     static let NOTIFICATION_ZOMBIE_WOKE_UP = ZombieSubmitter.NOTIFICATION_WOKE_UP
     static let NOTIFICATION_ZOMBIE_SUBMITTED = ZombieSubmitter.NOTIFICATION_SUBMITTED

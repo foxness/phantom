@@ -6,10 +6,6 @@
 //  Copyright © 2020 Rivershy. All rights reserved.
 //
 
-// todo: remove postscheduler?
-// todo: revoke backgroundtasks persmissions?
-// todo: remove Schdule library dependecy?
-
 /*import Foundation
 
 // !!!
