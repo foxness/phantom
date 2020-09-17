@@ -24,10 +24,32 @@ class PostTableViewController: UITableViewController {
     var redditLoggedIn = false
     let database: Database = .instance
     let submitter: PostSubmitter = .instance
+    let zombie: ZombieSubmitter = .instance
     
-    // todo: disable submission / freeze ui during zombie submission
-    var disableSubmission = false // needed to prevent multiple post submission
-    var disabledPostId: UUID? // needed to disable editing segues for submitting post
+    // todo: disable zombie submission during controller submission?
+    var disableSubmissionBecauseController = false // needed to prevent multiple post submission
+    var disabledPostIdBecauseController: UUID? // needed to disable editing segues for submitting post
+    
+    var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
+    var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
+    
+    private var disableSubmission: Bool {
+        return disableSubmissionBecauseController || disableSubmissionBecauseZombie
+    }
+    
+    private var disabledPostIds: [UUID] {
+        var ids = [UUID]()
+        
+        if let becauseControllerId = disabledPostIdBecauseController {
+            ids.append(becauseControllerId)
+        }
+        
+        if let becauseZombieId = disabledPostIdBecauseZombie {
+            ids.append(becauseZombieId)
+        }
+        
+        return ids
+    }
     
     var postIdsToBeDeleted: [UUID] = []
     
@@ -47,6 +69,24 @@ class PostTableViewController: UITableViewController {
         addSubmissionIndicatorView()
         setupPostSubmitter()
         loadPostsFromDatabase()
+        
+        if zombie.awake.value {
+            // we are doing this only because of the following scenario:
+            // - the app is not open (its dead)
+            // - user gets a post notification
+            // - user submits via the notification
+            // - user opens the app while the zombie is still submitting
+            // but the app couldn't have gotten the notification that
+            // the zombie has awoken because the app was dead
+            // so we check if the zombie is awake here
+            // and disable submission/postId according to zombie
+            
+            disableSubmissionBecauseZombie = true
+            
+            let zombieId = zombie.submissionId.value
+            assert(zombieId != nil)
+            disabledPostIdBecauseZombie = zombieId
+        }
     }
     
     deinit {
@@ -82,6 +122,12 @@ class PostTableViewController: UITableViewController {
     
     @objc func zombieWokeUp(notification: Notification) {
         Log.p("zombie woke up")
+        
+        // todo: decide if I use post id from notification or from zombie.submissionId
+        let submissionId = PostNotifier.getPostId(notification: notification)
+        
+        disableSubmissionBecauseZombie = true
+        disabledPostIdBecauseZombie = submissionId
     }
     
     @objc func zombieSubmitted(notification: Notification) {
@@ -96,10 +142,16 @@ class PostTableViewController: UITableViewController {
         } else { // defer deletion for when app is activated
             postIdsToBeDeleted.append(submittedPostId)
         }
+        
+        disableSubmissionBecauseZombie = false
+        disabledPostIdBecauseZombie = nil
     }
     
     @objc func zombieFailed(notification: Notification) {
         Log.p("zombie failed")
+        
+        disableSubmissionBecauseZombie = false
+        disabledPostIdBecauseZombie = nil
     }
     
     func loginReddit(with reddit: Reddit) {
@@ -287,28 +339,30 @@ class PostTableViewController: UITableViewController {
     // todo: disable editing while zombie is awake/submitting?
     // prevents post submission and deletion while a post is being submitted
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard let disabledPostId = disabledPostId else { return true }
+        let disabled = disabledPostIds
+        guard !disabled.isEmpty else { return true }
         
         let postId = posts[indexPath.row].id
-        return postId != disabledPostId
+        return !disabled.contains(postId)
     }
     
     // todo: disable editing segue while zombie is awake/submitting?
     // prevents post editing segue while a post is being submitted
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let disabledPostId = disabledPostId else { return indexPath }
+        let disabled = disabledPostIds
+        guard !disabled.isEmpty else { return indexPath }
         
         let postId = posts[indexPath.row].id
-        return postId == disabledPostId ? nil : indexPath
+        return disabled.contains(postId) ? nil : indexPath
     }
     
     func submitPressed(postIndex: IndexPath) {
-        disableSubmission = true
+        disableSubmissionBecauseController = true
         
         let post = posts[postIndex.row]
         PostNotifier.cancel(for: post)
         
-        disabledPostId = post.id // make the post uneditable
+        disabledPostIdBecauseController = post.id // make the post uneditable
         setSubmissionIndicator(start: true) // let the user know
         
         submitter.submitPost(post) { url in
@@ -323,10 +377,10 @@ class PostTableViewController: UITableViewController {
                     // todo: notify user it's gone wrong
                 }
                 
-                self.disabledPostId = nil // make editable
+                self.disabledPostIdBecauseController = nil // make editable
                 self.setSubmissionIndicator(start: false) {
                     // when the indicator disappears:
-                    self.disableSubmission = false
+                    self.disableSubmissionBecauseController = false
                 }
             }
         }

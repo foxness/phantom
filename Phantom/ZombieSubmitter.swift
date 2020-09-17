@@ -22,12 +22,15 @@ struct ZombieSubmitter {
     private let database = Database.instance
     private let submitter = PostSubmitter.instance
     
-    //var awoken = Atomic<Bool>(false)
-    //var submittingId = Atomic<UUID?>(nil)
+    private(set) var awake = Atomic<Bool>(false)
+    private(set) var submissionId = Atomic<UUID?>(nil)
     
     private init() { }
     
     func submitPost(id: UUID, callback: @escaping () -> Void) {
+        awake.mutate { $0 = true }
+        submissionId.mutate { $0 = id }
+        
         ZombieSubmitter.notifyZombieWokeUp(postId: id)
         
         guard let postIndex = database.posts.firstIndex(where: { $0.id == id }) else {
@@ -41,7 +44,10 @@ struct ZombieSubmitter {
             
             Log.p("post wasnt found")
             ZombieSubmitter.notifyZombieFailed(postId: id)
+            
             callback()
+            awake.mutate { $0 = false }
+            submissionId.mutate { $0 = nil }
             return
         }
         
@@ -82,6 +88,8 @@ struct ZombieSubmitter {
                 // todo: issue submission error user notification
             }
             
+            self.awake.mutate { $0 = false }
+            self.submissionId.mutate { $0 = nil }
             callback()
         }
     }
