@@ -68,6 +68,7 @@ class PostSubmitter {
     
     static let instance = PostSubmitter()
     
+    // todo: use Atomic instead
     private let dq = DispatchQueue(label: "postSubmitter", qos: .default, attributes: .concurrent)
     private var unsafeReddit: Reddit?
     var reddit: Reddit? {

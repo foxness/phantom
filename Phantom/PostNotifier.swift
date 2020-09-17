@@ -64,7 +64,7 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
-            ZombieSubmitter.submitPost(postId: postId, callback: callback)
+            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
         case UNNotificationDefaultActionIdentifier:
             break
         default:

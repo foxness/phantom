@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: reverse dns names wherever possible
+
 struct ZombieSubmitter {
     static let NOTIFICATION_WOKE_UP = Notification.Name("zombieWokeUp")
     static let NOTIFICATION_SUBMITTED = Notification.Name("zombieSubmittedFromBeyondTheGrave")
@@ -15,14 +17,20 @@ struct ZombieSubmitter {
     
     private static let KEY_POST_ID = "postId"
     
+    static let instance = ZombieSubmitter()
+    
+    private let database = Database.instance
+    private let submitter = PostSubmitter.instance
+    
+    //var awoken = Atomic<Bool>(false)
+    //var submittingId = Atomic<UUID?>(nil)
+    
     private init() { }
     
-    static func submitPost(postId: UUID, callback: @escaping () -> Void) {
-        notifyZombieWokeUp(postId: postId)
+    func submitPost(id: UUID, callback: @escaping () -> Void) {
+        ZombieSubmitter.notifyZombieWokeUp(postId: id)
         
-        let database = Database.instance
-        
-        guard let postIndex = database.posts.firstIndex(where: { $0.id == postId }) else {
+        guard let postIndex = database.posts.firstIndex(where: { $0.id == id }) else {
             // if we get to this situation it means:
             // - the notification banner popped up
             // - the user deleted the post of the notification in app while the notification banned was still popped up
@@ -32,16 +40,14 @@ struct ZombieSubmitter {
             // so we have to account for that niche situation here
             
             Log.p("post wasnt found")
-            notifyZombieFailed(postId: postId)
+            ZombieSubmitter.notifyZombieFailed(postId: id)
             callback()
             return
         }
         
         let post = database.posts[postIndex]
         
-        let submitter = PostSubmitter.instance
         var reddit: Reddit!
-        
         var shouldGrabRedditFromSubmitter = true
         if submitter.reddit == nil {
             let redditAuth = database.redditAuth!
@@ -64,15 +70,15 @@ struct ZombieSubmitter {
             Log.p("url", url)
             
             if success {
-                database.posts.remove(at: postIndex)
-                database.savePosts()
+                self.database.posts.remove(at: postIndex)
+                self.database.savePosts()
                 
                 let redditAuth = reddit.auth
-                database.redditAuth = redditAuth
+                self.database.redditAuth = redditAuth
                 
-                notifyZombieSubmitted(postId: postId)
+                ZombieSubmitter.notifyZombieSubmitted(postId: id)
             } else {
-                notifyZombieFailed(postId: postId)
+                ZombieSubmitter.notifyZombieFailed(postId: id)
                 // todo: issue submission error user notification
             }
             
