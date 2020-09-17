@@ -17,7 +17,7 @@ class PostSubmitter {
         private let callback: UrlCallback
         
         // debug
-        let simulateSubmission = true
+        let simulateSubmission = false
         
         init(reddit: Reddit, database: Database, callback: @escaping UrlCallback) {
             self.reddit = reddit
@@ -68,17 +68,7 @@ class PostSubmitter {
     
     static let instance = PostSubmitter()
     
-    // todo: use Atomic instead
-    private let dq = DispatchQueue(label: "postSubmitter", qos: .default, attributes: .concurrent)
-    private var unsafeReddit: Reddit?
-    var reddit: Reddit? {
-        get { dq.sync { unsafeReddit } }
-        set { dq.async(flags: .barrier) { [unowned self] in
-            assert(self.unsafeReddit == nil)
-            self.unsafeReddit = newValue
-            }
-        }
-    }
+    var reddit = Atomic<Reddit?>(nil)
     
     private lazy var submitQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -101,16 +91,16 @@ class PostSubmitter {
     }
     
     func submitPost(_ post: Post, callback: @escaping UrlCallback) {
-        guard let unsafeReddit = unsafeReddit else { fatalError() }
+        guard let reddit = reddit.value else { fatalError() }
         
-        let submission = PostSubmission(reddit: unsafeReddit, post: post, callback: callback)
+        let submission = PostSubmission(reddit: reddit, post: post, callback: callback)
         addToQueue(submission: submission)
     }
     
     func submitPostInDatabase(_ database: Database, callback: @escaping UrlCallback) {
-        guard let unsafeReddit = unsafeReddit else { fatalError() }
+        guard let reddit = reddit.value else { fatalError() }
         
-        let submission = PostSubmission(reddit: unsafeReddit, database: database, callback: callback)
+        let submission = PostSubmission(reddit: reddit, database: database, callback: callback)
         addToQueue(submission: submission)
     }
     

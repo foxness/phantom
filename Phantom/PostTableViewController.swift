@@ -26,6 +26,7 @@ class PostTableViewController: UITableViewController {
     let submitter: PostSubmitter = .instance
     let zombie: ZombieSubmitter = .instance
     
+    // todo: let user know the zombie is submitting?
     // todo: disable zombie submission during controller submission?
     var disableSubmissionBecauseController = false // needed to prevent multiple post submission
     var disabledPostIdBecauseController: UUID? // needed to disable editing segues for submitting post
@@ -72,7 +73,7 @@ class PostTableViewController: UITableViewController {
         
         if zombie.awake.value {
             // we are doing this only because of the following scenario:
-            // - the app is not open (its dead)
+            // - the app is not open (it's dead)
             // - user gets a post notification
             // - user submits via the notification
             // - user opens the app while the zombie is still submitting
@@ -155,9 +156,9 @@ class PostTableViewController: UITableViewController {
     }
     
     func loginReddit(with reddit: Reddit) {
-        assert(submitter.reddit == nil)
+        assert(submitter.reddit.value == nil)
         
-        submitter.reddit = reddit
+        submitter.reddit.mutate { $0 = reddit }
         Log.p("i logged in reddit")
         
         // todo: remove the previous view controllers from the navigation stack
@@ -166,12 +167,12 @@ class PostTableViewController: UITableViewController {
     }
     
     func setupPostSubmitter() {
-        if submitter.reddit == nil {
+        if submitter.reddit.value == nil {
             if let redditAuth = database.redditAuth {
                 let reddit = Reddit(auth: redditAuth)
                 
-                if submitter.reddit == nil { // this is almost certainly true but you never know
-                    submitter.reddit = reddit
+                if submitter.reddit.value == nil { // this is almost certainly true but you never know
+                    submitter.reddit.mutate { $0 = reddit }
                 }
             } else {
                 fatalError() // I dont see how this could happen
@@ -226,7 +227,7 @@ class PostTableViewController: UITableViewController {
     }
     
     func saveRedditAuth() {
-        if let redditAuth = submitter.reddit?.auth {
+        if let redditAuth = submitter.reddit.value?.auth {
             database.redditAuth = redditAuth
         }
     }

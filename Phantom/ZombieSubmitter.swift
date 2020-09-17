@@ -55,18 +55,18 @@ struct ZombieSubmitter {
         
         var reddit: Reddit!
         var shouldGrabRedditFromSubmitter = true
-        if submitter.reddit == nil {
+        if submitter.reddit.value == nil {
             let redditAuth = database.redditAuth!
             reddit = Reddit(auth: redditAuth)
             
-            if submitter.reddit == nil { // this will almost certainly be true but you never know
-                submitter.reddit = reddit
+            if submitter.reddit.value == nil { // this will almost certainly be true but you never know
+                submitter.reddit.mutate { $0 = reddit }
                 shouldGrabRedditFromSubmitter = false
             }
         }
         
         if shouldGrabRedditFromSubmitter {
-            reddit = submitter.reddit
+            reddit = submitter.reddit.value
             Log.p("zombie: used existing reddit")
         }
         
