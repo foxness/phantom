@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+// todo: use this? https://medium.com/@TomZurkan/creating-an-atomic-property-in-swift-988fa55cc71
 final class Atomic<A> { // src: https://www.objc.io/blog/2018/12/18/atomic-variables/
     private let queue = DispatchQueue(label: "Atomic serial queue")
     private var _value: A

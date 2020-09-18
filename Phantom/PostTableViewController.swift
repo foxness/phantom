@@ -337,8 +337,6 @@ class PostTableViewController: UITableViewController {
         }    
     }
     
-    // todo: disable editing while zombie is awake/submitting?
-    // prevents post submission and deletion while a post is being submitted
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let disabled = disabledPostIds
         guard !disabled.isEmpty else { return true }
@@ -347,8 +345,6 @@ class PostTableViewController: UITableViewController {
         return !disabled.contains(postId)
     }
     
-    // todo: disable editing segue while zombie is awake/submitting?
-    // prevents post editing segue while a post is being submitted
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let disabled = disabledPostIds
         guard !disabled.isEmpty else { return indexPath }
