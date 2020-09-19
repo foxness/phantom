@@ -83,6 +83,9 @@ struct ZombieSubmitter {
                 self.database.redditAuth = redditAuth
                 
                 ZombieSubmitter.notifyZombieSubmitted(postId: id)
+                
+                let posts = self.database.posts
+                PostNotifier.updateAppBadge(posts: posts)
             } else {
                 ZombieSubmitter.notifyZombieFailed(postId: id)
                 // todo: issue submission error user notification

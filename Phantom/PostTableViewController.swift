@@ -119,6 +119,8 @@ class PostTableViewController: UITableViewController {
     @objc func sceneDidEnterBackground() {
         Log.p("scene did enter background")
         sceneInForeground = false
+        
+        updateAppBadge()
     }
     
     @objc func zombieWokeUp(notification: Notification) {
@@ -153,6 +155,10 @@ class PostTableViewController: UITableViewController {
         
         disableSubmissionBecauseZombie = false
         disabledPostIdBecauseZombie = nil
+    }
+    
+    func updateAppBadge() {
+        PostNotifier.updateAppBadge(posts: posts)
     }
     
     func loginReddit(with reddit: Reddit) {

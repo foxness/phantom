@@ -34,11 +34,12 @@ struct PostNotifier {
         let userInfo = [KEY_POST_ID: post.id.uuidString]
         let categoryId = CATEGORY_DUE_POST
         let sound = UNNotificationSound.default
+        let badgeCount = 1
         
         let id = post.id.uuidString
         let dc = dateToComponents(date)
         
-        let content = Notifications.ContentParams(title: title, body: body, subtitle: subtitle, userInfo: userInfo, categoryId: categoryId, sound: sound)
+        let content = Notifications.ContentParams(title: title, body: body, subtitle: subtitle, userInfo: userInfo, categoryId: categoryId, sound: sound, badgeCount: badgeCount)
         let params = Notifications.RequestParams(id: id, dc: dc, content: content)
         
         Notifications.request(params: params) { error in
@@ -54,6 +55,17 @@ struct PostNotifier {
         let id = post.id.uuidString
         Notifications.cancel(ids: id)
         Notifications.removeDelivered(ids: id)
+    }
+    
+    // todo: fix badge being zero for a brief period of time after notification comes but date isn't overdue yet
+    static func updateAppBadge(posts: [Post]) {
+        let now = Date()
+        let overdueCount = posts.count { $0.date < now }
+        let badgeCount = overdueCount == 0 ? 0 : 1
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.applicationIconBadgeNumber = badgeCount // todo: use overdue count instead
+        }
     }
     
     static func didReceiveResponse(_ response: UNNotificationResponse, callback: @escaping () -> Void) {

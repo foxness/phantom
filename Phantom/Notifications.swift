@@ -17,6 +17,7 @@ struct Notifications {
         let userInfo: [AnyHashable: Any]?
         let categoryId: String?
         let sound: UNNotificationSound?
+        let badgeCount: Int?
     }
     
     struct RequestParams {
@@ -68,6 +69,10 @@ struct Notifications {
             content.sound = sound
         } else {
             content.sound = .default
+        }
+        
+        if let badgeCount = params.badgeCount {
+            content.badge = NSNumber(value: badgeCount)
         }
         
         return content

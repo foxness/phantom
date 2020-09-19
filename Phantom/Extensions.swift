@@ -27,6 +27,12 @@ final class Atomic<A> { // src: https://www.objc.io/blog/2018/12/18/atomic-varia
     }
 }
 
+extension Sequence {
+    func count(`where`: (Element) -> Bool) -> Int {
+        return self.lazy.filter(`where`).count
+    }
+}
+
 extension Int {
     var randomString: String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
