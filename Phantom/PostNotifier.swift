@@ -57,10 +57,17 @@ struct PostNotifier {
         Notifications.removeDelivered(ids: id)
     }
     
-    // todo: fix badge being zero for a brief period of time after notification comes but date isn't overdue yet
     static func updateAppBadge(posts: [Post]) {
+        // this cancels out the brief period of time after notification comes but date isn't overdue yet
+        // the notification doesn't come right on time (just calendar trigger things I guess) so we give it 1 min leeway
+        
+        // alternatively we can check if there are delivered notifications
+        // and if there are, set the app badge to 1 regardless [todo]
+        
+        let leeway = TimeInterval(60) // 1 min
         let now = Date()
-        let overdueCount = posts.count { $0.date < now }
+        let adjustedNow = now + leeway
+        let overdueCount = posts.count { $0.date < adjustedNow }
         let badgeCount = overdueCount == 0 ? 0 : 1
         
         DispatchQueue.main.async {
