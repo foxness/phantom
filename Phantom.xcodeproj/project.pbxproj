@@ -86,24 +86,10 @@
 		71C031B024FA6B5600D6E19F /* Phantom */ = {
 			isa = PBXGroup;
 			children = (
-				718181DB24FBEDF500059658 /* Post.swift */,
-				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
-				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
-				718181DD24FBFEE200059658 /* Requests.swift */,
-				71614EF024FD195C00FA8B76 /* Database.swift */,
-				7192A40924FFD76500CB54A8 /* Notifications.swift */,
-				7179EF392501037000BDA598 /* PostSubmitter.swift */,
-				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
-				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
-				71684AD025024D83005BA857 /* PostCell.swift */,
-				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
-				718181D924FBE01D00059658 /* PostViewController.swift */,
-				71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */,
-				71C031C824FA705B00D6E19F /* LoginViewController.swift */,
-				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
-				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
-				71C031B724FA6B5600D6E19F /* Main.storyboard */,
-				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
+				9693DCE92527736100A4A23E /* Model */,
+				9693DCE8252772D200A4A23E /* View */,
+				9693DCEA252773E400A4A23E /* Presenter */,
+				9693DCEB252773FE00A4A23E /* Other */,
 				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
 			);
@@ -116,6 +102,52 @@
 				71C031C624FA6FF400D6E19F /* WebKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9693DCE8252772D200A4A23E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7192A40924FFD76500CB54A8 /* Notifications.swift */,
+				71684AD025024D83005BA857 /* PostCell.swift */,
+				718181D924FBE01D00059658 /* PostViewController.swift */,
+				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
+				71C031B724FA6B5600D6E19F /* Main.storyboard */,
+				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
+				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
+				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
+				71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */,
+				71C031C824FA705B00D6E19F /* LoginViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9693DCE92527736100A4A23E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				718181DB24FBEDF500059658 /* Post.swift */,
+				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
+				71614EF024FD195C00FA8B76 /* Database.swift */,
+				718181DD24FBFEE200059658 /* Requests.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9693DCEA252773E400A4A23E /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				7179EF392501037000BDA598 /* PostSubmitter.swift */,
+				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
+				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		9693DCEB252773FE00A4A23E /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
+			);
+			path = Other;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
