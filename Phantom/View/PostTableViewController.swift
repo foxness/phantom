@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController {
+class PostTableViewController: UITableViewController, PostTableViewDelegate {
     static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
     static let SEGUE_ADD_POST = "addPost"
     static let SEGUE_EDIT_POST = "editPost"
@@ -21,7 +21,6 @@ class PostTableViewController: UITableViewController {
     
     static let DURATION_INDICATOR_DONE = 1.5
     
-    var redditLoggedIn = false
     let database: Database = .instance
     let submitter: PostSubmitter = .instance
     let zombie: ZombieSubmitter = .instance
@@ -59,6 +58,8 @@ class PostTableViewController: UITableViewController {
     
     var posts: [Post] = []
     
+    private var presenter = PostTablePresenter()
+    
     @IBOutlet weak var submissionIndicatorView: UIView!
     @IBOutlet weak var submissionIndicatorLabel: UILabel!
     @IBOutlet weak var submissionIndicatorActivity: UIActivityIndicatorView!
@@ -66,9 +67,10 @@ class PostTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter.attachView(self)
+        
         subscribeToNotifications()
         addSubmissionIndicatorView()
-        setupPostSubmitter()
         loadPostsFromDatabase()
         
         if zombie.awake.value {
@@ -168,11 +170,11 @@ class PostTableViewController: UITableViewController {
         Log.p("i logged in reddit")
         
         // todo: remove the previous view controllers from the navigation stack
-        
-        redditLoggedIn = true
     }
     
     func setupPostSubmitter() {
+        var redditLogged = false
+        
         if submitter.reddit.value == nil {
             if let redditAuth = database.redditAuth {
                 let reddit = Reddit(auth: redditAuth)
@@ -181,10 +183,14 @@ class PostTableViewController: UITableViewController {
                     submitter.reddit.mutate { $0 = reddit }
                 }
                 
-                redditLoggedIn = true
+                redditLogged = true
             }
         } else {
-            redditLoggedIn = true
+            redditLogged = true
+        }
+        
+        if !redditLogged {
+            segueToIntroduction()
         }
     }
     
@@ -221,9 +227,11 @@ class PostTableViewController: UITableViewController {
             }
         }
         
-        if !redditLoggedIn {
-            performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
-        }
+        setupPostSubmitter()
+    }
+    
+    func segueToIntroduction() {
+        performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
     }
     
     func saveData() {

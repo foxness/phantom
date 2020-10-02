@@ -10,4 +10,12 @@ import Foundation
 
 class PostTablePresenter {
     private weak var viewDelegate: PostTableViewDelegate?
+    
+    func attachView(_ viewDelegate: PostTableViewDelegate) {
+        self.viewDelegate = viewDelegate
+    }
+    
+    func detachView() {
+        viewDelegate = nil
+    }
 }

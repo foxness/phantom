@@ -9,5 +9,5 @@
 import Foundation
 
 protocol PostTableViewDelegate: AnyObject {
-    func displayMessage(_ message: String)
+    //func displayMessage(_ message: String)
 }
