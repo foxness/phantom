@@ -180,12 +180,12 @@ class PostTableViewController: UITableViewController {
                 if submitter.reddit.value == nil { // this is almost certainly true but you never know
                     submitter.reddit.mutate { $0 = reddit }
                 }
-            } else {
-                fatalError() // I dont see how this could happen
+                
+                redditLoggedIn = true
             }
+        } else {
+            redditLoggedIn = true
         }
-        
-        redditLoggedIn = true
     }
     
     func addSubmissionIndicatorView() {
