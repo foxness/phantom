@@ -25,6 +25,8 @@
 		71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CA24FA8B4E00D6E19F /* Reddit.swift */; };
 		71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C031CC24FA95CB00D6E19F /* Extensions.swift */; };
 		71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C646A8250254A4005C28B1 /* PostTableViewController.swift */; };
+		960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D066125277F7700FFB4AC /* PostTablePresenter.swift */; };
+		960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */; };
 		96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96886AE2250BCFBE004FDE30 /* PostNotifier.swift */; };
 		969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +52,8 @@
 		71C031CA24FA8B4E00D6E19F /* Reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reddit.swift; sourceTree = "<group>"; };
 		71C031CC24FA95CB00D6E19F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		71C646A8250254A4005C28B1 /* PostTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewController.swift; sourceTree = "<group>"; };
+		960D066125277F7700FFB4AC /* PostTablePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTablePresenter.swift; sourceTree = "<group>"; };
+		960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewDelegate.swift; sourceTree = "<group>"; };
 		96886AE2250BCFBE004FDE30 /* PostNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNotifier.swift; sourceTree = "<group>"; };
 		969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieSubmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +139,8 @@
 		9693DCEA252773E400A4A23E /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				960D066125277F7700FFB4AC /* PostTablePresenter.swift */,
+				960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
 				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
 				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
@@ -226,6 +232,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
+				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
+				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,
 				718181DA24FBE01D00059658 /* PostViewController.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
 				96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */,
