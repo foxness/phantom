@@ -21,43 +21,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     
     static let DURATION_INDICATOR_DONE = 1.5
     
-    let database: Database = .instance
-    let submitter: PostSubmitter = .instance
-    let zombie: ZombieSubmitter = .instance
-    
-    // todo: let user know the zombie is submitting?
-    // todo: disable zombie submission during controller submission?
-    var disableSubmissionBecauseController = false // needed to prevent multiple post submission
-    var disabledPostIdBecauseController: UUID? // needed to disable editing segues for submitting post
-    
-    var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
-    var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
-    
-    private var disableSubmission: Bool {
-        return disableSubmissionBecauseController || disableSubmissionBecauseZombie
-    }
-    
-    private var disabledPostIds: [UUID] {
-        var ids = [UUID]()
-        
-        if let becauseControllerId = disabledPostIdBecauseController {
-            ids.append(becauseControllerId)
-        }
-        
-        if let becauseZombieId = disabledPostIdBecauseZombie {
-            ids.append(becauseZombieId)
-        }
-        
-        return ids
-    }
-    
-    var postIdsToBeDeleted: [UUID] = []
-    
-    var sceneActivated = true
-    var sceneInForeground = true
-    
-    var posts: [Post] = []
-    
     private var presenter = PostTablePresenter()
     
     @IBOutlet weak var submissionIndicatorView: UIView!
@@ -67,29 +30,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter.attachView(self)
-        
         subscribeToNotifications()
         addSubmissionIndicatorView()
-        loadPostsFromDatabase()
         
-        if zombie.awake.value {
-            // we are doing this only because of the following scenario:
-            // - the app is not open (it's dead)
-            // - user gets a post notification
-            // - user submits via the notification
-            // - user opens the app while the zombie is still submitting
-            // but the app couldn't have gotten the notification that
-            // the zombie has awoken because the app was dead
-            // so we check if the zombie is awake here
-            // and disable submission/postId according to zombie
-            
-            disableSubmissionBecauseZombie = true
-            
-            let zombieId = zombie.submissionId.value
-            assert(zombieId != nil)
-            disabledPostIdBecauseZombie = zombieId
-        }
+        presenter.attachView(self)
+        presenter.viewDidLoad()
     }
     
     deinit {
@@ -97,101 +42,37 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     }
     
     @objc func sceneWillEnterForeground() {
-        Log.p("scene will enter foreground")
-        sceneInForeground = true
+        presenter.sceneWillEnterForeground()
     }
     
     @objc func sceneDidActivate() {
-        Log.p("scene did activate")
-        sceneActivated = true
-        
-        if !postIdsToBeDeleted.isEmpty { // todo: move this to sceneWillEnterForeground!?
-            deletePosts(ids: postIdsToBeDeleted, withAnimation: .right, cancelNotify: false)
-            postIdsToBeDeleted.removeAll()
-        }
+        presenter.sceneDidActivate()
     }
     
     @objc func sceneWillDeactivate() {
-        Log.p("scene will deactivate")
-        sceneActivated = false
-        
-        saveData()
+        presenter.sceneWillDeactivate()
     }
     
     @objc func sceneDidEnterBackground() {
-        Log.p("scene did enter background")
-        sceneInForeground = false
-        
-        updateAppBadge()
+        presenter.sceneDidEnterBackground()
     }
     
     @objc func zombieWokeUp(notification: Notification) {
-        Log.p("zombie woke up")
-        
-        // todo: decide if I use post id from notification or from zombie.submissionId
-        let submissionId = PostNotifier.getPostId(notification: notification)
-        
-        disableSubmissionBecauseZombie = true
-        disabledPostIdBecauseZombie = submissionId
+        presenter.zombieWokeUp(notification: notification)
     }
     
     @objc func zombieSubmitted(notification: Notification) {
-        Log.p("zombie submitted")
-        
-        let submittedPostId = PostNotifier.getPostId(notification: notification)
-        
-        if sceneActivated { // we're reloading only when app is currently visible
-            DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
-                self.deletePosts(ids: [submittedPostId], withAnimation: .right, cancelNotify: false)
-            }
-        } else { // defer deletion for when app is activated
-            postIdsToBeDeleted.append(submittedPostId)
-        }
-        
-        disableSubmissionBecauseZombie = false
-        disabledPostIdBecauseZombie = nil
+        presenter.zombieSubmitted(notification: notification)
     }
     
     @objc func zombieFailed(notification: Notification) {
-        Log.p("zombie failed")
-        
-        disableSubmissionBecauseZombie = false
-        disabledPostIdBecauseZombie = nil
-    }
-    
-    func updateAppBadge() {
-        PostNotifier.updateAppBadge(posts: posts)
+        presenter.zombieFailed(notification: notification)
     }
     
     func loginReddit(with reddit: Reddit) {
-        assert(submitter.reddit.value == nil)
-        
-        submitter.reddit.mutate { $0 = reddit }
-        Log.p("i logged in reddit")
+        presenter.redditLoggedIn(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
-    }
-    
-    func setupPostSubmitter() {
-        var redditLogged = false
-        
-        if submitter.reddit.value == nil {
-            if let redditAuth = database.redditAuth {
-                let reddit = Reddit(auth: redditAuth)
-                
-                if submitter.reddit.value == nil { // this is almost certainly true but you never know
-                    submitter.reddit.mutate { $0 = reddit }
-                }
-                
-                redditLogged = true
-            }
-        } else {
-            redditLogged = true
-        }
-        
-        if !redditLogged {
-            segueToIntroduction()
-        }
     }
     
     func addSubmissionIndicatorView() {
@@ -217,47 +98,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        Notifications.requestPermissions { granted, error in
-            if !granted {
-                Log.p("permissions not granted :0")
-            }
-            
-            if let error = error {
-                Log.p("permissions error", error)
-            }
-        }
-        
-        setupPostSubmitter()
+        presenter.viewDidAppear()
     }
     
     func segueToIntroduction() {
         performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
-    }
-    
-    func saveData() {
-        savePosts()
-        saveRedditAuth()
-        Log.p("saved data")
-    }
-    
-    func saveRedditAuth() {
-        if let redditAuth = submitter.reddit.value?.auth {
-            database.redditAuth = redditAuth
-        }
-    }
-    
-    func savePosts() {
-        database.posts = posts
-        database.savePosts()
-    }
-    
-    func loadPostsFromDatabase() {
-        posts = database.posts
-        sortPosts()
-    }
-    
-    func sortPosts() {
-        posts.sort { $0.date < $1.date }
     }
     
     func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)? = nil) {
@@ -282,61 +127,44 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
 
     // MARK: - Table view data source
     
-    func addNewPost(_ post: Post, with animation: UITableView.RowAnimation = .top) {
-        Log.p("user added new post")
-        PostNotifier.notifyUser(about: post)
-        
-        posts.append(post)
-        sortPosts()
-        
-        let row = posts.firstIndex(of: post)!
-        let newIndexPath = IndexPath(row: row, section: 0)
-        
-        tableView.insertRows(at: [newIndexPath], with: animation)
+    func insertRows(at indices: [Int], with animation: ListAnimation) {
+        let indexPaths = PostTableViewController.indicesToIndexPaths(indices)
+        let rowAnimation = PostTableViewController.listAnimationToRow(animation)
+        tableView.insertRows(at: indexPaths, with: rowAnimation)
     }
     
-    // todo: do not update table view when user is looking at another view controller (shows warnings in console)
-    
-    func editPost(post: Post, with animation: UITableView.RowAnimation = .none) {
-        if let index = posts.firstIndex(where: { $0.id == post.id }) {
-            Log.p("user edited a post")
-            PostNotifier.notifyUser(about: post)
-            
-            posts[index] = post
-            sortPosts()
-            
-            tableView.reloadSections([0], with: animation)
-        } else {
-            // this situation can happen when user submits a post
-            // from notification banner while editing the same post
-            // in that case we just discard it since it has already been posted
-            
-            Log.p("edited post discarded because already posted")
+    private static func listAnimationToRow(_ listAnimation: ListAnimation) -> UITableView.RowAnimation {
+        switch listAnimation {
+        case .none: return .none
+        case .top: return .top
+        case .right: return .right
+        case .automatic: return .automatic
         }
     }
     
-    func deletePosts(ids postIds: [UUID], withAnimation animation: UITableView.RowAnimation = .none, cancelNotify: Bool = true) {
-        let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
-        assert(!indicesToDelete.isEmpty)
-        
-        for index in indicesToDelete {
-            let deletedPost = posts.remove(at: index)
-            if cancelNotify {
-                PostNotifier.cancel(for: deletedPost)
-            }
-        }
-        
-        let indexPaths = indicesToDelete.map { IndexPath(row: $0, section: 0) }
-        tableView.deleteRows(at: indexPaths, with: animation)
+    private static func indicesToIndexPaths(_ indices: [Int]) -> [IndexPath] {
+        return indices.map { IndexPath(row: $0, section: 0) }
+    }
+    
+    func reloadSection(with animation: ListAnimation) {
+        let sections: IndexSet = [0]
+        let rowAnimation = PostTableViewController.listAnimationToRow(animation)
+        tableView.reloadSections(sections, with: rowAnimation)
+    }
+    
+    func deleteRows(at indices: [Int], with animation: ListAnimation) {
+        let indexPaths = PostTableViewController.indicesToIndexPaths(indices)
+        let rowAnimation = PostTableViewController.listAnimationToRow(animation)
+        tableView.deleteRows(at: indexPaths, with: rowAnimation)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { posts.count }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { presenter.getPostCount() }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PostCell.IDENTIFIER, for: indexPath) as! PostCell
-        let post = posts[indexPath.row]
+        let post = presenter.getPost(at: indexPath.row)
         
         cell.set(post: post)
         return cell
@@ -344,68 +172,30 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let postId = posts[indexPath.row].id // todo: make delete post by indexPath just for this case?
-            deletePosts(ids: [postId], withAnimation: .top, cancelNotify: true)
+            let postId = presenter.getPost(at: indexPath.row).id // todo: make delete post by indexPath just for this case?
+            presenter.deletePosts(ids: [postId], withAnimation: .top, cancelNotify: true)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let disabled = disabledPostIds
-        guard !disabled.isEmpty else { return true }
-        
-        let postId = posts[indexPath.row].id
-        return !disabled.contains(postId)
+        return presenter.canEditPost(at: indexPath.row)
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let disabled = disabledPostIds
-        guard !disabled.isEmpty else { return indexPath }
-        
-        let postId = posts[indexPath.row].id
-        return disabled.contains(postId) ? nil : indexPath
-    }
-    
-    func submitPressed(postIndex: IndexPath) {
-        disableSubmissionBecauseController = true
-        
-        let post = posts[postIndex.row]
-        PostNotifier.cancel(for: post)
-        
-        disabledPostIdBecauseController = post.id // make the post uneditable
-        setSubmissionIndicator(start: true) // let the user know
-        
-        submitter.submitPost(post) { url in
-            Log.p("url: \(String(describing: url))")
-            
-            DispatchQueue.main.async {
-                let success = url != nil
-                if success {
-                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                } else {
-                    PostNotifier.notifyUser(about: post)
-                    // todo: notify user it's gone wrong
-                }
-                
-                self.disabledPostIdBecauseController = nil // make editable
-                self.setSubmissionIndicator(start: false) {
-                    // when the indicator disappears:
-                    self.disableSubmissionBecauseController = false
-                }
-            }
-        }
+        return presenter.canEditPost(at: indexPath.row) ? indexPath : nil
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !disableSubmission else { return UISwipeActionsConfiguration() } // this prevents multiple post submission
+        guard !presenter.disableSubmission else { return UISwipeActionsConfiguration() } // this prevents multiple post submission
         
         let style = UIContextualAction.Style.normal
         let title = "Submit"
         let bgColor = UIColor.systemIndigo
         
         let handler = { (action: UIContextualAction, sourceView: UIView, completion: @escaping (Bool) -> Void) in
-            self.submitPressed(postIndex: indexPath)
+            self.presenter.submitPressed(postIndex: indexPath.row)
             
             let actionPerformed = true
             completion(actionPerformed)
@@ -431,7 +221,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
-            let selectedPost = posts[indexPath.row]
+            let selectedPost = presenter.getPost(at: indexPath.row)
             dest.post = selectedPost
             Log.p("edit post segue")
             
@@ -448,9 +238,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
             if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
                 if pvc.newPost {
-                    addNewPost(post)
+                    presenter.addNewPost(post)
                 } else { // user edited a post
-                    editPost(post: post, with: .automatic)
+                    presenter.editPost(post, with: .automatic)
                 }
             } else {
                 fatalError()
