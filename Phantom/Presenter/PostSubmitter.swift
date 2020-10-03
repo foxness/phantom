@@ -17,7 +17,7 @@ class PostSubmitter {
         private let callback: UrlCallback
         
         // debug
-        let simulateSubmission = false
+        let simulateSubmission = true
         
         init(reddit: Reddit, database: Database, callback: @escaping UrlCallback) {
             self.reddit = reddit

@@ -28,9 +28,13 @@ class PostCell: UITableViewCell {
     }
     
     func set(post: Post) {
-        ptitle.text = post.title
-        ptext.text = post.text
-        pdate.text = PostCell.dateToString(post.date)
+        let title = post.title
+        let subtitle = post.type == .text ? post.text : post.url
+        let date = PostCell.dateToString(post.date)
+        
+        ptitle.text = title
+        ptext.text = subtitle
+        pdate.text = date
         
         pimage.image = UIImage(named: "thumbnail_text_post")!
         
