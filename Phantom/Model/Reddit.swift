@@ -61,6 +61,7 @@ class Reddit {
         static let BEARER = "bearer"
         static let DATA = "data"
         static let URL = "url"
+        static let LINK = "link"
     }
     
     // MARK: - Constants
@@ -136,7 +137,8 @@ class Reddit {
                         let postUrl = deeperData[Symbols.URL] as! String
                         url = postUrl
                     } catch {
-                        Log.p("post submit error", error)
+                        Log.p("post submit error", error) // this can include words "Our CDN was unable to reach our servers"
+                        Log.p("raw body text", String(data: data, encoding: .utf8))
                     }
                 } else if let error = error {
                     Log.p("post submit error 2", error)
@@ -293,19 +295,30 @@ class Reddit {
     }
     
     private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
+        let isLink = true
+        
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
         let subredditString = post.subreddit
-        let textString = post.text
         let titleString = post.title
         
-        let data = [Symbols.API_TYPE: Symbols.JSON,
-                    Symbols.KIND: Symbols.SELF,
+        var data = [Symbols.API_TYPE: Symbols.JSON,
                     Symbols.RESUBMIT: resubmitString,
                     Symbols.SEND_REPLIES: sendRepliesString,
                     Symbols.SUBREDDIT: subredditString,
-                    Symbols.TEXT: textString,
                     Symbols.TITLE: titleString]
+        
+        if isLink {
+            let urlString = post.text
+            
+            data[Symbols.KIND] = Symbols.LINK
+            data[Symbols.URL] = urlString
+        } else {
+            let textString = post.text
+            
+            data[Symbols.KIND] = Symbols.SELF
+            data[Symbols.TEXT] = textString
+        }
         
         let username = Symbols.BEARER
         let password = accessToken!
