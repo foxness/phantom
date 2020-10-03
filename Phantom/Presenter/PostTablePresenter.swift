@@ -44,7 +44,7 @@ class PostTablePresenter {
     
     private let database: Database = .instance
     private let submitter: PostSubmitter = .instance
-    let zombie: ZombieSubmitter = .instance
+    private let zombie: ZombieSubmitter = .instance
     
     private var posts: [Post] = []
     
@@ -154,18 +154,17 @@ class PostTablePresenter {
         }
     }
     
-    // todo: make private
+    // todo: make private!?
+    // todo: this shouldn't have animation parameter I think, only view should be concerned with animation
     func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
         let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
         assert(!indicesToDelete.isEmpty)
         
-        for index in indicesToDelete {
-            let deletedPost = posts.remove(at: index)
-            if cancelNotify {
-                PostNotifier.cancel(for: deletedPost)
-            }
+        if cancelNotify {
+            indicesToDelete.forEach { PostNotifier.cancel(for: posts[$0]) }
         }
         
+        posts.remove(at: indicesToDelete)
         viewDelegate?.deleteRows(at: indicesToDelete, with: animation)
     }
     

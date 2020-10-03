@@ -33,6 +33,16 @@ extension Sequence {
     }
 }
 
+extension Array {
+    func removed(at indices: [Int]) -> Array {
+        return self.indices.filter { !indices.contains($0) }.map { self[$0] }
+    }
+    
+    mutating func remove(at indices: [Int]) {
+        self = removed(at: indices)
+    }
+}
+
 extension Int {
     var randomString: String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
