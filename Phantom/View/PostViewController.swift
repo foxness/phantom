@@ -13,8 +13,10 @@ class PostViewController: UIViewController {
     
     static let TEXT_NEW_POST_TITLE = "New Post"
     
+    @IBOutlet weak var typeControl: UISegmentedControl!
+    
     @IBOutlet weak var titleField: UITextField!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var contentField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
     
@@ -22,6 +24,57 @@ class PostViewController: UIViewController {
     
     var newPost = false
     var post: Post?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if post == nil {
+            newPost = true
+            Log.p("new post")
+            post = PostViewController.getDefaultPost()
+            navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
+        }
+        
+        updateUi(for: post!)
+        updateSaveButton()
+    }
+    
+    private func updateUi(for post: Post) {
+        titleField.text = post.title
+        subredditField.text = post.subreddit
+        datePicker.date = post.date
+        
+        let content: String?
+        let segmentIndex: Int
+        switch post.type {
+        case .text:
+            content = post.text
+            segmentIndex = 1
+        case .link:
+            content = post.url // todo: add paste button
+            segmentIndex = 0
+        }
+        
+        contentField.text = content
+        typeControl.selectedSegmentIndex = segmentIndex
+        
+        updateContentPlaceholder()
+    }
+    
+    private func updateContentPlaceholder() {
+        let contentPlaceholder: String
+        
+        switch typeControl.selectedSegmentIndex {
+        case 1:
+            contentPlaceholder = "Text"
+        case 0:
+            contentPlaceholder = "Link"
+        default:
+            fatalError()
+        }
+        
+        contentField.placeholder = contentPlaceholder
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
@@ -31,47 +84,42 @@ class PostViewController: UIViewController {
             return
         }
         
+        savePost()
+    }
+    
+    private func getPostType() -> Post.PostType {
+        return typeControl.selectedSegmentIndex == 0 ? .link : .text
+    }
+    
+    private func constructPost() -> Post {
         let id = post!.id
         let title = titleField.text!
-        let text = textField.text!
         let subreddit = subredditField.text!
         let date = datePicker.date
         
-        post = Post.Link(id: id, title: title, subreddit: subreddit, date: date, url: text)
-    }
-    
-    func updateSaveButton() {
-        let title = titleField.text!
-        let text = textField.text!
-        let subreddit = subredditField.text!
+        let postType = getPostType()
+        let post: Post
         
-        let isPostValid = Post.isValid(title: title, subreddit: subreddit, type: .link, text: nil, url: text)
-        saveButton.isEnabled = isPostValid
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if post == nil {
-            newPost = true
-            Log.p("new post")
-            
-            let title = ""
-            let subreddit = "test"
-            let date = Date() + 1 * 60
-            let url = ""
-            
-            post = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
-            
-            navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
+        switch postType {
+        case .link:
+            let url = contentField.text!
+            post = Post.Link(id: id, title: title, subreddit: subreddit, date: date, url: url)
+        case .text:
+            let text = contentField.text!
+            post = Post.Text(id: id, title: title, subreddit: subreddit, date: date, text: text)
         }
         
-        titleField.text = post!.title
-        textField.text = post!.url
-        subredditField.text = post!.subreddit
-        datePicker.date = post!.date
-        
-        updateSaveButton()
+        return post
+    }
+    
+    private func savePost() {
+        self.post = constructPost()
+    }
+    
+    private func updateSaveButton() {
+        let post = constructPost()
+        let isPostValid = post.isValid()
+        saveButton.isEnabled = isPostValid
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
@@ -87,7 +135,21 @@ class PostViewController: UIViewController {
         }
     }
     
+    @IBAction func typeChanged(_ sender: UISegmentedControl) {
+        updateContentPlaceholder()
+        updateSaveButton()
+    }
+    
     @IBAction func titleChanged(_ sender: Any) { updateSaveButton() }
     @IBAction func textChanged(_ sender: Any) { updateSaveButton() }
     @IBAction func subredditChanged(_ sender: Any) { updateSaveButton() }
+    
+    private static func getDefaultPost() -> Post {
+        let title = ""
+        let subreddit = "test"
+        let date = Date() + 1 * 60
+        let url = ""
+        
+        return Post.Link(title: title, subreddit: subreddit, date: date, url: url)
+    }
 }

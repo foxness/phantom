@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nU6-67-4tZ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -84,10 +83,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="40" y="158" width="334" height="374"/>
+                                <rect key="frame" x="40" y="158" width="334" height="425"/>
                                 <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-0i-hpg" userLabel="TypeControl">
+                                        <rect key="frame" x="71" y="0.0" width="192" height="32"/>
+                                        <segments>
+                                            <segment title="" image="link" catalog="system"/>
+                                            <segment title="" image="square.and.pencil" catalog="system"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="typeChanged:" destination="npb-aq-zMg" eventType="valueChanged" id="Lz7-gZ-97K"/>
+                                        </connections>
+                                    </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
-                                        <rect key="frame" x="30" y="0.0" width="274" height="138"/>
+                                        <rect key="frame" x="30" y="51" width="274" height="138"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="testy is besty" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
                                                 <rect key="frame" x="0.0" y="0.0" width="274" height="34"/>
@@ -116,12 +125,13 @@
                                         </subviews>
                                     </stackView>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
-                                        <rect key="frame" x="7" y="158" width="320" height="216"/>
+                                        <rect key="frame" x="7" y="209" width="320" height="216"/>
                                     </datePicker>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" constant="30" id="0WH-zB-Rb2"/>
                                     <constraint firstAttribute="trailing" secondItem="6Td-yy-gaf" secondAttribute="trailing" constant="30" id="PSj-wR-5Ue"/>
+                                    <constraint firstItem="DX9-0i-hpg" firstAttribute="width" secondItem="6Td-yy-gaf" secondAttribute="width" multiplier="0.7" id="jlf-O5-VHm"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -147,11 +157,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="contentField" destination="DXl-Eb-uh3" id="4R3-ej-e5E"/>
                         <outlet property="datePicker" destination="ikv-Dr-6WC" id="MlJ-8H-MUT"/>
                         <outlet property="saveButton" destination="7uj-8O-RgY" id="pHE-Ac-rHZ"/>
                         <outlet property="subredditField" destination="WKp-cX-yYf" id="RUi-dQ-9aj"/>
-                        <outlet property="textField" destination="DXl-Eb-uh3" id="4R3-ej-e5E"/>
                         <outlet property="titleField" destination="L7F-hX-VAI" id="DiR-fT-Qde"/>
+                        <outlet property="typeControl" destination="DX9-0i-hpg" id="d1o-Sz-r3r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ls-Pd-2zn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -321,6 +332,8 @@
         <segue reference="I6c-Og-Mxs"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="link" catalog="system" width="128" height="122"/>
+        <image name="square.and.pencil" catalog="system" width="128" height="115"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
