@@ -24,7 +24,7 @@ class PostTablePresenter {
     private var sceneActivated = true
     private var sceneInForeground = true
     
-    var disableSubmission: Bool {
+    var submissionDisabled: Bool {
         return disableSubmissionBecauseController || disableSubmissionBecauseZombie
     }
     
@@ -121,8 +121,7 @@ class PostTablePresenter {
         updateAppBadge()
     }
     
-    // todo: make private
-    func addNewPost(_ post: Post, with animation: ListAnimation = .top) {
+    func newPostAdded(_ post: Post) {
         Log.p("user added new post")
         PostNotifier.notifyUser(about: post)
         
@@ -130,13 +129,11 @@ class PostTablePresenter {
         sortPosts()
         
         let index = posts.firstIndex(of: post)!
-        
-        viewDelegate?.insertRows(at: [index], with: animation)
+        viewDelegate?.insertRows(at: [index], with: .top)
     }
     
     // todo: do not update table view when user is looking at another view controller (shows warnings in console)
-    // todo: make private
-    func editPost(_ post: Post, with animation: ListAnimation = .none) {
+    func postEdited(_ post: Post) {
         if let index = posts.firstIndex(where: { $0.id == post.id }) {
             Log.p("user edited a post")
             PostNotifier.notifyUser(about: post)
@@ -144,7 +141,7 @@ class PostTablePresenter {
             posts[index] = post
             sortPosts()
             
-            viewDelegate?.reloadSection(with: animation)
+            viewDelegate?.reloadSection(with: .automatic)
         } else {
             // this situation can happen when user submits a post
             // from notification banner while editing the same post
@@ -154,9 +151,7 @@ class PostTablePresenter {
         }
     }
     
-    // todo: make private!?
-    // todo: this shouldn't have animation parameter I think, only view should be concerned with animation
-    func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
+    private func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
         let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
         assert(!indicesToDelete.isEmpty)
         
@@ -166,6 +161,11 @@ class PostTablePresenter {
         
         posts.remove(at: indicesToDelete)
         viewDelegate?.deleteRows(at: indicesToDelete, with: animation)
+    }
+    
+    func postDeleted(at index: Int) {
+        let id = posts[index].id
+        deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
     func submitPressed(postIndex: Int) {

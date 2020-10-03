@@ -160,7 +160,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
 
     override func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { presenter.getPostCount() }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return presenter.getPostCount()
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PostCell.IDENTIFIER, for: indexPath) as! PostCell
@@ -172,8 +174,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let postId = presenter.getPost(at: indexPath.row).id // todo: make delete post by indexPath just for this case?
-            presenter.deletePosts(ids: [postId], withAnimation: .top, cancelNotify: true)
+            presenter.postDeleted(at: indexPath.row)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -188,7 +189,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !presenter.disableSubmission else { return UISwipeActionsConfiguration() } // this prevents multiple post submission
+        guard !presenter.submissionDisabled else { return UISwipeActionsConfiguration() } // this prevents multiple post submission
         
         let style = UIContextualAction.Style.normal
         let title = "Submit"
@@ -238,9 +239,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
             if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
                 if pvc.newPost {
-                    presenter.addNewPost(post)
+                    presenter.newPostAdded(post)
                 } else { // user edited a post
-                    presenter.editPost(post, with: .automatic)
+                    presenter.postEdited(post)
                 }
             } else {
                 fatalError()
