@@ -19,9 +19,11 @@ class PostTablePresenter {
     
     // todo: let user know the zombie is submitting?
     // todo: disable zombie submission during controller submission?
-    private var disableSubmissionBecauseController = false // needed to prevent multiple post submission
-    private var disabledPostIdBecauseController: UUID? // needed to disable editing segues for submitting post
+    // main means the main portion of the app aka what you see when you open the app
+    private var disableSubmissionBecauseMain = false // needed to prevent multiple post submission
+    private var disabledPostIdBecauseMain: UUID? // needed to disable editing segues for submitting post
     
+    // zombie means the invisible/background daemon that submits when you press submit from a notification
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
@@ -34,13 +36,13 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return disableSubmissionBecauseController || disableSubmissionBecauseZombie
+        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie
     }
     
     private var disabledPostIds: [UUID] {
         var ids = [UUID]()
         
-        if let becauseControllerId = disabledPostIdBecauseController {
+        if let becauseControllerId = disabledPostIdBecauseMain {
             ids.append(becauseControllerId)
         }
         
@@ -69,12 +71,12 @@ class PostTablePresenter {
     }
     
     func submitPressed(postIndex: Int) {
-        disableSubmissionBecauseController = true
+        disableSubmissionBecauseMain = true
         
         let post = posts[postIndex]
         PostNotifier.cancel(for: post)
         
-        disabledPostIdBecauseController = post.id // make the post uneditable
+        disabledPostIdBecauseMain = post.id // make the post uneditable
         
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
@@ -90,10 +92,10 @@ class PostTablePresenter {
                     // todo: notify user it's gone wrong
                 }
                 
-                self.disabledPostIdBecauseController = nil // make editable
+                self.disabledPostIdBecauseMain = nil // make editable
                 self.viewDelegate?.setSubmissionIndicator(start: false) {
                     // when the indicator disappears:
-                    self.disableSubmissionBecauseController = false
+                    self.disableSubmissionBecauseMain = false
                 }
             }
         }
@@ -253,7 +255,35 @@ class PostTablePresenter {
         deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
-    // MARK: - Private methods
+    // MARK: - Database methods
+    
+    private func loadPostsFromDatabase() {
+        posts = database.posts
+        sortPosts()
+    }
+    
+    private func saveData() {
+        savePosts()
+        saveRedditAuth()
+        Log.p("saved data")
+    }
+    
+    private func saveRedditAuth() {
+        if let redditAuth = submitter.reddit.value?.auth {
+            database.redditAuth = redditAuth
+        }
+    }
+    
+    private func savePosts() {
+        database.posts = posts
+        database.savePosts()
+    }
+    
+    private func sortPosts() {
+        posts.sort { $0.date < $1.date }
+    }
+    
+    // MARK: - Misc methods
     
     private func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
         let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
@@ -291,33 +321,5 @@ class PostTablePresenter {
         if !redditLogged {
             viewDelegate?.segueToIntroduction()
         }
-    }
-    
-    // MARK: - Database methods
-    
-    private func loadPostsFromDatabase() {
-        posts = database.posts
-        sortPosts()
-    }
-    
-    private func saveData() {
-        savePosts()
-        saveRedditAuth()
-        Log.p("saved data")
-    }
-    
-    private func saveRedditAuth() {
-        if let redditAuth = submitter.reddit.value?.auth {
-            database.redditAuth = redditAuth
-        }
-    }
-    
-    private func savePosts() {
-        database.posts = posts
-        database.savePosts()
-    }
-    
-    private func sortPosts() {
-        posts.sort { $0.date < $1.date }
     }
 }
