@@ -226,7 +226,7 @@ class PostTablePresenter {
         sortPosts()
         
         let index = posts.firstIndex(of: post)!
-        viewDelegate?.insertRows(at: [index], with: .top)
+        viewDelegate?.insertPostRows(at: [index], with: .top)
     }
     
     // todo: do not update table view when user is looking at another view controller (shows warnings in console)
@@ -238,7 +238,7 @@ class PostTablePresenter {
             posts[index] = post
             sortPosts()
             
-            viewDelegate?.reloadSection(with: .automatic)
+            viewDelegate?.reloadPostRows(with: .automatic)
         } else {
             // this situation can happen when user submits a post
             // from notification banner while editing the same post
@@ -264,7 +264,7 @@ class PostTablePresenter {
         }
         
         posts.remove(at: indicesToDelete)
-        viewDelegate?.deleteRows(at: indicesToDelete, with: animation)
+        viewDelegate?.deletePostRows(at: indicesToDelete, with: animation)
     }
     
     private func updateAppBadge() {

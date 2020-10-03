@@ -15,9 +15,9 @@ enum ListAnimation {
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
     
-    func insertRows(at indices: [Int], with animation: ListAnimation)
-    func reloadSection(with animation: ListAnimation)
-    func deleteRows(at indices: [Int], with animation: ListAnimation)
+    func insertPostRows(at indices: [Int], with animation: ListAnimation)
+    func reloadPostRows(with animation: ListAnimation)
+    func deletePostRows(at indices: [Int], with animation: ListAnimation)
     
     func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
 }

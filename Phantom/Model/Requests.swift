@@ -24,7 +24,9 @@ struct Requests {
         return userAgent
     }
     
-    static func isResponseOk(_ response: HTTPURLResponse) -> Bool { 200..<300 ~= response.statusCode }
+    static func isResponseOk(_ response: HTTPURLResponse) -> Bool {
+        return 200..<300 ~= response.statusCode
+    }
     
     static func formRequest(with params: Params) -> URLRequest {
         let (url, data, auth) = params
