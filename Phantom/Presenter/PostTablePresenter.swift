@@ -13,7 +13,7 @@ class PostTablePresenter {
     
     private weak var viewDelegate: PostTableViewDelegate?
     
-    private let database: Database = .instance
+    private let database: Database = .instance // todo: make them services? implement dip
     private let submitter: PostSubmitter = .instance
     private let zombie: ZombieSubmitter = .instance
     
@@ -27,7 +27,7 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var sceneActivated = true
+    private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true
     
     private var postIdsToBeDeleted: [UUID] = []
