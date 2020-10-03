@@ -9,7 +9,13 @@
 import Foundation
 
 class PostTablePresenter {
+    // MARK: - Properties
+    
     private weak var viewDelegate: PostTableViewDelegate?
+    
+    private let database: Database = .instance
+    private let submitter: PostSubmitter = .instance
+    private let zombie: ZombieSubmitter = .instance
     
     // todo: let user know the zombie is submitting?
     // todo: disable zombie submission during controller submission?
@@ -19,10 +25,13 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var postIdsToBeDeleted: [UUID] = []
-    
     private var sceneActivated = true
     private var sceneInForeground = true
+    
+    private var postIdsToBeDeleted: [UUID] = []
+    private var posts: [Post] = []
+    
+    // MARK: - Computed properties
     
     var submissionDisabled: Bool {
         return disableSubmissionBecauseController || disableSubmissionBecauseZombie
@@ -42,11 +51,7 @@ class PostTablePresenter {
         return ids
     }
     
-    private let database: Database = .instance
-    private let submitter: PostSubmitter = .instance
-    private let zombie: ZombieSubmitter = .instance
-    
-    private var posts: [Post] = []
+    // MARK: - Public methods
     
     func attachView(_ viewDelegate: PostTableViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -55,6 +60,46 @@ class PostTablePresenter {
     func detachView() {
         viewDelegate = nil
     }
+    
+    func redditLoggedIn(_ reddit: Reddit) {
+        assert(submitter.reddit.value == nil)
+        
+        submitter.reddit.mutate { $0 = reddit }
+        Log.p("i logged in reddit")
+    }
+    
+    func submitPressed(postIndex: Int) {
+        disableSubmissionBecauseController = true
+        
+        let post = posts[postIndex]
+        PostNotifier.cancel(for: post)
+        
+        disabledPostIdBecauseController = post.id // make the post uneditable
+        
+        viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
+        
+        submitter.submitPost(post) { url in
+            Log.p("url: \(String(describing: url))")
+            
+            DispatchQueue.main.async {
+                let success = url != nil
+                if success {
+                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
+                } else {
+                    PostNotifier.notifyUser(about: post)
+                    // todo: notify user it's gone wrong
+                }
+                
+                self.disabledPostIdBecauseController = nil // make editable
+                self.viewDelegate?.setSubmissionIndicator(start: false) {
+                    // when the indicator disappears:
+                    self.disableSubmissionBecauseController = false
+                }
+            }
+        }
+    }
+    
+    // MARK: - View lifecycle methods
     
     func viewDidLoad() {
         loadPostsFromDatabase()
@@ -92,6 +137,8 @@ class PostTablePresenter {
         setupPostSubmitter()
     }
     
+    // MARK: - Scene lifecycle methods
+    
     func sceneWillEnterForeground() {
         Log.p("scene will enter foreground")
         sceneInForeground = true
@@ -121,83 +168,7 @@ class PostTablePresenter {
         updateAppBadge()
     }
     
-    func newPostAdded(_ post: Post) {
-        Log.p("user added new post")
-        PostNotifier.notifyUser(about: post)
-        
-        posts.append(post)
-        sortPosts()
-        
-        let index = posts.firstIndex(of: post)!
-        viewDelegate?.insertRows(at: [index], with: .top)
-    }
-    
-    // todo: do not update table view when user is looking at another view controller (shows warnings in console)
-    func postEdited(_ post: Post) {
-        if let index = posts.firstIndex(where: { $0.id == post.id }) {
-            Log.p("user edited a post")
-            PostNotifier.notifyUser(about: post)
-            
-            posts[index] = post
-            sortPosts()
-            
-            viewDelegate?.reloadSection(with: .automatic)
-        } else {
-            // this situation can happen when user submits a post
-            // from notification banner while editing the same post
-            // in that case we just discard it since it has already been posted
-            
-            Log.p("edited post discarded because already posted")
-        }
-    }
-    
-    private func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
-        let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
-        assert(!indicesToDelete.isEmpty)
-        
-        if cancelNotify {
-            indicesToDelete.forEach { PostNotifier.cancel(for: posts[$0]) }
-        }
-        
-        posts.remove(at: indicesToDelete)
-        viewDelegate?.deleteRows(at: indicesToDelete, with: animation)
-    }
-    
-    func postDeleted(at index: Int) {
-        let id = posts[index].id
-        deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
-    }
-    
-    func submitPressed(postIndex: Int) {
-        disableSubmissionBecauseController = true
-        
-        let post = posts[postIndex]
-        PostNotifier.cancel(for: post)
-        
-        disabledPostIdBecauseController = post.id // make the post uneditable
-        
-        viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
-        
-        submitter.submitPost(post) { url in
-            Log.p("url: \(String(describing: url))")
-            
-            DispatchQueue.main.async {
-                let success = url != nil
-                if success {
-                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                } else {
-                    PostNotifier.notifyUser(about: post)
-                    // todo: notify user it's gone wrong
-                }
-                
-                self.disabledPostIdBecauseController = nil // make editable
-                self.viewDelegate?.setSubmissionIndicator(start: false) {
-                    // when the indicator disappears:
-                    self.disableSubmissionBecauseController = false
-                }
-            }
-        }
-    }
+    // MARK: - Zombie lifecycle methods
     
     func zombieWokeUp(notification: Notification) {
         Log.p("zombie woke up")
@@ -233,13 +204,11 @@ class PostTablePresenter {
         disabledPostIdBecauseZombie = nil
     }
     
-    func getPostCount() -> Int {
-        return posts.count
-    }
+    // MARK: - Post list methods
     
-    func getPost(at index: Int) -> Post {
-        return posts[index]
-    }
+    func getPost(at index: Int) -> Post { posts[index] }
+    
+    func getPostCount() -> Int { posts.count }
     
     func canEditPost(at index: Int) -> Bool {
         let disabled = disabledPostIds
@@ -249,11 +218,53 @@ class PostTablePresenter {
         return !disabled.contains(postId)
     }
     
-    func redditLoggedIn(_ reddit: Reddit) {
-        assert(submitter.reddit.value == nil)
+    func newPostAdded(_ post: Post) {
+        Log.p("user added new post")
+        PostNotifier.notifyUser(about: post)
         
-        submitter.reddit.mutate { $0 = reddit }
-        Log.p("i logged in reddit")
+        posts.append(post)
+        sortPosts()
+        
+        let index = posts.firstIndex(of: post)!
+        viewDelegate?.insertRows(at: [index], with: .top)
+    }
+    
+    // todo: do not update table view when user is looking at another view controller (shows warnings in console)
+    func postEdited(_ post: Post) {
+        if let index = posts.firstIndex(where: { $0.id == post.id }) {
+            Log.p("user edited a post")
+            PostNotifier.notifyUser(about: post)
+            
+            posts[index] = post
+            sortPosts()
+            
+            viewDelegate?.reloadSection(with: .automatic)
+        } else {
+            // this situation can happen when user submits a post
+            // from notification banner while editing the same post
+            // in that case we just discard it since it has already been posted
+            
+            Log.p("edited post discarded because already posted")
+        }
+    }
+    
+    func postDeleted(at index: Int) {
+        let id = posts[index].id
+        deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
+    }
+    
+    // MARK: - Private methods
+    
+    private func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
+        let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
+        assert(!indicesToDelete.isEmpty)
+        
+        if cancelNotify {
+            indicesToDelete.forEach { PostNotifier.cancel(for: posts[$0]) }
+        }
+        
+        posts.remove(at: indicesToDelete)
+        viewDelegate?.deleteRows(at: indicesToDelete, with: animation)
     }
     
     private func updateAppBadge() {
@@ -282,6 +293,19 @@ class PostTablePresenter {
         }
     }
     
+    // MARK: - Database methods
+    
+    private func loadPostsFromDatabase() {
+        posts = database.posts
+        sortPosts()
+    }
+    
+    private func saveData() {
+        savePosts()
+        saveRedditAuth()
+        Log.p("saved data")
+    }
+    
     private func saveRedditAuth() {
         if let redditAuth = submitter.reddit.value?.auth {
             database.redditAuth = redditAuth
@@ -293,18 +317,7 @@ class PostTablePresenter {
         database.savePosts()
     }
     
-    private func loadPostsFromDatabase() {
-        posts = database.posts
-        sortPosts()
-    }
-    
     private func sortPosts() {
         posts.sort { $0.date < $1.date }
-    }
-    
-    private func saveData() {
-        savePosts()
-        saveRedditAuth()
-        Log.p("saved data")
     }
 }
