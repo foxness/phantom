@@ -36,7 +36,7 @@ class PostViewController: UIViewController {
         let subreddit = subredditField.text!
         let date = datePicker.date
         
-        post = Post(title: title, text: text, subreddit: subreddit, date: date)
+        post = Post.Link(title: title, subreddit: subreddit, date: date, url: text)
     }
     
     func updateSaveButton() {
@@ -44,7 +44,7 @@ class PostViewController: UIViewController {
         let text = textField.text!
         let subreddit = subredditField.text!
         
-        let isPostValid = Post.isValid(title: title, text: text, subreddit: subreddit)
+        let isPostValid = Post.isValid(title: title, subreddit: subreddit, type: .link, text: nil, url: text)
         saveButton.isEnabled = isPostValid
     }
     
@@ -53,19 +53,20 @@ class PostViewController: UIViewController {
         
         if post == nil {
             newPost = true
+            Log.p("new post")
             
             let title = ""
-            let text = ""
             let subreddit = "test"
             let date = Date() + 1 * 60
+            let url = ""
             
-            post = Post(title: title, text: text, subreddit: subreddit, date: date)
+            post = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
             
             navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
         }
         
         titleField.text = post!.title
-        textField.text = post!.text
+        textField.text = post!.url
         subredditField.text = post!.subreddit
         datePicker.date = post!.date
         

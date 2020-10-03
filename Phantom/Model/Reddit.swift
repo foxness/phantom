@@ -295,8 +295,6 @@ class Reddit {
     }
     
     private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
-        let isLink = true
-        
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
         let subredditString = post.subreddit
@@ -308,16 +306,14 @@ class Reddit {
                     Symbols.SUBREDDIT: subredditString,
                     Symbols.TITLE: titleString]
         
-        if isLink {
-            let urlString = post.text
-            
+        switch post.type {
+        case .link:
             data[Symbols.KIND] = Symbols.LINK
-            data[Symbols.URL] = urlString
-        } else {
-            let textString = post.text
+            data[Symbols.URL] = post.url!
             
+        case .text:
             data[Symbols.KIND] = Symbols.SELF
-            data[Symbols.TEXT] = textString
+            data[Symbols.TEXT] = post.text ?? ""
         }
         
         let username = Symbols.BEARER

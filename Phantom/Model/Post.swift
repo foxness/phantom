@@ -9,37 +9,68 @@
 import Foundation
 
 struct Post: Equatable, Codable {
+    enum PostType: String, Codable {
+        case text, link
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, title, subreddit, date, type, url, text
+    }
+    
     let id: UUID
     let title: String
-    let text: String
     let subreddit: String
     let date: Date
     
-    private enum CodingKeys: String, CodingKey {
-        case id, title, text, subreddit, date // coding keys default to their name, title = "title" etc
-    }
+    let type: PostType
+    let text: String?
+    let url: String?
     
-    init(title: String, text: String, subreddit: String, date: Date) {
+    private init(title: String, subreddit: String, date: Date, type: PostType, text: String?, url: String?) {
         self.id = UUID()
         self.title = title
-        self.text = text
         self.subreddit = subreddit
         self.date = date
+        
+        self.type = type
+        self.text = text
+        self.url = url
     }
     
-    func isValid() -> Bool {
-        Post.isValid(title: title, text: text, subreddit: subreddit)
+    static func Text(title: String, subreddit: String, date: Date, text: String) -> Post {
+        let type = PostType.text
+        let url: String? = nil
+        return Post(title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
     }
     
-    static func isValid(title: String, text: String, subreddit: String) -> Bool {
+    static func Link(title: String, subreddit: String, date: Date, url: String) -> Post {
+        let type = PostType.link
+        let text: String? = nil
+        return Post(title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
+    }
+    
+    func isValid() -> Bool { Post.isValid(self) }
+    
+    static func isValid(title: String, subreddit: String, type: PostType, text: String?, url: String?) -> Bool {
         let goodTitle = !title.isEmpty && title.count < Reddit.LIMIT_TITLE_LENGTH
-        let goodText = text.count < Reddit.LIMIT_TEXT_LENGTH
         let goodSubreddit = !subreddit.isEmpty && subreddit.count < Reddit.LIMIT_SUBREDDIT_LENGTH
         
-        return goodTitle && goodText && goodSubreddit
+        let goodContent: Bool
+        switch type {
+        case .text:
+            goodContent = text == nil || text!.count < Reddit.LIMIT_TEXT_LENGTH
+        case .link:
+            goodContent = url != nil && URL(string: url!) != nil
+        }
+        
+        return goodTitle && goodSubreddit && goodContent
     }
     
-    static func isValid(post: Post) -> Bool {
-        isValid(title: post.title, text: post.text, subreddit: post.subreddit)
+    static func isValid(_ post: Post) -> Bool {
+        isValid(title: post.title,
+                subreddit: post.subreddit,
+                type: post.type,
+                text: post.text,
+                url: post.url)
     }
 }

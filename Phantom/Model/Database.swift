@@ -32,7 +32,7 @@ class Database {
         // DEBUG VARIABLES
         let wipe = false
         let wipeAuth = false
-        let samplePosts = false
+        //let samplePosts = false
         let wipePosts = false
         
         if wipe {
@@ -44,8 +44,8 @@ class Database {
             
             if wipePosts {
                 posts = []
-            } else if samplePosts {
-                setSamplePosts()
+            //} else if samplePosts {
+            //    setSamplePosts()
             } else {
                 loadPosts()
             }
@@ -71,14 +71,14 @@ class Database {
         }
     }
     
-    private func setSamplePosts() { // debug
-        posts.removeAll()
-        40.times { i in
-            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
-        }
-        
-        savePosts()
-    }
+//    private func setSamplePosts() { // debug
+//        posts.removeAll()
+//        40.times { i in
+//            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
+//        }
+//
+//        savePosts()
+//    }
     
     private func wipeReddit() {
         redditAuthString = nil
