@@ -26,8 +26,8 @@ struct Post: Equatable, Codable {
     let text: String?
     let url: String?
     
-    private init(title: String, subreddit: String, date: Date, type: PostType, text: String?, url: String?) {
-        self.id = UUID()
+    private init(id: UUID? = nil, title: String, subreddit: String, date: Date, type: PostType, text: String?, url: String?) {
+        self.id = id ?? UUID()
         self.title = title
         self.subreddit = subreddit
         self.date = date
@@ -37,16 +37,16 @@ struct Post: Equatable, Codable {
         self.url = url
     }
     
-    static func Text(title: String, subreddit: String, date: Date, text: String) -> Post {
+    static func Text(id: UUID? = nil, title: String, subreddit: String, date: Date, text: String) -> Post {
         let type = PostType.text
         let url: String? = nil
-        return Post(title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
+        return Post(id: id, title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
     }
     
-    static func Link(title: String, subreddit: String, date: Date, url: String) -> Post {
+    static func Link(id: UUID? = nil, title: String, subreddit: String, date: Date, url: String) -> Post {
         let type = PostType.link
         let text: String? = nil
-        return Post(title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
+        return Post(id: id, title: title, subreddit: subreddit, date: date, type: type, text: text, url: url)
     }
     
     func isValid() -> Bool { Post.isValid(self) }

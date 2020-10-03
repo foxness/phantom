@@ -26,7 +26,7 @@ struct PostNotifier {
     
     static func notifyUser(about post: Post) {
         let date = post.date
-        guard date > Date() else { return }
+        guard date > Date() else { return } // todo: dont notify if post is due in less than 1 min
         
         let title = post.title
         let body = "Time to submit has come"

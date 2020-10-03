@@ -31,12 +31,13 @@ class PostViewController: UIViewController {
             return
         }
         
+        let id = post!.id
         let title = titleField.text!
         let text = textField.text!
         let subreddit = subredditField.text!
         let date = datePicker.date
         
-        post = Post.Link(title: title, subreddit: subreddit, date: date, url: text)
+        post = Post.Link(id: id, title: title, subreddit: subreddit, date: date, url: text)
     }
     
     func updateSaveButton() {
