@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostViewController: UIViewController {
+class PostViewController: UIViewController, PostViewDelegate {
     static let SEGUE_BACK_POST_TO_LIST = "backSavePost"
     
     static let TEXT_NEW_POST_TITLE = "New Post"
@@ -22,24 +22,57 @@ class PostViewController: UIViewController {
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    var newPost = false
-    var post: Post?
+    private let presenter = PostPresenter()
+    
+    var postTitle: String {
+        return PostViewController.emptyIfNull(titleField.text)
+    }
+    
+    var postSubreddit: String {
+        return PostViewController.emptyIfNull(subredditField.text)
+    }
+    
+    var postDate: Date {
+        return datePicker.date
+    }
+    
+    var postType: Post.PostType {
+        return typeControl.selectedSegmentIndex == 0 ? .link : .text
+    }
+    
+    var postUrl: String? {
+        return contentField.text
+    }
+    
+    var postText: String? {
+        return contentField.text
+    }
+    
+    func setSaveButton(enabled: Bool) {
+        saveButton.isEnabled = enabled
+    }
+    
+    func supplyPost(_ post: Post) {
+        presenter.postSupplied(post)
+    }
+    
+    func getResultingPost() -> (post: Post, isNewPost: Bool) {
+        return (post: presenter.resultingPost, isNewPost: presenter.isNewPost)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if post == nil {
-            newPost = true
-            Log.p("new post")
-            post = PostViewController.getDefaultPost()
-            navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
-        }
+        presenter.attachView(self)
         
-        updateUi(for: post!)
-        updateSaveButton()
+        presenter.viewDidLoad()
     }
     
-    private func updateUi(for post: Post) {
+    func indicateNewPost() {
+        navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
+    }
+    
+    func displayPost(_ post: Post) {
         titleField.text = post.title
         subredditField.text = post.subreddit
         datePicker.date = post.date
@@ -84,45 +117,10 @@ class PostViewController: UIViewController {
             return
         }
         
-        savePost()
+        presenter.saveButtonPressed()
     }
     
-    private func getPostType() -> Post.PostType {
-        return typeControl.selectedSegmentIndex == 0 ? .link : .text
-    }
-    
-    private func constructPost() -> Post {
-        let id = post!.id
-        let title = titleField.text!
-        let subreddit = subredditField.text!
-        let date = datePicker.date
-        
-        let postType = getPostType()
-        let post: Post
-        
-        switch postType {
-        case .link:
-            let url = contentField.text!
-            post = Post.Link(id: id, title: title, subreddit: subreddit, date: date, url: url)
-        case .text:
-            let text = contentField.text!
-            post = Post.Text(id: id, title: title, subreddit: subreddit, date: date, text: text)
-        }
-        
-        return post
-    }
-    
-    private func savePost() {
-        self.post = constructPost()
-    }
-    
-    private func updateSaveButton() {
-        let post = constructPost()
-        let isPostValid = post.isValid()
-        saveButton.isEnabled = isPostValid
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    func dismiss() {
         let animated = true
         
         let presentingInAddMode = presentingViewController is UINavigationController
@@ -135,21 +133,28 @@ class PostViewController: UIViewController {
         }
     }
     
-    @IBAction func typeChanged(_ sender: UISegmentedControl) {
-        updateContentPlaceholder()
-        updateSaveButton()
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        presenter.cancelButtonPressed()
     }
     
-    @IBAction func titleChanged(_ sender: Any) { updateSaveButton() }
-    @IBAction func textChanged(_ sender: Any) { updateSaveButton() }
-    @IBAction func subredditChanged(_ sender: Any) { updateSaveButton() }
+    @IBAction func typeChanged(_ sender: UISegmentedControl) {
+        updateContentPlaceholder()
+        presenter.postTypeChanged()
+    }
     
-    private static func getDefaultPost() -> Post {
-        let title = ""
-        let subreddit = "test"
-        let date = Date() + 1 * 60
-        let url = ""
-        
-        return Post.Link(title: title, subreddit: subreddit, date: date, url: url)
+    @IBAction func titleChanged(_ sender: Any) {
+        presenter.titleChanged()
+    }
+    
+    @IBAction func textChanged(_ sender: Any) {
+        presenter.textChanged()
+    }
+    
+    @IBAction func subredditChanged(_ sender: Any) {
+        presenter.subredditChanged()
+    }
+    
+    private static func emptyIfNull(_ str: String?) -> String {
+        return str ?? ""
     }
 }

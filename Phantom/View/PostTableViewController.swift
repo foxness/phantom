@@ -107,7 +107,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
-            dest.post = selectedPost
+            dest.supplyPost(selectedPost)
             Log.p("edit post segue")
             
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
@@ -121,8 +121,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier ?? "" {
         case PostViewController.SEGUE_BACK_POST_TO_LIST:
-            if let pvc = unwindSegue.source as? PostViewController, let post = pvc.post {
-                if pvc.newPost {
+            if let pvc = unwindSegue.source as? PostViewController {
+                let (post, isNewPost) = pvc.getResultingPost()
+                
+                if isNewPost {
                     presenter.newPostAdded(post)
                 } else { // user edited a post
                     presenter.postEdited(post)
