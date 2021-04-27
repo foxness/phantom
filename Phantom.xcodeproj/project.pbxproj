@@ -136,6 +136,9 @@
 				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
 				71614EF024FD195C00FA8B76 /* Database.swift */,
 				718181DD24FBFEE200059658 /* Requests.swift */,
+				7179EF392501037000BDA598 /* PostSubmitter.swift */,
+				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
+				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -147,9 +150,6 @@
 				96AA4D6A252B574B009488F6 /* PostViewDelegate.swift */,
 				960D066125277F7700FFB4AC /* PostTablePresenter.swift */,
 				960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */,
-				7179EF392501037000BDA598 /* PostSubmitter.swift */,
-				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
-				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
