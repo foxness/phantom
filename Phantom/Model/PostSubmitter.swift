@@ -17,7 +17,7 @@ class PostSubmitter {
         private let callback: UrlCallback
         
         // DEBUGVAR
-        let simulateSubmission = false
+        let simulateSubmission = true
         
         init(reddit: Reddit, database: Database, callback: @escaping UrlCallback) {
             self.reddit = reddit
@@ -48,14 +48,18 @@ class PostSubmitter {
             dispatchGroup.enter()
             
             if simulateSubmission {
+                let middlewaredPost = WallhavenMiddleware.transform(post: post) // TODO: proper middleware support
+                
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
                     guard !self.isCancelled else { return }
                     self.callback("https://simulated-url-lolz.com/")
                     dispatchGroup.leave()
                 }
             } else {
+                let middlewaredPost = WallhavenMiddleware.transform(post: post)
+                
                 // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-                reddit.submit(post: post) { url in
+                reddit.submit(post: middlewaredPost) { url in
                     guard !self.isCancelled else { return }
                     self.callback(url)
                     dispatchGroup.leave()

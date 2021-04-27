@@ -28,7 +28,7 @@ struct Requests {
         return 200..<300 ~= response.statusCode
     }
     
-    static func formRequest(with params: Params) -> URLRequest {
+    static func formPostRequest(with params: Params) -> URLRequest {
         let (url, data, auth) = params
         
         var urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
@@ -59,7 +59,42 @@ struct Requests {
     }
     
     static func post(with params: Params, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        let request = formRequest(with: params)
+        let request = formPostRequest(with: params)
         session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    static func formGetRequest(url: URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let userAgent = getUserAgent()
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        
+        return request
+    }
+    
+    static func get(url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let request = formGetRequest(url: url)
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+    
+    static func synchronousGet(url: URL) -> (Data?, URLResponse?, Error?) {
+        var data: Data?
+        var response: URLResponse?
+        var error: Error?
+        
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
+        Requests.get(url: url) { (data_, response_, error_) in
+            data = data_
+            response = response_
+            error = error_
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.wait()
+        return (data, response, error)
     }
 }
