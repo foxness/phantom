@@ -98,7 +98,7 @@ class Reddit {
                    accessTokenExpirationDate: accessTokenExpirationDate!)
     }
     
-    private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString }
+    private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString } // TODO: I think this should be a method
     
     var isLoggedIn: Bool { refreshToken != nil }
     
