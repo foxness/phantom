@@ -14,6 +14,8 @@ struct WallhavenMiddleware: SubmitterMiddleware {
             let url = URL(string: post.url!)!
             guard let directUrl = getDirectUrl(wallhavenUrl: url) else { return post }
             
+            Log.p("wallhaven direct url found", directUrl)
+            
             let newPost = Post.Link(id: post.id,
                                     title: post.title,
                                     subreddit: post.subreddit,

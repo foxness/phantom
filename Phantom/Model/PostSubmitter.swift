@@ -15,20 +15,29 @@ class PostSubmitter {
         private let reddit: Reddit
         private let post: Post
         private let callback: UrlCallback
+        private let middlewares: [SubmitterMiddleware.Type]
         
         // DEBUGVAR
-        let simulateSubmission = true
+        let simulateReddit = true
+        let simulateMiddleware = false
         
-        init(reddit: Reddit, database: Database, callback: @escaping UrlCallback) {
+        init(reddit: Reddit, database: Database, useWallhaven: Bool = true, callback: @escaping UrlCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
             self.callback = callback
+            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven)
         }
         
-        init(reddit: Reddit, post: Post, callback: @escaping UrlCallback) {
+        init(reddit: Reddit, post: Post, useWallhaven: Bool = true, callback: @escaping UrlCallback) {
             self.reddit = reddit
             self.post = post
             self.callback = callback
+            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven)
+        }
+        
+        private static func getMiddlewares(useWallhaven: Bool) -> [SubmitterMiddleware.Type] {
+            return [useWallhaven ? WallhavenMiddleware.self : nil]
+                .compactMap { $0 }
         }
         
         private static func getPost(database: Database) -> Post {
@@ -47,17 +56,22 @@ class PostSubmitter {
             let dispatchGroup = DispatchGroup()
             dispatchGroup.enter()
             
-            if simulateSubmission {
-                let middlewaredPost = WallhavenMiddleware.transform(post: post) // TODO: proper middleware support
-                
+            var middlewaredPost = post
+            if simulateMiddleware {
+                sleep(1)
+            } else {
+                for middleware in middlewares {
+                    middlewaredPost = middleware.transform(post: middlewaredPost)
+                }
+            }
+            
+            if simulateReddit {
                 DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
                     guard !self.isCancelled else { return }
                     self.callback("https://simulated-url-lolz.com/")
                     dispatchGroup.leave()
                 }
             } else {
-                let middlewaredPost = WallhavenMiddleware.transform(post: post)
-                
                 // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
                 reddit.submit(post: middlewaredPost) { url in
                     guard !self.isCancelled else { return }

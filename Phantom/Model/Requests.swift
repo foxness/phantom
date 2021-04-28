@@ -20,7 +20,6 @@ struct Requests {
         let version = Bundle.main.releaseVersionNumber
         
         let userAgent = "iOS:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
-        Log.p("useragent", userAgent)
         return userAgent
     }
     

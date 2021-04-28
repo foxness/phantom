@@ -96,7 +96,10 @@ class PostPresenter {
     private static func getDefaultPost() -> Post {
         let title = ""
         let subreddit = "test"
-        let date = Date() + 1 * 60
+        
+        // TODO: set a realistic new post date
+        let date = Date() + 60 * 60 // 1 hour from now
+        
         let url = ""
         
         return Post.Link(title: title, subreddit: subreddit, date: date, url: url)
