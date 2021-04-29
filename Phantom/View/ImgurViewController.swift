@@ -20,13 +20,17 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
         
         webView.customUserAgent = Requests.getUserAgent()
-//        webView.navigationDelegate = self
+        webView.navigationDelegate = self
 
         let url = imgur.getAuthUrl()
         
         let rememberLogin = true
         if rememberLogin {
-            webView.load(URLRequest(url: url))
+            var req = URLRequest(url: url)
+//            req.httpMethod = "GET"
+//            req.setValue("Client-ID e5a0810d22af4d7", forHTTPHeaderField: "Authorization")
+            
+            webView.load(req)
         } else {
             deleteCookies {
                 self.webView.load(URLRequest(url: url))
@@ -39,20 +43,15 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records.filter { $0.displayName.contains("imgur") }, completionHandler: completion )}
     }
     
-//    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-//        let url = navigationAction.request.url!
-//        let response = imgur.getUserResponse(to: url)
-//        if response == .allow {
-//            Log.p("fetching tokens")
-//            imgur.fetchAuthTokens() {
-//                DispatchQueue.main.async {
-//                    self.performSegue(withIdentifier: ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST, sender: nil)
-//                }
-//            }
-//        }
-//        
-//        decisionHandler(.allow)
-//    }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url!
+        let response = imgur.getUserResponse(to: url)
+        if response == .allow {
+//            performSegue(withIdentifier: ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST, sender: nil)
+        }
+        
+        decisionHandler(.allow)
+    }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        let dest = segue.destination as! PostTableViewController
