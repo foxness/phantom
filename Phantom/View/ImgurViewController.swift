@@ -26,11 +26,7 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
         
         let rememberLogin = true
         if rememberLogin {
-            var req = URLRequest(url: url)
-//            req.httpMethod = "GET"
-//            req.setValue("Client-ID e5a0810d22af4d7", forHTTPHeaderField: "Authorization")
-            
-            webView.load(req)
+            webView.load(URLRequest(url: url))
         } else {
             deleteCookies {
                 self.webView.load(URLRequest(url: url))
@@ -46,15 +42,15 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = imgur.getUserResponse(to: url)
-        if response == .allow {
-//            performSegue(withIdentifier: ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST, sender: nil)
+        if response == .allow && imgur.isLoggedIn {
+            performSegue(withIdentifier: ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST, sender: nil)
         }
         
         decisionHandler(.allow)
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let dest = segue.destination as! PostTableViewController
-//        dest.loginImgur(with: imgur)
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let dest = segue.destination as! PostTableViewController
+        dest.loginImgur(with: imgur)
+    }
 }

@@ -8,7 +8,18 @@
 
 import Foundation
 
-class Imgur {
+class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit from to reduce helper method duplication
+    struct AuthParams: Codable {
+        let refreshToken: String
+        let accessToken: String
+        let accessTokenExpirationDate: Date
+        let accountUsername: String
+        
+        private enum CodingKeys: String, CodingKey {
+            case refreshToken, accessToken, accessTokenExpirationDate, accountUsername
+        }
+    }
+    
     enum UserResponse { case none, allow, decline }
     
     private struct Symbols {
@@ -62,7 +73,23 @@ class Imgur {
     
     private var accountUsername: String?
     
+    var auth: AuthParams {
+        AuthParams(refreshToken: refreshToken!,
+                   accessToken: accessToken!,
+                   accessTokenExpirationDate: accessTokenExpirationDate!,
+                   accountUsername: accountUsername!)
+    }
+    
     var isLoggedIn: Bool { refreshToken != nil }
+    
+    init() { }
+    
+    init(auth: AuthParams) {
+        self.refreshToken = auth.refreshToken
+        self.accessToken = auth.accessToken
+        self.accessTokenExpirationDate = auth.accessTokenExpirationDate
+        self.accountUsername = auth.accountUsername
+    }
     
     func getAuthUrl() -> URL {
          // https://api.imgur.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&response_type=REQUESTED_RESPONSE_TYPE&state=APPLICATION_STATE

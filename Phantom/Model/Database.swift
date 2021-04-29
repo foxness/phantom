@@ -12,6 +12,7 @@ import Foundation
 class Database {
     private static let KEY_POSTS = "posts"
     private static let KEY_REDDIT_AUTH = "reddit_auth"
+    private static let KEY_IMGUR_AUTH = "imgur_auth"
     
     static let instance = Database()
     
@@ -19,11 +20,17 @@ class Database {
     private let decoder = JSONDecoder()
     
     @UserDefaultsBacked(key: Database.KEY_REDDIT_AUTH) private var redditAuthString: String?
+    @UserDefaultsBacked(key: Database.KEY_IMGUR_AUTH) private var imgurAuthString: String?
     @UserDefaultsBacked(key: Database.KEY_POSTS) private var postsString: String?
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(redditAuthString) }
         set { redditAuthString = serializeRedditAuth(newValue) }
+    }
+    
+    var imgurAuth: Imgur.AuthParams? {
+        get { deserializeImgurAuth(imgurAuthString) }
+        set { imgurAuthString = serializeImgurAuth(newValue) }
     }
     
     var posts: [Post] = []
@@ -40,6 +47,7 @@ class Database {
         } else {
             if wipeAuth {
                 wipeReddit()
+                wipeImgur()
             }
             
             if wipePosts {
@@ -84,6 +92,10 @@ class Database {
         redditAuthString = nil
     }
     
+    private func wipeImgur() {
+        imgurAuthString = nil
+    }
+    
     private func serializePosts(_ posts: [Post]) -> String {
         let data = try! encoder.encode(posts)
         let serialized = data.base64EncodedString() // String(data: data, encoding: .utf8)!
@@ -114,6 +126,24 @@ class Database {
         let redditAuth = try! decoder.decode(Reddit.AuthParams.self, from: data)
         
         return redditAuth
+    }
+    
+    private func serializeImgurAuth(_ auth: Imgur.AuthParams?) -> String? {
+        guard let auth = auth else { return nil }
+        
+        let data = try! encoder.encode(auth)
+        let serialized = data.base64EncodedString()
+        
+        return serialized
+    }
+    
+    private func deserializeImgurAuth(_ serialized: String?) -> Imgur.AuthParams? {
+        guard let serialized = serialized else { return nil }
+        
+        let data = Data(base64Encoded: serialized)!
+        let imgurAuth = try! decoder.decode(Imgur.AuthParams.self, from: data)
+        
+        return imgurAuth
     }
 }
 

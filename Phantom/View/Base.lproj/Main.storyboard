@@ -255,6 +255,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="imgurButton" destination="rkM-TE-gyP" id="CoD-du-7Hg"/>
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
@@ -341,9 +342,11 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="ahD-Sv-y1C" id="hzT-F6-gDQ"/>
+                        <segue destination="IeG-JS-B1f" kind="unwind" identifier="backImgurToList" unwindAction="unwindToPostListWithUnwindSegue:" id="vCX-Pb-MD7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhD-Gp-bvR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="IeG-JS-B1f" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="186" y="-638"/>
         </scene>
