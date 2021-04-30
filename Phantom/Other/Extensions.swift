@@ -44,11 +44,6 @@ extension Array {
 }
 
 extension Int {
-    var randomString: String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return String((0..<self).map { _ in letters.randomElement()! })
-    }
-    
     func times(_ block: @autoclosure () -> Void) {
         guard self > 0 else { return }
         
@@ -76,10 +71,6 @@ extension Int {
 
 extension Date {
     static var random: Date { Date(timeIntervalSinceNow: TimeInterval.random(in: 0..<(2 * 24 * 60 * 60))) }
-}
-
-extension Dictionary where Key == String, Value == String {
-    var toUrlQueryItems: [URLQueryItem] { map { URLQueryItem(name: $0.key, value: $0.value) } }
 }
 
 extension UIViewController {

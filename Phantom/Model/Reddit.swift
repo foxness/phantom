@@ -75,8 +75,6 @@ class Reddit {
     private static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
     private static let ENDPOINT_SUBMIT = "https://oauth.reddit.com/api/submit"
     
-    private static let RANDOM_STATE_LENGTH = 10
-    
     static let LIMIT_TITLE_LENGTH = 300
     static let LIMIT_TEXT_LENGTH = 40000
     static let LIMIT_SUBREDDIT_LENGTH = 21
@@ -97,8 +95,6 @@ class Reddit {
                    accessToken: accessToken!,
                    accessTokenExpirationDate: accessTokenExpirationDate!)
     }
-    
-    private var randomState: String { Reddit.RANDOM_STATE_LENGTH.randomString } // TODO: I think this should be a method
     
     var isLoggedIn: Bool { refreshToken != nil }
     
@@ -138,7 +134,7 @@ class Reddit {
                         url = postUrl
                     } catch {
                         Log.p("post submit error", error) // this can include words "Our CDN was unable to reach our servers"
-                        Log.p("raw body text", String(data: data, encoding: .utf8))
+                        Log.p("raw body text", String(data: data, encoding: .utf8)!)
                     }
                 } else if let error = error {
                     Log.p("post submit error 2", error)
@@ -154,7 +150,7 @@ class Reddit {
     func getAuthUrl() -> URL {
          // https://www.reddit.com/api/v1/authorize?client_id=CLIENT_ID&response_type=TYPE&state=RANDOM_STRING&redirect_uri=URI&duration=DURATION&scope=SCOPE_STRING
          
-        authState = randomState
+        authState = Helper.getRandomState()
         
         let params = [Symbols.CLIENT_ID: Reddit.PARAM_CLIENT_ID,
                       Symbols.RESPONSE_TYPE: Symbols.CODE,
@@ -163,16 +159,14 @@ class Reddit {
                       Symbols.DURATION: Reddit.PARAM_DURATION,
                       Symbols.SCOPE: Reddit.PARAM_SCOPE]
         
-        var urlc = URLComponents(string: Reddit.ENDPOINT_AUTH)!
-        urlc.queryItems = params.toUrlQueryItems
-        return urlc.url!
+        let url = Helper.appendQuery(url: Reddit.ENDPOINT_AUTH, query: params)
+        return url
     }
     
     func getUserResponse(to url: URL) -> UserResponse {
         guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
-        let urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        let params = urlc.queryItems!.reduce(into: [String:String]()) { $0[$1.name] = $1.value }
+        let params = Helper.getQueryItems(url: url)
         
         let state = params[Symbols.STATE]
         guard state != nil && state == authState else { return .none }
@@ -205,7 +199,7 @@ class Reddit {
                     
                     self.accessToken = newAccessToken
                     self.refreshToken = newRefreshToken
-                    self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
+                    self.accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
                     
                     Log.p("auth token fetch: all good")
                 } catch {
@@ -240,7 +234,7 @@ class Reddit {
                     let newExpiresIn = json[Symbols.EXPIRES_IN] as! Int
                     
                     self.accessToken = newAccessToken
-                    self.accessTokenExpirationDate = Reddit.convertExpiresIn(newExpiresIn)
+                    self.accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
                     
                     Log.p("access token refresh: all good")
                     Log.p("accesstoken", newAccessToken)
@@ -322,9 +316,5 @@ class Reddit {
         let auth = (username: username, password: password)
         let url = URL(string: Reddit.ENDPOINT_SUBMIT)!
         return (url, data, auth)
-    }
-    
-    private static func convertExpiresIn(_ expiresIn: Int) -> Date {
-        Date(timeIntervalSinceNow: TimeInterval(expiresIn))
     }
 }

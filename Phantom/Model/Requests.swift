@@ -31,7 +31,7 @@ struct Requests {
         let (url, data, auth) = params
         
         var urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        urlc.queryItems = data.toUrlQueryItems
+        urlc.queryItems = Helper.toUrlQueryItems(query: data)
         let query = urlc.url!.query!
         
         var request = URLRequest(url: url)

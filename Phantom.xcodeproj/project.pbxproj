@@ -12,6 +12,7 @@
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
+		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		71614EF124FD195C00FA8B76 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71614EF024FD195C00FA8B76 /* Database.swift */; };
 		71684AD125024D83005BA857 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71684AD025024D83005BA857 /* PostCell.swift */; };
 		7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7179EF392501037000BDA598 /* PostSubmitter.swift */; };
@@ -44,6 +45,7 @@
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
+		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		71614EF024FD195C00FA8B76 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		71684AD025024D83005BA857 /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		7179EF392501037000BDA598 /* PostSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmitter.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 		9693DCEB252773FE00A4A23E /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				578358E0263C7E0E00320607 /* Helper.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
 			);
 			path = Other;
@@ -270,6 +273,7 @@
 				5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */,
 				5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
+				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
