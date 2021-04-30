@@ -14,6 +14,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     private static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
     private static let SEGUE_ADD_POST = "addPost"
     private static let SEGUE_EDIT_POST = "editPost"
+    private static let SEGUE_IMGUR_LOGIN = "imgurLogin"
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     private static let TEXT_INDICATOR_DONE = "Done!"
@@ -32,6 +33,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     @IBOutlet private weak var submissionIndicatorView: UIView!
     @IBOutlet private weak var submissionIndicatorLabel: UILabel!
     @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView!
+    
+    @IBOutlet weak var imgurButton: UIBarButtonItem!
     
     // MARK: - View lifecycle
     
@@ -95,6 +98,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         // todo: remove the previous view controllers from the navigation stack
     }
     
+    func loginImgur(with imgur: Imgur) {
+        presenter.imgurLoggedIn(imgur)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
@@ -112,6 +119,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
             Log.p("introduction segue")
+            
+        case PostTableViewController.SEGUE_IMGUR_LOGIN:
+            Log.p("imgur login segue")
             
         default:
             fatalError()
@@ -134,6 +144,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             }
             
         case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
+            break
+            
+        case ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST:
             break
             
         default:
@@ -269,6 +282,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         
         let config = UISwipeActionsConfiguration(actions: [submitAction])
         return config
+    }
+    
+    // MARK: - View control
+    
+    func disableImgurLogin() {
+        imgurButton.isEnabled = false
     }
     
     // MARK: - Lifecycle notifications

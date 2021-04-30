@@ -62,6 +62,26 @@ struct Requests {
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
     
+    static func synchronousPost(with params: Params) -> (Data?, URLResponse?, Error?) {
+        var data: Data?
+        var response: URLResponse?
+        var error: Error?
+        
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
+        Requests.post(with: params) { (data_, response_, error_) in
+            data = data_
+            response = response_
+            error = error_
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.wait()
+        return (data, response, error)
+    }
+    
     static func formGetRequest(url: URL) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

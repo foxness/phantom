@@ -67,7 +67,16 @@ class PostTablePresenter {
         assert(submitter.reddit.value == nil)
         
         submitter.reddit.mutate { $0 = reddit }
-        Log.p("i logged in reddit")
+        Log.p("I logged in reddit")
+    }
+    
+    func imgurLoggedIn(_ imgur: Imgur) {
+        assert(submitter.imgur.value == nil)
+        
+        submitter.imgur.mutate { $0 = imgur }
+        Log.p("I logged in imgur")
+        
+        viewDelegate?.disableImgurLogin()
     }
     
     func submitPressed(postIndex: Int) {
@@ -265,12 +274,19 @@ class PostTablePresenter {
     private func saveData() {
         savePosts()
         saveRedditAuth()
+        saveImgurAuth()
         Log.p("saved data")
     }
     
     private func saveRedditAuth() {
         if let redditAuth = submitter.reddit.value?.auth {
             database.redditAuth = redditAuth
+        }
+    }
+    
+    private func saveImgurAuth() {
+        if let imgurAuth = submitter.imgur.value?.auth {
+            database.imgurAuth = imgurAuth
         }
     }
     
@@ -303,6 +319,7 @@ class PostTablePresenter {
     
     private func setupPostSubmitter() {
         var redditLogged = false
+        var imgurLogged = false
         
         if submitter.reddit.value == nil {
             if let redditAuth = database.redditAuth {
@@ -318,8 +335,26 @@ class PostTablePresenter {
             redditLogged = true
         }
         
+        if submitter.imgur.value == nil {
+            if let imgurAuth = database.imgurAuth {
+                let imgur = Imgur(auth: imgurAuth)
+                
+                if submitter.imgur.value == nil { // this is almost certainly true but you never know
+                    submitter.imgur.mutate { $0 = imgur }
+                }
+                
+                imgurLogged = true
+            }
+        } else {
+            imgurLogged = true
+        }
+        
         if !redditLogged {
             viewDelegate?.segueToIntroduction()
+        }
+        
+        if imgurLogged {
+            viewDelegate?.disableImgurLogin()
         }
     }
 }

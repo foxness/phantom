@@ -14,6 +14,7 @@ enum ListAnimation {
 
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
+    func disableImgurLogin()
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)
