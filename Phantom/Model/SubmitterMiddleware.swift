@@ -9,5 +9,5 @@
 import Foundation
 
 protocol SubmitterMiddleware {
-    static func transform(post: Post) -> Post
+    func transform(post: Post) -> Post
 }

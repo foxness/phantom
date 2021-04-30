@@ -15,29 +15,46 @@ class PostSubmitter {
         private let reddit: Reddit
         private let post: Post
         private let callback: UrlCallback
-        private let middlewares: [SubmitterMiddleware.Type]
+        private let middlewares: [SubmitterMiddleware]
         
         // DEBUGVAR
         let simulateReddit = true
         let simulateMiddleware = false
         
-        init(reddit: Reddit, database: Database, useWallhaven: Bool = true, callback: @escaping UrlCallback) {
+        init(reddit: Reddit,
+             database: Database,
+             imgur: Imgur? = nil,
+             useWallhaven: Bool = true,
+             callback: @escaping UrlCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
             self.callback = callback
-            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven)
+            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven, imgur: imgur)
         }
         
-        init(reddit: Reddit, post: Post, useWallhaven: Bool = true, callback: @escaping UrlCallback) {
+        init(reddit: Reddit,
+             post: Post,
+             imgur: Imgur? = nil,
+             useWallhaven: Bool = true,
+             callback: @escaping UrlCallback) {
             self.reddit = reddit
             self.post = post
             self.callback = callback
-            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven)
+            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven, imgur: imgur)
         }
         
-        private static func getMiddlewares(useWallhaven: Bool) -> [SubmitterMiddleware.Type] {
-            return [useWallhaven ? WallhavenMiddleware.self : nil]
-                .compactMap { $0 }
+        private static func getMiddlewares(useWallhaven: Bool, imgur: Imgur?) -> [SubmitterMiddleware] {
+            var mw = [SubmitterMiddleware]()
+            
+            if useWallhaven {
+                mw.append(WallhavenMiddleware())
+            }
+            
+            if let imgur = imgur {
+                mw.append(ImgurMiddleware(imgur))
+            }
+            
+            return mw
         }
         
         private static func getPost(database: Database) -> Post {
@@ -110,16 +127,24 @@ class PostSubmitter {
     }
     
     func submitPost(_ post: Post, callback: @escaping UrlCallback) {
-        guard let reddit = reddit.value else { fatalError() }
+        guard let reddit = reddit.value,
+              let imgur = imgur.value
+        else {
+            fatalError()
+        }
         
-        let submission = PostSubmission(reddit: reddit, post: post, callback: callback)
+        let submission = PostSubmission(reddit: reddit, post: post, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
     func submitPostInDatabase(_ database: Database, callback: @escaping UrlCallback) {
-        guard let reddit = reddit.value else { fatalError() }
+        guard let reddit = reddit.value,
+              let imgur = imgur.value
+        else {
+            fatalError()
+        }
         
-        let submission = PostSubmission(reddit: reddit, database: database, callback: callback)
+        let submission = PostSubmission(reddit: reddit, database: database, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     

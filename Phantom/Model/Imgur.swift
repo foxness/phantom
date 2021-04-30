@@ -9,6 +9,12 @@
 import Foundation
 
 class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit from to reduce helper method duplication
+    struct Image {
+        let url: String
+        let width: Int
+        let height: Int
+    }
+    
     struct AuthParams: Codable {
         let refreshToken: String
         let accessToken: String
@@ -36,6 +42,13 @@ class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit fro
         static let ACCOUNT_ID = "account_id"
         static let ERROR = "error"
         static let ACCESS_DENIED = "access_denied"
+        static let IMAGE = "image"
+        static let TYPE = "type"
+        static let URL = "url"
+        static let DATA = "data"
+        static let LINK = "link"
+        static let WIDTH = "width"
+        static let HEIGHT = "height"
 //        static let CLIENT_SECRET = ""
 //        static let CODE = "code"
 //        static let REDIRECT_URI = "redirect_uri"
@@ -52,9 +65,6 @@ class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit fro
 //        static let SUBREDDIT = "sr"
 //        static let TEXT = "text"
 //        static let TITLE = "title"
-//        static let DATA = "data"
-//        static let URL = "url"
-//        static let LINK = "link"
     }
     
     private static let PARAM_CLIENT_ID = "e5a0810d22af4d7"
@@ -62,6 +72,7 @@ class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit fro
     private static let PARAM_REDIRECT_URI = "https://localhost/phantom"
     
     private static let ENDPOINT_AUTH = "https://api.imgur.com/oauth2/authorize"
+    private static let ENDPOINT_UPLOAD = "https://api.imgur.com/3/upload"
     
     private static let RANDOM_STATE_LENGTH = 10
     
@@ -150,6 +161,57 @@ class Imgur { // todo: add OAuthAPI superclass that Reddit and Imgur inherit fro
         }
         
         return .allow
+    }
+    
+    func uploadImage(imageUrl: URL) -> Image? { // synchronous
+        // todo: do ensureValidAccessToken
+        
+        let params = getUploadImageParams(imageUrl: imageUrl)
+        let (data, rawResponse, error) = Requests.synchronousPost(with: params)
+        
+        var imgurImage: Image? = nil
+        let response = rawResponse as! HTTPURLResponse
+        
+        if Requests.isResponseOk(response) {
+            Log.p("imgur upload: http ok")
+        } else {
+            Log.p("imgur upload: http not ok, status code: \(response.statusCode), response", response)
+        }
+        
+        if let data = data {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                Log.p("json", json)
+                
+                let jsonData = json[Symbols.DATA] as! [String: Any]
+                let imageUrl = jsonData[Symbols.LINK] as! String
+                let imageWidth = jsonData[Symbols.WIDTH] as! Int
+                let imageHeight = jsonData[Symbols.HEIGHT] as! Int
+                
+                imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
+            } catch {
+                Log.p("imgur upload error", error)
+                Log.p("raw body text", String(data: data, encoding: .utf8)!)
+            }
+        } else if let error = error {
+            Log.p("imgur upload error 2", error)
+        }
+        
+        return imgurImage
+    }
+    
+    private func getUploadImageParams(imageUrl: URL) -> Requests.Params {
+        let imageString = imageUrl.absoluteString
+        
+        let data = [Symbols.IMAGE: imageString,
+                    Symbols.TYPE: Symbols.URL]
+        
+        let username = Symbols.BEARER
+        let password = accessToken!
+        
+        let auth = (username: username, password: password)
+        let url = URL(string: Imgur.ENDPOINT_UPLOAD)!
+        return (url, data, auth)
     }
     
     private static func convertExpiresIn(_ expiresIn: Int) -> Date {

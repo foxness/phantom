@@ -9,10 +9,10 @@
 import Foundation
 
 struct WallhavenMiddleware: SubmitterMiddleware {
-    static func transform(post: Post) -> Post {
+    func transform(post: Post) -> Post {
         if post.type == .link && WallhavenMiddleware.isWallhaven(post.url) {
             let url = URL(string: post.url!)!
-            guard let directUrl = getDirectUrl(wallhavenUrl: url) else { return post }
+            guard let directUrl = WallhavenMiddleware.getDirectUrl(wallhavenUrl: url) else { return post }
             
             Log.p("wallhaven direct url found", directUrl)
             
