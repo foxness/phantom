@@ -34,6 +34,7 @@ class Imgur {
     
     private struct Symbols {
         static let CLIENT_ID = "client_id"
+        static let CLIENT_SECRET = "client_secret"
         static let RESPONSE_TYPE = "response_type"
         static let TOKEN = "token"
         static let STATE = "state"
@@ -53,6 +54,7 @@ class Imgur {
         static let LINK = "link"
         static let WIDTH = "width"
         static let HEIGHT = "height"
+        static let GRANT_TYPE = "grant_type"
     }
     
     // MARK: - Constants
@@ -63,6 +65,7 @@ class Imgur {
     
     private static let ENDPOINT_AUTH = "https://api.imgur.com/oauth2/authorize"
     private static let ENDPOINT_UPLOAD = "https://api.imgur.com/3/upload"
+    private static let ENDPOINT_REFRESH = "https://api.imgur.com/oauth2/token"
     
     // MARK: - Properties
     
@@ -99,7 +102,7 @@ class Imgur {
     // MARK: - Main methods
     
     func uploadImage(imageUrl: URL) -> Image? { // synchronous
-        // todo: do ensureValidAccessToken
+        ensureValidAccessToken()
         
         let params = getUploadImageParams(imageUrl: imageUrl)
         let (data, rawResponse, error) = Requests.synchronousPost(with: params)
@@ -193,7 +196,49 @@ class Imgur {
         return .allow
     }
     
+    private func refreshAccessToken() {
+        assert(refreshToken != nil)
+        
+        let params = getAccessTokenRefreshParams()
+        let (data, rawResponse, error) = Requests.synchronousPost(with: params)
+        
+        let response = rawResponse as! HTTPURLResponse
+        if Requests.isResponseOk(response) {
+            Log.p("imgur access token refresh: http ok")
+        } else {
+            Log.p("imgur access token refresh: http not ok, status code: \(response.statusCode), response", response)
+        }
+        
+        if let data = data {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                Log.p("json", json)
+                
+                let newAccessToken = json[Symbols.ACCESS_TOKEN] as! String
+                let newExpiresIn = json[Symbols.EXPIRES_IN] as! Int
+                
+                accessToken = newAccessToken
+                accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
+                
+                Log.p("access token refresh: all good")
+                Log.p("accesstoken", newAccessToken)
+                Log.p("expiration", accessTokenExpirationDate!)
+            } catch {
+                Log.p("imgur access token refresh deserialization error", error)
+            }
+        } else if let error = error {
+            Log.p("imgur access token token refresh error 2", error)
+        }
+    }
+    
     // MARK: - Helper methods
+    
+    private func ensureValidAccessToken() {
+        guard accessToken == nil || accessTokenExpirationDate == nil || accessTokenExpirationDate! < Date()
+        else { return }
+        
+        refreshAccessToken()
+    }
     
     private func getUploadImageParams(imageUrl: URL) -> Requests.Params {
         let imageString = imageUrl.absoluteString
@@ -206,6 +251,18 @@ class Imgur {
         
         let auth = (username: username, password: password)
         let url = URL(string: Imgur.ENDPOINT_UPLOAD)!
+        return (url, data, auth)
+    }
+    
+    private func getAccessTokenRefreshParams() -> Requests.Params {
+        let data = [Symbols.REFRESH_TOKEN: refreshToken!,
+                    Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
+                    Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
+                    Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
+        
+        let auth: (String, String)? = nil
+        let url = URL(string: Imgur.ENDPOINT_REFRESH)!
+        
         return (url, data, auth)
     }
     
