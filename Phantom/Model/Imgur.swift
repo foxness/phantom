@@ -101,41 +101,29 @@ class Imgur {
     
     // MARK: - Main methods
     
-    func uploadImage(imageUrl: URL) -> Image? { // synchronous
-        ensureValidAccessToken()
+    func uploadImage(imageUrl: URL) throws -> Image { // synchronous
+        let request = "imgur upload"
+        
+        try ensureValidAccessToken()
         
         let params = getUploadImageParams(imageUrl: imageUrl)
-        let (data, rawResponse, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.synchronousPost(with: params)
         
-        var imgurImage: Image? = nil
-        let response = rawResponse as! HTTPURLResponse
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
         
-        if Requests.isResponseOk(response) {
-            Log.p("imgur upload: http ok")
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        
+        if let jsonData = json[Symbols.DATA] as? [String: Any],
+           let imageUrl = jsonData[Symbols.LINK] as? String,
+           let imageWidth = jsonData[Symbols.WIDTH] as? Int,
+           let imageHeight = jsonData[Symbols.HEIGHT] as? Int {
+            
+            let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
+            return imgurImage
         } else {
-            Log.p("imgur upload: http not ok, status code: \(response.statusCode), response", response)
+            throw ApiError.deserialization(request: request, json: json)
         }
-        
-        if let data = data {
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                Log.p("json", json)
-                
-                let jsonData = json[Symbols.DATA] as! [String: Any]
-                let imageUrl = jsonData[Symbols.LINK] as! String
-                let imageWidth = jsonData[Symbols.WIDTH] as! Int
-                let imageHeight = jsonData[Symbols.HEIGHT] as! Int
-                
-                imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
-            } catch {
-                Log.p("imgur deserialization error", error)
-                Log.p("raw body text", String(data: data, encoding: .utf8)!)
-            }
-        } else if let error = error {
-            Log.p("imgur upload error 2", error)
-        }
-        
-        return imgurImage
     }
     
     // MARK: - Auth methods
@@ -196,48 +184,40 @@ class Imgur {
         return .allow
     }
     
-    private func refreshAccessToken() {
+    private func refreshAccessToken() throws {
         assert(refreshToken != nil)
         
+        let request = "imgur access token refresh"
+        
         let params = getAccessTokenRefreshParams()
-        let (data, rawResponse, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.synchronousPost(with: params)
         
-        let response = rawResponse as! HTTPURLResponse
-        if Requests.isResponseOk(response) {
-            Log.p("imgur access token refresh: http ok")
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        
+        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
+           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
+            
+            accessToken = newAccessToken
+            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
         } else {
-            Log.p("imgur access token refresh: http not ok, status code: \(response.statusCode), response", response)
-        }
-        
-        if let data = data {
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                Log.p("json", json)
-                
-                let newAccessToken = json[Symbols.ACCESS_TOKEN] as! String
-                let newExpiresIn = json[Symbols.EXPIRES_IN] as! Int
-                
-                accessToken = newAccessToken
-                accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
-                
-                Log.p("access token refresh: all good")
-                Log.p("accesstoken", newAccessToken)
-                Log.p("expiration", accessTokenExpirationDate!)
-            } catch {
-                Log.p("imgur access token refresh deserialization error", error)
-            }
-        } else if let error = error {
-            Log.p("imgur access token token refresh error 2", error)
+            throw ApiError.deserialization(request: request, json: json)
         }
     }
     
     // MARK: - Helper methods
     
-    private func ensureValidAccessToken() {
-        guard accessToken == nil || accessTokenExpirationDate == nil || accessTokenExpirationDate! < Date()
-        else { return }
+    private func ensureValidAccessToken() throws {
+        guard accessToken == nil ||
+                accessTokenExpirationDate == nil ||
+                accessTokenExpirationDate! < Date()
+        else {
+            return
+        }
         
-        refreshAccessToken()
+        try refreshAccessToken()
     }
     
     private func getUploadImageParams(imageUrl: URL) -> Requests.Params {
@@ -267,6 +247,6 @@ class Imgur {
     }
     
     private static func getFixedImgurResponse(url: URL) -> URL {
-        URL(string: url.absoluteString.replacingOccurrences(of: "#", with: "&"))! // imgur has weird queries
+        return URL(string: url.absoluteString.replacingOccurrences(of: "#", with: "&"))! // imgur has weird queries
     }
 }

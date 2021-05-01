@@ -16,31 +16,23 @@ struct ImgurMiddleware: SubmitterMiddleware {
     }
     
     func transform(post: Post) -> Post {
-        if post.type == .link && ImgurMiddleware.isImageUrl(post.url) {
-            let url = URL(string: post.url!)!
-            guard let imgurImage = uploadToImgur(imageUrl: url) else { return post }
-
-            Log.p("imgur image uploaded", imgurImage)
-            
-            let title = "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]"
-
-            let newPost = Post.Link(id: post.id,
-                                    title: title,
-                                    subreddit: post.subreddit,
-                                    date: post.date,
-                                    url: imgurImage.url)
-
-            return newPost
-        }
-
-        return post
+        guard ImgurMiddleware.isRightPost(post) else { return post }
+        
+        let url = URL(string: post.url!)!
+        let imgurImage = try! imgur.uploadImage(imageUrl: url)
+        Log.p("imgur image uploaded", imgurImage)
+        
+        let title = "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]"
+        let newPost = Post.Link(id: post.id,
+                                title: title,
+                                subreddit: post.subreddit,
+                                date: post.date,
+                                url: imgurImage.url)
+        return newPost
     }
-
-    private func uploadToImgur(imageUrl: URL) -> Imgur.Image? {
-        imgur.uploadImage(imageUrl: imageUrl)
-    }
-
-    private static func isImageUrl(_ url: String?) -> Bool {
-        return [".jpg", ".jpeg", ".png"].contains { url?.hasSuffix($0) ?? false }
+    
+    private static func isRightPost(_ post: Post) -> Bool {
+        let isImage = [".jpg", ".jpeg", ".png"].contains { post.url?.hasSuffix($0) ?? false }
+        return post.type == .link && isImage
     }
 }

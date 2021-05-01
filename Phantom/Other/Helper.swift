@@ -36,4 +36,43 @@ struct Helper {
         urlc.queryItems = Helper.toUrlQueryItems(query: query)
         return urlc.url!
     }
+    
+    static func ensureGoodResponse(response: URLResponse?, request: String) throws {
+        let httpResponse = response as! HTTPURLResponse
+        if Requests.isResponseOk(httpResponse) {
+            Log.p("\(request): http ok")
+        } else {
+            throw ApiError.badResponse(request: request, statusCode: httpResponse.statusCode, response: httpResponse)
+        }
+    }
+    
+    static func ensureNoError(error: Error?, request: String) throws {
+        if let error = error {
+            throw ApiError.request(request: request, error: error)
+        }
+    }
+    
+    static func deserializeResponse(data: Data?, request: String) throws -> [String: Any] {
+        guard let data = data else {
+            throw ApiError.noData(request: request)
+        }
+        
+        var json: [String: Any]?
+        let goodJson: [String: Any]
+        do {
+            json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            goodJson = json!
+        } catch {
+            throw ApiError.deserialization(request: request, json: json)
+        }
+        
+        return goodJson
+    }
+}
+
+enum ApiError: Error {
+    case badResponse(request: String, statusCode: Int, response: HTTPURLResponse)
+    case request(request: String, error: Error)
+    case noData(request: String)
+    case deserialization(request: String, json: [String: Any]?)
 }
