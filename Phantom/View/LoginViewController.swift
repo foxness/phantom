@@ -43,8 +43,9 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
         let url = navigationAction.request.url!
         let response = reddit.getUserResponse(to: url)
         if response == .allow {
-            Log.p("fetching tokens")
-            reddit.fetchAuthTokens() {
+            DispatchQueue.global(qos: .userInitiated).async {
+                Log.p("fetching tokens")
+                try! self.reddit.fetchAuthTokens()
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: LoginViewController.SEGUE_BACK_LOGIN_TO_LIST, sender: nil)
                 }

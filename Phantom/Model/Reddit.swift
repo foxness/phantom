@@ -110,38 +110,26 @@ class Reddit {
     
     // MARK: - Main methods
     
-    func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true, callback: @escaping (String?) -> Void) {
-        ensureValidAccessToken {
-            let params = self.getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
-            Requests.post(with: params) { (data, response, error) in
-                var url: String? = nil
-                let response = response as! HTTPURLResponse
-                
-                if Requests.isResponseOk(response) {
-                    Log.p("post submit: http ok")
-                } else {
-                    Log.p("post submit: http not ok, status code: \(response.statusCode), response", response)
-                }
-                
-                if let data = data {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                        Log.p("json", json)
-                        
-                        let jsonDeeper = json[Symbols.JSON] as! [String: Any]
-                        let deeperData = jsonDeeper[Symbols.DATA] as! [String: Any]
-                        let postUrl = deeperData[Symbols.URL] as! String
-                        url = postUrl
-                    } catch {
-                        Log.p("post submit error", error) // this can include words "Our CDN was unable to reach our servers"
-                        Log.p("raw body text", String(data: data, encoding: .utf8)!)
-                    }
-                } else if let error = error {
-                    Log.p("post submit error 2", error)
-                }
-                
-                callback(url)
-            }
+    func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true) throws -> String {
+        let request = "reddit submit"
+        
+        try ensureValidAccessToken()
+
+        let params = getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
+        let (data, response, error) = Requests.synchronousPost(with: params)
+        
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        
+        if let jsonDeeper = json[Symbols.JSON] as? [String: Any],
+           let deeperData = jsonDeeper[Symbols.DATA] as? [String: Any],
+           let postUrl = deeperData[Symbols.URL] as? String {
+            
+            return postUrl
+        } else {
+            throw ApiError.deserialization(request: request, json: json)
         }
     }
     
@@ -176,77 +164,51 @@ class Reddit {
         return authCode == nil ? .decline : .allow
     }
     
-    func fetchAuthTokens(callback: @escaping () -> Void) {
+    func fetchAuthTokens() throws {
         assert(authCode != nil)
         
+        let request = "reddit auth token fetch"
+        
         let params = getAuthTokenFetchParams()
-        Requests.post(with: params) { (data, response, error) in
-            let response = response as! HTTPURLResponse
-            if Requests.isResponseOk(response) {
-                Log.p("auth token fetch: http ok")
-            } else {
-                Log.p("auth token fetch: http not ok, status code: \(response.statusCode), response", response)
-            }
+        let (data, response, error) = Requests.synchronousPost(with: params)
+        
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        
+        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
+           let newRefreshToken = json[Symbols.REFRESH_TOKEN] as? String,
+           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
             
-            if let data = data {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    Log.p("json", json)
-                    
-                    let newAccessToken = json[Symbols.ACCESS_TOKEN] as! String
-                    let newRefreshToken = json[Symbols.REFRESH_TOKEN] as! String
-                    let newExpiresIn = json[Symbols.EXPIRES_IN] as! Int
-                    
-                    self.accessToken = newAccessToken
-                    self.refreshToken = newRefreshToken
-                    self.accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
-                    
-                    Log.p("auth token fetch: all good")
-                } catch {
-                    Log.p("auth token fetch error", error)
-                }
-            } else if let error = error {
-                Log.p("auth token fetch error 2", error)
-            }
-            
-            callback()
+            accessToken = newAccessToken
+            refreshToken = newRefreshToken
+            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
+        } else {
+            throw ApiError.deserialization(request: request, json: json)
         }
     }
     
-    private func refreshAccessToken(callback: @escaping () -> Void) {
+    private func refreshAccessToken() throws {
         assert(refreshToken != nil)
         
+        let request = "reddit access token refresh"
+        
         let params = getAccessTokenRefreshParams()
-        Requests.post(with: params) { (data, response, error) in
-            let response = response as! HTTPURLResponse
-            if Requests.isResponseOk(response) {
-                Log.p("access token refresh: http ok")
-            } else {
-                Log.p("access token refresh: http not ok, status code: \(response.statusCode), response", response)
-            }
+        let (data, response, error) = Requests.synchronousPost(with: params)
+        
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        
+        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
+           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
             
-            if let data = data {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    Log.p("json", json)
-                    
-                    let newAccessToken = json[Symbols.ACCESS_TOKEN] as! String
-                    let newExpiresIn = json[Symbols.EXPIRES_IN] as! Int
-                    
-                    self.accessToken = newAccessToken
-                    self.accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
-                    
-                    Log.p("access token refresh: all good")
-                    Log.p("accesstoken", newAccessToken)
-                    Log.p("expiration", self.accessTokenExpirationDate!)
-                } catch {
-                    Log.p("access token refresh error", error)
-                }
-            } else if let error = error {
-                Log.p("access token refresh error 2", error)
-            }
-            
-            callback()
+            accessToken = newAccessToken
+            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
+        } else {
+            throw ApiError.deserialization(request: request, json: json)
         }
     }
     
@@ -262,13 +224,15 @@ class Reddit {
         return (url, auth)
     }
     
-    private func ensureValidAccessToken(callback: @escaping () -> Void) {
-        guard accessToken == nil || accessTokenExpirationDate == nil || accessTokenExpirationDate! < Date() else {
-            callback()
+    private func ensureValidAccessToken() throws {
+        guard accessToken == nil ||
+                accessTokenExpirationDate == nil ||
+                accessTokenExpirationDate! < Date()
+        else {
             return
         }
         
-        refreshAccessToken(callback: callback)
+        try refreshAccessToken()
     }
     
     private func getAccessTokenRefreshParams() -> Requests.Params {

@@ -19,7 +19,7 @@ class PostSubmitter {
         
         // DEBUGVAR
         let simulateReddit = true
-        let simulateMiddleware = false
+        let simulateMiddleware = true
         
         init(reddit: Reddit,
              database: Database,
@@ -66,13 +66,6 @@ class PostSubmitter {
             
             Log.p("submission task started")
             
-            // why use dispatch group?
-            // to make reddit async tasks sync
-            // so that it works nicely with operation queue (correctly adheres to maxConcurrentOperationCount)
-            
-            let dispatchGroup = DispatchGroup()
-            dispatchGroup.enter()
-            
             var middlewaredPost = post
             if simulateMiddleware {
                 sleep(1)
@@ -83,21 +76,15 @@ class PostSubmitter {
             }
             
             if simulateReddit {
-                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
-                    guard !self.isCancelled else { return }
-                    self.callback("https://simulated-url-lolz.com/")
-                    dispatchGroup.leave()
-                }
+                sleep(3)
+                guard !self.isCancelled else { return }
+                callback("https://simulated-url-lolz.com/")
             } else {
                 // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-                reddit.submit(post: middlewaredPost) { url in
-                    guard !self.isCancelled else { return }
-                    self.callback(url)
-                    dispatchGroup.leave()
-                }
+                
+                let url = try! reddit.submit(post: middlewaredPost)
+                callback(url)
             }
-            
-            dispatchGroup.wait()
         }
     }
     
