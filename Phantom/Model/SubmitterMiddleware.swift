@@ -9,5 +9,5 @@
 import Foundation
 
 protocol SubmitterMiddleware {
-    func transform(post: Post) -> Post
+    func transform(post: Post) throws -> (post: Post, changed: Bool)
 }

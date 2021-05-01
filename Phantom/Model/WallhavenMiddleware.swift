@@ -9,45 +9,41 @@
 import Foundation
 
 struct WallhavenMiddleware: SubmitterMiddleware {
-    func transform(post: Post) -> Post {
-        if post.type == .link && WallhavenMiddleware.isWallhaven(post.url) {
-            let url = URL(string: post.url!)!
-            guard let directUrl = WallhavenMiddleware.getDirectUrl(wallhavenUrl: url) else { return post }
-            
-            Log.p("wallhaven direct url found", directUrl)
-            
-            let newPost = Post.Link(id: post.id,
-                                    title: post.title,
-                                    subreddit: post.subreddit,
-                                    date: post.date,
-                                    url: directUrl)
-            
-            return newPost
-        }
+    func transform(post: Post) throws -> (post: Post, changed: Bool) {
+        guard WallhavenMiddleware.isRightPost(post) else { return (post, changed: false) }
         
-        return post
+        let url = URL(string: post.url!)!
+        guard let directUrl = try? WallhavenMiddleware.getDirectUrl(wallhavenUrl: url) else { return (post, changed: false) }
+        
+        Log.p("wallhaven direct url found", directUrl)
+        
+        let newPost = Post.Link(id: post.id,
+                                title: post.title,
+                                subreddit: post.subreddit,
+                                date: post.date,
+                                url: directUrl)
+        return (newPost, changed: true)
     }
     
-    private static func getDirectUrl(wallhavenUrl: URL) -> String? {
-        let (data, rawResponse, error) = Requests.synchronousGet(url: wallhavenUrl)
+    private static func getDirectUrl(wallhavenUrl: URL) throws -> String {
+        let request = "wallhaven direct url"
         
-        let response = rawResponse as! HTTPURLResponse
+        let (data, response, error) = Requests.synchronousGet(url: wallhavenUrl)
         
-        if Requests.isResponseOk(response) {
-            Log.p("wallhaven middleware: http ok")
-        } else {
-            Log.p("wallhaven middleware: http not ok, status code: \(response.statusCode), response", response)
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        guard let data = data else {
+            throw ApiError.noData(request: request)
         }
         
-        if let data = data {
-            let html = String(data: data, encoding: .utf8)
-            let directUrl = getDirectUrl(html: html!)
+        if let html = String(data: data, encoding: .utf8),
+           let directUrl = getDirectUrl(html: html) {
+            
             return directUrl
-        } else if let error = error {
-            Log.p("wallhaven middleware error", error)
+        } else {
+            throw ApiError.deserialization(request: request, json: nil)
         }
-        
-        return nil
     }
     
     private static func getDirectUrl(html: String) -> String? {
@@ -64,11 +60,8 @@ struct WallhavenMiddleware: SubmitterMiddleware {
         return String(directUrl)
     }
     
-    private static func isWallhaven(_ url: String?) -> Bool {
-        if let url = url {
-            return url.contains("wallhaven") // TODO: fix stub with proper regex
-        } else {
-            return false
-        }
+    private static func isRightPost(_ post: Post) -> Bool {
+        let wallhaven = post.url?.contains("wallhaven") ?? false // TODO: fix stub with proper regex
+        return post.type == .link && wallhaven
     }
 }

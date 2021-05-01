@@ -15,8 +15,8 @@ struct ImgurMiddleware: SubmitterMiddleware {
         self.imgur = imgur
     }
     
-    func transform(post: Post) -> Post {
-        guard ImgurMiddleware.isRightPost(post) else { return post }
+    func transform(post: Post) throws -> (post: Post, changed: Bool) {
+        guard ImgurMiddleware.isRightPost(post) else { return (post, changed: false) }
         
         let url = URL(string: post.url!)!
         let imgurImage = try! imgur.uploadImage(imageUrl: url)
@@ -28,7 +28,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
                                 subreddit: post.subreddit,
                                 date: post.date,
                                 url: imgurImage.url)
-        return newPost
+        return (newPost, changed: true)
     }
     
     private static func isRightPost(_ post: Post) -> Bool {

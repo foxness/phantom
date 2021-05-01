@@ -71,7 +71,12 @@ class PostSubmitter {
                 sleep(1)
             } else {
                 for middleware in middlewares {
-                    middlewaredPost = middleware.transform(post: middlewaredPost)
+                    let middlewared = try! middleware.transform(post: middlewaredPost)
+                    middlewaredPost = middlewared.post
+                    let changed = middlewared.changed
+                    
+                    // todo: use changed ^
+                    // todo: return possible error to callback
                 }
             }
             
