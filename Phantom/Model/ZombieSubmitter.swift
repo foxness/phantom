@@ -70,7 +70,9 @@ struct ZombieSubmitter {
             Log.p("zombie: used existing reddit")
         }
         
-        submitter.submitPost(post) { url in
+        submitter.submitPost(post) { url, error in
+            // todo: handle error !!1
+            
             let success = url != nil
             Log.p("success", success)
             Log.p("url", url)

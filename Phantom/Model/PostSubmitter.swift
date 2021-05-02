@@ -9,23 +9,23 @@
 import Foundation
 
 class PostSubmitter {
-    typealias UrlCallback = (String?) -> Void
+    typealias SubmitCallback = (_ url: String?, _ error: Error?) -> Void
     
     private class PostSubmission: Operation {
         private let reddit: Reddit
         private let post: Post
-        private let callback: UrlCallback
+        private let callback: SubmitCallback
         private let middlewares: [SubmitterMiddleware]
         
         // DEBUGVAR
-        let simulateReddit = true
-        let simulateMiddleware = true
+        let simulateReddit = false
+        let simulateMiddleware = false
         
         init(reddit: Reddit,
              database: Database,
              imgur: Imgur? = nil,
              useWallhaven: Bool = true,
-             callback: @escaping UrlCallback) {
+             callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
             self.callback = callback
@@ -36,7 +36,7 @@ class PostSubmitter {
              post: Post,
              imgur: Imgur? = nil,
              useWallhaven: Bool = true,
-             callback: @escaping UrlCallback) {
+             callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = post
             self.callback = callback
@@ -61,35 +61,67 @@ class PostSubmitter {
             return database.posts.last!
         }
         
+        private func executeMiddlewares(on post: Post) throws -> Post {
+            guard !simulateMiddleware else {
+                sleep(1)
+                return post
+            }
+            
+            var middlewaredPost = post
+            for middleware in middlewares {
+                let middlewared = try middleware.transform(post: middlewaredPost)
+                
+                middlewaredPost = middlewared.post
+                let postChanged = middlewared.changed
+                
+                if !postChanged {
+                    throw SubmitterError.noEffectMiddleware(middleware: String(describing: middleware))
+                }
+                
+                // todo: handle imgur 10 MB error
+            }
+            
+            return middlewaredPost
+        }
+        
+        private func submitPost(_ post: Post) throws -> String {
+            guard !simulateReddit else {
+                sleep(3)
+                
+                return "https://simulated-url-lolz.com/"
+            }
+            
+            // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
+            let url = try reddit.submit(post: post)
+            return url
+        }
+        
         override func main() {
-            guard !isCancelled else { return }
+            guard !isCancelled else { return } // we need more of these in this method
             
             Log.p("submission task started")
             
-            var middlewaredPost = post
-            if simulateMiddleware {
-                sleep(1)
-            } else {
-                for middleware in middlewares {
-                    let middlewared = try! middleware.transform(post: middlewaredPost)
-                    middlewaredPost = middlewared.post
-                    let changed = middlewared.changed
-                    
-                    // todo: use changed ^
-                    // todo: return possible error to callback
-                }
+            let middlewaredPost: Post
+            do {
+                middlewaredPost = try executeMiddlewares(on: post)
+            } catch {
+                Log.p("Unexpected error while middlewaring", error)
+                callback(nil, error)
+                return
             }
             
-            if simulateReddit {
-                sleep(3)
-                guard !self.isCancelled else { return }
-                callback("https://simulated-url-lolz.com/")
-            } else {
-                // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-                
-                let url = try! reddit.submit(post: middlewaredPost)
-                callback(url)
+            guard !isCancelled else { return }
+            
+            let url: String
+            do {
+                url = try submitPost(middlewaredPost)
+            } catch {
+                Log.p("Unexpected error while submitting", error)
+                callback(nil, error)
+                return
             }
+            
+            callback(url, nil)
         }
     }
     
@@ -118,7 +150,7 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, callback: @escaping UrlCallback) {
+    func submitPost(_ post: Post, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
@@ -129,7 +161,7 @@ class PostSubmitter {
         addToQueue(submission: submission)
     }
     
-    func submitPostInDatabase(_ database: Database, callback: @escaping UrlCallback) {
+    func submitPostInDatabase(_ database: Database, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
@@ -143,4 +175,8 @@ class PostSubmitter {
     func cancelEverything() {
         submitQueue.cancelAllOperations()
     }
+}
+
+enum SubmitterError: Error {
+    case noEffectMiddleware(middleware: String)
 }

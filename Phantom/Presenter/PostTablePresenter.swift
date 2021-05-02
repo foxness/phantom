@@ -89,7 +89,9 @@ class PostTablePresenter {
         
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
-        submitter.submitPost(post) { url in
+        submitter.submitPost(post) { url, error in
+            // todo: handle error !!1
+            
             Log.p("url: \(String(describing: url))")
             
             DispatchQueue.main.async {
