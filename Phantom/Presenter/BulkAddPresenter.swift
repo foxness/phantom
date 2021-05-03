@@ -8,10 +8,12 @@
 
 import Foundation
 
-class BulkAddPresenter {
+typealias BarePost = (title: String, url: String)
+
+class BulkAddPresenter { // todo: add paste button
     private weak var viewDelegate: BulkAddViewDelegate?
     
-    var posts: [Post]?
+    var posts: [BarePost]?
     
     func attachView(_ viewDelegate: BulkAddViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -43,7 +45,22 @@ class BulkAddPresenter {
         updateAddButton()
     }
     
-    private static func constructPosts(text: String) -> [Post]? {
-        return nil
+    private static func constructPosts(text: String) -> [BarePost]? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let rawPosts = trimmed.components(separatedBy: "\n\n")
+        
+        var constructedPosts = [BarePost]()
+        for rawPost in rawPosts {
+            let properties = rawPost.components(separatedBy: "\n")
+            let title = properties[0]
+            let url = properties[1]
+            
+            guard !title.isEmpty && URL(string: url) != nil else { return nil }
+            
+            let post = (title: title, url: url)
+            constructedPosts.append(post)
+        }
+        
+        return constructedPosts
     }
 }

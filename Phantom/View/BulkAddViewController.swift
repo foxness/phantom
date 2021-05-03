@@ -47,7 +47,7 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         presenter.textChanged()
     }
     
-    func getResultingPosts() -> [Post]? {
+    func getResultingPosts() -> [BarePost]? {
         return presenter.posts
     }
 
