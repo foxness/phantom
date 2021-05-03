@@ -146,6 +146,15 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             } else {
                 fatalError()
             }
+        
+        case BulkAddViewController.SEGUE_BACK_BULK_TO_LIST:
+            if let bavc = unwindSegue.source as? BulkAddViewController {
+                if let bulkPosts = bavc.getResultingPosts() {
+                    presenter.newPostsAdded(bulkPosts)
+                }
+            } else {
+                fatalError()
+            }
             
         case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
             break

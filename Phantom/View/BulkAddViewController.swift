@@ -8,26 +8,54 @@
 
 import UIKit
 
-class BulkAddViewController: UIViewController {
+class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDelegate {
+    static let SEGUE_BACK_BULK_TO_LIST = "backBulkAdd"
+    
+    @IBOutlet weak var postsView: UITextView!
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    
+    var postsText: String? { postsView.text }
+    
+    private let presenter = BulkAddPresenter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        postsView.delegate = self
 
-        // Do any additional setup after loading the view.
+        presenter.attachView(self)
+        presenter.viewDidLoad()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setAddButton(enabled: Bool) {
+        addButton.isEnabled = enabled
     }
-    */
+    
+    func dismiss() {
+        dismiss(animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        guard let button = sender as? UIBarButtonItem, button === addButton else { return }
+        
+        presenter.addButtonPressed()
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        presenter.textChanged()
+    }
+    
+    func getResultingPosts() -> [Post]? {
+        return presenter.posts
+    }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        Log.p("cancel button pressed")
+        presenter.cancelButtonPressed()
+    }
+    
+    @IBAction func textChanged(_ sender: Any) {
+        presenter.cancelButtonPressed()
     }
 }

@@ -266,6 +266,10 @@ class PostTablePresenter {
         deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
+    func newPostsAdded(_ posts: [Post]) {
+        // todo: do handle this
+    }
+    
     // MARK: - Database methods
     
     private func loadPostsFromDatabase() {

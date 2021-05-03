@@ -14,6 +14,8 @@
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DE8264074B200B10E75 /* BulkAddViewController.swift */; };
+		57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */; };
+		57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */; };
 		71614EF124FD195C00FA8B76 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71614EF024FD195C00FA8B76 /* Database.swift */; };
 		71684AD125024D83005BA857 /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71684AD025024D83005BA857 /* PostCell.swift */; };
 		7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7179EF392501037000BDA598 /* PostSubmitter.swift */; };
@@ -48,6 +50,8 @@
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
+		57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddPresenter.swift; sourceTree = "<group>"; };
+		57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewDelegate.swift; sourceTree = "<group>"; };
 		71614EF024FD195C00FA8B76 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		71684AD025024D83005BA857 /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		7179EF392501037000BDA598 /* PostSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmitter.swift; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 				96AA4D6A252B574B009488F6 /* PostViewDelegate.swift */,
 				960D066125277F7700FFB4AC /* PostTablePresenter.swift */,
 				960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */,
+				57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */,
+				57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -258,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */,
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
 				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
 				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,
@@ -265,6 +272,7 @@
 				5768C33B2639CE9C00459260 /* Imgur.swift in Sources */,
 				57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */,
 				5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */,
+				57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
 				96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */,
 				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
