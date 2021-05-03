@@ -15,6 +15,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     private static let SEGUE_ADD_POST = "addPost"
     private static let SEGUE_EDIT_POST = "editPost"
     private static let SEGUE_IMGUR_LOGIN = "imgurLogin"
+    private static let SEGUE_BULK_ADD = "bulkAdd"
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     private static let TEXT_INDICATOR_DONE = "Done!"
@@ -122,6 +123,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             
         case PostTableViewController.SEGUE_IMGUR_LOGIN:
             Log.p("imgur login segue")
+            
+        case PostTableViewController.SEGUE_BULK_ADD:
+            Log.p("bulk add segue")
             
         default:
             fatalError()

@@ -18,7 +18,7 @@ class PostSubmitter {
         private let middlewares: [SubmitterMiddleware]
         
         // DEBUGVAR
-        let simulateReddit = false
+        let simulateReddit = true
         let simulateMiddleware = false
         
         init(reddit: Reddit,
