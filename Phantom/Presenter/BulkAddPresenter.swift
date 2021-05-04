@@ -44,6 +44,7 @@ class BulkAddPresenter { // todo: add paste button
     func pasteButtonPressed() {
         if let clipboard = viewDelegate?.getClipboard() {
             viewDelegate?.postsText = clipboard
+            updateAddButton()
         }
     }
     

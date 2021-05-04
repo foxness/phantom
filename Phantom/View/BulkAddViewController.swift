@@ -24,6 +24,8 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        postsView.becomeFirstResponder()
+        
         postsView.delegate = self
 
         presenter.attachView(self)

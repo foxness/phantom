@@ -366,21 +366,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="w41-oz-lme">
-                                <rect key="frame" x="0.0" y="56" width="390" height="700"/>
+                                <rect key="frame" x="12" y="68" width="366" height="710"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MMk-Ox-c8G"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="trailing" secondItem="w41-oz-lme" secondAttribute="trailing" id="Bgt-fi-PDN"/>
-                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="bottom" secondItem="w41-oz-lme" secondAttribute="bottom" id="JCU-3P-VPE"/>
-                            <constraint firstItem="w41-oz-lme" firstAttribute="top" secondItem="MMk-Ox-c8G" secondAttribute="top" id="imt-A8-KS5"/>
-                            <constraint firstItem="w41-oz-lme" firstAttribute="leading" secondItem="MMk-Ox-c8G" secondAttribute="leading" id="uQN-TY-jJU"/>
+                            <constraint firstAttribute="bottom" secondItem="w41-oz-lme" secondAttribute="bottom" constant="12" id="I6t-9k-Sig"/>
+                            <constraint firstItem="w41-oz-lme" firstAttribute="top" secondItem="MMk-Ox-c8G" secondAttribute="top" constant="12" id="Kub-om-Crb"/>
+                            <constraint firstItem="w41-oz-lme" firstAttribute="leading" secondItem="MMk-Ox-c8G" secondAttribute="leading" constant="12" id="ktU-W7-Dhd"/>
+                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="trailing" secondItem="w41-oz-lme" secondAttribute="trailing" constant="12" id="rnq-g6-bTf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Bulk Add" id="4FZ-LF-Knh">
