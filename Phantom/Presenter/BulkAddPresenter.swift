@@ -41,6 +41,12 @@ class BulkAddPresenter { // todo: add paste button
         viewDelegate?.dismiss()
     }
     
+    func pasteButtonPressed() {
+        if let clipboard = viewDelegate?.getClipboard() {
+            viewDelegate?.postsText = clipboard
+        }
+    }
+    
     func textChanged() {
         updateAddButton()
     }
@@ -52,6 +58,9 @@ class BulkAddPresenter { // todo: add paste button
         var constructedPosts = [BarePost]()
         for rawPost in rawPosts {
             let properties = rawPost.components(separatedBy: "\n")
+            
+            // todo: return nil is count isnt 2
+            
             let title = properties[0]
             let url = properties[1]
             

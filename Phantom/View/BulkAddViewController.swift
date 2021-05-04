@@ -14,7 +14,10 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     @IBOutlet weak var postsView: UITextView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var postsText: String? { postsView.text }
+    var postsText: String? {
+        get { postsView.text }
+        set { postsView.text = newValue }
+    }
     
     private let presenter = BulkAddPresenter()
 
@@ -40,6 +43,8 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         
         guard let button = sender as? UIBarButtonItem, button === addButton else { return }
         
+        // todo: cancel segue if posts arent parsing
+        
         presenter.addButtonPressed()
     }
     
@@ -50,6 +55,10 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     func getResultingPosts() -> [BarePost]? {
         return presenter.posts
     }
+    
+    func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
+        return UIPasteboard.general.string
+    }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         presenter.cancelButtonPressed()
@@ -57,5 +66,9 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     
     @IBAction func textChanged(_ sender: Any) {
         presenter.cancelButtonPressed()
+    }
+    
+    @IBAction func pasteButtonPressed(_ sender: Any) {
+        presenter.pasteButtonPressed()
     }
 }
