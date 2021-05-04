@@ -51,15 +51,29 @@ class BulkAddPresenter { // todo: add paste button
         updateAddButton()
     }
     
+    func shouldPerformAddSegue() -> Bool {
+        return isTextValid()
+    }
+    
+    private func isTextValid() -> Bool {
+        if let text = viewDelegate?.postsText {
+            return BulkAddPresenter.constructPosts(text: text) != nil
+        } else {
+            return false
+        }
+    }
+    
     private static func constructPosts(text: String) -> [BarePost]? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         let rawPosts = trimmed.components(separatedBy: "\n\n")
+        
+        guard !rawPosts.isEmpty else { return nil }
         
         var constructedPosts = [BarePost]()
         for rawPost in rawPosts {
             let properties = rawPost.components(separatedBy: "\n")
             
-            // todo: return nil is count isnt 2
+            guard properties.count == 2 else { return nil }
             
             let title = properties[0]
             let url = properties[1]

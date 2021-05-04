@@ -48,6 +48,11 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         presenter.addButtonPressed()
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return identifier == BulkAddViewController.SEGUE_BACK_BULK_TO_LIST
+            && presenter.shouldPerformAddSegue()
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         presenter.textChanged()
     }
