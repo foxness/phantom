@@ -266,35 +266,6 @@ class PostTablePresenter {
         deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
-    private static func getNextDate(previous: Date?) -> Date { // refactor into a PostScheduler or something
-        let desiredTime = TimeInterval(16 * 60 * 60) // 16:00
-        let day = TimeInterval(24 * 60 * 60) // 24 hours
-        let calender = Calendar.current
-        let tz = NSTimeZone.system
-        let now = Date()
-        
-        var nextDate: Date
-        if let previous = previous {
-            repeat {
-                nextDate = previous + day
-            } while nextDate < now
-        } else {
-            var dateComponents = calender.dateComponents([.year, .month, .day], from: now)
-            dateComponents.timeZone = tz
-            let dayStart = calender.date(from: dateComponents)!
-            
-            var desiredDate = dayStart + TimeInterval(desiredTime)
-            
-            if now > desiredDate {
-                desiredDate = desiredDate + day
-            }
-            
-            nextDate = desiredDate
-        }
-        
-        return nextDate
-    }
-    
     func newPostsAdded(_ barePosts: [BarePost]) {
         var lastDate = posts.last?.date
         
@@ -303,7 +274,7 @@ class PostTablePresenter {
             let subreddit = "wallpapers"
             let url = barePost.url
             
-            let date = PostTablePresenter.getNextDate(previous: lastDate)
+            let date = PostScheduler.getNextDate(previous: lastDate)
             lastDate = date
             
             let newPost = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
