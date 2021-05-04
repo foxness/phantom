@@ -243,11 +243,18 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
-                        <barButtonItem key="leftBarButtonItem" title="Imgur" id="rkM-TE-gyP">
-                            <connections>
-                                <segue destination="GW5-zR-qB6" kind="presentation" identifier="imgurLogin" id="WV1-le-KGl"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem title="Imgur" id="rkM-TE-gyP">
+                                <connections>
+                                    <segue destination="GW5-zR-qB6" kind="presentation" identifier="imgurLogin" id="WV1-le-KGl"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Bulk Add" image="plus" catalog="system" id="6qD-7h-p2c">
+                                <connections>
+                                    <segue destination="H2E-tt-C7O" kind="presentation" identifier="bulkAdd" id="Hz0-Js-R7o"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
                             <connections>
                                 <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
@@ -350,6 +357,54 @@
             </objects>
             <point key="canvasLocation" x="186" y="-638"/>
         </scene>
+        <!--Bulk Add-->
+        <scene sceneID="Mi7-yR-3UK">
+            <objects>
+                <viewController id="aIT-Jj-7Ba" customClass="BulkAddViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QYf-Xm-F8d">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="w41-oz-lme">
+                                <rect key="frame" x="0.0" y="56" width="390" height="700"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MMk-Ox-c8G"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="trailing" secondItem="w41-oz-lme" secondAttribute="trailing" id="Bgt-fi-PDN"/>
+                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="bottom" secondItem="w41-oz-lme" secondAttribute="bottom" id="JCU-3P-VPE"/>
+                            <constraint firstItem="w41-oz-lme" firstAttribute="top" secondItem="MMk-Ox-c8G" secondAttribute="top" id="imt-A8-KS5"/>
+                            <constraint firstItem="w41-oz-lme" firstAttribute="leading" secondItem="MMk-Ox-c8G" secondAttribute="leading" id="uQN-TY-jJU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Bulk Add" id="4FZ-LF-Knh">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="rQW-fB-waO">
+                            <connections>
+                                <action selector="cancelButtonPressed:" destination="aIT-Jj-7Ba" id="IUX-XY-4X1"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="H8r-SX-UcK">
+                            <connections>
+                                <segue destination="yR2-lY-Bd5" kind="unwind" identifier="backBulkAdd" unwindAction="unwindToPostListWithUnwindSegue:" id="Vju-qS-40l"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addButton" destination="H8r-SX-UcK" id="IpK-Ew-3Y7"/>
+                        <outlet property="postsView" destination="w41-oz-lme" id="EN7-5G-Kmh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hAp-zG-WPI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="yR2-lY-Bd5" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2000" y="-638.38862559241704"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="iSB-4U-oxl">
             <objects>
@@ -369,13 +424,35 @@
             </objects>
             <point key="canvasLocation" x="1071.0144927536232" y="115.84821428571428"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="i3r-wm-NES">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="H2E-tt-C7O" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NZl-RH-ffL">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="aIT-Jj-7Ba" kind="relationship" relationship="rootViewController" id="ws0-MX-caV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qwR-iV-7A9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1070.7692307692307" y="-638.38862559241704"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="link" catalog="system" width="128" height="122"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <image name="square.and.pencil" catalog="system" width="128" height="115"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
