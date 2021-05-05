@@ -63,7 +63,7 @@ struct Helper {
             json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             goodJson = json!
         } catch {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
         
         return goodJson
@@ -74,5 +74,5 @@ enum ApiError: Error {
     case badResponse(request: String, statusCode: Int, response: HTTPURLResponse)
     case request(request: String, error: Error)
     case noData(request: String)
-    case deserialization(request: String, json: [String: Any]?)
+    case deserialization(request: String, raw: String)
 }

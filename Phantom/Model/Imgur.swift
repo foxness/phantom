@@ -202,7 +202,7 @@ class Imgur {
             let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
             return imgurImage
         } else {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
     }
     
@@ -214,7 +214,7 @@ class Imgur {
             
             return (accessToken: accessToken, expirationDate: expirationDate)
         } else {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
     }
     
@@ -233,7 +233,7 @@ class Imgur {
               let expiresIn = Int(expiresInRaw)
         
         else {
-            throw ApiError.deserialization(request: "imgur auth url query", json: nil) // todo: send json/string here
+            throw ApiError.deserialization(request: "imgur auth url query", raw: String(describing: params))
         }
         
         let accessTokenExpirationDate = Helper.convertExpiresIn(expiresIn)

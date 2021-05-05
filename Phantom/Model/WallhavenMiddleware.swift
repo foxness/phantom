@@ -42,7 +42,7 @@ struct WallhavenMiddleware: SubmitterMiddleware {
             
             return directUrl
         } else {
-            throw ApiError.deserialization(request: request, json: nil)
+            throw ApiError.deserialization(request: request, raw: String(describing: String(data: data, encoding: .utf8)))
         }
     }
     

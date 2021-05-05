@@ -129,7 +129,7 @@ class Reddit {
             
             return postUrl
         } else {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
     }
     
@@ -185,7 +185,7 @@ class Reddit {
             refreshToken = newRefreshToken
             accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
         } else {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
     }
     
@@ -208,7 +208,7 @@ class Reddit {
             accessToken = newAccessToken
             accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
         } else {
-            throw ApiError.deserialization(request: request, json: json)
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
     }
     
