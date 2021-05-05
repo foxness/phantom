@@ -122,15 +122,9 @@ class Reddit {
         try Helper.ensureNoError(error: error, request: request)
         
         let json = try Helper.deserializeResponse(data: data, request: request)
+        let postUrl = try Reddit.deserializeSubmitResponse(json: json, request: request)
         
-        if let jsonDeeper = json[Symbols.JSON] as? [String: Any],
-           let deeperData = jsonDeeper[Symbols.DATA] as? [String: Any],
-           let postUrl = deeperData[Symbols.URL] as? String {
-            
-            return postUrl
-        } else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
-        }
+        return postUrl
     }
     
     // MARK: - Auth methods
@@ -154,14 +148,13 @@ class Reddit {
     func getUserResponse(to url: URL) -> UserResponse {
         guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
-        let params = Helper.getQueryItems(url: url)
-        
-        let state = params[Symbols.STATE]
+        let (state, code) = Reddit.deserializeAuthResponse(url: url, request: "reddit user response")
+
         guard state != nil && state == authState else { return .none }
-        
         authState = nil
-        authCode = params[Symbols.CODE]
-        return authCode == nil ? .decline : .allow
+        
+        let response: UserResponse = code == nil ? .decline : .allow
+        return response
     }
     
     func fetchAuthTokens() throws {
@@ -176,17 +169,11 @@ class Reddit {
         try Helper.ensureNoError(error: error, request: request)
         
         let json = try Helper.deserializeResponse(data: data, request: request)
+        let (newAccessToken, newExpirationDate, newRefreshToken) = try Reddit.deserializeAuthTokens(json: json, request: request)
         
-        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
-           let newRefreshToken = json[Symbols.REFRESH_TOKEN] as? String,
-           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
-            
-            accessToken = newAccessToken
-            refreshToken = newRefreshToken
-            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
-        } else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
-        }
+        accessToken = newAccessToken
+        accessTokenExpirationDate = newExpirationDate
+        refreshToken = newRefreshToken
     }
     
     private func refreshAccessToken() throws {
@@ -201,15 +188,55 @@ class Reddit {
         try Helper.ensureNoError(error: error, request: request)
         
         let json = try Helper.deserializeResponse(data: data, request: request)
+        let (newAccessToken, newAccessTokenExpirationDate) = try Reddit.deserializeAccessToken(json: json, request: request)
         
-        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
-           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
-            
-            accessToken = newAccessToken
-            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
-        } else {
+        accessToken = newAccessToken
+        accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    // MARK: - Deserializer methods
+    
+    private static func deserializeAccessToken(json: [String: Any], request: String) throws -> (accessToken: String, expirationDate: Date) {
+        guard let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
+              let expiresIn = json[Symbols.EXPIRES_IN] as? Int
+        else {
             throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
+            
+        let expirationDate = Helper.convertExpiresIn(expiresIn)
+        return (accessToken: accessToken, expirationDate: expirationDate)
+    }
+    
+    private static func deserializeAuthTokens(json: [String: Any], request: String) throws -> (accessToken: String, expirationDate: Date, refreshToken: String) {
+        guard let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
+              let refreshToken = json[Symbols.REFRESH_TOKEN] as? String,
+              let expiresIn = json[Symbols.EXPIRES_IN] as? Int
+        else {
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
+        }
+        
+        let expirationDate = Helper.convertExpiresIn(expiresIn)
+        return (accessToken: accessToken, expirationDate: expirationDate, refreshToken: refreshToken)
+    }
+    
+    private static func deserializeSubmitResponse(json: [String: Any], request: String) throws -> String {
+        guard let jsonDeeper = json[Symbols.JSON] as? [String: Any],
+              let deeperData = jsonDeeper[Symbols.DATA] as? [String: Any],
+              let postUrl = deeperData[Symbols.URL] as? String
+        else {
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
+        }
+            
+        return postUrl
+    }
+    
+    private static func deserializeAuthResponse(url: URL, request: String) -> (state: String?, code: String?) {
+        let params = Helper.getQueryItems(url: url)
+        
+        let state = params[Symbols.STATE]
+        let code = params[Symbols.CODE]
+        
+        return (state: state, code: code)
     }
     
     // MARK: - Helper methods

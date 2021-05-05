@@ -194,28 +194,27 @@ class Imgur {
     // MARK: - Deserializer methods
     
     private static func deserializeImgurImage(json: [String: Any], request: String) throws -> Image {
-        if let jsonData = json[Symbols.DATA] as? [String: Any],
-           let imageUrl = jsonData[Symbols.LINK] as? String,
-           let imageWidth = jsonData[Symbols.WIDTH] as? Int,
-           let imageHeight = jsonData[Symbols.HEIGHT] as? Int {
-            
-            let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
-            return imgurImage
-        } else {
+        guard let jsonData = json[Symbols.DATA] as? [String: Any],
+              let imageUrl = jsonData[Symbols.LINK] as? String,
+              let imageWidth = jsonData[Symbols.WIDTH] as? Int,
+              let imageHeight = jsonData[Symbols.HEIGHT] as? Int
+        else {
             throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
+            
+        let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
+        return imgurImage
     }
     
     private static func deserializeAccessToken(json: [String: Any], request: String) throws -> (accessToken: String, expirationDate: Date) {
-        if let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
-           let expiresIn = json[Symbols.EXPIRES_IN] as? Int {
-            
-            let expirationDate = Helper.convertExpiresIn(expiresIn)
-            
-            return (accessToken: accessToken, expirationDate: expirationDate)
-        } else {
+        guard let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
+           let expiresIn = json[Symbols.EXPIRES_IN] as? Int
+        else {
             throw ApiError.deserialization(request: request, raw: String(describing: json))
         }
+            
+        let expirationDate = Helper.convertExpiresIn(expiresIn)
+        return (accessToken: accessToken, expirationDate: expirationDate)
     }
     
     private static func deserializeAuthResponse(url: URL) throws -> AuthResponse {
