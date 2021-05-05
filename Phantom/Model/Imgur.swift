@@ -28,6 +28,22 @@ class Imgur {
         }
     }
     
+    struct AuthResponse {
+        let state: String
+        let error: AuthError?
+        let tokenType: String
+        let accountId: String
+        let accountUsername: String
+        let accessToken: String
+        let accessTokenExpirationDate: Date
+        let refreshToken: String
+    }
+    
+    enum AuthError {
+        case accessDenied
+        case other(message: String)
+    }
+    
     enum UserResponse { case none, allow, decline }
     
     // MARK: - Symbols
@@ -113,17 +129,9 @@ class Imgur {
         try Helper.ensureNoError(error: error, request: request)
         
         let json = try Helper.deserializeResponse(data: data, request: request)
+        let imgurImage = try Imgur.deserializeImgurImage(json: json, request: request)
         
-        if let jsonData = json[Symbols.DATA] as? [String: Any],
-           let imageUrl = jsonData[Symbols.LINK] as? String,
-           let imageWidth = jsonData[Symbols.WIDTH] as? Int,
-           let imageHeight = jsonData[Symbols.HEIGHT] as? Int {
-            
-            let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
-            return imgurImage
-        } else {
-            throw ApiError.deserialization(request: request, json: json)
-        }
+        return imgurImage
     }
     
     // MARK: - Auth methods
@@ -147,39 +155,20 @@ class Imgur {
         let fixedUrl = Imgur.getFixedImgurResponse(url: url)
         guard fixedUrl.absoluteString.hasPrefix(Imgur.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
-        let params = Helper.getQueryItems(url: fixedUrl)
-        let state = params[Symbols.STATE]
-        guard state != nil && state == authState else { return .none }
+        let response = try! Imgur.deserializeAuthResponse(url: fixedUrl)
         
-        let error = params[Symbols.ERROR]
-        guard error == nil else {
-            let error2 = error!
-            if error2 == Symbols.ACCESS_DENIED {
-                Log.p("imgur auth denied by user")
-            } else {
-                Log.p("imgur auth error", error2)
-            }
+        guard response.state == authState else { return .none }
+        
+        guard response.error == nil else {
+            Log.p("imgur auth error", response.error)
             
             return .decline
         }
         
-        let tokenType = params[Symbols.TOKEN_TYPE]
-        let accountId = params[Symbols.ACCOUNT_ID]
-        let expiresIn = params[Symbols.EXPIRES_IN]
-        accountUsername = params[Symbols.ACCOUNT_USERNAME]
-        
-        accessToken = params[Symbols.ACCESS_TOKEN]
-        accessTokenExpirationDate = Helper.convertExpiresIn(Int(expiresIn!)!)
-        refreshToken = params[Symbols.REFRESH_TOKEN]
-        
-        guard tokenType == Symbols.BEARER,
-              accountId != nil,
-              accountUsername != nil,
-              accessToken != nil,
-              refreshToken != nil
-        else {
-            fatalError("Imgur API might have changed or something")
-        }
+        accountUsername = response.accountUsername
+        accessToken = response.accessToken
+        accessTokenExpirationDate = response.accessTokenExpirationDate
+        refreshToken = response.refreshToken
         
         return .allow
     }
@@ -196,15 +185,79 @@ class Imgur {
         try Helper.ensureNoError(error: error, request: request)
         
         let json = try Helper.deserializeResponse(data: data, request: request)
+        let (newAccessToken, newAccessTokenExpirationDate) = try Imgur.deserializeAccessToken(json: json, request: request)
         
-        if let newAccessToken = json[Symbols.ACCESS_TOKEN] as? String,
-           let newExpiresIn = json[Symbols.EXPIRES_IN] as? Int {
+        accessToken = newAccessToken
+        accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    // MARK: - Deserializer methods
+    
+    private static func deserializeImgurImage(json: [String: Any], request: String) throws -> Image {
+        if let jsonData = json[Symbols.DATA] as? [String: Any],
+           let imageUrl = jsonData[Symbols.LINK] as? String,
+           let imageWidth = jsonData[Symbols.WIDTH] as? Int,
+           let imageHeight = jsonData[Symbols.HEIGHT] as? Int {
             
-            accessToken = newAccessToken
-            accessTokenExpirationDate = Helper.convertExpiresIn(newExpiresIn)
+            let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
+            return imgurImage
         } else {
             throw ApiError.deserialization(request: request, json: json)
         }
+    }
+    
+    private static func deserializeAccessToken(json: [String: Any], request: String) throws -> (accessToken: String, expirationDate: Date) {
+        if let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
+           let expiresIn = json[Symbols.EXPIRES_IN] as? Int {
+            
+            let expirationDate = Helper.convertExpiresIn(expiresIn)
+            
+            return (accessToken: accessToken, expirationDate: expirationDate)
+        } else {
+            throw ApiError.deserialization(request: request, json: json)
+        }
+    }
+    
+    private static func deserializeAuthResponse(url: URL) throws -> AuthResponse {
+        let params = Helper.getQueryItems(url: url)
+        
+        guard let state = params[Symbols.STATE],
+              let tokenType = params[Symbols.TOKEN_TYPE],
+              let accountId = params[Symbols.ACCOUNT_ID],
+              let expiresInRaw = params[Symbols.EXPIRES_IN],
+              let accountUsername = params[Symbols.ACCOUNT_USERNAME],
+              let accessToken = params[Symbols.ACCESS_TOKEN],
+              let refreshToken = params[Symbols.REFRESH_TOKEN],
+              
+              tokenType == Symbols.BEARER,
+              let expiresIn = Int(expiresInRaw)
+        
+        else {
+            throw ApiError.deserialization(request: "imgur auth url query", json: nil) // todo: send json/string here
+        }
+        
+        let accessTokenExpirationDate = Helper.convertExpiresIn(expiresIn)
+        
+        let error: AuthError?
+        if let rawError = params[Symbols.ERROR] {
+            if rawError == Symbols.ACCESS_DENIED {
+                error = .accessDenied
+            } else {
+                error = .other(message: rawError)
+            }
+        } else {
+            error = nil
+        }
+        
+        let response = AuthResponse(state: state,
+                                    error: error,
+                                    tokenType: tokenType,
+                                    accountId: accountId,
+                                    accountUsername: accountUsername,
+                                    accessToken: accessToken,
+                                    accessTokenExpirationDate: accessTokenExpirationDate,
+                                    refreshToken: refreshToken)
+        return response
     }
     
     // MARK: - Helper methods
