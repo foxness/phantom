@@ -255,14 +255,22 @@
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
-                            <connections>
-                                <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Item" image="ellipsis" catalog="system" id="L7C-q1-tqX">
+                                <connections>
+                                    <action selector="moreButtonPressed:" destination="1Tx-rk-0aO" id="xNN-3i-T3a"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="add" id="5T6-h1-6Gd">
+                                <connections>
+                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="imgurButton" destination="rkM-TE-gyP" id="CoD-du-7Hg"/>
+                        <outlet property="moreButtton" destination="L7C-q1-tqX" id="NNW-I3-M9b"/>
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
@@ -453,6 +461,7 @@
         <segue reference="I6c-Og-Mxs"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="link" catalog="system" width="128" height="122"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="square.and.pencil" catalog="system" width="128" height="115"/>

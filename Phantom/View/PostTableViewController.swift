@@ -36,6 +36,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView!
     
     @IBOutlet weak var imgurButton: UIBarButtonItem!
+    @IBOutlet weak var moreButtton: UIBarButtonItem!
     
     // MARK: - View lifecycle
     
@@ -301,6 +302,13 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     
     func disableImgurLogin() {
         imgurButton.isEnabled = false
+    }
+    
+    let slideUpMenu = SlideUpMenu()
+    
+    @IBAction func moreButtonPressed(_ sender: Any) {
+        Log.p("more button pressed")
+        slideUpMenu.show()
     }
     
     // MARK: - Lifecycle notifications
