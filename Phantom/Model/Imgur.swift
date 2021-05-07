@@ -118,6 +118,8 @@ class Imgur {
     // MARK: - Main methods
     
     func uploadImage(imageUrl: URL) throws -> Image { // synchronous
+        assert(isLoggedIn) // todo: throw error instead
+        
         let request = "imgur upload"
         
         try ensureValidAccessToken()
@@ -174,7 +176,7 @@ class Imgur {
     }
     
     private func refreshAccessToken() throws {
-        assert(refreshToken != nil)
+        assert(isLoggedIn)
         
         let request = "imgur access token refresh"
         

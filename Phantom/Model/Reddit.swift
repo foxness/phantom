@@ -111,6 +111,8 @@ class Reddit {
     // MARK: - Main methods
     
     func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true) throws -> String {
+        assert(isLoggedIn) // todo: throw error instead if not logged in
+        
         let request = "reddit submit"
         
         try ensureValidAccessToken()
@@ -177,7 +179,7 @@ class Reddit {
     }
     
     private func refreshAccessToken() throws {
-        assert(refreshToken != nil)
+        assert(isLoggedIn)
         
         let request = "reddit access token refresh"
         
