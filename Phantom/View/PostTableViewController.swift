@@ -47,6 +47,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         subscribeToNotifications()
         addSubmissionIndicatorView()
         
+        slideUpMenu.setupViews(window: PostTableViewController.getWindow()!, onRedditLogout: redditLogoutButtonPressed)
+        
         presenter.attachView(self)
         presenter.viewDidLoad()
     }
@@ -299,15 +301,30 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         return config
     }
     
-    // MARK: - View control
+    // MARK: - Receiver methods
     
     func disableImgurLogin() {
         imgurButton.isEnabled = false
     }
     
-    @IBAction func moreButtonPressed(_ sender: Any) {
-        Log.p("more button pressed")
+    func showSlideUpMenu() {
         slideUpMenu.show()
+    }
+    
+    // MARK: - Emitter methods
+    
+    func redditLogoutButtonPressed() {
+        presenter.redditLogoutButtonPressed()
+    }
+    
+    @IBAction func moreButtonPressed(_ sender: Any) {
+        presenter.moreButtonPressed()
+    }
+    
+    // MARK: - Helper methods
+    
+    private static func getWindow() -> UIWindow? {
+        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
     }
     
     // MARK: - Lifecycle notifications

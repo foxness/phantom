@@ -10,30 +10,33 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private let blackView = UIView()
-    private let menuView = UIView()
-    
     private static let MENUVIEW_HEIGHT: CGFloat = 200
     private static let FADE_ALPHA: CGFloat = 0.5
     private static let ANIMATION_DURATION: TimeInterval = 0.5
     
-    init() {
-        setupViews()
-    }
+    private var blackView: UIView!
+    private var menuView: UIView!
+    
+    private var window: UIWindow!
+    
+    private var onRedditLogout: (() -> Void)?
     
     func show() {
-        guard let window = SlideUpMenu.getWindow() else { return }
-        
-        prepareToShowViews(window: window)
-        animateShow(window: window)
+        animateShow()
     }
     
-    private func setupViews() {
+    func setupViews(window: UIWindow, onRedditLogout: (() -> Void)? = nil) {
+        self.onRedditLogout = onRedditLogout
+        self.window = window
+        
         setupBlackView()
         setupMenuView()
+        
+        prepareToShowViews()
     }
     
     private func setupBlackView() {
+        blackView = UIView()
         blackView.backgroundColor = UIColor(white: 0.2, alpha: SlideUpMenu.FADE_ALPHA) // works for both light and dark modes
         
         let tapper = UITapGestureRecognizer(target: self, action: #selector(blackViewTapped))
@@ -41,27 +44,57 @@ class SlideUpMenu {
     }
     
     private func setupMenuView() {
+        menuView = UIView()
         menuView.backgroundColor = UIColor.systemBackground
+        
+        let redditLabel = UILabel()
+        redditLabel.text = "Reddit account"
+        menuView.addSubview(redditLabel)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
+        menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: redditLabel)
+        
+        let redditNameLabel = UILabel()
+        redditNameLabel.text = "redditName"
+        menuView.addSubview(redditNameLabel)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: redditNameLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditLabel, redditNameLabel)
+        
+        let redditLogoutButton = UIButton()
+        redditLogoutButton.translatesAutoresizingMaskIntoConstraints = false
+        redditLogoutButton.setTitle("Log out", for: .normal)
+        redditLogoutButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        redditLogoutButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
+        redditLogoutButton.addTarget(self, action: #selector(redditLogoutButtonPressed), for: .touchUpInside)
+        menuView.addSubview(redditLogoutButton)
+        
+        let constraints = [NSLayoutConstraint(item: redditLogoutButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                           NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditLogoutButton, attribute: .centerY, multiplier: 1, constant: 0),
+                           NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditLogoutButton, attribute: .trailing, multiplier: 1, constant: 16)
+        ]
+        
+        menuView.addConstraints(constraints)
     }
     
-    private func prepareToShowViews(window: UIWindow) {
+    private func prepareToShowViews() {
         window.addSubview(blackView)
         window.addSubview(menuView)
         
         blackView.frame = window.frame
         
         hideBlackView()
-        hideMenuView(windowFrame: window.frame)
+        hideMenuView()
     }
     
-    private func animateShow(window: UIWindow) {
+    private func animateShow() {
         let duration = SlideUpMenu.ANIMATION_DURATION
         let delay: TimeInterval = 0
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
             self.showBlackView()
-            self.showMenuView(windowFrame: window.frame)
+            self.showMenuView()
         }
         
         let completion = { (completed: Bool) in
@@ -71,14 +104,14 @@ class SlideUpMenu {
         UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
     }
     
-    private func animateHide(window: UIWindow) {
+    private func animateHide() {
         let duration = SlideUpMenu.ANIMATION_DURATION
         let delay: TimeInterval = 0
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
             self.hideBlackView()
-            self.hideMenuView(windowFrame: window.frame)
+            self.hideMenuView()
         }
         
         let completion = { (completed: Bool) in
@@ -96,24 +129,22 @@ class SlideUpMenu {
         blackView.alpha = 1
     }
     
-    private func hideMenuView(windowFrame: CGRect) {
-        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: windowFrame)
+    private func hideMenuView() {
+        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: self.window.frame)
         menuView.frame = hiddenMenuFrame
     }
     
-    private func showMenuView(windowFrame: CGRect) {
-        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: windowFrame)
+    private func showMenuView() {
+        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: self.window.frame)
         menuView.frame = shownMenuFrame
     }
     
     @objc private func blackViewTapped() {
-        guard let window = SlideUpMenu.getWindow() else { return }
-        
-        animateHide(window: window)
+        animateHide()
     }
     
-    private static func getWindow() -> UIWindow? {
-        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+    @objc private func redditLogoutButtonPressed() {
+        onRedditLogout?()
     }
     
     private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {

@@ -112,6 +112,14 @@ class PostTablePresenter {
         }
     }
     
+    func redditLogoutButtonPressed() {
+        Log.p("reddit logout button pressed")
+    }
+    
+    func moreButtonPressed() {
+        viewDelegate?.showSlideUpMenu()
+    }
+    
     // MARK: - View lifecycle methods
     
     func viewDidLoad() {

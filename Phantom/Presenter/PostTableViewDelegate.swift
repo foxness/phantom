@@ -13,12 +13,12 @@ enum ListAnimation {
 }
 
 protocol PostTableViewDelegate: AnyObject {
+    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
     func segueToIntroduction()
     func disableImgurLogin()
+    func showSlideUpMenu()
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)
     func deletePostRows(at indices: [Int], with animation: ListAnimation)
-    
-    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
 }
