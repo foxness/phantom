@@ -28,6 +28,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Properties
     
     private var presenter = PostTablePresenter()
+    private let slideUpMenu = SlideUpMenu()
     
     // MARK: - Views
     
@@ -303,8 +304,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     func disableImgurLogin() {
         imgurButton.isEnabled = false
     }
-    
-    let slideUpMenu = SlideUpMenu()
     
     @IBAction func moreButtonPressed(_ sender: Any) {
         Log.p("more button pressed")

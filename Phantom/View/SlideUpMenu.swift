@@ -34,9 +34,7 @@ class SlideUpMenu {
     }
     
     private func setupBlackView() {
-        let white: CGFloat = UIColor.systemBackground == UIColor.white ? 0 : 1
-        
-        blackView.backgroundColor = UIColor(white: 0.2, alpha: SlideUpMenu.FADE_ALPHA)
+        blackView.backgroundColor = UIColor(white: 0.2, alpha: SlideUpMenu.FADE_ALPHA) // works for both light and dark modes
         
         let tapper = UITapGestureRecognizer(target: self, action: #selector(blackViewTapped))
         blackView.addGestureRecognizer(tapper)
@@ -51,14 +49,9 @@ class SlideUpMenu {
         window.addSubview(menuView)
         
         blackView.frame = window.frame
-        blackView.alpha = 0
         
-        let x: CGFloat = 0
-        let y: CGFloat = window.frame.height
-        let width: CGFloat = window.frame.width
-        let height: CGFloat = SlideUpMenu.MENUVIEW_HEIGHT
-        
-        menuView.frame = CGRect(x: x, y: y, width: width, height: height)
+        hideBlackView()
+        hideMenuView(windowFrame: window.frame)
     }
     
     private func animateShow(window: UIWindow) {
@@ -67,14 +60,8 @@ class SlideUpMenu {
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
-            self.blackView.alpha = 1
-            
-            let x: CGFloat = 0
-            let y: CGFloat = window.frame.height - SlideUpMenu.MENUVIEW_HEIGHT
-            let width: CGFloat = self.menuView.frame.width
-            let height: CGFloat = self.menuView.frame.height
-            
-            self.menuView.frame = CGRect(x: x, y: y, width: width, height: height)
+            self.showBlackView()
+            self.showMenuView(windowFrame: window.frame)
         }
         
         let completion = { (completed: Bool) in
@@ -90,14 +77,8 @@ class SlideUpMenu {
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
-            self.blackView.alpha = 0
-            
-            let x: CGFloat = 0
-            let y: CGFloat = window.frame.height
-            let width: CGFloat = window.frame.width
-            let height: CGFloat = SlideUpMenu.MENUVIEW_HEIGHT
-            
-            self.menuView.frame = CGRect(x: x, y: y, width: width, height: height)
+            self.hideBlackView()
+            self.hideMenuView(windowFrame: window.frame)
         }
         
         let completion = { (completed: Bool) in
@@ -105,6 +86,24 @@ class SlideUpMenu {
         }
         
         UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
+    }
+    
+    private func hideBlackView() {
+        blackView.alpha = 0
+    }
+    
+    private func showBlackView() {
+        blackView.alpha = 1
+    }
+    
+    private func hideMenuView(windowFrame: CGRect) {
+        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: windowFrame)
+        menuView.frame = hiddenMenuFrame
+    }
+    
+    private func showMenuView(windowFrame: CGRect) {
+        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: windowFrame)
+        menuView.frame = shownMenuFrame
     }
     
     @objc private func blackViewTapped() {
@@ -115,5 +114,15 @@ class SlideUpMenu {
     
     private static func getWindow() -> UIWindow? {
         return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+    }
+    
+    private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {
+        let x: CGFloat = 0
+        let y: CGFloat = windowFrame.height - (hidden ? 0 : SlideUpMenu.MENUVIEW_HEIGHT)
+        let width: CGFloat = windowFrame.width
+        let height: CGFloat = SlideUpMenu.MENUVIEW_HEIGHT
+        
+        let menuFrame = CGRect(x: x, y: y, width: width, height: height)
+        return menuFrame
     }
 }
