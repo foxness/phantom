@@ -90,10 +90,12 @@ class Reddit {
     
     // MARK: - Computed properties
     
-    var auth: AuthParams {
-        AuthParams(refreshToken: refreshToken!,
-                   accessToken: accessToken!,
-                   accessTokenExpirationDate: accessTokenExpirationDate!)
+    var auth: AuthParams? {
+        guard isLoggedIn else { return nil }
+        
+        return AuthParams(refreshToken: refreshToken!,
+                          accessToken: accessToken!,
+                          accessTokenExpirationDate: accessTokenExpirationDate!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -195,6 +197,15 @@ class Reddit {
         
         accessToken = newAccessToken
         accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    func logout() {
+        assert(isLoggedIn)
+        
+        authCode = nil
+        refreshToken = nil
+        accessToken = nil
+        accessTokenExpirationDate = nil
     }
     
     // MARK: - Deserializer methods

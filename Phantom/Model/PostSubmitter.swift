@@ -150,7 +150,7 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, callback: @escaping SubmitCallback) {
+    func submitPost(_ post: Post, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {

@@ -16,23 +16,35 @@ class SlideUpMenu {
     
     private var blackView: UIView!
     private var menuView: UIView!
+    private var redditNameLabel: UILabel!
+    private var redditButton: UIButton!
     
     private var window: UIWindow!
     
-    private var onRedditLogout: (() -> Void)?
+    var onRedditButtonPressed: (() -> Void)?
+    
+    var redditName: String? = "redditName"
+    var redditLoggedIn = true
     
     func show() {
         animateShow()
     }
     
-    func setupViews(window: UIWindow, onRedditLogout: (() -> Void)? = nil) {
-        self.onRedditLogout = onRedditLogout
+    func setupViews(window: UIWindow) {
         self.window = window
         
         setupBlackView()
         setupMenuView()
         
+        updateViews()
         prepareToShowViews()
+    }
+    
+    func updateViews() {
+        redditNameLabel.text = redditName
+        
+        let title = redditLoggedIn ? "Log Out" : "Log In"
+        redditButton.setTitle(title, for: .normal)
     }
     
     private func setupBlackView() {
@@ -54,24 +66,22 @@ class SlideUpMenu {
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
         menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: redditLabel)
         
-        let redditNameLabel = UILabel()
-        redditNameLabel.text = "redditName"
+        redditNameLabel = UILabel()
         menuView.addSubview(redditNameLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: redditNameLabel)
         menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditLabel, redditNameLabel)
         
-        let redditLogoutButton = UIButton()
-        redditLogoutButton.translatesAutoresizingMaskIntoConstraints = false
-        redditLogoutButton.setTitle("Log out", for: .normal)
-        redditLogoutButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        redditLogoutButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-        redditLogoutButton.addTarget(self, action: #selector(redditLogoutButtonPressed), for: .touchUpInside)
-        menuView.addSubview(redditLogoutButton)
+        redditButton = UIButton()
+        redditButton.translatesAutoresizingMaskIntoConstraints = false
+        redditButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        redditButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
+        redditButton.addTarget(self, action: #selector(redditButtonPressed), for: .touchUpInside)
+        menuView.addSubview(redditButton)
         
-        let constraints = [NSLayoutConstraint(item: redditLogoutButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                           NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditLogoutButton, attribute: .centerY, multiplier: 1, constant: 0),
-                           NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditLogoutButton, attribute: .trailing, multiplier: 1, constant: 16)
+        let constraints = [NSLayoutConstraint(item: redditButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                           NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
+                           NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
         ]
         
         menuView.addConstraints(constraints)
@@ -143,9 +153,13 @@ class SlideUpMenu {
         animateHide()
     }
     
-    @objc private func redditLogoutButtonPressed() {
-        animateHide() {
-            self.onRedditLogout?()
+    @objc private func redditButtonPressed() {
+        if redditLoggedIn {
+            onRedditButtonPressed?()
+        } else {
+            animateHide() {
+                self.onRedditButtonPressed?()
+            }
         }
     }
     

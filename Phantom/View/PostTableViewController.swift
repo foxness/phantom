@@ -12,6 +12,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Constants
     
     private static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
+    private static let SEGUE_MENU_REDDIT_LOGIN = "menuRedditLogin"
     private static let SEGUE_ADD_POST = "addPost"
     private static let SEGUE_EDIT_POST = "editPost"
     private static let SEGUE_IMGUR_LOGIN = "imgurLogin"
@@ -47,7 +48,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         subscribeToNotifications()
         addSubmissionIndicatorView()
         
-        slideUpMenu.setupViews(window: PostTableViewController.getWindow()!, onRedditLogout: redditLogoutButtonPressed)
+        slideUpMenu.onRedditButtonPressed = redditButtonPressed
+        slideUpMenu.setupViews(window: PostTableViewController.getWindow()!)
         
         presenter.attachView(self)
         presenter.viewDidLoad()
@@ -97,6 +99,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
     }
     
+    func segueToRedditLogin() {
+        performSegue(withIdentifier: PostTableViewController.SEGUE_MENU_REDDIT_LOGIN, sender: nil)
+    }
+    
     func loginReddit(with reddit: Reddit) {
         presenter.redditLoggedIn(reddit)
         
@@ -130,6 +136,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             
         case PostTableViewController.SEGUE_BULK_ADD:
             Log.p("bulk add segue")
+            
+        case PostTableViewController.SEGUE_MENU_REDDIT_LOGIN:
+            Log.p("menu reddit login segue")
             
         default:
             fatalError()
@@ -311,10 +320,16 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         slideUpMenu.show()
     }
     
+    func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
+        slideUpMenu.redditName = redditName
+        slideUpMenu.redditLoggedIn = redditLoggedIn
+        slideUpMenu.updateViews()
+    }
+    
     // MARK: - Emitter methods
     
-    func redditLogoutButtonPressed() {
-        presenter.redditLogoutButtonPressed()
+    func redditButtonPressed() {
+        presenter.redditButtonPressed()
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {

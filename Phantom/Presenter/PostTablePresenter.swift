@@ -64,12 +64,14 @@ class PostTablePresenter {
     }
     
     func redditLoggedIn(_ reddit: Reddit) {
-        assert(submitter.reddit.value == nil)
-        
         submitter.reddit.mutate { $0 = reddit }
         Log.p("I logged in reddit")
         
         database.introductionShown = true // todo: move this somewhere else?
+        
+        let redditName = "asdy" // todo: fix
+        let redditLoggedIn = true
+        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
     }
     
     func imgurLoggedIn(_ imgur: Imgur) {
@@ -114,8 +116,16 @@ class PostTablePresenter {
         }
     }
     
-    func redditLogoutButtonPressed() {
-        Log.p("reddit logout button pressed")
+    func redditButtonPressed() { // todo: disable pressing the button while submitting
+        if let reddit = submitter.reddit.value {
+            if reddit.isLoggedIn {
+                reddit.logout()
+                
+                viewDelegate?.updateSlideUpMenu(redditName: nil, redditLoggedIn: false)
+            } else {
+                viewDelegate?.segueToRedditLogin()
+            }
+        }
     }
     
     func moreButtonPressed() {
@@ -315,9 +325,8 @@ class PostTablePresenter {
     }
     
     private func saveRedditAuth() {
-        if let redditAuth = submitter.reddit.value?.auth {
-            database.redditAuth = redditAuth
-        }
+        let redditAuth = submitter.reddit.value?.auth
+        database.redditAuth = redditAuth
     }
     
     private func saveImgurAuth() {
@@ -360,9 +369,21 @@ class PostTablePresenter {
     }
     
     private func updateViews() {
-        if submitter.imgur.value?.isLoggedIn == true {
+        if let imgur = submitter.imgur.value, imgur.isLoggedIn {
             viewDelegate?.disableImgurLogin()
         }
+        
+        let redditLoggedIn: Bool
+        let redditName: String?
+        if let reddit = submitter.reddit.value {
+            redditLoggedIn = reddit.isLoggedIn
+            redditName = "asdy" // todo: proper name
+        } else {
+            redditLoggedIn = false
+            redditName = nil
+        }
+
+        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
     }
     
     private func setupPostSubmitter() {
