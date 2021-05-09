@@ -91,15 +91,17 @@ class Imgur {
     private var accessToken: String?
     private var accessTokenExpirationDate: Date?
     
-    private var accountUsername: String?
+    private(set) var accountUsername: String?
     
     // MARK: - Computed properties
     
-    var auth: AuthParams {
-        AuthParams(refreshToken: refreshToken!,
-                   accessToken: accessToken!,
-                   accessTokenExpirationDate: accessTokenExpirationDate!,
-                   accountUsername: accountUsername!)
+    var auth: AuthParams? {
+        guard isLoggedIn else { return nil }
+        
+        return AuthParams(refreshToken: refreshToken!,
+                          accessToken: accessToken!,
+                          accessTokenExpirationDate: accessTokenExpirationDate!,
+                          accountUsername: accountUsername!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -191,6 +193,15 @@ class Imgur {
         
         accessToken = newAccessToken
         accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    func logout() {
+        assert(isLoggedIn)
+        
+        accountUsername = nil
+        refreshToken = nil
+        accessToken = nil
+        accessTokenExpirationDate = nil
     }
     
     // MARK: - Deserializer methods

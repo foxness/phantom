@@ -79,12 +79,12 @@ class PostTablePresenter {
     }
     
     func imgurLoggedIn(_ imgur: Imgur) {
-        assert(submitter.imgur.value == nil)
-        
         submitter.imgur.mutate { $0 = imgur }
         Log.p("I logged in imgur")
         
-        viewDelegate?.disableImgurLogin()
+        let imgurName = imgur.accountUsername
+        let imgurLoggedIn = true
+        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
     }
     
     func submitPressed(postIndex: Int) {
@@ -134,6 +134,22 @@ class PostTablePresenter {
         
         if !redditLoggedIn {
             viewDelegate?.segueToRedditLogin()
+        }
+    }
+    
+    func imgurButtonPressed() { // todo: disable pressing the button while submitting
+        var imgurLoggedIn = false
+        
+        if let imgur = submitter.imgur.value {
+            imgurLoggedIn = imgur.isLoggedIn
+            if imgurLoggedIn {
+                imgur.logout()
+                viewDelegate?.updateSlideUpMenu(imgurName: nil, imgurLoggedIn: false)
+            }
+        }
+        
+        if !imgurLoggedIn {
+            viewDelegate?.segueToImgurLogin()
         }
     }
     
@@ -339,9 +355,8 @@ class PostTablePresenter {
     }
     
     private func saveImgurAuth() {
-        if let imgurAuth = submitter.imgur.value?.auth {
-            database.imgurAuth = imgurAuth
-        }
+        let imgurAuth = submitter.imgur.value?.auth
+        database.imgurAuth = imgurAuth
     }
     
     private func savePosts() {
@@ -378,10 +393,6 @@ class PostTablePresenter {
     }
     
     private func updateViews() {
-        if let imgur = submitter.imgur.value, imgur.isLoggedIn {
-            viewDelegate?.disableImgurLogin()
-        }
-        
         let redditLoggedIn: Bool
         let redditName: String?
         if let reddit = submitter.reddit.value {
@@ -393,8 +404,16 @@ class PostTablePresenter {
         }
 
         viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
-        
         disableSubmissionBecauseNoReddit = !redditLoggedIn
+        
+        var imgurLoggedIn = false
+        var imgurName: String? = nil
+        if let imgur = submitter.imgur.value {
+            imgurLoggedIn = imgur.isLoggedIn
+            imgurName = imgur.accountUsername
+        }
+        
+        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
     }
     
     private func setupPostSubmitter() {

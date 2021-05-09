@@ -13,9 +13,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     
     private static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
     private static let SEGUE_MENU_REDDIT_LOGIN = "menuRedditLogin"
+    private static let SEGUE_MENU_IMGUR_LOGIN = "menuImgurLogin"
     private static let SEGUE_ADD_POST = "addPost"
     private static let SEGUE_EDIT_POST = "editPost"
-    private static let SEGUE_IMGUR_LOGIN = "imgurLogin"
     private static let SEGUE_BULK_ADD = "bulkAdd"
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
@@ -49,6 +49,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         addSubmissionIndicatorView()
         
         slideUpMenu.onRedditButtonPressed = redditButtonPressed
+        slideUpMenu.onImgurButtonPressed = imgurButtonPressed
         slideUpMenu.setupViews(window: PostTableViewController.getWindow()!)
         
         presenter.attachView(self)
@@ -103,6 +104,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         performSegue(withIdentifier: PostTableViewController.SEGUE_MENU_REDDIT_LOGIN, sender: nil)
     }
     
+    func segueToImgurLogin() {
+        performSegue(withIdentifier: PostTableViewController.SEGUE_MENU_IMGUR_LOGIN, sender: nil)
+    }
+    
     func loginReddit(with reddit: Reddit) {
         presenter.redditLoggedIn(reddit)
         
@@ -131,14 +136,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
             Log.p("introduction segue")
             
-        case PostTableViewController.SEGUE_IMGUR_LOGIN:
-            Log.p("imgur login segue")
-            
         case PostTableViewController.SEGUE_BULK_ADD:
             Log.p("bulk add segue")
             
         case PostTableViewController.SEGUE_MENU_REDDIT_LOGIN:
             Log.p("menu reddit login segue")
+        
+        case PostTableViewController.SEGUE_MENU_IMGUR_LOGIN:
+            Log.p("menu imgur login segue")
             
         default:
             fatalError()
@@ -326,10 +331,20 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         slideUpMenu.updateViews()
     }
     
+    func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
+        slideUpMenu.imgurName = imgurName
+        slideUpMenu.imgurLoggedIn = imgurLoggedIn
+        slideUpMenu.updateViews()
+    }
+    
     // MARK: - Emitter methods
     
     func redditButtonPressed() {
         presenter.redditButtonPressed()
+    }
+    
+    func imgurButtonPressed() {
+        presenter.imgurButtonPressed()
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {

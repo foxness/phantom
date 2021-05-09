@@ -16,15 +16,21 @@ class SlideUpMenu {
     
     private var blackView: UIView!
     private var menuView: UIView!
+    
     private var redditNameLabel: UILabel!
     private var redditButton: UIButton!
+    private var imgurNameLabel: UILabel!
+    private var imgurButton: UIButton!
     
     private var window: UIWindow!
     
     var onRedditButtonPressed: (() -> Void)?
+    var onImgurButtonPressed: (() -> Void)?
     
-    var redditName: String? = "redditName"
-    var redditLoggedIn = true
+    var redditName: String? = "adsy"
+    var redditLoggedIn = false
+    var imgurName: String? = "lolz"
+    var imgurLoggedIn = false
     
     func show() {
         animateShow()
@@ -43,8 +49,13 @@ class SlideUpMenu {
     func updateViews() {
         redditNameLabel.text = redditName
         
-        let title = redditLoggedIn ? "Log Out" : "Log In"
-        redditButton.setTitle(title, for: .normal)
+        let redditTitle = redditLoggedIn ? "Log Out" : "Log In" // todo: extract
+        redditButton.setTitle(redditTitle, for: .normal)
+        
+        imgurNameLabel.text = imgurName
+        
+        let imgurTitle = imgurLoggedIn ? "Log Out" : "Log In"
+        imgurButton.setTitle(imgurTitle, for: .normal)
     }
     
     private func setupBlackView() {
@@ -59,6 +70,10 @@ class SlideUpMenu {
         menuView = UIView()
         menuView.backgroundColor = UIColor.systemBackground
         
+        var constraints = [NSLayoutConstraint]()
+        
+        // ---------------------------------------------------------------
+        
         let redditLabel = UILabel()
         redditLabel.text = "Reddit account"
         menuView.addSubview(redditLabel)
@@ -66,11 +81,15 @@ class SlideUpMenu {
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
         menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: redditLabel)
         
+        // ---------------------------------------------------------------
+        
         redditNameLabel = UILabel()
         menuView.addSubview(redditNameLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: redditNameLabel)
         menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditLabel, redditNameLabel)
+        
+        // ---------------------------------------------------------------
         
         redditButton = UIButton()
         redditButton.translatesAutoresizingMaskIntoConstraints = false
@@ -79,10 +98,43 @@ class SlideUpMenu {
         redditButton.addTarget(self, action: #selector(redditButtonPressed), for: .touchUpInside)
         menuView.addSubview(redditButton)
         
-        let constraints = [NSLayoutConstraint(item: redditButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                           NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
-                           NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
+        constraints += [NSLayoutConstraint(item: redditButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
         ]
+        
+        // ---------------------------------------------------------------
+        
+        let imgurLabel = UILabel()
+        imgurLabel.text = "Imgur account"
+        menuView.addSubview(imgurLabel)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: imgurLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditNameLabel, imgurLabel)
+        
+        // ---------------------------------------------------------------
+        
+        imgurNameLabel = UILabel()
+        menuView.addSubview(imgurNameLabel)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: imgurNameLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: imgurLabel, imgurNameLabel)
+        
+        // ---------------------------------------------------------------
+        
+        imgurButton = UIButton()
+        imgurButton.translatesAutoresizingMaskIntoConstraints = false
+        imgurButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        imgurButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
+        imgurButton.addTarget(self, action: #selector(imgurButtonPressed), for: .touchUpInside)
+        menuView.addSubview(imgurButton)
+        
+        constraints += [NSLayoutConstraint(item: imgurButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: imgurNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: imgurNameLabel, attribute: .centerY, relatedBy: .equal, toItem: imgurButton, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: imgurButton, attribute: .trailing, multiplier: 1, constant: 16)
+        ]
+        
+        // ---------------------------------------------------------------
         
         menuView.addConstraints(constraints)
     }
@@ -159,6 +211,16 @@ class SlideUpMenu {
         } else {
             animateHide() {
                 self.onRedditButtonPressed?()
+            }
+        }
+    }
+    
+    @objc private func imgurButtonPressed() {
+        if imgurLoggedIn {
+            onImgurButtonPressed?()
+        } else {
+            animateHide() {
+                self.onImgurButtonPressed?()
             }
         }
     }

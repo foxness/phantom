@@ -243,18 +243,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
-                        <leftBarButtonItems>
-                            <barButtonItem title="Imgur" id="rkM-TE-gyP">
-                                <connections>
-                                    <segue destination="GW5-zR-qB6" kind="presentation" identifier="imgurLogin" id="WV1-le-KGl"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Bulk Add" image="plus" catalog="system" id="6qD-7h-p2c">
-                                <connections>
-                                    <segue destination="H2E-tt-C7O" kind="presentation" identifier="bulkAdd" id="Hz0-Js-R7o"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" title="Bulk Add" image="plus" catalog="system" id="6qD-7h-p2c">
+                            <connections>
+                                <segue destination="H2E-tt-C7O" kind="presentation" identifier="bulkAdd" id="Hz0-Js-R7o"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem title="Item" image="ellipsis" catalog="system" id="L7C-q1-tqX">
                                 <connections>
@@ -269,13 +262,13 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="imgurButton" destination="rkM-TE-gyP" id="CoD-du-7Hg"/>
                         <outlet property="moreButtton" destination="L7C-q1-tqX" id="NNW-I3-M9b"/>
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showIntroduction" animates="NO" id="smv-r4-N41"/>
                         <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
+                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
