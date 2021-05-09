@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 200
+    private static let MENUVIEW_HEIGHT: CGFloat = 300
     private static let FADE_ALPHA: CGFloat = 0.5
     private static let ANIMATION_DURATION: TimeInterval = 0.5
     
@@ -26,6 +26,7 @@ class SlideUpMenu {
     
     var onRedditButtonPressed: (() -> Void)?
     var onImgurButtonPressed: (() -> Void)?
+    var onBulkAddButtonPressed: (() -> Void)?
     
     var redditName: String? = "adsy"
     var redditLoggedIn = false
@@ -74,12 +75,25 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
+        let bulkAddButton = UIButton()
+        bulkAddButton.translatesAutoresizingMaskIntoConstraints = false
+        bulkAddButton.setTitle("Bulk Add", for: .normal)
+        bulkAddButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        bulkAddButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
+        bulkAddButton.addTarget(self, action: #selector(bulkAddButtonPressed), for: .touchUpInside)
+        menuView.addSubview(bulkAddButton)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: bulkAddButton)
+        menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: bulkAddButton)
+        
+        // ---------------------------------------------------------------
+        
         let redditLabel = UILabel()
         redditLabel.text = "Reddit account"
         menuView.addSubview(redditLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
-        menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: redditLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, redditLabel)
         
         // ---------------------------------------------------------------
         
@@ -222,6 +236,12 @@ class SlideUpMenu {
             animateHide() {
                 self.onImgurButtonPressed?()
             }
+        }
+    }
+    
+    @objc private func bulkAddButtonPressed() {
+        animateHide() {
+            self.onBulkAddButtonPressed?()
         }
     }
     

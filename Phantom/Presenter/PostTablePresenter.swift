@@ -153,6 +153,10 @@ class PostTablePresenter {
         }
     }
     
+    func bulkAddButtonPressed() {
+        viewDelegate?.segueToBulkAdd()
+    }
+    
     func moreButtonPressed() {
         viewDelegate?.showSlideUpMenu()
     }

@@ -16,6 +16,7 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
     func segueToRedditLogin()
     func segueToImgurLogin()
+    func segueToBulkAdd()
     
     func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
     
