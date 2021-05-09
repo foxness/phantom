@@ -128,7 +128,7 @@ class PostSubmitter {
     static let instance = PostSubmitter()
     
     var reddit = Atomic<Reddit?>(nil)
-    var imgur = Atomic<Imgur?>(nil) // todo: incorporate into middleware
+    var imgur = Atomic<Imgur?>(nil)
     
     private lazy var submitQueue: OperationQueue = {
         let queue = OperationQueue()

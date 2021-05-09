@@ -98,13 +98,13 @@ class SlideUpMenu {
         }
         
         let completion = { (completed: Bool) in
-            
+            // todo: remove this?
         }
         
         UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
     }
     
-    private func animateHide() {
+    private func animateHide(onCompleted: (() -> Void)? = nil) {
         let duration = SlideUpMenu.ANIMATION_DURATION
         let delay: TimeInterval = 0
         let options: UIView.AnimationOptions = [.curveEaseOut]
@@ -114,8 +114,8 @@ class SlideUpMenu {
             self.hideMenuView()
         }
         
-        let completion = { (completed: Bool) in
-            
+        let completion: (Bool) -> Void = { completed in
+            onCompleted?()
         }
         
         UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
@@ -144,7 +144,9 @@ class SlideUpMenu {
     }
     
     @objc private func redditLogoutButtonPressed() {
-        onRedditLogout?()
+        animateHide() {
+            self.onRedditLogout?()
+        }
     }
     
     private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {

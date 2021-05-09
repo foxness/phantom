@@ -151,6 +151,7 @@ class Reddit {
         guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
         let (state, code) = Reddit.deserializeAuthResponse(url: url, request: "reddit user response")
+        authCode = code
 
         guard state != nil && state == authState else { return .none }
         authState = nil
