@@ -10,7 +10,9 @@ import UIKit
 import WebKit
 
 class ImgurViewController: UIViewController, WKNavigationDelegate {
-    static let SEGUE_BACK_IMGUR_TO_LIST = "backImgurToList"
+    enum Segue: String {
+        case backImgurToList
+    }
     
     @IBOutlet weak var webView: WKWebView!
     
@@ -43,7 +45,7 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
         let url = navigationAction.request.url!
         let response = imgur.getUserResponse(to: url)
         if response == .allow && imgur.isLoggedIn {
-            performSegue(withIdentifier: ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST, sender: nil)
+            performSegue(withIdentifier: ImgurViewController.Segue.backImgurToList.rawValue, sender: nil)
         }
         
         decisionHandler(.allow)

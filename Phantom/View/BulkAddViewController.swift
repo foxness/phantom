@@ -9,7 +9,9 @@
 import UIKit
 
 class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDelegate {
-    static let SEGUE_BACK_BULK_TO_LIST = "backBulkAdd"
+    enum Segue: String {
+        case backBulkAdd // back bulk to list
+    }
     
     @IBOutlet weak var postsView: UITextView!
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -51,7 +53,7 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return identifier == BulkAddViewController.SEGUE_BACK_BULK_TO_LIST
+        return identifier == BulkAddViewController.Segue.backBulkAdd.rawValue
             && presenter.shouldPerformAddSegue()
     }
     

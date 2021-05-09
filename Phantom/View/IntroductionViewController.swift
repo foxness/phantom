@@ -9,7 +9,9 @@
 import UIKit
 
 class IntroductionViewController: UIViewController {
-    static let SEGUE_SHOW_LOGIN = "showLogin"
+    enum Segue: String {
+        case showLogin
+    }
     
     private let hideNavBar = true
 

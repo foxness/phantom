@@ -9,7 +9,9 @@
 import UIKit
 
 class PostViewController: UIViewController, PostViewDelegate {
-    static let SEGUE_BACK_POST_TO_LIST = "backSavePost"
+    enum Segue: String {
+        case backSavePost // post to list
+    }
     
     static let TEXT_NEW_POST_TITLE = "New Post"
     

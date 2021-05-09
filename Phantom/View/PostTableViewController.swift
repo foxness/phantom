@@ -9,14 +9,11 @@
 import UIKit
 
 class PostTableViewController: UITableViewController, PostTableViewDelegate {
-    // MARK: - Constants
+    enum Segue: String {
+        case showIntroduction, menuRedditLogin, menuImgurLogin, menuBulkAdd, addPost, editPost
+    }
     
-    private static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
-    private static let SEGUE_MENU_REDDIT_LOGIN = "menuRedditLogin"
-    private static let SEGUE_MENU_IMGUR_LOGIN = "menuImgurLogin"
-    private static let SEGUE_MENU_BULK_ADD = "menuBulkAdd"
-    private static let SEGUE_ADD_POST = "addPost"
-    private static let SEGUE_EDIT_POST = "editPost"
+    // MARK: - Constants
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     private static let TEXT_INDICATOR_DONE = "Done!"
@@ -98,23 +95,23 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Navigation
     
     func segueToIntroduction() {
-        segueTo(identifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION)
+        segueTo(.showIntroduction)
     }
     
     func segueToRedditLogin() {
-        segueTo(identifier: PostTableViewController.SEGUE_MENU_REDDIT_LOGIN)
+        segueTo(.menuRedditLogin)
     }
     
     func segueToImgurLogin() {
-        segueTo(identifier: PostTableViewController.SEGUE_MENU_IMGUR_LOGIN)
+        segueTo(.menuImgurLogin)
     }
     
     func segueToBulkAdd() {
-        segueTo(identifier: PostTableViewController.SEGUE_MENU_BULK_ADD)
+        segueTo(.menuBulkAdd)
     }
     
-    private func segueTo(identifier: String) { // todo: go from identifiers to enum
-        performSegue(withIdentifier: identifier, sender: nil)
+    private func segueTo(_ segue: Segue) {
+        performSegue(withIdentifier: segue.rawValue, sender: nil)
     }
     
     func loginReddit(with reddit: Reddit) {
@@ -130,11 +127,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        switch segue.identifier ?? "" {
-        case PostTableViewController.SEGUE_ADD_POST:
+        switch Segue(rawValue: segue.identifier ?? "") {
+        case .addPost:
             Log.p("add post segue")
             
-        case PostTableViewController.SEGUE_EDIT_POST:
+        case .editPost:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
@@ -142,16 +139,16 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
             dest.supplyPost(selectedPost)
             Log.p("edit post segue")
             
-        case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
+        case .showIntroduction:
             Log.p("introduction segue")
             
-        case PostTableViewController.SEGUE_MENU_REDDIT_LOGIN:
+        case .menuRedditLogin:
             Log.p("menu reddit login segue")
         
-        case PostTableViewController.SEGUE_MENU_IMGUR_LOGIN:
+        case .menuImgurLogin:
             Log.p("menu imgur login segue")
             
-        case PostTableViewController.SEGUE_MENU_BULK_ADD:
+        case .menuBulkAdd:
             Log.p("menu bulk add segue")
             
         default:
@@ -161,7 +158,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier ?? "" {
-        case PostViewController.SEGUE_BACK_POST_TO_LIST:
+        case PostViewController.Segue.backSavePost.rawValue:
             if let pvc = unwindSegue.source as? PostViewController {
                 let (post, isNewPost) = pvc.getResultingPost()
                 
@@ -174,7 +171,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
                 fatalError()
             }
         
-        case BulkAddViewController.SEGUE_BACK_BULK_TO_LIST:
+        case BulkAddViewController.Segue.backBulkAdd.rawValue:
             if let bavc = unwindSegue.source as? BulkAddViewController {
                 if let bulkPosts = bavc.getResultingPosts() {
                     presenter.newPostsAdded(bulkPosts)
@@ -183,10 +180,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
                 fatalError()
             }
             
-        case LoginViewController.SEGUE_BACK_LOGIN_TO_LIST:
+        case LoginViewController.Segue.backLoginToList.rawValue:
             break
             
-        case ImgurViewController.SEGUE_BACK_IMGUR_TO_LIST:
+        case ImgurViewController.Segue.backImgurToList.rawValue:
             break
             
         default:
@@ -325,10 +322,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     }
     
     // MARK: - Receiver methods
-    
-    func disableImgurLogin() {
-        imgurButton.isEnabled = false
-    }
     
     func showSlideUpMenu() {
         slideUpMenu.show()
