@@ -12,10 +12,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Constants
     
     private static let SEGUE_SHOW_INTRODUCTION = "showIntroduction"
+    private static let SEGUE_MENU_REDDIT_LOGIN = "menuRedditLogin"
+    private static let SEGUE_MENU_IMGUR_LOGIN = "menuImgurLogin"
+    private static let SEGUE_MENU_BULK_ADD = "menuBulkAdd"
     private static let SEGUE_ADD_POST = "addPost"
     private static let SEGUE_EDIT_POST = "editPost"
-    private static let SEGUE_IMGUR_LOGIN = "imgurLogin"
-    private static let SEGUE_BULK_ADD = "bulkAdd"
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     private static let TEXT_INDICATOR_DONE = "Done!"
@@ -28,6 +29,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Properties
     
     private var presenter = PostTablePresenter()
+    private let slideUpMenu = SlideUpMenu()
     
     // MARK: - Views
     
@@ -36,6 +38,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView!
     
     @IBOutlet weak var imgurButton: UIBarButtonItem!
+    @IBOutlet weak var moreButtton: UIBarButtonItem!
     
     // MARK: - View lifecycle
     
@@ -44,6 +47,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         
         subscribeToNotifications()
         addSubmissionIndicatorView()
+        
+        slideUpMenu.onRedditButtonPressed = redditButtonPressed
+        slideUpMenu.onImgurButtonPressed = imgurButtonPressed
+        slideUpMenu.onBulkAddButtonPressed = bulkAddButtonPressed
+        slideUpMenu.setupViews(window: PostTableViewController.getWindow()!)
         
         presenter.attachView(self)
         presenter.viewDidLoad()
@@ -90,7 +98,23 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
     // MARK: - Navigation
     
     func segueToIntroduction() {
-        performSegue(withIdentifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION, sender: nil)
+        segueTo(identifier: PostTableViewController.SEGUE_SHOW_INTRODUCTION)
+    }
+    
+    func segueToRedditLogin() {
+        segueTo(identifier: PostTableViewController.SEGUE_MENU_REDDIT_LOGIN)
+    }
+    
+    func segueToImgurLogin() {
+        segueTo(identifier: PostTableViewController.SEGUE_MENU_IMGUR_LOGIN)
+    }
+    
+    func segueToBulkAdd() {
+        segueTo(identifier: PostTableViewController.SEGUE_MENU_BULK_ADD)
+    }
+    
+    private func segueTo(identifier: String) { // todo: go from identifiers to enum
+        performSegue(withIdentifier: identifier, sender: nil)
     }
     
     func loginReddit(with reddit: Reddit) {
@@ -121,11 +145,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         case PostTableViewController.SEGUE_SHOW_INTRODUCTION:
             Log.p("introduction segue")
             
-        case PostTableViewController.SEGUE_IMGUR_LOGIN:
-            Log.p("imgur login segue")
+        case PostTableViewController.SEGUE_MENU_REDDIT_LOGIN:
+            Log.p("menu reddit login segue")
+        
+        case PostTableViewController.SEGUE_MENU_IMGUR_LOGIN:
+            Log.p("menu imgur login segue")
             
-        case PostTableViewController.SEGUE_BULK_ADD:
-            Log.p("bulk add segue")
+        case PostTableViewController.SEGUE_MENU_BULK_ADD:
+            Log.p("menu bulk add segue")
             
         default:
             fatalError()
@@ -297,10 +324,50 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         return config
     }
     
-    // MARK: - View control
+    // MARK: - Receiver methods
     
     func disableImgurLogin() {
         imgurButton.isEnabled = false
+    }
+    
+    func showSlideUpMenu() {
+        slideUpMenu.show()
+    }
+    
+    func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
+        slideUpMenu.redditName = redditName
+        slideUpMenu.redditLoggedIn = redditLoggedIn
+        slideUpMenu.updateViews()
+    }
+    
+    func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
+        slideUpMenu.imgurName = imgurName
+        slideUpMenu.imgurLoggedIn = imgurLoggedIn
+        slideUpMenu.updateViews()
+    }
+    
+    // MARK: - Emitter methods
+    
+    func redditButtonPressed() {
+        presenter.redditButtonPressed()
+    }
+    
+    func imgurButtonPressed() {
+        presenter.imgurButtonPressed()
+    }
+    
+    func bulkAddButtonPressed() {
+        presenter.bulkAddButtonPressed()
+    }
+    
+    @IBAction func moreButtonPressed(_ sender: Any) {
+        presenter.moreButtonPressed()
+    }
+    
+    // MARK: - Helper methods
+    
+    private static func getWindow() -> UIWindow? {
+        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
     }
     
     // MARK: - Lifecycle notifications

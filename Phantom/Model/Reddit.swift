@@ -90,10 +90,12 @@ class Reddit {
     
     // MARK: - Computed properties
     
-    var auth: AuthParams {
-        AuthParams(refreshToken: refreshToken!,
-                   accessToken: accessToken!,
-                   accessTokenExpirationDate: accessTokenExpirationDate!)
+    var auth: AuthParams? {
+        guard isLoggedIn else { return nil }
+        
+        return AuthParams(refreshToken: refreshToken!,
+                          accessToken: accessToken!,
+                          accessTokenExpirationDate: accessTokenExpirationDate!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -111,6 +113,8 @@ class Reddit {
     // MARK: - Main methods
     
     func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true) throws -> String {
+        assert(isLoggedIn) // todo: throw error instead if not logged in
+        
         let request = "reddit submit"
         
         try ensureValidAccessToken()
@@ -149,6 +153,7 @@ class Reddit {
         guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
         
         let (state, code) = Reddit.deserializeAuthResponse(url: url, request: "reddit user response")
+        authCode = code
 
         guard state != nil && state == authState else { return .none }
         authState = nil
@@ -177,7 +182,7 @@ class Reddit {
     }
     
     private func refreshAccessToken() throws {
-        assert(refreshToken != nil)
+        assert(isLoggedIn)
         
         let request = "reddit access token refresh"
         
@@ -192,6 +197,15 @@ class Reddit {
         
         accessToken = newAccessToken
         accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    func logout() {
+        assert(isLoggedIn)
+        
+        authCode = nil
+        refreshToken = nil
+        accessToken = nil
+        accessTokenExpirationDate = nil
     }
     
     // MARK: - Deserializer methods

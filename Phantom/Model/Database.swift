@@ -13,24 +13,32 @@ class Database {
     private static let KEY_POSTS = "posts"
     private static let KEY_REDDIT_AUTH = "reddit_auth"
     private static let KEY_IMGUR_AUTH = "imgur_auth"
+    private static let KEY_INTRODUCTION_SHOWN = "introduction_shown"
     
     static let instance = Database()
     
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
-    @UserDefaultsBacked(key: Database.KEY_REDDIT_AUTH) private var redditAuthString: String?
-    @UserDefaultsBacked(key: Database.KEY_IMGUR_AUTH) private var imgurAuthString: String?
-    @UserDefaultsBacked(key: Database.KEY_POSTS) private var postsString: String?
+    @UserDefaultsBacked(key: Database.KEY_REDDIT_AUTH) private var internalRedditAuth: String?
+    @UserDefaultsBacked(key: Database.KEY_IMGUR_AUTH) private var internalImgurAuth: String?
+    
+    @UserDefaultsBacked(key: Database.KEY_INTRODUCTION_SHOWN, defaultValue: false) private var internalIntroductionShown: Bool
+    @UserDefaultsBacked(key: Database.KEY_POSTS) private var internalPosts: String?
     
     var redditAuth: Reddit.AuthParams? {
-        get { deserializeRedditAuth(redditAuthString) }
-        set { redditAuthString = serializeRedditAuth(newValue) }
+        get { deserializeRedditAuth(internalRedditAuth) }
+        set { internalRedditAuth = serializeRedditAuth(newValue) }
     }
     
     var imgurAuth: Imgur.AuthParams? {
-        get { deserializeImgurAuth(imgurAuthString) }
-        set { imgurAuthString = serializeImgurAuth(newValue) }
+        get { deserializeImgurAuth(internalImgurAuth) }
+        set { internalImgurAuth = serializeImgurAuth(newValue) }
+    }
+    
+    var introductionShown: Bool {
+        get { internalIntroductionShown }
+        set { internalIntroductionShown = newValue }
     }
     
     var posts: [Post] = []
@@ -63,19 +71,21 @@ class Database {
     }
     
     func savePosts() {
-        postsString = serializePosts(posts)
+        internalPosts = serializePosts(posts)
     }
     
     func setDefaults() {
-        redditAuthString = nil
+        redditAuth = nil
+        imgurAuth = nil
+        introductionShown = false
         
         posts = []
         savePosts()
     }
     
     private func loadPosts() {
-        if let postsString = postsString {
-            posts = deserializePosts(serialized: postsString)
+        if let internalPosts = internalPosts {
+            posts = deserializePosts(serialized: internalPosts)
         }
     }
     
@@ -89,11 +99,11 @@ class Database {
 //    }
     
     private func wipeReddit() {
-        redditAuthString = nil
+        redditAuth = nil
     }
     
     private func wipeImgur() {
-        imgurAuthString = nil
+        imgurAuth = nil
     }
     
     private func serializePosts(_ posts: [Post]) -> String {

@@ -128,7 +128,7 @@ class PostSubmitter {
     static let instance = PostSubmitter()
     
     var reddit = Atomic<Reddit?>(nil)
-    var imgur = Atomic<Imgur?>(nil) // todo: incorporate into middleware
+    var imgur = Atomic<Imgur?>(nil)
     
     private lazy var submitQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -150,7 +150,7 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, callback: @escaping SubmitCallback) {
+    func submitPost(_ post: Post, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {

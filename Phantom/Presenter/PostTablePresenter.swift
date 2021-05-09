@@ -27,6 +27,8 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
+    private var disableSubmissionBecauseNoReddit = false // no reddit = logged out
+    
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true
     
@@ -36,7 +38,7 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie
+        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie || disableSubmissionBecauseNoReddit
     }
     
     private var disabledPostIds: [UUID] {
@@ -64,19 +66,25 @@ class PostTablePresenter {
     }
     
     func redditLoggedIn(_ reddit: Reddit) {
-        assert(submitter.reddit.value == nil)
-        
         submitter.reddit.mutate { $0 = reddit }
         Log.p("I logged in reddit")
+        
+        database.introductionShown = true // todo: move this somewhere else?
+        
+        let redditName = "asdy" // todo: fix
+        let redditLoggedIn = true
+        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
+        
+        disableSubmissionBecauseNoReddit = false
     }
     
     func imgurLoggedIn(_ imgur: Imgur) {
-        assert(submitter.imgur.value == nil)
-        
         submitter.imgur.mutate { $0 = imgur }
         Log.p("I logged in imgur")
         
-        viewDelegate?.disableImgurLogin()
+        let imgurName = imgur.accountUsername
+        let imgurLoggedIn = true
+        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
     }
     
     func submitPressed(postIndex: Int) {
@@ -110,6 +118,47 @@ class PostTablePresenter {
                 }
             }
         }
+    }
+    
+    func redditButtonPressed() { // todo: disable pressing the button while submitting
+        var redditLoggedIn = false
+        
+        if let reddit = submitter.reddit.value {
+            redditLoggedIn = reddit.isLoggedIn
+            if redditLoggedIn {
+                reddit.logout()
+                viewDelegate?.updateSlideUpMenu(redditName: nil, redditLoggedIn: false)
+                disableSubmissionBecauseNoReddit = true
+            }
+        }
+        
+        if !redditLoggedIn {
+            viewDelegate?.segueToRedditLogin()
+        }
+    }
+    
+    func imgurButtonPressed() { // todo: disable pressing the button while submitting
+        var imgurLoggedIn = false
+        
+        if let imgur = submitter.imgur.value {
+            imgurLoggedIn = imgur.isLoggedIn
+            if imgurLoggedIn {
+                imgur.logout()
+                viewDelegate?.updateSlideUpMenu(imgurName: nil, imgurLoggedIn: false)
+            }
+        }
+        
+        if !imgurLoggedIn {
+            viewDelegate?.segueToImgurLogin()
+        }
+    }
+    
+    func bulkAddButtonPressed() {
+        viewDelegate?.segueToBulkAdd()
+    }
+    
+    func moreButtonPressed() {
+        viewDelegate?.showSlideUpMenu()
     }
     
     // MARK: - View lifecycle methods
@@ -147,7 +196,9 @@ class PostTablePresenter {
             }
         }
         
+        showIntroductionIfNeeded()
         setupPostSubmitter()
+        updateViews()
     }
     
     // MARK: - Scene lifecycle methods
@@ -303,15 +354,13 @@ class PostTablePresenter {
     }
     
     private func saveRedditAuth() {
-        if let redditAuth = submitter.reddit.value?.auth {
-            database.redditAuth = redditAuth
-        }
+        let redditAuth = submitter.reddit.value?.auth
+        database.redditAuth = redditAuth
     }
     
     private func saveImgurAuth() {
-        if let imgurAuth = submitter.imgur.value?.auth {
-            database.imgurAuth = imgurAuth
-        }
+        let imgurAuth = submitter.imgur.value?.auth
+        database.imgurAuth = imgurAuth
     }
     
     private func savePosts() {
@@ -341,44 +390,51 @@ class PostTablePresenter {
         PostNotifier.updateAppBadge(posts: posts)
     }
     
+    private func showIntroductionIfNeeded() {
+        guard !database.introductionShown else { return }
+        
+        viewDelegate?.segueToIntroduction()
+    }
+    
+    private func updateViews() {
+        let redditLoggedIn: Bool
+        let redditName: String?
+        if let reddit = submitter.reddit.value {
+            redditLoggedIn = reddit.isLoggedIn
+            redditName = "asdy" // todo: proper name
+        } else {
+            redditLoggedIn = false
+            redditName = nil
+        }
+
+        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
+        disableSubmissionBecauseNoReddit = !redditLoggedIn
+        
+        var imgurLoggedIn = false
+        var imgurName: String? = nil
+        if let imgur = submitter.imgur.value {
+            imgurLoggedIn = imgur.isLoggedIn
+            imgurName = imgur.accountUsername
+        }
+        
+        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
+    }
+    
     private func setupPostSubmitter() {
-        var redditLogged = false
-        var imgurLogged = false
-        
-        if submitter.reddit.value == nil {
+        submitter.reddit.mutate { reddit in
+            guard reddit == nil else { return }
+            
             if let redditAuth = database.redditAuth {
-                let reddit = Reddit(auth: redditAuth)
-                
-                if submitter.reddit.value == nil { // this is almost certainly true but you never know
-                    submitter.reddit.mutate { $0 = reddit }
-                }
-                
-                redditLogged = true
+                reddit = Reddit(auth: redditAuth)
             }
-        } else {
-            redditLogged = true
         }
         
-        if submitter.imgur.value == nil {
+        submitter.imgur.mutate { imgur in
+            guard imgur == nil else { return }
+            
             if let imgurAuth = database.imgurAuth {
-                let imgur = Imgur(auth: imgurAuth)
-                
-                if submitter.imgur.value == nil { // this is almost certainly true but you never know
-                    submitter.imgur.mutate { $0 = imgur }
-                }
-                
-                imgurLogged = true
+                imgur = Imgur(auth: imgurAuth)
             }
-        } else {
-            imgurLogged = true
-        }
-        
-        if !redditLogged {
-            viewDelegate?.segueToIntroduction()
-        }
-        
-        if imgurLogged {
-            viewDelegate?.disableImgurLogin()
         }
     }
 }

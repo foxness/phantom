@@ -104,6 +104,20 @@ extension Bundle {
     private func getString(_ key: String) -> String { infoDictionary?[key] as! String }
 }
 
+extension UIView {
+    func addConstraintsWithFormat(format: String, views: UIView...) {
+        var viewsDict = [String: UIView]()
+        
+        for (index, view) in views.enumerated() {
+            let key = "v\(index)"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            viewsDict[key] = view
+        }
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: [], metrics: nil, views: viewsDict))
+    }
+}
+
 struct Log {
     static func dp(_ string: String, _ obj: Any) {
         debugPrint("!!! \(string.uppercased()): \(obj)")

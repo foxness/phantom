@@ -243,30 +243,28 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Posts" id="WFb-kc-Gr2">
-                        <leftBarButtonItems>
-                            <barButtonItem title="Imgur" id="rkM-TE-gyP">
+                        <rightBarButtonItems>
+                            <barButtonItem title="Item" image="ellipsis" catalog="system" id="L7C-q1-tqX">
                                 <connections>
-                                    <segue destination="GW5-zR-qB6" kind="presentation" identifier="imgurLogin" id="WV1-le-KGl"/>
+                                    <action selector="moreButtonPressed:" destination="1Tx-rk-0aO" id="xNN-3i-T3a"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Bulk Add" image="plus" catalog="system" id="6qD-7h-p2c">
+                            <barButtonItem systemItem="add" id="5T6-h1-6Gd">
                                 <connections>
-                                    <segue destination="H2E-tt-C7O" kind="presentation" identifier="bulkAdd" id="Hz0-Js-R7o"/>
+                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
                                 </connections>
                             </barButtonItem>
-                        </leftBarButtonItems>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="5T6-h1-6Gd">
-                            <connections>
-                                <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
-                            </connections>
-                        </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="imgurButton" destination="rkM-TE-gyP" id="CoD-du-7Hg"/>
+                        <outlet property="moreButtton" destination="L7C-q1-tqX" id="NNW-I3-M9b"/>
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showIntroduction" animates="NO" id="smv-r4-N41"/>
+                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
+                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
+                        <segue destination="H2E-tt-C7O" kind="presentation" identifier="menuBulkAdd" id="uyW-lq-5nh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -451,10 +449,11 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
+        <segue reference="t8V-rm-KZc"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="link" catalog="system" width="128" height="122"/>
-        <image name="plus" catalog="system" width="128" height="113"/>
         <image name="square.and.pencil" catalog="system" width="128" height="115"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

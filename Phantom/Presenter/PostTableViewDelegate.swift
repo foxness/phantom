@@ -14,11 +14,17 @@ enum ListAnimation {
 
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
-    func disableImgurLogin()
+    func segueToRedditLogin()
+    func segueToImgurLogin()
+    func segueToBulkAdd()
+    
+    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
+    
+    func showSlideUpMenu()
+    func updateSlideUpMenu(redditName: String?,  redditLoggedIn: Bool)
+    func updateSlideUpMenu(imgurName: String?,  imgurLoggedIn: Bool)
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)
     func deletePostRows(at indices: [Int], with animation: ListAnimation)
-    
-    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
 }

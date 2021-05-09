@@ -91,15 +91,17 @@ class Imgur {
     private var accessToken: String?
     private var accessTokenExpirationDate: Date?
     
-    private var accountUsername: String?
+    private(set) var accountUsername: String?
     
     // MARK: - Computed properties
     
-    var auth: AuthParams {
-        AuthParams(refreshToken: refreshToken!,
-                   accessToken: accessToken!,
-                   accessTokenExpirationDate: accessTokenExpirationDate!,
-                   accountUsername: accountUsername!)
+    var auth: AuthParams? {
+        guard isLoggedIn else { return nil }
+        
+        return AuthParams(refreshToken: refreshToken!,
+                          accessToken: accessToken!,
+                          accessTokenExpirationDate: accessTokenExpirationDate!,
+                          accountUsername: accountUsername!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -118,6 +120,8 @@ class Imgur {
     // MARK: - Main methods
     
     func uploadImage(imageUrl: URL) throws -> Image { // synchronous
+        assert(isLoggedIn) // todo: throw error instead
+        
         let request = "imgur upload"
         
         try ensureValidAccessToken()
@@ -174,7 +178,7 @@ class Imgur {
     }
     
     private func refreshAccessToken() throws {
-        assert(refreshToken != nil)
+        assert(isLoggedIn)
         
         let request = "imgur access token refresh"
         
@@ -189,6 +193,15 @@ class Imgur {
         
         accessToken = newAccessToken
         accessTokenExpirationDate = newAccessTokenExpirationDate
+    }
+    
+    func logout() {
+        assert(isLoggedIn)
+        
+        accountUsername = nil
+        refreshToken = nil
+        accessToken = nil
+        accessTokenExpirationDate = nil
     }
     
     // MARK: - Deserializer methods
