@@ -28,7 +28,8 @@ struct WallhavenMiddleware: SubmitterMiddleware {
     private static func getDirectUrl(wallhavenUrl: URL) throws -> String {
         let request = "wallhaven direct url"
         
-        let (data, response, error) = Requests.synchronousGet(url: wallhavenUrl)
+        let params = WallhavenMiddleware.getRequestParams(url: wallhavenUrl)
+        let (data, response, error) = Requests.synchronousGet(with: params)
         
         try Helper.ensureGoodResponse(response: response, request: request)
         try Helper.ensureNoError(error: error, request: request)
@@ -63,5 +64,9 @@ struct WallhavenMiddleware: SubmitterMiddleware {
     private static func isRightPost(_ post: Post) -> Bool {
         let wallhaven = post.url?.contains("wallhaven") ?? false // TODO: fix stub with proper regex
         return post.type == .link && wallhaven
+    }
+    
+    private static func getRequestParams(url: URL) -> Requests.GetParams {
+        return (url: url, auth: nil)
     }
 }

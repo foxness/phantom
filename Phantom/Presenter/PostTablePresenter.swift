@@ -71,20 +71,24 @@ class PostTablePresenter {
         
         database.introductionShown = true // todo: move this somewhere else?
         
-        let redditName = "asdy" // todo: fix
+        let redditName = reddit.username
         let redditLoggedIn = true
         viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
         
         disableSubmissionBecauseNoReddit = false
+        
+        saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
     func imgurLoggedIn(_ imgur: Imgur) {
         submitter.imgur.mutate { $0 = imgur }
         Log.p("I logged in imgur")
         
-        let imgurName = imgur.accountUsername
+        let imgurName = imgur.username
         let imgurLoggedIn = true
         viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
+        
+        saveImgurAuth()
     }
     
     func submitPressed(postIndex: Int) {
@@ -401,7 +405,7 @@ class PostTablePresenter {
         let redditName: String?
         if let reddit = submitter.reddit.value {
             redditLoggedIn = reddit.isLoggedIn
-            redditName = "asdy" // todo: proper name
+            redditName = reddit.username
         } else {
             redditLoggedIn = false
             redditName = nil
@@ -414,7 +418,7 @@ class PostTablePresenter {
         var imgurName: String? = nil
         if let imgur = submitter.imgur.value {
             imgurLoggedIn = imgur.isLoggedIn
-            imgurName = imgur.accountUsername
+            imgurName = imgur.username
         }
         
         viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)

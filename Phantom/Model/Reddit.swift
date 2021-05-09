@@ -25,9 +25,10 @@ class Reddit {
         let refreshToken: String
         let accessToken: String
         let accessTokenExpirationDate: Date
+        let username: String
         
         private enum CodingKeys: String, CodingKey {
-            case refreshToken, accessToken, accessTokenExpirationDate
+            case refreshToken, accessToken, accessTokenExpirationDate, username
         }
     }
     
@@ -62,6 +63,7 @@ class Reddit {
         static let DATA = "data"
         static let URL = "url"
         static let LINK = "link"
+        static let NAME = "name"
     }
     
     // MARK: - Constants
@@ -74,6 +76,7 @@ class Reddit {
     private static let ENDPOINT_AUTH = "https://www.reddit.com/api/v1/authorize.compact"
     private static let ENDPOINT_ACCESS_TOKEN = "https://www.reddit.com/api/v1/access_token"
     private static let ENDPOINT_SUBMIT = "https://oauth.reddit.com/api/submit"
+    private static let ENDPOINT_IDENTITY = "https://oauth.reddit.com/api/v1/me"
     
     static let LIMIT_TITLE_LENGTH = 300
     static let LIMIT_TEXT_LENGTH = 40000
@@ -88,6 +91,8 @@ class Reddit {
     private var accessToken: String?
     private var accessTokenExpirationDate: Date?
     
+    private(set) var username: String?
+    
     // MARK: - Computed properties
     
     var auth: AuthParams? {
@@ -95,7 +100,8 @@ class Reddit {
         
         return AuthParams(refreshToken: refreshToken!,
                           accessToken: accessToken!,
-                          accessTokenExpirationDate: accessTokenExpirationDate!)
+                          accessTokenExpirationDate: accessTokenExpirationDate!,
+                          username: username!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -108,6 +114,7 @@ class Reddit {
         self.refreshToken = auth.refreshToken
         self.accessToken = auth.accessToken
         self.accessTokenExpirationDate = auth.accessTokenExpirationDate
+        self.username = auth.username
     }
     
     // MARK: - Main methods
@@ -129,6 +136,23 @@ class Reddit {
         let postUrl = try Reddit.deserializeSubmitResponse(json: json, request: request)
         
         return postUrl
+    }
+    
+    func getIdentity() throws { // identity = account username
+        assert(isLoggedIn) // todo: throw error instead if not logged in
+        
+        let request = "reddit identity"
+        
+        try ensureValidAccessToken()
+
+        let params = getIdentityParams()
+        let (data, response, error) = Requests.synchronousGet(with: params)
+        
+        try Helper.ensureGoodResponse(response: response, request: request)
+        try Helper.ensureNoError(error: error, request: request)
+        
+        let json = try Helper.deserializeResponse(data: data, request: request)
+        username = try Reddit.deserializeIdentityResponse(json: json, request: request)
     }
     
     // MARK: - Auth methods
@@ -244,6 +268,14 @@ class Reddit {
         return postUrl
     }
     
+    private static func deserializeIdentityResponse(json: [String: Any], request: String) throws -> String {
+        guard let username = json[Symbols.NAME] as? String else {
+            throw ApiError.deserialization(request: request, raw: String(describing: json))
+        }
+            
+        return username
+    }
+    
     private static func deserializeAuthResponse(url: URL, request: String) -> (state: String?, code: String?) {
         let params = Helper.getQueryItems(url: url)
         
@@ -265,6 +297,10 @@ class Reddit {
         return (url, auth)
     }
     
+    private func getBearerAuth() -> (username: String, password: String) {
+        return (username: Symbols.BEARER, password: accessToken!)
+    }
+    
     private func ensureValidAccessToken() throws {
         guard accessToken == nil ||
                 accessTokenExpirationDate == nil ||
@@ -276,7 +312,7 @@ class Reddit {
         try refreshAccessToken()
     }
     
-    private func getAccessTokenRefreshParams() -> Requests.Params {
+    private func getAccessTokenRefreshParams() -> Requests.PostParams {
         let data = [Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN,
                     Symbols.REFRESH_TOKEN: refreshToken!]
         
@@ -284,7 +320,7 @@ class Reddit {
         return (url, data, auth)
     }
     
-    private func getAuthTokenFetchParams() -> Requests.Params {
+    private func getAuthTokenFetchParams() -> Requests.PostParams {
         let data = [Symbols.GRANT_TYPE: Symbols.AUTHORIZATION_CODE,
                     Symbols.CODE: authCode!,
                     Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
@@ -293,7 +329,7 @@ class Reddit {
         return (url, data, auth)
     }
     
-    private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.Params {
+    private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.PostParams {
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
         let subredditString = post.subreddit
@@ -315,11 +351,15 @@ class Reddit {
             data[Symbols.TEXT] = post.text ?? ""
         }
         
-        let username = Symbols.BEARER
-        let password = accessToken!
-        
-        let auth = (username: username, password: password)
+        let auth = getBearerAuth()
         let url = URL(string: Reddit.ENDPOINT_SUBMIT)!
         return (url, data, auth)
+    }
+    
+    private func getIdentityParams() -> Requests.GetParams {
+        let auth = getBearerAuth()
+        let url = URL(string: Reddit.ENDPOINT_IDENTITY)!
+        
+        return (url, auth)
     }
 }

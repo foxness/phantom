@@ -48,6 +48,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
             DispatchQueue.global(qos: .userInitiated).async {
                 Log.p("fetching tokens")
                 try! self.reddit.fetchAuthTokens()
+                try! self.reddit.getIdentity()
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: LoginViewController.Segue.backLoginToList.rawValue, sender: nil)
                 }

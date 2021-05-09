@@ -21,10 +21,10 @@ class Imgur {
         let refreshToken: String
         let accessToken: String
         let accessTokenExpirationDate: Date
-        let accountUsername: String
+        let username: String
         
         private enum CodingKeys: String, CodingKey {
-            case refreshToken, accessToken, accessTokenExpirationDate, accountUsername
+            case refreshToken, accessToken, accessTokenExpirationDate, username
         }
     }
     
@@ -33,7 +33,7 @@ class Imgur {
         let error: AuthError?
         let tokenType: String
         let accountId: String
-        let accountUsername: String
+        let username: String
         let accessToken: String
         let accessTokenExpirationDate: Date
         let refreshToken: String
@@ -91,7 +91,7 @@ class Imgur {
     private var accessToken: String?
     private var accessTokenExpirationDate: Date?
     
-    private(set) var accountUsername: String?
+    private(set) var username: String?
     
     // MARK: - Computed properties
     
@@ -101,7 +101,7 @@ class Imgur {
         return AuthParams(refreshToken: refreshToken!,
                           accessToken: accessToken!,
                           accessTokenExpirationDate: accessTokenExpirationDate!,
-                          accountUsername: accountUsername!)
+                          username: username!)
     }
     
     var isLoggedIn: Bool { refreshToken != nil }
@@ -114,7 +114,7 @@ class Imgur {
         self.refreshToken = auth.refreshToken
         self.accessToken = auth.accessToken
         self.accessTokenExpirationDate = auth.accessTokenExpirationDate
-        self.accountUsername = auth.accountUsername
+        self.username = auth.username
     }
     
     // MARK: - Main methods
@@ -169,7 +169,7 @@ class Imgur {
             return .decline
         }
         
-        accountUsername = response.accountUsername
+        username = response.username
         accessToken = response.accessToken
         accessTokenExpirationDate = response.accessTokenExpirationDate
         refreshToken = response.refreshToken
@@ -198,7 +198,7 @@ class Imgur {
     func logout() {
         assert(isLoggedIn)
         
-        accountUsername = nil
+        username = nil
         refreshToken = nil
         accessToken = nil
         accessTokenExpirationDate = nil
@@ -265,7 +265,7 @@ class Imgur {
                                     error: error,
                                     tokenType: tokenType,
                                     accountId: accountId,
-                                    accountUsername: accountUsername,
+                                    username: accountUsername,
                                     accessToken: accessToken,
                                     accessTokenExpirationDate: accessTokenExpirationDate,
                                     refreshToken: refreshToken)
@@ -285,7 +285,7 @@ class Imgur {
         try refreshAccessToken()
     }
     
-    private func getUploadImageParams(imageUrl: URL) -> Requests.Params {
+    private func getUploadImageParams(imageUrl: URL) -> Requests.PostParams {
         let imageString = imageUrl.absoluteString
         
         let data = [Symbols.IMAGE: imageString,
@@ -299,7 +299,7 @@ class Imgur {
         return (url, data, auth)
     }
     
-    private func getAccessTokenRefreshParams() -> Requests.Params {
+    private func getAccessTokenRefreshParams() -> Requests.PostParams {
         let data = [Symbols.REFRESH_TOKEN: refreshToken!,
                     Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
                     Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
