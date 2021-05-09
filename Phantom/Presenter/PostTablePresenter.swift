@@ -27,6 +27,8 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
+    private var disableSubmissionBecauseNoReddit = false // no reddit = logged out
+    
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true
     
@@ -36,7 +38,7 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie
+        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie || disableSubmissionBecauseNoReddit
     }
     
     private var disabledPostIds: [UUID] {
@@ -72,6 +74,8 @@ class PostTablePresenter {
         let redditName = "asdy" // todo: fix
         let redditLoggedIn = true
         viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
+        
+        disableSubmissionBecauseNoReddit = false
     }
     
     func imgurLoggedIn(_ imgur: Imgur) {
@@ -117,14 +121,19 @@ class PostTablePresenter {
     }
     
     func redditButtonPressed() { // todo: disable pressing the button while submitting
+        var redditLoggedIn = false
+        
         if let reddit = submitter.reddit.value {
-            if reddit.isLoggedIn {
+            redditLoggedIn = reddit.isLoggedIn
+            if redditLoggedIn {
                 reddit.logout()
-                
                 viewDelegate?.updateSlideUpMenu(redditName: nil, redditLoggedIn: false)
-            } else {
-                viewDelegate?.segueToRedditLogin()
+                disableSubmissionBecauseNoReddit = true
             }
+        }
+        
+        if !redditLoggedIn {
+            viewDelegate?.segueToRedditLogin()
         }
     }
     
@@ -384,6 +393,8 @@ class PostTablePresenter {
         }
 
         viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
+        
+        disableSubmissionBecauseNoReddit = !redditLoggedIn
     }
     
     private func setupPostSubmitter() {
