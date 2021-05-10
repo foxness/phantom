@@ -14,6 +14,8 @@ class SlideUpMenu {
     private static let FADE_ALPHA: CGFloat = 0.5
     private static let ANIMATION_DURATION: TimeInterval = 0.5
     
+    weak var delegate: SlideUpMenuDelegate?
+    
     private var blackView: UIView!
     private var menuView: UIView!
     
@@ -23,10 +25,6 @@ class SlideUpMenu {
     private var imgurButton: UIButton!
     
     private var window: UIWindow!
-    
-    var onRedditButtonPressed: (() -> Void)?
-    var onImgurButtonPressed: (() -> Void)?
-    var onBulkAddButtonPressed: (() -> Void)?
     
     var redditName: String? = "adsy"
     var redditLoggedIn = false
@@ -221,27 +219,27 @@ class SlideUpMenu {
     
     @objc private func redditButtonPressed() {
         if redditLoggedIn {
-            onRedditButtonPressed?()
+            delegate?.redditButtonPressed()
         } else {
             animateHide() {
-                self.onRedditButtonPressed?()
+                self.delegate?.redditButtonPressed()
             }
         }
     }
     
     @objc private func imgurButtonPressed() {
         if imgurLoggedIn {
-            onImgurButtonPressed?()
+            delegate?.imgurButtonPressed()
         } else {
             animateHide() {
-                self.onImgurButtonPressed?()
+                self.delegate?.imgurButtonPressed()
             }
         }
     }
     
     @objc private func bulkAddButtonPressed() {
         animateHide() {
-            self.onBulkAddButtonPressed?()
+            self.delegate?.bulkAddButtonPressed()
         }
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate {
     enum Segue: String {
         case showIntroduction, menuRedditLogin, menuImgurLogin, menuBulkAdd, addPost, editPost
     }
@@ -45,9 +45,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate {
         subscribeToNotifications()
         addSubmissionIndicatorView()
         
-        slideUpMenu.onRedditButtonPressed = redditButtonPressed
-        slideUpMenu.onImgurButtonPressed = imgurButtonPressed
-        slideUpMenu.onBulkAddButtonPressed = bulkAddButtonPressed
+        slideUpMenu.delegate = self
         slideUpMenu.setupViews(window: PostTableViewController.getWindow()!)
         
         presenter.attachView(self)

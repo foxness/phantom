@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */; };
 		5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */; };
 		5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuDelegate.swift; sourceTree = "<group>"; };
 		5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitterMiddleware.swift; sourceTree = "<group>"; };
 		5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallhavenMiddleware.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				718181D924FBE01D00059658 /* PostViewController.swift */,
 				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
 				576E515A2644708200B0047F /* SlideUpMenu.swift */,
+				571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */,
 				71C031B724FA6B5600D6E19F /* Main.storyboard */,
 				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
 				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
@@ -296,6 +299,7 @@
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
+				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
 				969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
