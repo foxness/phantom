@@ -52,6 +52,7 @@ struct ZombieSubmitter {
         }
         
         let post = database.posts[postIndex]
+        let wallpaperMode = database.wallpaperMode
         
         var reddit: Reddit!
         var shouldGrabRedditFromSubmitter = true
@@ -70,7 +71,7 @@ struct ZombieSubmitter {
             Log.p("zombie: used existing reddit")
         }
         
-        submitter.submitPost(post) { url, error in
+        submitter.submitPost(post, wallpaperMode: wallpaperMode) { url, error in
             // todo: handle error !!1
             
             let success = url != nil

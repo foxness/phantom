@@ -51,8 +51,9 @@ class SlideUpMenu {
         prepareToShowViews()
     }
     
-    func updateViews() {
+    func updateViews() { // todo: separate into 3 and use in didSet of properties?
         wallpaperModeSwitch.isOn = wallpaperMode
+        Log.p("menu: just switched it \(wallpaperMode)")
         
         redditNameLabel.text = redditName
         
@@ -107,6 +108,7 @@ class SlideUpMenu {
         
         wallpaperModeSwitch = UISwitch()
         wallpaperModeSwitch.translatesAutoresizingMaskIntoConstraints = false
+        wallpaperModeSwitch.addTarget(self, action: #selector(wallpaperModeSwitched), for: .valueChanged)
         menuView.addSubview(wallpaperModeSwitch)
         
         constraints += [NSLayoutConstraint(item: wallpaperModeSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: wallpaperModeLabel, attribute: .trailing, multiplier: 1, constant: 16),
@@ -228,12 +230,12 @@ class SlideUpMenu {
     }
     
     private func hideMenuView() {
-        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: self.window.frame)
+        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: window.frame)
         menuView.frame = hiddenMenuFrame
     }
     
     private func showMenuView() {
-        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: self.window.frame)
+        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: window.frame)
         menuView.frame = shownMenuFrame
     }
     
@@ -265,6 +267,12 @@ class SlideUpMenu {
         animateHide() {
             self.delegate?.bulkAddButtonPressed()
         }
+    }
+    
+    @objc private func wallpaperModeSwitched(`switch`: UISwitch) {
+        let newState = `switch`.isOn
+        wallpaperMode = newState
+        delegate?.wallpaperModeSwitched(on: newState)
     }
     
     private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {

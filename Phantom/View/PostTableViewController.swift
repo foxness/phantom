@@ -337,6 +337,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.updateViews()
     }
     
+    func updateSlideUpMenu(wallpaperMode: Bool) {
+        slideUpMenu.wallpaperMode = wallpaperMode
+        slideUpMenu.updateViews()
+    }
+    
     // MARK: - Emitter methods
     
     func redditButtonPressed() {
@@ -349,6 +354,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func bulkAddButtonPressed() {
         presenter.bulkAddButtonPressed()
+    }
+    
+    func wallpaperModeSwitched(on: Bool) {
+        presenter.wallpaperModeSwitched(on: on)
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {

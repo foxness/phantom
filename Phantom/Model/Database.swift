@@ -14,6 +14,7 @@ class Database {
     private static let KEY_REDDIT_AUTH = "reddit_auth"
     private static let KEY_IMGUR_AUTH = "imgur_auth"
     private static let KEY_INTRODUCTION_SHOWN = "introduction_shown"
+    private static let KEY_WALLPAPER_MODE = "wallpaper_mode"
     
     static let instance = Database()
     
@@ -24,6 +25,8 @@ class Database {
     @UserDefaultsBacked(key: Database.KEY_IMGUR_AUTH) private var internalImgurAuth: String?
     
     @UserDefaultsBacked(key: Database.KEY_INTRODUCTION_SHOWN, defaultValue: false) private var internalIntroductionShown: Bool
+    @UserDefaultsBacked(key: Database.KEY_WALLPAPER_MODE, defaultValue: false) private var internalWallpaperMode: Bool
+    
     @UserDefaultsBacked(key: Database.KEY_POSTS) private var internalPosts: String?
     
     var redditAuth: Reddit.AuthParams? {
@@ -39,6 +42,11 @@ class Database {
     var introductionShown: Bool {
         get { internalIntroductionShown }
         set { internalIntroductionShown = newValue }
+    }
+    
+    var wallpaperMode: Bool {
+        get { internalWallpaperMode }
+        set { internalWallpaperMode = newValue }
     }
     
     var posts: [Post] = []
@@ -78,6 +86,7 @@ class Database {
         redditAuth = nil
         imgurAuth = nil
         introductionShown = false
+        wallpaperMode = false
         
         posts = []
         savePosts()

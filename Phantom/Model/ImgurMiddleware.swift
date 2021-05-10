@@ -10,9 +10,11 @@ import Foundation
 
 struct ImgurMiddleware: SubmitterMiddleware {
     private let imgur: Imgur
+    private let wallpaperMode: Bool
     
-    init(_ imgur: Imgur) {
+    init(_ imgur: Imgur, wallpaperMode: Bool) {
         self.imgur = imgur
+        self.wallpaperMode = wallpaperMode
     }
     
     func transform(post: Post) throws -> (post: Post, changed: Bool) {
@@ -22,7 +24,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
         let imgurImage = try! imgur.uploadImage(imageUrl: url)
         Log.p("imgur image uploaded", imgurImage)
         
-        let title = "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]"
+        let title = wallpaperMode ? "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]" : post.title
         let newPost = Post.Link(id: post.id,
                                 title: title,
                                 subreddit: post.subreddit,

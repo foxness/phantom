@@ -55,7 +55,7 @@ class PostTablePresenter {
         return ids
     }
     
-    // MARK: - Public methods
+    // MARK: - Delegate methods
     
     func attachView(_ viewDelegate: PostTableViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -64,6 +64,8 @@ class PostTablePresenter {
     func detachView() {
         viewDelegate = nil
     }
+    
+    // MARK: - Receiver methods
     
     func redditLoggedIn(_ reddit: Reddit) {
         submitter.reddit.mutate { $0 = reddit }
@@ -101,7 +103,8 @@ class PostTablePresenter {
         
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
-        submitter.submitPost(post) { url, error in
+        let wallpaperMode = database.wallpaperMode
+        submitter.submitPost(post, wallpaperMode: wallpaperMode) { url, error in
             // todo: handle error !!1
             
             Log.p("url: \(String(describing: url))")
@@ -159,6 +162,10 @@ class PostTablePresenter {
     
     func bulkAddButtonPressed() {
         viewDelegate?.segueToBulkAdd()
+    }
+    
+    func wallpaperModeSwitched(on: Bool) {
+        database.wallpaperMode = on
     }
     
     func moreButtonPressed() {
@@ -401,6 +408,9 @@ class PostTablePresenter {
     }
     
     private func updateViews() {
+        let wallpaperMode = database.wallpaperMode
+        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode)
+        
         let redditLoggedIn: Bool
         let redditName: String?
         if let reddit = submitter.reddit.value {

@@ -16,6 +16,7 @@ class PostSubmitter {
         private let post: Post
         private let callback: SubmitCallback
         private let middlewares: [SubmitterMiddleware]
+        private let wallpaperMode: Bool
         
         // DEBUGVAR
         let simulateReddit = true
@@ -23,35 +24,39 @@ class PostSubmitter {
         
         init(reddit: Reddit,
              database: Database,
+             wallpaperMode: Bool = false,
              imgur: Imgur? = nil,
-             useWallhaven: Bool = true,
              callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
             self.callback = callback
-            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven, imgur: imgur)
+            self.wallpaperMode = wallpaperMode
+            self.middlewares = PostSubmission.getMiddlewares(wallpaperMode: wallpaperMode, imgur: imgur)
         }
         
         init(reddit: Reddit,
              post: Post,
+             wallpaperMode: Bool = false,
              imgur: Imgur? = nil,
-             useWallhaven: Bool = true,
              callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = post
             self.callback = callback
-            self.middlewares = PostSubmission.getMiddlewares(useWallhaven: useWallhaven, imgur: imgur)
+            self.wallpaperMode = wallpaperMode
+            self.middlewares = PostSubmission.getMiddlewares(wallpaperMode: wallpaperMode, imgur: imgur)
         }
         
-        private static func getMiddlewares(useWallhaven: Bool, imgur: Imgur?) -> [SubmitterMiddleware] {
+        private static func getMiddlewares(wallpaperMode: Bool, imgur: Imgur?) -> [SubmitterMiddleware] {
             var mw = [SubmitterMiddleware]()
             
-            if useWallhaven {
+            if wallpaperMode {
                 mw.append(WallhavenMiddleware())
             }
             
             if let imgur = imgur {
-                mw.append(ImgurMiddleware(imgur))
+                mw.append(ImgurMiddleware(imgur, wallpaperMode: wallpaperMode))
+            } else if wallpaperMode {
+                fatalError("Imgur is required for wallpaper mode")
             }
             
             return mw
@@ -74,7 +79,7 @@ class PostSubmitter {
                 middlewaredPost = middlewared.post
                 let postChanged = middlewared.changed
                 
-                if !postChanged {
+                if wallpaperMode && !postChanged {
                     throw SubmitterError.noEffectMiddleware(middleware: String(describing: middleware))
                 }
                 
@@ -150,25 +155,25 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
+    func submitPost(_ post: Post, wallpaperMode: Bool = false, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, post: post, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, post: post, wallpaperMode: wallpaperMode, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
-    func submitPostInDatabase(_ database: Database, callback: @escaping SubmitCallback) {
+    func submitPostInDatabase(_ database: Database, wallpaperMode: Bool = false, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, database: database, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, database: database, wallpaperMode: wallpaperMode, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
