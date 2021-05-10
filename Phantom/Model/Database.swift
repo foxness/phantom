@@ -44,7 +44,7 @@ class Database {
     var posts: [Post] = []
     
     private init() {
-        // DEBUG VARIABLES
+        // DEBUGVAR
         let wipe = false
         let wipeAuth = false
         //let samplePosts = false

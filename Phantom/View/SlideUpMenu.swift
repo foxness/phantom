@@ -10,13 +10,17 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 300
+    private static let MENUVIEW_HEIGHT: CGFloat = 250
     private static let FADE_ALPHA: CGFloat = 0.5
-    private static let ANIMATION_DURATION: TimeInterval = 0.5
+    private static let FADE_WHITE: CGFloat = 0.2 // works for both light and dark modes
+    private static let ANIMATION_DURATION: TimeInterval = 0.3
+    
+    private static let TEXT_LOG_IN = "Log In"
+    private static let TEXT_LOG_OUT = "Log Out"
     
     weak var delegate: SlideUpMenuDelegate?
     
-    private var blackView: UIView!
+    private var fadeView: UIView!
     private var menuView: UIView!
     
     private var redditNameLabel: UILabel!
@@ -38,7 +42,7 @@ class SlideUpMenu {
     func setupViews(window: UIWindow) {
         self.window = window
         
-        setupBlackView()
+        setupFadeView()
         setupMenuView()
         
         updateViews()
@@ -48,21 +52,23 @@ class SlideUpMenu {
     func updateViews() {
         redditNameLabel.text = redditName
         
-        let redditTitle = redditLoggedIn ? "Log Out" : "Log In" // todo: extract
+        let redditTitle = redditLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
         redditButton.setTitle(redditTitle, for: .normal)
         
         imgurNameLabel.text = imgurName
         
-        let imgurTitle = imgurLoggedIn ? "Log Out" : "Log In"
+        let imgurTitle = imgurLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
         imgurButton.setTitle(imgurTitle, for: .normal)
     }
     
-    private func setupBlackView() {
-        blackView = UIView()
-        blackView.backgroundColor = UIColor(white: 0.2, alpha: SlideUpMenu.FADE_ALPHA) // works for both light and dark modes
+    private func setupFadeView() {
+        fadeView = UIView()
+        fadeView.backgroundColor = UIColor(white: SlideUpMenu.FADE_WHITE, alpha: SlideUpMenu.FADE_ALPHA)
         
-        let tapper = UITapGestureRecognizer(target: self, action: #selector(blackViewTapped))
-        blackView.addGestureRecognizer(tapper)
+        let tapper = UITapGestureRecognizer(target: self, action: #selector(fadeViewTapped))
+        fadeView.addGestureRecognizer(tapper)
+        
+        fadeView.frame = window.frame
     }
     
     private func setupMenuView() {
@@ -110,9 +116,9 @@ class SlideUpMenu {
         redditButton.addTarget(self, action: #selector(redditButtonPressed), for: .touchUpInside)
         menuView.addSubview(redditButton)
         
-        constraints += [NSLayoutConstraint(item: redditButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: redditNameLabel, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
+        constraints += [NSLayoutConstraint(item: redditButton!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: redditNameLabel!, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
         ]
         
         // ---------------------------------------------------------------
@@ -141,9 +147,9 @@ class SlideUpMenu {
         imgurButton.addTarget(self, action: #selector(imgurButtonPressed), for: .touchUpInside)
         menuView.addSubview(imgurButton)
         
-        constraints += [NSLayoutConstraint(item: imgurButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: imgurNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: imgurNameLabel, attribute: .centerY, relatedBy: .equal, toItem: imgurButton, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView, attribute: .trailing, relatedBy: .equal, toItem: imgurButton, attribute: .trailing, multiplier: 1, constant: 16)
+        constraints += [NSLayoutConstraint(item: imgurButton!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: imgurNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: imgurNameLabel!, attribute: .centerY, relatedBy: .equal, toItem: imgurButton, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: imgurButton, attribute: .trailing, multiplier: 1, constant: 16)
         ]
         
         // ---------------------------------------------------------------
@@ -152,12 +158,10 @@ class SlideUpMenu {
     }
     
     private func prepareToShowViews() {
-        window.addSubview(blackView)
+        window.addSubview(fadeView)
         window.addSubview(menuView)
         
-        blackView.frame = window.frame
-        
-        hideBlackView()
+        hideFadeView()
         hideMenuView()
     }
     
@@ -167,15 +171,11 @@ class SlideUpMenu {
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
-            self.showBlackView()
+            self.showFadeView()
             self.showMenuView()
         }
         
-        let completion = { (completed: Bool) in
-            // todo: remove this?
-        }
-        
-        UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
+        UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: nil)
     }
     
     private func animateHide(onCompleted: (() -> Void)? = nil) {
@@ -184,7 +184,7 @@ class SlideUpMenu {
         let options: UIView.AnimationOptions = [.curveEaseOut]
         
         let animations = {
-            self.hideBlackView()
+            self.hideFadeView()
             self.hideMenuView()
         }
         
@@ -195,12 +195,12 @@ class SlideUpMenu {
         UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations, completion: completion)
     }
     
-    private func hideBlackView() {
-        blackView.alpha = 0
+    private func hideFadeView() {
+        fadeView.alpha = 0
     }
     
-    private func showBlackView() {
-        blackView.alpha = 1
+    private func showFadeView() {
+        fadeView.alpha = 1
     }
     
     private func hideMenuView() {
@@ -213,7 +213,7 @@ class SlideUpMenu {
         menuView.frame = shownMenuFrame
     }
     
-    @objc private func blackViewTapped() {
+    @objc private func fadeViewTapped() {
         animateHide()
     }
     
