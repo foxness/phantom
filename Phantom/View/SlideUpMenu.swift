@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 250
+    private static let MENUVIEW_HEIGHT: CGFloat = 320
     private static let FADE_ALPHA: CGFloat = 0.5
     private static let FADE_WHITE: CGFloat = 0.2 // works for both light and dark modes
     private static let ANIMATION_DURATION: TimeInterval = 0.3
@@ -23,16 +23,18 @@ class SlideUpMenu {
     private var fadeView: UIView!
     private var menuView: UIView!
     
+    private var wallpaperModeSwitch: UISwitch!
     private var redditNameLabel: UILabel!
     private var redditButton: UIButton!
     private var imgurNameLabel: UILabel!
     private var imgurButton: UIButton!
     
-    private var window: UIWindow!
+    private unowned var window: UIWindow! // I think these should be unowned but I'm not 100% sure
     
-    var redditName: String? = "adsy"
+    var wallpaperMode = false
+    var redditName: String?
     var redditLoggedIn = false
-    var imgurName: String? = "lolz"
+    var imgurName: String?
     var imgurLoggedIn = false
     
     func show() {
@@ -50,6 +52,8 @@ class SlideUpMenu {
     }
     
     func updateViews() {
+        wallpaperModeSwitch.isOn = wallpaperMode
+        
         redditNameLabel.text = redditName
         
         let redditTitle = redditLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
@@ -92,12 +96,32 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
+        let wallpaperModeLabel = UILabel()
+        wallpaperModeLabel.text = "Wallpaper Mode"
+        menuView.addSubview(wallpaperModeLabel)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: wallpaperModeLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, wallpaperModeLabel)
+        
+        // ---------------------------------------------------------------
+        
+        wallpaperModeSwitch = UISwitch()
+        wallpaperModeSwitch.translatesAutoresizingMaskIntoConstraints = false
+        menuView.addSubview(wallpaperModeSwitch)
+        
+        constraints += [NSLayoutConstraint(item: wallpaperModeSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: wallpaperModeLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: wallpaperModeLabel, attribute: .centerY, relatedBy: .equal, toItem: wallpaperModeSwitch, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: wallpaperModeSwitch, attribute: .trailing, multiplier: 1, constant: 16)
+        ]
+        
+        // ---------------------------------------------------------------
+        
         let redditLabel = UILabel()
         redditLabel.text = "Reddit account"
         menuView.addSubview(redditLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, redditLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: wallpaperModeLabel, redditLabel)
         
         // ---------------------------------------------------------------
         
