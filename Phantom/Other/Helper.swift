@@ -37,26 +37,21 @@ struct Helper {
         return urlc.url!
     }
     
-    static func ensureGoodResponse(response: URLResponse?, request: String) throws {
+    static func ensureGoodResponse(data: Data?, response: URLResponse?, error: Error?, request: String) throws -> Data {
         let httpResponse = response as! HTTPURLResponse
-        if Requests.isResponseOk(httpResponse) {
-            Log.p("\(request): http ok")
-        } else {
-            throw ApiError.badResponse(request: request, statusCode: httpResponse.statusCode, response: httpResponse)
-        }
-    }
-    
-    static func ensureNoError(error: Error?, request: String) throws {
+        
         if let error = error {
-            throw ApiError.request(request: request, error: error)
-        }
-    }
-    
-    static func deserializeResponse(data: Data?, request: String) throws -> [String: Any] {
-        guard let data = data else {
-            throw ApiError.noData(request: request)
+            throw ApiError.composeResponseHasErrorError(request: request, error: error, data: data, response: httpResponse)
         }
         
+        if !Requests.isResponseOk(httpResponse) || data == nil {
+            throw ApiError.composeBadResponseError(request: request, response: httpResponse, data: data)
+        }
+        
+        return data!
+    }
+    
+    static func deserializeResponse(data: Data, request: String) throws -> [String: Any] {
         var json: [String: Any]?
         let goodJson: [String: Any]
         do {
@@ -75,8 +70,32 @@ struct Helper {
 }
 
 enum ApiError: Error {
-    case badResponse(request: String, statusCode: Int, response: HTTPURLResponse)
-    case request(request: String, error: Error)
-    case noData(request: String)
+    case responseHasError(request: String, message: String, error: Error, data: Data?, response: HTTPURLResponse?)
+    case badResponse(request: String, message: String, response: HTTPURLResponse, data: Data?)
     case deserialization(request: String, raw: String)
+    
+    static func composeResponseHasErrorError(request: String, error: Error, data: Data?, response: HTTPURLResponse?) -> Error {
+        let message = "Error Localized Description: \(error.localizedDescription); Data String: \(ApiError.getDataString(data: data))"
+        return ApiError.responseHasError(request: request, message: message, error: error, data: data, response: response)
+    }
+    
+    static func composeBadResponseError(request: String, response: HTTPURLResponse, data: Data?) -> Error {
+        let message = "Data String: \(ApiError.getDataString(data: data))"
+        return ApiError.badResponse(request: request, message: message, response: response, data: data)
+    }
+    
+    private static func getDataString(data: Data?) -> String {
+        let dataString: String
+        if let data = data {
+            if let decoded = String(data: data, encoding: .utf8) {
+                dataString = decoded
+            } else {
+                dataString = String(describing: data)
+            }
+        } else {
+            dataString = "nil"
+        }
+        
+        return dataString
+    }
 }

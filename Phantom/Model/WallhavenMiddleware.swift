@@ -36,19 +36,14 @@ struct WallhavenMiddleware: SubmitterMiddleware {
         let params = WallhavenMiddleware.getRequestParams(url: wallhavenUrl)
         let (data, response, error) = Requests.synchronousGet(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         
-        guard let data = data else {
-            throw ApiError.noData(request: request)
-        }
-        
-        if let html = String(data: data, encoding: .utf8),
+        if let html = String(data: goodData, encoding: .utf8),
            let directUrl = getDirectUrl(html: html) {
             
             return directUrl
         } else {
-            throw ApiError.deserialization(request: request, raw: String(describing: String(data: data, encoding: .utf8)))
+            throw ApiError.deserialization(request: request, raw: String(describing: String(data: goodData, encoding: .utf8)))
         }
     }
     

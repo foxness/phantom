@@ -129,10 +129,8 @@ class Imgur {
         let params = getUploadImageParams(imageUrl: imageUrl)
         let (data, response, error) = Requests.synchronousPost(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         let imgurImage = try Imgur.deserializeImgurImage(json: json, request: request)
         
         return imgurImage
@@ -185,10 +183,8 @@ class Imgur {
         let params = getAccessTokenRefreshParams()
         let (data, response, error) = Requests.synchronousPost(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         let (newAccessToken, newAccessTokenExpirationDate) = try Imgur.deserializeAccessToken(json: json, request: request)
         
         accessToken = newAccessToken

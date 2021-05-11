@@ -129,10 +129,8 @@ class Reddit {
         let params = getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
         let (data, response, error) = Requests.synchronousPost(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         let postUrl = try Reddit.deserializeSubmitResponse(json: json, request: request)
         
         return postUrl
@@ -148,10 +146,8 @@ class Reddit {
         let params = getIdentityParams()
         let (data, response, error) = Requests.synchronousGet(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         username = try Reddit.deserializeIdentityResponse(json: json, request: request)
     }
     
@@ -194,10 +190,8 @@ class Reddit {
         let params = getAuthTokenFetchParams()
         let (data, response, error) = Requests.synchronousPost(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         let (newAccessToken, newExpirationDate, newRefreshToken) = try Reddit.deserializeAuthTokens(json: json, request: request)
         
         accessToken = newAccessToken
@@ -213,10 +207,8 @@ class Reddit {
         let params = getAccessTokenRefreshParams()
         let (data, response, error) = Requests.synchronousPost(with: params)
         
-        try Helper.ensureGoodResponse(response: response, request: request)
-        try Helper.ensureNoError(error: error, request: request)
-        
-        let json = try Helper.deserializeResponse(data: data, request: request)
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
         let (newAccessToken, newAccessTokenExpirationDate) = try Reddit.deserializeAccessToken(json: json, request: request)
         
         accessToken = newAccessToken

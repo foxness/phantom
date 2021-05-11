@@ -106,6 +106,8 @@ class PostSubmitter {
             do {
                 middlewaredPost = try executeMiddlewares(on: post)
             } catch {
+//                let e = error
+//                fatalError()
                 Log.p("Unexpected error while middlewaring", error)
                 callback(nil, error)
                 return
