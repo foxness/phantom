@@ -18,10 +18,6 @@ class PostSubmitter {
         private let middlewares: [SubmitterMiddleware]
         private let wallpaperMode: Bool
         
-        // DEBUGVAR
-        let simulateReddit = true
-        let simulateMiddleware = false
-        
         init(reddit: Reddit,
              database: Database,
              wallpaperMode: Bool = false,
@@ -67,7 +63,7 @@ class PostSubmitter {
         }
         
         private func executeMiddlewares(on post: Post) throws -> Post {
-            guard !simulateMiddleware else {
+            guard !DebugVariable.simulateMiddleware else {
                 sleep(1)
                 return post
             }
@@ -90,7 +86,7 @@ class PostSubmitter {
         }
         
         private func submitPost(_ post: Post) throws -> String {
-            guard !simulateReddit else {
+            guard !DebugVariable.simulateReddit else {
                 sleep(3)
                 
                 return "https://simulated-url-lolz.com/"

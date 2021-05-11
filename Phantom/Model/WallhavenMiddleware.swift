@@ -10,7 +10,12 @@ import Foundation
 
 struct WallhavenMiddleware: SubmitterMiddleware {
     func transform(post: Post) throws -> (post: Post, changed: Bool) {
-        guard WallhavenMiddleware.isRightPost(post) else { return (post, changed: false) }
+        let (right, alreadyChanged) = WallhavenMiddleware.isRightPost(post)
+        
+        Log.p("wallhaven input url. indirect? \(right) direct? \(alreadyChanged)")
+        
+        guard !alreadyChanged else { return (post, changed: true) }
+        guard right else { return (post, changed: false) }
         
         let url = URL(string: post.url!)!
         guard let directUrl = try? WallhavenMiddleware.getDirectUrl(wallhavenUrl: url) else { return (post, changed: false) }
@@ -61,9 +66,38 @@ struct WallhavenMiddleware: SubmitterMiddleware {
         return String(directUrl)
     }
     
-    private static func isRightPost(_ post: Post) -> Bool {
-        let wallhaven = post.url?.contains("wallhaven") ?? false // TODO: fix stub with proper regex
-        return post.type == .link && wallhaven
+    private static func isIndirectUrl(_ url: String) -> Bool {
+        // indirect: https://wallhaven.cc/w/q22885
+        // regex: https://(wallhaven\.cc/w/|whvn\.cc/)\w+
+        
+        let indirectRegex = "https://(wallhaven\\.cc/w/|whvn\\.cc/)\\w+"
+        
+        let matches = try! url.matchesRegex(indirectRegex)
+        return matches
+    }
+    
+    private static func isDirectUrl(_ url: String) -> Bool {
+        // direct: https://w.wallhaven.cc/full/q2/wallhaven-q22885.jpg
+        // regex: https://w\.wallhaven\.cc/full/\w+/wallhaven-\w+\.\w+
+        
+        let directPattern = "https://w\\.wallhaven\\.cc/full/\\w+/wallhaven-\\w+\\.\\w+"
+        
+        let matches = try! url.matchesRegex(directPattern)
+        return matches
+    }
+    
+    private static func isRightPost(_ post: Post) -> (right: Bool, alreadyChanged: Bool) {
+        guard post.type == .link, let url = post.url else { return (right: false, alreadyChanged: false) }
+        
+        if isIndirectUrl(url) {
+            return (right: true, alreadyChanged: false)
+        }
+        
+        if isDirectUrl(url) {
+            return (right: false, alreadyChanged: true)
+        }
+        
+        return (right: false, alreadyChanged: false)
     }
     
     private static func getRequestParams(url: URL) -> Requests.GetParams {

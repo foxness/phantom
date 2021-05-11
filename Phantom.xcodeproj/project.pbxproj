@@ -16,6 +16,7 @@
 		576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E515A2644708200B0047F /* SlideUpMenu.swift */; };
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
+		57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C43512264AFB4B00226A24 /* DebugVariable.swift */; };
 		57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DE8264074B200B10E75 /* BulkAddViewController.swift */; };
 		57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */; };
 		57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */; };
@@ -55,6 +56,7 @@
 		576E515A2644708200B0047F /* SlideUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenu.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
+		57C43512264AFB4B00226A24 /* DebugVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugVariable.swift; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
 		57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddPresenter.swift; sourceTree = "<group>"; };
 		57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewDelegate.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
 				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
+				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
@@ -276,6 +279,7 @@
 				57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */,
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
 				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
+				57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */,
 				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,
 				718181DA24FBE01D00059658 /* PostViewController.swift in Sources */,
 				5768C33B2639CE9C00459260 /* Imgur.swift in Sources */,

@@ -52,24 +52,16 @@ class Database {
     var posts: [Post] = []
     
     private init() {
-        // DEBUGVAR
-        let wipe = false
-        let wipeAuth = false
-        //let samplePosts = false
-        let wipePosts = false
-        
-        if wipe {
+        if DebugVariable.wipeDatabase {
             setDefaults()
         } else {
-            if wipeAuth {
+            if DebugVariable.wipeAuth {
                 wipeReddit()
                 wipeImgur()
             }
             
-            if wipePosts {
+            if DebugVariable.wipePosts {
                 posts = []
-            //} else if samplePosts {
-            //    setSamplePosts()
             } else {
                 loadPosts()
             }
@@ -97,15 +89,6 @@ class Database {
             posts = deserializePosts(serialized: internalPosts)
         }
     }
-    
-//    private func setSamplePosts() { // debug
-//        posts.removeAll()
-//        40.times { i in
-//            posts.append(Post(title: "Posty\(i)", text: "texty\(i)", subreddit: "test", date: Date.random))
-//        }
-//
-//        savePosts()
-//    }
     
     private func wipeReddit() {
         redditAuth = nil

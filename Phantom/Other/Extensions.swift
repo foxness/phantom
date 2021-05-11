@@ -104,6 +104,16 @@ extension Bundle {
     private func getString(_ key: String) -> String { infoDictionary?[key] as! String }
 }
 
+extension String {
+    func matchesRegex(_ regex: String) throws -> Bool {
+        let re = try NSRegularExpression(pattern: regex, options: [])
+        let range = NSRange(location: 0, length: self.utf16.count)
+        
+        let matches = re.firstMatch(in: self, options: [], range: range) != nil
+        return matches
+    }
+}
+
 extension UIView {
     func addConstraintsWithFormat(format: String, views: UIView...) {
         var viewsDict = [String: UIView]()

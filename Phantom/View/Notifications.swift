@@ -90,7 +90,6 @@ struct Notifications {
         let id = params.id
         let content = makeContent(params: params.content)
         let trigger = makeTrigger(for: params.dc)
-        //let trigger = makeNowTrigger() // DEBUGVAR
         
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         return request

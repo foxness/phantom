@@ -21,7 +21,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
         guard ImgurMiddleware.isRightPost(post) else { return (post, changed: false) }
         
         let url = URL(string: post.url!)!
-        let imgurImage = try! imgur.uploadImage(imageUrl: url)
+        let imgurImage = try imgur.uploadImage(imageUrl: url)
         Log.p("imgur image uploaded", imgurImage)
         
         let title = wallpaperMode ? "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]" : post.title
@@ -34,7 +34,8 @@ struct ImgurMiddleware: SubmitterMiddleware {
     }
     
     private static func isRightPost(_ post: Post) -> Bool {
-        let isImage = [".jpg", ".jpeg", ".png"].contains { post.url?.hasSuffix($0) ?? false }
-        return post.type == .link && isImage
+        guard post.type == .link, let url = post.url else { return false }
+        
+        return Helper.isImageUrl(url)
     }
 }

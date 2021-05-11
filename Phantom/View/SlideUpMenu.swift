@@ -53,7 +53,6 @@ class SlideUpMenu {
     
     func updateViews() { // todo: separate into 3 and use in didSet of properties?
         wallpaperModeSwitch.isOn = wallpaperMode
-        Log.p("menu: just switched it \(wallpaperMode)")
         
         redditNameLabel.text = redditName
         

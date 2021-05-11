@@ -68,6 +68,10 @@ struct Helper {
         
         return goodJson
     }
+    
+    static func isImageUrl(_ url: String) -> Bool {
+        return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
+    }
 }
 
 enum ApiError: Error {
