@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
@@ -36,7 +37,21 @@ class PostCell: UITableViewCell {
         ptext.text = subtitle
         pdate.text = date
         
-        pimage.image = UIImage(named: "thumbnail_text_post")!
+        //pimage.image = UIImage(named: "thumbnail_text_post")!
+        if post.type == .link, let url = post.url {
+            var imageUrl: String? = nil
+            if let wallhavenThumbnailUrl = Wallhaven.getThumbnailUrl(wallhavenUrl: url) {
+                imageUrl = wallhavenThumbnailUrl
+            } else if Helper.isImageUrl(url) {
+                imageUrl = url
+            }
+            
+            if let imageUrl = imageUrl, let goodImageUrl = URL(string: imageUrl) {
+                pimage.kf.setImage(with: goodImageUrl)
+            }
+        } else {
+            pimage.image = UIImage(named: "thumbnail_text_post")!
+        }
         
         let overdue = post.date < Date()
         let bg: UIColor = overdue ? .secondarySystemBackground : .systemBackground
