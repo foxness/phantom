@@ -104,12 +104,38 @@ extension Bundle {
     private func getString(_ key: String) -> String { infoDictionary?[key] as! String }
 }
 
+// src: https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
+extension NSRegularExpression {
+    convenience init(_ pattern: String) {
+        do {
+            try self.init(pattern: pattern)
+        } catch {
+            preconditionFailure("Illegal regular expression: \(pattern)")
+        }
+    }
+    
+    func getMatch(_ string: String) -> NSTextCheckingResult? {
+        let range = NSRange(location: 0, length: string.utf16.count)
+        let match = firstMatch(in: string, options: [], range: range)
+        return match
+    }
+    
+    func matches(_ string: String) -> Bool {
+        return getMatch(string) != nil
+    }
+}
+
+// src: https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
 extension String {
     func matchesRegex(_ regex: String) throws -> Bool {
-        let re = try NSRegularExpression(pattern: regex, options: [])
-        let range = NSRange(location: 0, length: self.utf16.count)
-        
-        let matches = re.firstMatch(in: self, options: [], range: range) != nil
+        let re = try NSRegularExpression(pattern: regex)
+        let matches = re.matches(self)
+        return matches
+    }
+    
+    static func ~= (lhs: String, rhs: String) -> Bool {
+        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
+        let matches = regex.matches(lhs)
         return matches
     }
 }
