@@ -15,6 +15,7 @@ class PostCell: UITableViewCell {
     private static let THUMBNAIL_TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
     private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 10
     private static let THUMBNAIL_TRANSITION_DURATION: TimeInterval = 0.5
+    private static let THUMBNAIL_GUARANTEED_PERIOD: TimeInterval = 3 * 24 * 60 * 60 // it expires 3 days after posting
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -57,17 +58,21 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post, with imageUrl: URL) {
+        let placeholder = PostCell.getPlaceholder(for: post.type)
+        let transition = ImageTransition.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)
+        let thumbnailExpirationDate = PostCell.getThumbnailExpirationDate(postDate: post.date)
+        
         let thumbnailSize = thumbnailView.bounds.size
         let processor = AspectCroppingImageProcessor(aspectRatio: thumbnailSize)
             |> DownsamplingImageProcessor(size: thumbnailSize)
             |> RoundCornerImageProcessor(cornerRadius: PostCell.THUMBNAIL_CORNER_RADIUS)
         
-        let placeholder = PostCell.getPlaceholder(for: post.type)
         let options: KingfisherOptionsInfo = [
             .processor(processor),
             .cacheSerializer(FormatIndicatedCacheSerializer.jpeg),
             .scaleFactor(UIScreen.main.scale),
-            .transition(.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION))
+            .transition(transition),
+            .diskCacheExpiration(.date(thumbnailExpirationDate))
 //            ,.forceRefresh
         ]
         
@@ -119,6 +124,15 @@ class PostCell: UITableViewCell {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .full
         return formatter.localizedString(for: date, relativeTo: Date())
+    }
+    
+    private static func getThumbnailExpirationDate(postDate: Date) -> Date {
+        let now = Date()
+        if postDate < now { // post is in the past
+            return now + PostCell.THUMBNAIL_GUARANTEED_PERIOD // 3 days from now
+        } else { // post is in the future
+            return postDate + PostCell.THUMBNAIL_GUARANTEED_PERIOD // 3 days after post
+        }
     }
 }
 
