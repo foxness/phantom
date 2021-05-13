@@ -12,7 +12,9 @@ import Kingfisher
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     
-    private static let TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
+    private static let THUMBNAIL_TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
+    private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 5
+    private static let THUMBNAIL_TRANSITION_DURATION: TimeInterval = 0.5
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -34,18 +36,6 @@ class PostCell: UITableViewCell {
         setMainViews(for: post)
         setThumbnail(for: post)
         setBackground(for: post)
-        
-//        let f = UIScreen.main.scale
-//        let w = pimage.bounds.width * f
-//        let h = pimage.bounds.height * f
-//
-//        Log.p("viewW: \(w), viewH: \(h)")
-//
-//        let ss = pimage.image!.scale
-//        let ww = pimage.image!.size.width * ss
-//        let hh = pimage.image!.size.height * ss
-//
-//        Log.p("imgW: \(ww), imgH: \(hh)")
     }
     
     private func setMainViews(for post: Post) {
@@ -67,17 +57,18 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post, with imageUrl: URL) {
-        let processor = CroppingImageProcessor(size: thumbnailView.bounds.size)
-            |> DownsamplingImageProcessor(size: thumbnailView.bounds.size)
-            |> RoundCornerImageProcessor(cornerRadius: 5)
+        let thumbnailSize = thumbnailView.bounds.size
+        let processor = AspectCroppingImageProcessor(aspectRatio: thumbnailSize)
+            |> DownsamplingImageProcessor(size: thumbnailSize)
+            |> RoundCornerImageProcessor(cornerRadius: PostCell.THUMBNAIL_CORNER_RADIUS)
         
         let placeholder = PostCell.getPlaceholder(for: post.type)
         let options: KingfisherOptionsInfo = [
             .processor(processor),
             .cacheSerializer(FormatIndicatedCacheSerializer.jpeg),
             .scaleFactor(UIScreen.main.scale),
-            .transition(.flipFromRight(0.5)),
-//            .forceRefresh
+            .transition(.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)),
+            .forceRefresh
         ]
         
         thumbnailView.kf.indicatorType = .activity
@@ -85,7 +76,7 @@ class PostCell: UITableViewCell {
             result in
             switch result {
             case .success(let value):
-                print("Task done for: \(value.source.url?.absoluteString ?? "") ... \(value.image.size)")
+                print("Task done for: \(value.source.url?.absoluteString ?? "")")
             case .failure(let error):
                 print("Job failed: \(error.localizedDescription)")
             }
@@ -121,12 +112,63 @@ class PostCell: UITableViewCell {
     
     private static func getPlaceholder(for type: Post.PostType) -> UIImage {
         // todo: different placeholders for link & text type posts
-        return UIImage(named: PostCell.TEXT_POST_PLACEHOLDER)!
+        return UIImage(named: PostCell.THUMBNAIL_TEXT_POST_PLACEHOLDER)!
     }
     
     private static func dateToString(_ date: Date) -> String { // "in X hours"
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .full
         return formatter.localizedString(for: date, relativeTo: Date())
+    }
+}
+
+struct AspectCroppingImageProcessor: ImageProcessor {
+    let identifier: String
+    let aspectRatio: CGSize
+    
+    init(aspectRatio: CGSize = CGSize(width: 1, height: 1)) { // default is square aspect ratio
+        self.aspectRatio = aspectRatio
+        self.identifier = "com.rivershy.AspectCroppingImageProcessor(\(String(describing: self.aspectRatio)))"
+    }
+    
+    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
+        switch item {
+        case .image(let image):
+            return AspectCroppingImageProcessor.aspectCrop(image: image, aspectRatio: aspectRatio)
+        case .data(_):
+            return (DefaultImageProcessor.default |> self).process(item: item, options: options)
+        }
+    }
+    
+    private static func aspectCrop(image: UIImage, aspectRatio: CGSize) -> UIImage {
+        let imageHeight = image.size.height
+        let imageWidth = image.size.width
+        
+        let imageAspectRatio = imageWidth / imageHeight
+        let targetAspectRatio = aspectRatio.width / aspectRatio.height
+        
+        let resultWidth: CGFloat
+        let resultHeight: CGFloat
+        if imageAspectRatio > targetAspectRatio {
+            // image is wider than target
+            
+            // ratio = width / height
+            // width = ratio * height
+            // height = width / ratio
+            
+            resultHeight = imageHeight
+            resultWidth = resultHeight * targetAspectRatio
+        } else {
+            // target is wider than image
+            
+            resultWidth = imageWidth
+            resultHeight = resultWidth / targetAspectRatio
+        }
+        
+        let resultSize = CGSize(width: resultWidth, height: resultHeight)
+        let centerPoint = CGPoint(x: 0.5, y: 0.5)
+        let resultImage = image.kf.crop(to: resultSize, anchorOn: centerPoint)
+        
+        return resultImage
     }
 }
