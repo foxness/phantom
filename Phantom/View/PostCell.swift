@@ -17,7 +17,8 @@ class PostCell: UITableViewCell {
     private static let THUMBNAIL_TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
     private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 10
     private static let THUMBNAIL_TRANSITION_DURATION: TimeInterval = 0.5
-    private static let THUMBNAIL_GUARANTEED_PERIOD: TimeInterval = 3 * 24 * 60 * 60 // it expires 3 days after posting
+    private static let THUMBNAIL_GUARANTEED_PERIOD: TimeInterval = 3 * 24 * 60 * 60 // expires 3 days after posting
+    private static let THUMBNAIL_MAX_PERIOD: TimeInterval = 90 * 24 * 60 * 60 // don't wanna cache for more than 90 days
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -148,7 +149,10 @@ class PostCell: UITableViewCell {
         if postDate < now { // post is in the past
             return now + PostCell.THUMBNAIL_GUARANTEED_PERIOD // 3 days from now
         } else { // post is in the future
-            return postDate + PostCell.THUMBNAIL_GUARANTEED_PERIOD // 3 days after post
+            let expireDate = postDate + PostCell.THUMBNAIL_GUARANTEED_PERIOD // 3 days after post
+            let maxDate = now + PostCell.THUMBNAIL_MAX_PERIOD // 90 days from now
+            
+            return expireDate > maxDate ? maxDate : expireDate
         }
     }
 }
