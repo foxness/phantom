@@ -71,7 +71,10 @@ class PostCell: UITableViewCell {
         
         let options: KingfisherOptionsInfo = [
             .processor(processor),
-            .cacheSerializer(FormatIndicatedCacheSerializer.jpeg),
+            
+            // png because we need transparency because rounded corners are transparent
+            .cacheSerializer(FormatIndicatedCacheSerializer.png),
+            
             .scaleFactor(UIScreen.main.scale),
             .transition(transition),
             .diskCacheExpiration(.date(thumbnailExpirationDate))
