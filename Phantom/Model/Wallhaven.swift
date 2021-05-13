@@ -9,8 +9,21 @@
 import Foundation
 
 struct Wallhaven {
+    private static let WALLHAVEN_ID_GROUP = "whId"
+    
+    // indirect example: https://wallhaven.cc/w/q22885
+    // indirect regex: https://(wallhaven\.cc/w/|whvn\.cc/)(?<whId>\w+)
+    
+    private static let REGEX_INDIRECT = "https://(wallhaven\\.cc/w/|whvn\\.cc/)(?<\(WALLHAVEN_ID_GROUP)>\\w+)"
+    
+    // direct example: https://w.wallhaven.cc/full/q2/wallhaven-q22885.jpg
+    // direct regex: https://w\.wallhaven\.cc/full/\w+/wallhaven-(?<whId>\w+)\.\w+
+    
+    private static let REGEX_DIRECT = "https://w\\.wallhaven\\.cc/full/\\w+/wallhaven-(?<\(WALLHAVEN_ID_GROUP)>\\w+)\\.\\w+"
+    
     static func getThumbnailUrl(wallhavenUrl: String) -> String? {
-        guard let wallhavenId = getWallhavenId(wallhavenUrl: wallhavenUrl) else { return nil }
+        let regexes = [REGEX_INDIRECT, REGEX_DIRECT]
+        guard let wallhavenId = Helper.extractNamedGroup(WALLHAVEN_ID_GROUP, from: wallhavenUrl, using: regexes) else { return nil }
         
         let thumbnailUrl = "https://th.wallhaven.cc/lg/\(wallhavenId.prefix(2))/\(wallhavenId).jpg"
         return thumbnailUrl
@@ -48,49 +61,11 @@ struct Wallhaven {
     }
     
     static func isIndirectUrl(_ url: String) -> Bool {
-        return matchIndirectUrl(url) != nil
+        return try! url.matchesRegex(REGEX_INDIRECT)
     }
     
     static func isDirectUrl(_ url: String) -> Bool {
-        return matchDirectUrl(url) != nil
-    }
-    
-    private static func getWallhavenId(wallhavenUrl: String) -> String? {
-        var possibleMatch: NSTextCheckingResult? = nil
-        if let indirectMatch = matchIndirectUrl(wallhavenUrl) {
-            possibleMatch = indirectMatch
-        } else if let directMatch = matchDirectUrl(wallhavenUrl) {
-            possibleMatch = directMatch
-        }
-        
-        guard let match = possibleMatch else { return nil }
-        
-        let range = match.range(withName: "whId")
-        let wallhavenId = String(wallhavenUrl[Range(range, in: wallhavenUrl)!])
-        
-        return wallhavenId
-    }
-    
-    private static func matchIndirectUrl(_ url: String) -> NSTextCheckingResult? {
-        // indirect: https://wallhaven.cc/w/q22885
-        // regex: https://(wallhaven\.cc/w/|whvn\.cc/)(?<whId>\w+)
-        
-        let indirectRegex = "https://(wallhaven\\.cc/w/|whvn\\.cc/)(?<whId>\\w+)" // must have whId named capture group
-        
-        let regex = NSRegularExpression(indirectRegex)
-        let match = regex.getMatch(url)
-        return match
-    }
-    
-    private static func matchDirectUrl(_ url: String) -> NSTextCheckingResult? {
-        // direct: https://w.wallhaven.cc/full/q2/wallhaven-q22885.jpg
-        // regex: https://w\.wallhaven\.cc/full/\w+/wallhaven-(?<whId>\w+)\.\w+
-        
-        let directRegex = "https://w\\.wallhaven\\.cc/full/\\w+/wallhaven-(?<whId>\\w+)\\.\\w+" // must have whId named capture group
-        
-        let regex = NSRegularExpression(directRegex)
-        let match = regex.getMatch(url)
-        return match
+        return try! url.matchesRegex(REGEX_DIRECT)
     }
     
     private static func getDirectUrlParams(url: URL) -> Requests.GetParams {

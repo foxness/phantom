@@ -9,6 +9,8 @@
 import UIKit
 import Kingfisher
 
+// todo: add custom kingfisher image cache to avoid calculating wallhaven & imgur thumbnail urls?
+
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     
@@ -50,7 +52,7 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post) {
-        if let imageUrl = PostCell.getImageUrl(from: post) {
+        if let imageUrl = PostCell.getThumbnailUrl(from: post) {
             setThumbnail(for: post, with: imageUrl)
         } else {
             setPlaceholder(for: post)
@@ -98,14 +100,16 @@ class PostCell: UITableViewCell {
         contentView.backgroundColor = bg
     }
     
-    private static func getImageUrl(from post: Post) -> URL? {
+    private static func getThumbnailUrl(from post: Post) -> URL? {
         guard post.type == .link, let postUrl = post.url else { return nil }
         
-        var url: String? = nil
-        if let wallhavenThumbnailUrl = Wallhaven.getThumbnailUrl(wallhavenUrl: postUrl) {
-            url = wallhavenThumbnailUrl
+        let url: String?
+        if let thumbnailUrl = PostCell.getThumbnailUrl(from: postUrl) {
+            url = thumbnailUrl
         } else if Helper.isImageUrl(postUrl) {
             url = postUrl
+        } else {
+            url = nil
         }
         
         if let url = url, let imageUrl = URL(string: url) {
@@ -113,6 +117,16 @@ class PostCell: UITableViewCell {
         }
         
         return nil
+    }
+    
+    private static func getThumbnailUrl(from url: String) -> String? {
+        if let imgurUrl = Imgur.getThumbnailUrl(from: url) {
+            return imgurUrl
+        } else if let wallhavenUrl = Wallhaven.getThumbnailUrl(wallhavenUrl: url) {
+            return wallhavenUrl
+        } else {
+            return nil
+        }
     }
     
     private static func getPlaceholder(for type: Post.PostType) -> UIImage {

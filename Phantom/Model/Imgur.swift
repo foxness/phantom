@@ -310,4 +310,27 @@ class Imgur {
     private static func getFixedImgurResponse(url: URL) -> URL {
         return URL(string: url.absoluteString.replacingOccurrences(of: "#", with: "&"))! // imgur has weird queries
     }
+    
+    // MARK: - Thumbnail calculator methods
+    
+    static func getThumbnailUrl(from imgurUrl: String) -> String? {
+        let imgurIdGroup = "imgurId"
+        let thumbnailSize = "m" // there's "s", "m", and "l"
+        
+        // indirect example: https://imgur.com/NeGReDX
+        // indirect regex: https://imgur\.com/(?<imgurId>\w+)
+        
+        let indirectRegex = "https://imgur\\.com/(?<\(imgurIdGroup)>\\w+)"
+        
+        // direct example: https://i.imgur.com/NeGReDX.png
+        // direct regex: https://i\.imgur\.com/(?<imgurId>\w+)\.\w+
+        
+        let directRegex = "https://i\\.imgur\\.com/(?<\(imgurIdGroup)>\\w+)\\.\\w+"
+        
+        let regexes = [indirectRegex, directRegex]
+        guard let imgurId = Helper.extractNamedGroup(imgurIdGroup, from: imgurUrl, using: regexes) else { return nil }
+        
+        let thumbnailUrl = "https://i.imgur.com/\(imgurId)\(thumbnailSize).jpg"
+        return thumbnailUrl
+    }
 }
