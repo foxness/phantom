@@ -13,7 +13,7 @@ class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     
     private static let THUMBNAIL_TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
-    private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 5
+    private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 10
     private static let THUMBNAIL_TRANSITION_DURATION: TimeInterval = 0.5
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -67,23 +67,23 @@ class PostCell: UITableViewCell {
             .processor(processor),
             .cacheSerializer(FormatIndicatedCacheSerializer.jpeg),
             .scaleFactor(UIScreen.main.scale),
-            .transition(.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)),
-            .forceRefresh
+            .transition(.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION))
+//            ,.forceRefresh
         ]
         
         thumbnailView.kf.indicatorType = .activity
-        thumbnailView.kf.setImage(with: imageUrl, placeholder: placeholder, options: options) {
-            result in
-            switch result {
-            case .success(let value):
-                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("Job failed: \(error.localizedDescription)")
-            }
+        thumbnailView.kf.setImage(with: imageUrl, placeholder: placeholder, options: options) { result in
+//            switch result {
+//            case .success(let value):
+//                print("Task done for: \(value.source.url?.absoluteString ?? "")")
+//            case .failure(let error):
+//                print("Job failed: \(error.localizedDescription)")
+//            }
         }
     }
     
     private func setPlaceholder(for post: Post) {
+        thumbnailView.kf.cancelDownloadTask()
         thumbnailView.image = PostCell.getPlaceholder(for: post.type)
     }
     
