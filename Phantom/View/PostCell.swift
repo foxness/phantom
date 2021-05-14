@@ -15,6 +15,8 @@ class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     
     private static let THUMBNAIL_TEXT_POST_PLACEHOLDER = "thumbnail_text_post"
+    private static let THUMBNAIL_LINK_POST_PLACEHOLDER = "thumbnail_link_post"
+    
     private static let THUMBNAIL_CORNER_RADIUS: CGFloat = 10
     private static let THUMBNAIL_TRANSITION_DURATION: TimeInterval = 0.5
     private static let THUMBNAIL_GUARANTEED_PERIOD: TimeInterval = 3 * 24 * 60 * 60 // expires 3 days after posting
@@ -96,9 +98,15 @@ class PostCell: UITableViewCell {
     }
     
     private func getPlaceholder(for type: Post.PostType) -> UIImage {
-        // todo: different placeholders for link & text type posts
+        let name: String
+        switch type {
+        case .text:
+            name = PostCell.THUMBNAIL_TEXT_POST_PLACEHOLDER
+        case .link:
+            name = PostCell.THUMBNAIL_LINK_POST_PLACEHOLDER
+        }
         
-        let placeholder = ImageProcessItem.image(UIImage(named: PostCell.THUMBNAIL_TEXT_POST_PLACEHOLDER)!)
+        let placeholder = ImageProcessItem.image(UIImage(named: name)!)
         let options = KingfisherParsedOptionsInfo([PostCell.getScaleFactorOption()])
         let processor = getThumbnailProcessor()
         let processedPlaceholder = processor.process(item: placeholder, options: options)!
