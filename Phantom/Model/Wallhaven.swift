@@ -21,7 +21,7 @@ struct Wallhaven {
     
     private static let REGEX_DIRECT = "https://w\\.wallhaven\\.cc/full/\\w+/wallhaven-(?<\(WALLHAVEN_ID_GROUP)>\\w+)\\.\\w+"
     
-    static func getThumbnailUrl(wallhavenUrl: String) -> String? {
+    static func calculateThumbnailUrl(from wallhavenUrl: String) -> String? {
         let regexes = [REGEX_INDIRECT, REGEX_DIRECT]
         guard let wallhavenId = Helper.extractNamedGroup(WALLHAVEN_ID_GROUP, from: wallhavenUrl, using: regexes) else { return nil }
         

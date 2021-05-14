@@ -313,7 +313,7 @@ class Imgur {
     
     // MARK: - Thumbnail calculator methods
     
-    static func getThumbnailUrl(from imgurUrl: String) -> String? {
+    static func calculateThumbnailUrl(from imgurUrl: String) -> String? {
         let imgurIdGroup = "imgurId"
         let thumbnailSize = "m" // there's "s", "m", and "l"
         

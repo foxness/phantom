@@ -27,6 +27,8 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var thumbnailView: UIImageView!
     @IBOutlet weak var dateLabel: UILabel!
     
+    private let thumbnailResolver: ThumbnailResolver = .instance
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -55,10 +57,16 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post) {
-        if let imageUrl = PostCell.getThumbnailUrl(from: post) {
-            setThumbnail(for: post, with: imageUrl)
-        } else {
-            setPlaceholder(for: post)
+        getThumbnailUrl(from: post) { [weak self] thumbnailUrl in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                if let thumbnailUrl = thumbnailUrl {
+                    self.setThumbnail(for: post, with: thumbnailUrl)
+                } else {
+                    self.setPlaceholder(for: post)
+                }
+            }
         }
     }
     
@@ -133,32 +141,27 @@ class PostCell: UITableViewCell {
         return KingfisherOptionsInfoItem.scaleFactor(UIScreen.main.scale)
     }
     
-    private static func getThumbnailUrl(from post: Post) -> URL? {
-        guard post.type == .link, let postUrl = post.url else { return nil }
-        
-        let url: String?
-        if let thumbnailUrl = PostCell.getThumbnailUrl(from: postUrl) {
-            url = thumbnailUrl
-        } else if Helper.isImageUrl(postUrl) {
-            url = postUrl
-        } else {
-            url = nil
+    private func getThumbnailUrl(from post: Post, callback: @escaping (URL?) -> Void) {
+        guard post.type == .link, let postUrl = post.url else {
+            callback(nil)
+            return
         }
         
-        if let url = url, let imageUrl = URL(string: url) {
-            return imageUrl
-        }
-        
-        return nil
-    }
-    
-    private static func getThumbnailUrl(from url: String) -> String? {
-        if let imgurUrl = Imgur.getThumbnailUrl(from: url) {
-            return imgurUrl
-        } else if let wallhavenUrl = Wallhaven.getThumbnailUrl(wallhavenUrl: url) {
-            return wallhavenUrl
-        } else {
-            return nil
+        thumbnailResolver.resolveThumbnailUrl(with: postUrl) { thumbnailUrl in
+            let url: String?
+            if let thumbnailUrl = thumbnailUrl {
+                url = thumbnailUrl
+            } else if Helper.isImageUrl(postUrl) {
+                url = postUrl
+            } else {
+                url = nil
+            }
+            
+            if let url = url, let imageUrl = URL(string: url) {
+                callback(imageUrl)
+            } else {
+                callback(nil)
+            }
         }
     }
     

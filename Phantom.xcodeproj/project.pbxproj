@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */; };
 		571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */; };
 		5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */; };
 		5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailResolver.swift; sourceTree = "<group>"; };
 		571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuDelegate.swift; sourceTree = "<group>"; };
 		5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitterMiddleware.swift; sourceTree = "<group>"; };
 		5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallhavenMiddleware.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
+				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
+				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,
 				575D7877264C112000173E7A /* Wallhaven.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
