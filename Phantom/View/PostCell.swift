@@ -61,24 +61,19 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post, with imageUrl: URL) {
-        let placeholder = PostCell.getPlaceholder(for: post.type)
+        let placeholder = getPlaceholder(for: post.type)
         let transition = ImageTransition.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)
-        let thumbnailExpirationDate = PostCell.getThumbnailExpirationDate(postDate: post.date)
-        
-        let thumbnailSize = thumbnailView.bounds.size
-        let processor = AspectCroppingImageProcessor(aspectRatio: thumbnailSize)
-            |> DownsamplingImageProcessor(size: thumbnailSize)
-            |> RoundCornerImageProcessor(cornerRadius: PostCell.THUMBNAIL_CORNER_RADIUS)
+        let thumbnailExpiration = StorageExpiration.date(PostCell.getThumbnailExpirationDate(postDate: post.date))
+        let processor = getThumbnailProcessor()
+        let cacheSerializer = FormatIndicatedCacheSerializer.png // png because we need transparency because rounded corners are transparent
+        let scaleFactorOption = PostCell.getScaleFactorOption()
         
         let options: KingfisherOptionsInfo = [
             .processor(processor),
-            
-            // png because we need transparency because rounded corners are transparent
-            .cacheSerializer(FormatIndicatedCacheSerializer.png),
-            
-            .scaleFactor(UIScreen.main.scale),
+            .cacheSerializer(cacheSerializer),
             .transition(transition),
-            .diskCacheExpiration(.date(thumbnailExpirationDate))
+            .diskCacheExpiration(thumbnailExpiration),
+            scaleFactorOption
 //            ,.forceRefresh
         ]
         
@@ -95,13 +90,39 @@ class PostCell: UITableViewCell {
     
     private func setPlaceholder(for post: Post) {
         thumbnailView.kf.cancelDownloadTask()
-        thumbnailView.image = PostCell.getPlaceholder(for: post.type)
+        
+        let placeholder = getPlaceholder(for: post.type)
+        thumbnailView.image = placeholder
+    }
+    
+    private func getPlaceholder(for type: Post.PostType) -> UIImage {
+        // todo: different placeholders for link & text type posts
+        
+        let placeholder = ImageProcessItem.image(UIImage(named: PostCell.THUMBNAIL_TEXT_POST_PLACEHOLDER)!)
+        let options = KingfisherParsedOptionsInfo([PostCell.getScaleFactorOption()])
+        let processor = getThumbnailProcessor()
+        let processedPlaceholder = processor.process(item: placeholder, options: options)!
+        
+        return processedPlaceholder
     }
     
     private func setBackground(for post: Post) {
         let overdue = post.date < Date()
         let bg: UIColor = overdue ? .secondarySystemBackground : .systemBackground
         contentView.backgroundColor = bg
+    }
+    
+    private func getThumbnailProcessor() -> ImageProcessor {
+        let thumbnailSize = thumbnailView.bounds.size
+        let processor = AspectCroppingImageProcessor(aspectRatio: thumbnailSize)
+            |> DownsamplingImageProcessor(size: thumbnailSize)
+            |> RoundCornerImageProcessor(cornerRadius: PostCell.THUMBNAIL_CORNER_RADIUS)
+        
+        return processor
+    }
+    
+    private static func getScaleFactorOption() -> KingfisherOptionsInfoItem {
+        return KingfisherOptionsInfoItem.scaleFactor(UIScreen.main.scale)
     }
     
     private static func getThumbnailUrl(from post: Post) -> URL? {
@@ -131,11 +152,6 @@ class PostCell: UITableViewCell {
         } else {
             return nil
         }
-    }
-    
-    private static func getPlaceholder(for type: Post.PostType) -> UIImage {
-        // todo: different placeholders for link & text type posts
-        return UIImage(named: PostCell.THUMBNAIL_TEXT_POST_PLACEHOLDER)!
     }
     
     private static func dateToString(_ date: Date) -> String { // "in X hours"
