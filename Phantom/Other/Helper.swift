@@ -67,6 +67,20 @@ struct Helper {
     static func isImageUrl(_ url: String) -> Bool {
         return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
     }
+    
+    static func extractNamedGroup(_ namedGroup: String, from string: String, using regexes: [String]) -> String? {
+        for regex in regexes {
+            let re = NSRegularExpression(regex)
+            if let match = re.getMatch(string) {
+                let range = match.range(withName: namedGroup)
+                let extracted = String(string[Range(range, in: string)!])
+                
+                return extracted
+            }
+        }
+        
+        return nil
+    }
 }
 
 enum ApiError: Error {

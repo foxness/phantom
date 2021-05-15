@@ -278,7 +278,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         let cell = tableView.dequeueReusableCell(withIdentifier: PostCell.IDENTIFIER, for: indexPath) as! PostCell
         let post = presenter.getPost(at: indexPath.row)
         
-        cell.set(post: post)
+        cell.setPost(post)
         return cell
     }
 

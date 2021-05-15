@@ -11,6 +11,7 @@ import Foundation
 // entirely UserDefaults-backed
 class Database {
     private static let KEY_POSTS = "posts"
+    private static let KEY_THUMBNAIL_RESOLVER_CACHE = "thumbnailResolverCache"
     private static let KEY_REDDIT_AUTH = "reddit_auth"
     private static let KEY_IMGUR_AUTH = "imgur_auth"
     private static let KEY_INTRODUCTION_SHOWN = "introduction_shown"
@@ -28,6 +29,7 @@ class Database {
     @UserDefaultsBacked(key: Database.KEY_WALLPAPER_MODE, defaultValue: false) private var internalWallpaperMode: Bool
     
     @UserDefaultsBacked(key: Database.KEY_POSTS) private var internalPosts: String?
+    @UserDefaultsBacked(key: Database.KEY_THUMBNAIL_RESOLVER_CACHE) private var internalThumbnailResolverCache: String?
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -47,6 +49,11 @@ class Database {
     var wallpaperMode: Bool {
         get { internalWallpaperMode }
         set { internalWallpaperMode = newValue }
+    }
+    
+    var thumbnailResolverCache: [String: ThumbnailResolver.ThumbnailUrl]? {
+        get { deserializeThumbnailResolverCache(internalThumbnailResolverCache) }
+        set { internalThumbnailResolverCache = serializeThumbnailResolverCache(newValue) }
     }
     
     var posts: [Post] = []
@@ -79,6 +86,7 @@ class Database {
         imgurAuth = nil
         introductionShown = false
         wallpaperMode = false
+        thumbnailResolverCache = nil
         
         posts = []
         savePosts()
@@ -146,6 +154,24 @@ class Database {
         let imgurAuth = try! decoder.decode(Imgur.AuthParams.self, from: data)
         
         return imgurAuth
+    }
+    
+    private func serializeThumbnailResolverCache(_ auth: [String: ThumbnailResolver.ThumbnailUrl]?) -> String? {
+        guard let auth = auth else { return nil }
+        
+        let data = try! encoder.encode(auth)
+        let serialized = data.base64EncodedString()
+        
+        return serialized
+    }
+    
+    private func deserializeThumbnailResolverCache(_ serialized: String?) -> [String: ThumbnailResolver.ThumbnailUrl]? {
+        guard let serialized = serialized else { return nil }
+        
+        let data = Data(base64Encoded: serialized)!
+        let cache = try! decoder.decode([String: ThumbnailResolver.ThumbnailUrl].self, from: data)
+        
+        return cache
     }
 }
 

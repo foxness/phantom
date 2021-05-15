@@ -3,13 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */; };
 		571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */; };
 		5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */; };
 		5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */; };
+		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
+		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -47,9 +50,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailResolver.swift; sourceTree = "<group>"; };
 		571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuDelegate.swift; sourceTree = "<group>"; };
 		5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitterMiddleware.swift; sourceTree = "<group>"; };
 		5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallhavenMiddleware.swift; sourceTree = "<group>"; };
+		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -93,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				575D787A264C264800173E7A /* Kingfisher in Frameworks */,
 				71C031C724FA6FF400D6E19F /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,10 +177,12 @@
 				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
 				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
+				575D7876264C112000173E7A /* Wallhaven.swift */,
 				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
+				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -218,6 +226,7 @@
 			);
 			name = Phantom;
 			packageProductDependencies = (
+				575D7879264C264800173E7A /* Kingfisher */,
 			);
 			productName = Phantom;
 			productReference = 71C031AE24FA6B5600D6E19F /* Phantom.app */;
@@ -248,6 +257,7 @@
 			);
 			mainGroup = 71C031A524FA6B5600D6E19F;
 			packageReferences = (
+				575D7878264C264800173E7A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 71C031AF24FA6B5600D6E19F /* Products */;
 			projectDirPath = "";
@@ -300,6 +310,8 @@
 				5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
+				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,
+				575D7877264C112000173E7A /* Wallhaven.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
@@ -512,6 +524,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		575D7878264C264800173E7A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		575D7879264C264800173E7A /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 575D7878264C264800173E7A /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 71C031A624FA6B5600D6E19F /* Project object */;
 }
