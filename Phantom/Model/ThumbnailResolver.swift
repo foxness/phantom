@@ -77,6 +77,13 @@ class ThumbnailResolver {
         }
     }
     
+    func removeCached(url: String) {
+        cacheQueue.sync(flags: .barrier) {
+            unsafeCache.removeValue(forKey: url)
+            return // does nothing but remove that warning. still good because shows intention
+        }
+    }
+    
     private func getCached(key: String) -> ThumbnailUrl? {
         return cacheQueue.sync { unsafeCache[key] }
     }

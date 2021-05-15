@@ -311,7 +311,14 @@ class PostTablePresenter {
     func postEdited(_ post: Post) {
         if let index = posts.firstIndex(where: { $0.id == post.id }) {
             Log.p("user edited a post")
+            
             PostNotifier.notifyUser(about: post)
+            
+            let uneditedPost = posts[index]
+            if uneditedPost.url != post.url, let uneditedPostUrl = uneditedPost.url {
+                Log.p("removed cached url", uneditedPostUrl)
+                thumbnailResolver.removeCached(url: uneditedPostUrl)
+            }
             
             posts[index] = post
             sortPosts()
@@ -403,6 +410,14 @@ class PostTablePresenter {
         
         if cancelNotify {
             indicesToDelete.forEach { PostNotifier.cancel(for: posts[$0]) }
+        }
+        
+        for indexToDelete in indicesToDelete {
+            let postToDelete = posts[indexToDelete]
+            if postToDelete.type == .link, let postUrl = postToDelete.url {
+                Log.p("removed cached url after deletion", postUrl)
+                thumbnailResolver.removeCached(url: postUrl)
+            }
         }
         
         posts.remove(at: indicesToDelete)
