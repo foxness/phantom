@@ -106,14 +106,46 @@ class ThumbnailResolver {
     }
     
     private static func calculateThumbnailUrl(from url: String, callback: @escaping (ThumbnailUrl) -> Void) {
-        DispatchQueue.global(qos: .userInteractive).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             if let imgurUrl = Imgur.calculateThumbnailUrl(from: url) {
                 callback(.found(url: imgurUrl))
             } else if let wallhavenUrl = Wallhaven.calculateThumbnailUrl(from: url) {
                 callback(.found(url: wallhavenUrl))
             } else {
-                callback(.calculatedNone)
+                calculateGenericThumbnailUrl(from: url, callback: callback)
             }
         }
+    }
+    
+    private static func calculateGenericThumbnailUrl(from url: String, callback: @escaping (ThumbnailUrl) -> Void) {
+        guard !Helper.isImageUrl(url) else {
+            Log.p("none because it's img url", url)
+            callback(.calculatedNone)
+            return
+        }
+        
+        let request = "generic thumbnail url"
+        
+        let params: Requests.GetParams = (url: URL(string: url)!, auth: nil)
+        let (data, response, error) = Requests.synchronousGet(with: params)
+        
+        guard let goodData = try? Helper.ensureGoodResponse(data: data, response: response, error: error, request: request),
+              let rawHtml = String(data: goodData, encoding: .utf8),
+              let thumbnailUrl = parseThumbnailUrl(rawHtml: rawHtml)
+        else {
+            Log.p("none because idk", url)
+            callback(.calculatedNone)
+            return
+        }
+        
+        callback(.found(url: thumbnailUrl))
+    }
+    
+    private static func parseThumbnailUrl(rawHtml: String) -> String? {
+        let startKey = " property=\"og:image\" content=\"" // "<meta property=\"og:image\" content=\""
+        let endKey = "\""
+        
+        let thumbnailUrl = rawHtml.findMiddleKey(startKey: startKey, endKey: endKey)
+        return thumbnailUrl
     }
 }

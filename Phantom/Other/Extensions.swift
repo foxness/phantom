@@ -138,6 +138,17 @@ extension String {
         let matches = regex.matches(lhs)
         return matches
     }
+    
+    func findMiddleKey(startKey: String, endKey: String) -> String? {
+        guard let start = self.range(of: startKey)?.upperBound,
+              let end = self.range(of: endKey, options: [], range: start..<self.endIndex , locale: nil)?.lowerBound
+        else {
+            return nil
+        }
+        
+        let found = String(self[start..<end])
+        return found
+    }
 }
 
 extension UIView {

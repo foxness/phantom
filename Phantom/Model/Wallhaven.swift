@@ -32,7 +32,7 @@ struct Wallhaven {
     static func getDirectUrl(indirectWallhavenUrl: URL) throws -> String {
         let request = "wallhaven direct url"
         
-        let params = Wallhaven.getDirectUrlParams(url: indirectWallhavenUrl)
+        let params: Requests.GetParams = (url: indirectWallhavenUrl, auth: nil)
         let (data, response, error) = Requests.synchronousGet(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
@@ -50,13 +50,7 @@ struct Wallhaven {
         let startKey = "<img id=\"wallpaper\" src=\""
         let endKey = "\""
         
-        guard let start = rawHtml.range(of: startKey)?.upperBound,
-              let end = rawHtml.range(of: endKey, options: [], range: start..<rawHtml.endIndex , locale: nil)?.lowerBound
-        else {
-            return nil
-        }
-        
-        let directUrl = String(rawHtml[start..<end])
+        let directUrl = rawHtml.findMiddleKey(startKey: startKey, endKey: endKey)
         return directUrl
     }
     
@@ -66,9 +60,5 @@ struct Wallhaven {
     
     static func isDirectUrl(_ url: String) -> Bool {
         return try! url.matchesRegex(REGEX_DIRECT)
-    }
-    
-    private static func getDirectUrlParams(url: URL) -> Requests.GetParams {
-        return (url: url, auth: nil)
     }
 }

@@ -57,6 +57,9 @@ class PostCell: UITableViewCell {
     }
     
     private func setThumbnail(for post: Post) {
+        thumbnailView.kf.cancelDownloadTask()
+        
+//        setPlaceholder(for: post)
         getThumbnailUrl(from: post) { [weak self] thumbnailUrl in
             guard let self = self else { return }
             
@@ -99,8 +102,6 @@ class PostCell: UITableViewCell {
     }
     
     private func setPlaceholder(for post: Post) {
-        thumbnailView.kf.cancelDownloadTask()
-        
         let placeholder = getPlaceholder(for: post.type)
         thumbnailView.image = placeholder
     }
