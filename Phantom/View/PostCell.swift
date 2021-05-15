@@ -29,6 +29,8 @@ class PostCell: UITableViewCell {
     
     private let thumbnailResolver: ThumbnailResolver = .instance
     
+    private var resolutionTaskId: String?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -78,8 +80,18 @@ class PostCell: UITableViewCell {
         setPlaceholder(for: post) // set placeholder while we're waiting. it doesn't have kf-style animations but still
         
         let postUrl = post.url!
+        
+        // taskId is to ensure it is still the same post cell when the thumbnail is resolved
+        // the post cell might be hosting a different post if the user is scrolling fast
+        let taskId = post.id.uuidString // I this I can also make it Helper.getRandomState()
+        resolutionTaskId = taskId
         thumbnailResolver.resolveThumbnailUrl(with: postUrl) { [weak self] thumbnailUrl in
-            guard let self = self else { return }
+            guard let self = self, self.resolutionTaskId == taskId else {
+                self?.thumbnailResolver.removeCached(url: postUrl) // I'm like 99% sure this won't result in a deadlock
+                return
+            }
+            
+            self.resolutionTaskId = nil
             
             let finalUrl: String?
             if let thumbnailUrl = thumbnailUrl {
@@ -118,7 +130,7 @@ class PostCell: UITableViewCell {
             .transition(transition),
             .diskCacheExpiration(thumbnailExpiration),
             scaleFactorOption
-            ,.forceRefresh
+//            ,.forceRefresh
         ]
         
         thumbnailView.kf.indicatorType = .activity
