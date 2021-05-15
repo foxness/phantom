@@ -63,17 +63,9 @@ class ThumbnailResolver {
     private init() { }
     
     func resolveThumbnailUrl(with url: String, callback: @escaping (String?) -> Void) {
-        let key = url
-        
-        if let cached = getCached(key: key) {
-            Log.p("found in cache, key: \(key), value: \(cached)")
-            callback(ThumbnailResolver.simplifyThumbnailUrl(cached))
-        } else {
-            Log.p("didn't find in cache, key: \(key)")
-            ThumbnailResolver.calculateThumbnailUrl(from: url) { [self] calculated in
-                setCached(key: key, value: calculated)
-                callback(ThumbnailResolver.simplifyThumbnailUrl(calculated))
-            }
+        ThumbnailResolver.calculateThumbnailUrl(from: url) { [self] calculated in
+            setCached(key: url, value: calculated)
+            callback(ThumbnailResolver.simplifyThumbnailUrl(calculated))
         }
     }
     
@@ -84,9 +76,19 @@ class ThumbnailResolver {
         }
     }
     
-    private func getCached(key: String) -> ThumbnailUrl? {
-        return cacheQueue.sync { unsafeCache[key] }
+    func isCached(url: String) -> Bool {
+        return cacheQueue.sync { unsafeCache.keys.contains(url) }
     }
+    
+    func getCached(key: String) -> String? {
+        let url = cacheQueue.sync { unsafeCache[key] }
+        let simplified = ThumbnailResolver.simplifyThumbnailUrl(url)
+        return simplified
+    }
+    
+//    private func getCachedComplex(key: String) -> ThumbnailUrl? {
+//        return cacheQueue.sync { unsafeCache[key] }
+//    }
     
     private func setCached(key: String, value: ThumbnailUrl) {
         cacheQueue.sync(flags: .barrier) {

@@ -86,6 +86,7 @@ class Database {
         imgurAuth = nil
         introductionShown = false
         wallpaperMode = false
+        thumbnailResolverCache = nil
         
         posts = []
         savePosts()

@@ -59,17 +59,48 @@ class PostCell: UITableViewCell {
     private func setThumbnail(for post: Post) {
         thumbnailView.kf.cancelDownloadTask()
         
-//        setPlaceholder(for: post)
-        getThumbnailUrl(from: post) { [weak self] thumbnailUrl in
+        guard post.type == .link, let postUrl = post.url else {
+            setPlaceholder(for: post)
+            return
+        }
+        
+        if thumbnailResolver.isCached(url: postUrl) {
+            let thumbnailUrl = thumbnailResolver.getCached(key: postUrl)
+            Log.p("found in cache, key: \(postUrl), value: \(thumbnailUrl ?? "calculatedNone")")
+            forceSetThumbnail(for: post, thumbnailUrl: thumbnailUrl)
+        } else {
+            Log.p("didn't find in cache, key: \(postUrl)")
+            setThumbnailForUncachedLinkPost(post)
+        }
+    }
+    
+    private func setThumbnailForUncachedLinkPost(_ post: Post) {
+        setPlaceholder(for: post) // set placeholder while we're waiting. it doesn't have kf-style animations but still
+        
+        let postUrl = post.url!
+        thumbnailResolver.resolveThumbnailUrl(with: postUrl) { [weak self] thumbnailUrl in
             guard let self = self else { return }
             
-            DispatchQueue.main.async {
-                if let thumbnailUrl = thumbnailUrl {
-                    self.setThumbnail(for: post, with: thumbnailUrl)
-                } else {
-                    self.setPlaceholder(for: post)
-                }
+            let finalUrl: String?
+            if let thumbnailUrl = thumbnailUrl {
+                finalUrl = thumbnailUrl
+            } else if Helper.isImageUrl(postUrl) {
+                finalUrl = postUrl
+            } else {
+                finalUrl = nil
             }
+            
+            DispatchQueue.main.async {
+                self.forceSetThumbnail(for: post, thumbnailUrl: finalUrl)
+            }
+        }
+    }
+    
+    private func forceSetThumbnail(for post: Post, thumbnailUrl: String?) {
+        if let thumbnailUrl = thumbnailUrl, let url = URL(string: thumbnailUrl) {
+            self.setThumbnail(for: post, with: url)
+        } else {
+            self.setPlaceholder(for: post)
         }
     }
     
@@ -87,18 +118,11 @@ class PostCell: UITableViewCell {
             .transition(transition),
             .diskCacheExpiration(thumbnailExpiration),
             scaleFactorOption
-//            ,.forceRefresh
+            ,.forceRefresh
         ]
         
         thumbnailView.kf.indicatorType = .activity
-        thumbnailView.kf.setImage(with: imageUrl, placeholder: placeholder, options: options) { result in
-//            switch result {
-//            case .success(let value):
-//                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-//            case .failure(let error):
-//                print("Job failed: \(error.localizedDescription)")
-//            }
-        }
+        thumbnailView.kf.setImage(with: imageUrl, placeholder: placeholder, options: options)
     }
     
     private func setPlaceholder(for post: Post) {
@@ -140,30 +164,6 @@ class PostCell: UITableViewCell {
     
     private static func getScaleFactorOption() -> KingfisherOptionsInfoItem {
         return KingfisherOptionsInfoItem.scaleFactor(UIScreen.main.scale)
-    }
-    
-    private func getThumbnailUrl(from post: Post, callback: @escaping (URL?) -> Void) {
-        guard post.type == .link, let postUrl = post.url else {
-            callback(nil)
-            return
-        }
-        
-        thumbnailResolver.resolveThumbnailUrl(with: postUrl) { thumbnailUrl in
-            let url: String?
-            if let thumbnailUrl = thumbnailUrl {
-                url = thumbnailUrl
-            } else if Helper.isImageUrl(postUrl) {
-                url = postUrl
-            } else {
-                url = nil
-            }
-            
-            if let url = url, let imageUrl = URL(string: url) {
-                callback(imageUrl)
-            } else {
-                callback(nil)
-            }
-        }
     }
     
     private static func dateToString(_ date: Date) -> String { // "in X hours"
