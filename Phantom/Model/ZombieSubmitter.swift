@@ -71,14 +71,11 @@ struct ZombieSubmitter {
             Log.p("zombie: used existing reddit")
         }
         
-        submitter.submitPost(post, wallpaperMode: wallpaperMode) { url, error in
-            // todo: handle error !!1
-            
-            let success = url != nil
-            Log.p("success", success)
-            Log.p("url", url)
-            
-            if success {
+        submitter.submitPost(post, wallpaperMode: wallpaperMode) { result in
+            switch result {
+            case .success(let url):
+                Log.p("reddit url", url)
+                
                 self.database.posts.remove(at: postIndex)
                 self.database.savePosts()
                 
@@ -89,7 +86,11 @@ struct ZombieSubmitter {
                 
                 let posts = self.database.posts
                 PostNotifier.updateAppBadge(posts: posts)
-            } else {
+            case .failure(let apiError):
+                Log.p("got error", apiError)
+                
+                // todo: handle error !!1
+                
                 ZombieSubmitter.notifyZombieFailed(postId: id)
                 // todo: issue submission error user notification
             }

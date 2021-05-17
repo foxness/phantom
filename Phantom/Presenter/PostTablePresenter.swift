@@ -106,16 +106,17 @@ class PostTablePresenter {
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
-        submitter.submitPost(post, wallpaperMode: wallpaperMode) { url, error in
-            // todo: handle error !!1
-            
-            Log.p("url: \(String(describing: url))")
-            
+        submitter.submitPost(post, wallpaperMode: wallpaperMode) { result in
             DispatchQueue.main.async {
-                let success = url != nil
-                if success {
+                switch result {
+                case .success(let url):
+                    Log.p("reddit url", url)
+                    
                     self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                } else {
+                case .failure(let apiError):
+                    Log.p("got error", apiError)
+                    
+                    // todo: handle error !!1
                     PostNotifier.notifyUser(about: post)
                     // todo: notify user it's gone wrong
                 }

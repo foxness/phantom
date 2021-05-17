@@ -168,6 +168,7 @@
 		9693DCE92527736100A4A23E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				718181DB24FBEDF500059658 /* Post.swift */,
 				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
 				71614EF024FD195C00FA8B76 /* Database.swift */,
@@ -178,7 +179,6 @@
 				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
 				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
 				575D7876264C112000173E7A /* Wallhaven.swift */,
-				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,

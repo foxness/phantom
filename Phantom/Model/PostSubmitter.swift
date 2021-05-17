@@ -9,7 +9,7 @@
 import Foundation
 
 class PostSubmitter {
-    typealias SubmitCallback = (_ url: String?, _ error: Error?) -> Void
+    typealias SubmitCallback = (_ result: Result<String, ApiError>) -> Void
     
     private class PostSubmission: Operation {
         private let reddit: Reddit
@@ -105,12 +105,13 @@ class PostSubmitter {
             let middlewaredPost: Post
             do {
                 middlewaredPost = try executeMiddlewares(on: post)
-            } catch {
-//                let e = error
-//                fatalError()
-                Log.p("Unexpected error while middlewaring", error)
-                callback(nil, error)
+            } catch let e as ApiError {
+                Log.p("Unexpected error while middlewaring", e)
+                callback(.failure(e))
                 return
+            } catch {
+                let e = error // todo: handle this error too
+                fatalError()
             }
             
             guard !isCancelled else { return }
@@ -118,13 +119,16 @@ class PostSubmitter {
             let url: String
             do {
                 url = try submitPost(middlewaredPost)
-            } catch {
-                Log.p("Unexpected error while submitting", error)
-                callback(nil, error)
+            } catch let e as ApiError {
+                Log.p("Unexpected error while submitting", e)
+                callback(.failure(e))
                 return
+            } catch {
+                let e = error // todo: handle this error too
+                fatalError()
             }
             
-            callback(url, nil)
+            callback(.success(url))
         }
     }
     
