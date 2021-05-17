@@ -342,6 +342,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.updateViews()
     }
     
+    func showAlert(title: String, message: String) {
+        displayAlert(title: title, message: message)
+    }
+    
     // MARK: - Emitter methods
     
     func redditButtonPressed() {

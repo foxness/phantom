@@ -99,15 +99,17 @@ class PostTablePresenter {
         disableSubmissionBecauseMain = true
         
         let post = posts[postIndex]
-        PostNotifier.cancel(for: post)
+        PostNotifier.cancel(for: post) // todo: cancel notification only on successful submission
         
         disabledPostIdBecauseMain = post.id // make the post uneditable
         
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
-        submitter.submitPost(post, wallpaperMode: wallpaperMode) { result in
-            DispatchQueue.main.async {
+        submitter.submitPost(post, wallpaperMode: wallpaperMode) { [weak self] result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
                 switch result {
                 case .success(let url):
                     Log.p("reddit url", url)
@@ -119,6 +121,10 @@ class PostTablePresenter {
                     // todo: handle error !!1
                     PostNotifier.notifyUser(about: post)
                     // todo: notify user it's gone wrong
+                    
+                    let title = "An error has occurred"
+                    let message = "\(apiError)" // todo: do "\(apiError.localizedDescription)"
+                    self.viewDelegate?.showAlert(title: title, message: message)
                 }
                 
                 self.disabledPostIdBecauseMain = nil // make editable

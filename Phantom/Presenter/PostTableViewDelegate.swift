@@ -19,6 +19,7 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToBulkAdd()
     
     func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
+    func showAlert(title: String, message: String)
     
     func showSlideUpMenu()
     func updateSlideUpMenu(redditName: String?,  redditLoggedIn: Bool)
