@@ -20,6 +20,7 @@
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
 		57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C43512264AFB4B00226A24 /* DebugVariable.swift */; };
+		57C6352C26544FC90072D130 /* PhantomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6352B26544FC90072D130 /* PhantomError.swift */; };
 		57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DE8264074B200B10E75 /* BulkAddViewController.swift */; };
 		57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */; };
 		57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */; };
@@ -62,6 +63,7 @@
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
 		57C43512264AFB4B00226A24 /* DebugVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugVariable.swift; sourceTree = "<group>"; };
+		57C6352B26544FC90072D130 /* PhantomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomError.swift; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
 		57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddPresenter.swift; sourceTree = "<group>"; };
 		57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewDelegate.swift; sourceTree = "<group>"; };
@@ -127,8 +129,8 @@
 			isa = PBXGroup;
 			children = (
 				9693DCE92527736100A4A23E /* Model */,
-				9693DCE8252772D200A4A23E /* View */,
 				9693DCEA252773E400A4A23E /* Presenter */,
+				9693DCE8252772D200A4A23E /* View */,
 				9693DCEB252773FE00A4A23E /* Other */,
 				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				578358E0263C7E0E00320607 /* Helper.swift */,
+				57C6352B26544FC90072D130 /* PhantomError.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
 			);
 			path = Other;
@@ -288,6 +291,7 @@
 			files = (
 				57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */,
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
+				57C6352C26544FC90072D130 /* PhantomError.swift in Sources */,
 				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
 				57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */,
 				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,

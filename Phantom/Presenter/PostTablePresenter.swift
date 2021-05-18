@@ -99,7 +99,7 @@ class PostTablePresenter {
         disableSubmissionBecauseMain = true
         
         let post = posts[postIndex]
-        PostNotifier.cancel(for: post) // todo: cancel notification only on successful submission
+        PostNotifier.cancel(for: post)
         
         disabledPostIdBecauseMain = post.id // make the post uneditable
         
@@ -115,15 +115,15 @@ class PostTablePresenter {
                     Log.p("reddit url", url)
                     
                     self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                case .failure(let apiError):
-                    Log.p("got error", apiError)
+                case .failure(let phantomError):
+                    Log.p("got error", phantomError)
                     
                     // todo: handle error !!1
                     PostNotifier.notifyUser(about: post)
                     // todo: notify user it's gone wrong
                     
                     let title = "An error has occurred"
-                    let message = "\(apiError)" // todo: do "\(apiError.localizedDescription)"
+                    let message = "\(phantomError.localizedDescription)"
                     self.viewDelegate?.showAlert(title: title, message: message)
                 }
                 

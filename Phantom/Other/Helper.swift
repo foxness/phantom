@@ -41,11 +41,11 @@ struct Helper {
         let httpResponse = response as! HTTPURLResponse
         
         if let error = error {
-            throw ApiError.composeResponseHasErrorError(request: request, error: error, data: data, response: httpResponse)
+            throw PhantomError.responseHasError(request: request, error: error, data: data, response: httpResponse)
         }
         
         if !Requests.isResponseOk(httpResponse) || data == nil {
-            throw ApiError.composeBadResponseError(request: request, response: httpResponse, data: data)
+            throw PhantomError.badResponse(request: request, response: httpResponse, data: data)
         }
         
         return data!
@@ -58,7 +58,7 @@ struct Helper {
             json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             goodJson = json!
         } catch {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
         
         return goodJson
@@ -80,36 +80,5 @@ struct Helper {
         }
         
         return nil
-    }
-}
-
-enum ApiError: Error {
-    case responseHasError(request: String, message: String, error: Error, data: Data?, response: HTTPURLResponse?)
-    case badResponse(request: String, message: String, response: HTTPURLResponse, data: Data?)
-    case deserialization(request: String, raw: String)
-    
-    static func composeResponseHasErrorError(request: String, error: Error, data: Data?, response: HTTPURLResponse?) -> Error {
-        let message = "Error Localized Description: \(error.localizedDescription); Data String: \(ApiError.getDataString(data: data))"
-        return ApiError.responseHasError(request: request, message: message, error: error, data: data, response: response)
-    }
-    
-    static func composeBadResponseError(request: String, response: HTTPURLResponse, data: Data?) -> Error {
-        let message = "Data String: \(ApiError.getDataString(data: data))"
-        return ApiError.badResponse(request: request, message: message, response: response, data: data)
-    }
-    
-    private static func getDataString(data: Data?) -> String {
-        let dataString: String
-        if let data = data {
-            if let decoded = String(data: data, encoding: .utf8) {
-                dataString = decoded
-            } else {
-                dataString = String(describing: data)
-            }
-        } else {
-            dataString = "nil"
-        }
-        
-        return dataString
     }
 }

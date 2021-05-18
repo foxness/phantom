@@ -9,7 +9,7 @@
 import Foundation
 
 class PostSubmitter {
-    typealias SubmitCallback = (_ result: Result<String, ApiError>) -> Void
+    typealias SubmitCallback = (_ result: Result<String, PhantomError>) -> Void
     
     private class PostSubmission: Operation {
         private let reddit: Reddit
@@ -76,7 +76,7 @@ class PostSubmitter {
                 let postChanged = middlewared.changed
                 
                 if wallpaperMode && !postChanged {
-                    throw SubmitterError.noEffectMiddleware(middleware: String(describing: middleware))
+                    throw PhantomError.noEffectMiddleware(middleware: String(describing: middleware))
                 }
                 
                 // todo: handle imgur 10 MB error
@@ -105,7 +105,7 @@ class PostSubmitter {
             let middlewaredPost: Post
             do {
                 middlewaredPost = try executeMiddlewares(on: post)
-            } catch let e as ApiError {
+            } catch let e as PhantomError {
                 Log.p("Unexpected error while middlewaring", e)
                 callback(.failure(e))
                 return
@@ -119,7 +119,7 @@ class PostSubmitter {
             let url: String
             do {
                 url = try submitPost(middlewaredPost)
-            } catch let e as ApiError {
+            } catch let e as PhantomError {
                 Log.p("Unexpected error while submitting", e)
                 callback(.failure(e))
                 return
@@ -182,8 +182,4 @@ class PostSubmitter {
     func cancelEverything() {
         submitQueue.cancelAllOperations()
     }
-}
-
-enum SubmitterError: Error {
-    case noEffectMiddleware(middleware: String)
 }

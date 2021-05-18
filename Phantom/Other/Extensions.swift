@@ -157,6 +157,10 @@ extension String {
         let found = String(self[start..<end])
         return found
     }
+    
+    func trim() -> String {
+        return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 extension UIView {
@@ -173,17 +177,21 @@ extension UIView {
     }
 }
 
+//extension LocalizedError where Self: CustomStringConvertible {
+//   var errorDescription: String? { description }
+//}
+
 struct Log {
-    static func dp(_ string: String, _ obj: Any) {
-        debugPrint("!!! \(string.uppercased()): \(obj)")
-    }
-    
-    static func dp(_ string: String) {
-        debugPrint("!!! \(string.uppercased())")
-    }
+//    static func dp(_ string: String, _ obj: Any) {
+//        debugPrint("!!! \(string.uppercased()): \(obj)")
+//    }
+//
+//    static func dp(_ string: String) {
+//        debugPrint("!!! \(string.uppercased())")
+//    }
     
     static func p(_ string: String, _ obj: Any) {
-        print("!!! \(string.uppercased()): \(obj)")
+        print("!!! \(string.uppercased()): \(String(reflecting: obj))")
     }
     
     static func p(_ string: String) {

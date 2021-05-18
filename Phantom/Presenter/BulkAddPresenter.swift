@@ -65,7 +65,7 @@ class BulkAddPresenter { // todo: add paste button
     }
     
     private static func constructPosts(text: String) -> [BarePost]? {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.trim()
         let rawPosts = trimmed.components(separatedBy: "\n\n")
         
         guard !rawPosts.isEmpty else { return nil }

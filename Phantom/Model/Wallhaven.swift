@@ -42,7 +42,7 @@ struct Wallhaven {
             
             return directUrl
         } else {
-            throw ApiError.deserialization(request: request, raw: String(describing: String(data: goodData, encoding: .utf8)))
+            throw PhantomError.deserialization(request: request, raw: String(describing: String(data: goodData, encoding: .utf8)))
         }
     }
     

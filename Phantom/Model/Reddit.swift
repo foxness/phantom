@@ -230,7 +230,7 @@ class Reddit {
         guard let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
               let expiresIn = json[Symbols.EXPIRES_IN] as? Int
         else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
             
         let expirationDate = Helper.convertExpiresIn(expiresIn)
@@ -242,7 +242,7 @@ class Reddit {
               let refreshToken = json[Symbols.REFRESH_TOKEN] as? String,
               let expiresIn = json[Symbols.EXPIRES_IN] as? Int
         else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
         
         let expirationDate = Helper.convertExpiresIn(expiresIn)
@@ -254,7 +254,7 @@ class Reddit {
               let deeperData = jsonDeeper[Symbols.DATA] as? [String: Any],
               let postUrl = deeperData[Symbols.URL] as? String
         else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
             
         return postUrl
@@ -262,7 +262,7 @@ class Reddit {
     
     private static func deserializeIdentityResponse(json: [String: Any], request: String) throws -> String {
         guard let username = json[Symbols.NAME] as? String else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
             
         return username

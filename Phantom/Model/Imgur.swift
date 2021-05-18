@@ -208,7 +208,7 @@ class Imgur {
               let imageWidth = jsonData[Symbols.WIDTH] as? Int,
               let imageHeight = jsonData[Symbols.HEIGHT] as? Int
         else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
             
         let imgurImage = Image(url: imageUrl, width: imageWidth, height: imageHeight)
@@ -219,7 +219,7 @@ class Imgur {
         guard let accessToken = json[Symbols.ACCESS_TOKEN] as? String,
            let expiresIn = json[Symbols.EXPIRES_IN] as? Int
         else {
-            throw ApiError.deserialization(request: request, raw: String(describing: json))
+            throw PhantomError.deserialization(request: request, raw: String(describing: json))
         }
             
         let expirationDate = Helper.convertExpiresIn(expiresIn)
@@ -241,7 +241,7 @@ class Imgur {
               let expiresIn = Int(expiresInRaw)
         
         else {
-            throw ApiError.deserialization(request: "imgur auth url query", raw: String(describing: params))
+            throw PhantomError.deserialization(request: "imgur auth url query", raw: String(describing: params))
         }
         
         let accessTokenExpirationDate = Helper.convertExpiresIn(expiresIn)
