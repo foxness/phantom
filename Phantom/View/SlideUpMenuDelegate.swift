@@ -13,4 +13,5 @@ protocol SlideUpMenuDelegate: AnyObject {
     func imgurButtonPressed()
     func bulkAddButtonPressed()
     func wallpaperModeSwitched(on: Bool)
+    func wallhavenOnlySwitched(on: Bool)
 }

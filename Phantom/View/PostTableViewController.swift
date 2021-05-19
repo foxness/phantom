@@ -364,6 +364,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.wallpaperModeSwitched(on: on)
     }
     
+    func wallhavenOnlySwitched(on: Bool) {
+        presenter.wallhavenOnlySwitched(on: on)
+    }
+    
     @IBAction func moreButtonPressed(_ sender: Any) {
         presenter.moreButtonPressed()
     }

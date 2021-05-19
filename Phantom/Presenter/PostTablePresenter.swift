@@ -106,7 +106,10 @@ class PostTablePresenter {
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
-        submitter.submitPost(post, wallpaperMode: wallpaperMode) { [weak self] result in
+        let wallhavenOnly = database.wallhavenOnly
+        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, wallhavenOnly: wallhavenOnly)
+        
+        submitter.submitPost(post, with: submitParams) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
@@ -175,6 +178,10 @@ class PostTablePresenter {
     
     func wallpaperModeSwitched(on: Bool) {
         database.wallpaperMode = on
+    }
+    
+    func wallhavenOnlySwitched(on: Bool) {
+        database.wallhavenOnly = on
     }
     
     func moreButtonPressed() {

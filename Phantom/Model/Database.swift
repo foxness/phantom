@@ -16,6 +16,7 @@ class Database {
     private static let KEY_IMGUR_AUTH = "imgur_auth"
     private static let KEY_INTRODUCTION_SHOWN = "introduction_shown"
     private static let KEY_WALLPAPER_MODE = "wallpaper_mode"
+    private static let KEY_WALLHAVEN_ONLY = "wallhaven_only"
     
     static let instance = Database()
     
@@ -27,6 +28,7 @@ class Database {
     
     @UserDefaultsBacked(key: Database.KEY_INTRODUCTION_SHOWN, defaultValue: false) private var internalIntroductionShown: Bool
     @UserDefaultsBacked(key: Database.KEY_WALLPAPER_MODE, defaultValue: false) private var internalWallpaperMode: Bool
+    @UserDefaultsBacked(key: Database.KEY_WALLHAVEN_ONLY, defaultValue: false) private var internalWallhavenOnly: Bool
     
     @UserDefaultsBacked(key: Database.KEY_POSTS) private var internalPosts: String?
     @UserDefaultsBacked(key: Database.KEY_THUMBNAIL_RESOLVER_CACHE) private var internalThumbnailResolverCache: String?
@@ -47,6 +49,11 @@ class Database {
     }
     
     var wallpaperMode: Bool {
+        get { internalWallhavenOnly }
+        set { internalWallhavenOnly = newValue }
+    }
+    
+    var wallhavenOnly: Bool {
         get { internalWallpaperMode }
         set { internalWallpaperMode = newValue }
     }
@@ -86,6 +93,7 @@ class Database {
         imgurAuth = nil
         introductionShown = false
         wallpaperMode = false
+        wallhavenOnly = false
         thumbnailResolverCache = nil
         
         posts = []

@@ -11,48 +11,65 @@ import Foundation
 class PostSubmitter {
     typealias SubmitCallback = (_ result: Result<String, PhantomError>) -> Void
     
+    struct SubmitParams {
+        let wallpaperMode: Bool
+        let wallhavenOnly: Bool
+    }
+    
+    private struct RequiredMiddleware: SubmitterMiddleware {
+        let middleware: SubmitterMiddleware
+        let isRequired: Bool
+        
+        func transform(post: Post) throws -> (post: Post, changed: Bool) {
+            return try middleware.transform(post: post)
+        }
+    }
+    
     private class PostSubmission: Operation {
         private let reddit: Reddit
         private let post: Post
         private let callback: SubmitCallback
-        private let middlewares: [SubmitterMiddleware]
-        private let wallpaperMode: Bool
+        private let middlewares: [RequiredMiddleware]
+        private let submitParams: SubmitParams
         
         init(reddit: Reddit,
              database: Database,
-             wallpaperMode: Bool = false,
+             submitParams: SubmitParams,
              imgur: Imgur? = nil,
              callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = PostSubmission.getPost(database: database)
             self.callback = callback
-            self.wallpaperMode = wallpaperMode
-            self.middlewares = PostSubmission.getMiddlewares(wallpaperMode: wallpaperMode, imgur: imgur)
+            self.submitParams = submitParams
+            self.middlewares = PostSubmission.getMiddlewares(submitParams: submitParams, imgur: imgur)
         }
         
         init(reddit: Reddit,
              post: Post,
-             wallpaperMode: Bool = false,
+             submitParams: SubmitParams,
              imgur: Imgur? = nil,
              callback: @escaping SubmitCallback) {
             self.reddit = reddit
             self.post = post
             self.callback = callback
-            self.wallpaperMode = wallpaperMode
-            self.middlewares = PostSubmission.getMiddlewares(wallpaperMode: wallpaperMode, imgur: imgur)
+            self.submitParams = submitParams
+            self.middlewares = PostSubmission.getMiddlewares(submitParams: submitParams, imgur: imgur)
         }
         
-        private static func getMiddlewares(wallpaperMode: Bool, imgur: Imgur?) -> [SubmitterMiddleware] {
-            var mw = [SubmitterMiddleware]()
+        private static func getMiddlewares(submitParams: SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
+            var mw = [RequiredMiddleware]()
             
-            if wallpaperMode {
-                mw.append(WallhavenMiddleware())
-            }
+            // todo: allow user to submit indirect wallhaven links without
+            // automatically converting them to direct wallhaven links (aka "use wallhaven" setting)
+            let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: submitParams.wallhavenOnly)
+            mw.append(wallhavenMw)
             
             if let imgur = imgur {
-                mw.append(ImgurMiddleware(imgur, wallpaperMode: wallpaperMode))
-            } else if wallpaperMode {
-                fatalError("Imgur is required for wallpaper mode")
+                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: submitParams.wallpaperMode)
+                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: submitParams.wallpaperMode)
+                mw.append(imgurMw)
+            } else if submitParams.wallpaperMode {
+                fatalError("Imgur is required for wallpaper mode") // todo: make this scenario unreachable
             }
             
             return mw
@@ -75,8 +92,8 @@ class PostSubmitter {
                 middlewaredPost = middlewared.post
                 let postChanged = middlewared.changed
                 
-                if wallpaperMode && !postChanged {
-                    throw PhantomError.noEffectMiddleware(middleware: String(describing: middleware))
+                if middleware.isRequired && !postChanged {
+                    throw PhantomError.requiredMiddlewareNoEffect(middleware: String(describing: middleware.middleware))
                 }
                 
                 // todo: handle imgur 10 MB error
@@ -157,25 +174,25 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, wallpaperMode: Bool = false, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
+    func submitPost(_ post: Post, with submitParams: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, post: post, wallpaperMode: wallpaperMode, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, post: post, submitParams: submitParams, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
-    func submitPostInDatabase(_ database: Database, wallpaperMode: Bool = false, callback: @escaping SubmitCallback) {
+    func submitPostInDatabase(_ database: Database, with submitParams: SubmitParams, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, database: database, wallpaperMode: wallpaperMode, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, database: database, submitParams: submitParams, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
