@@ -24,7 +24,7 @@ protocol PostTableViewDelegate: AnyObject {
     func showSlideUpMenu()
     func updateSlideUpMenu(redditName: String?,  redditLoggedIn: Bool)
     func updateSlideUpMenu(imgurName: String?,  imgurLoggedIn: Bool)
-    func updateSlideUpMenu(wallpaperMode: Bool)
+    func updateSlideUpMenu(wallpaperMode: Bool, wallhavenOnly: Bool, directImageUpload: Bool)
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)

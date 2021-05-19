@@ -10,28 +10,32 @@ import Foundation
 
 // entirely UserDefaults-backed
 class Database {
-    private static let KEY_POSTS = "posts"
-    private static let KEY_THUMBNAIL_RESOLVER_CACHE = "thumbnailResolverCache"
-    private static let KEY_REDDIT_AUTH = "reddit_auth"
-    private static let KEY_IMGUR_AUTH = "imgur_auth"
-    private static let KEY_INTRODUCTION_SHOWN = "introduction_shown"
-    private static let KEY_WALLPAPER_MODE = "wallpaper_mode"
-    private static let KEY_WALLHAVEN_ONLY = "wallhaven_only"
+    private enum Key: String {
+        case posts
+        case thumbnailResolverCache
+        case reddit_auth // todo: switch to camelCase
+        case imgur_auth
+        case introduction_shown
+        case wallpaper_mode
+        case wallhaven_only
+        case direct_image_upload
+    }
     
     static let instance = Database()
     
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
-    @UserDefaultsBacked(key: Database.KEY_REDDIT_AUTH) private var internalRedditAuth: String?
-    @UserDefaultsBacked(key: Database.KEY_IMGUR_AUTH) private var internalImgurAuth: String?
+    @UserDefaultsBacked(key: Key.reddit_auth.rawValue) private var internalRedditAuth: String?
+    @UserDefaultsBacked(key: Key.imgur_auth.rawValue) private var internalImgurAuth: String?
     
-    @UserDefaultsBacked(key: Database.KEY_INTRODUCTION_SHOWN, defaultValue: false) private var internalIntroductionShown: Bool
-    @UserDefaultsBacked(key: Database.KEY_WALLPAPER_MODE, defaultValue: false) private var internalWallpaperMode: Bool
-    @UserDefaultsBacked(key: Database.KEY_WALLHAVEN_ONLY, defaultValue: false) private var internalWallhavenOnly: Bool
+    @UserDefaultsBacked(key: Key.introduction_shown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
+    @UserDefaultsBacked(key: Key.wallpaper_mode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
+    @UserDefaultsBacked(key: Key.wallhaven_only.rawValue, defaultValue: false) private var internalWallhavenOnly: Bool
+    @UserDefaultsBacked(key: Key.direct_image_upload.rawValue, defaultValue: false) private var internalDirectImageUpload: Bool
     
-    @UserDefaultsBacked(key: Database.KEY_POSTS) private var internalPosts: String?
-    @UserDefaultsBacked(key: Database.KEY_THUMBNAIL_RESOLVER_CACHE) private var internalThumbnailResolverCache: String?
+    @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
+    @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -56,6 +60,11 @@ class Database {
     var wallhavenOnly: Bool {
         get { internalWallpaperMode }
         set { internalWallpaperMode = newValue }
+    }
+    
+    var directImageUpload: Bool {
+        get { internalDirectImageUpload }
+        set { internalDirectImageUpload = newValue }
     }
     
     var thumbnailResolverCache: [String: ThumbnailResolver.ThumbnailUrl]? {
@@ -94,6 +103,7 @@ class Database {
         introductionShown = false
         wallpaperMode = false
         wallhavenOnly = false
+        directImageUpload = false
         thumbnailResolverCache = nil
         
         posts = []
