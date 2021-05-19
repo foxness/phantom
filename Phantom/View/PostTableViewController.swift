@@ -328,20 +328,20 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
         slideUpMenu.redditName = redditName
         slideUpMenu.redditLoggedIn = redditLoggedIn
-        slideUpMenu.updateViews()
+        slideUpMenu.updateRedditViews()
     }
     
     func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
         slideUpMenu.imgurName = imgurName
         slideUpMenu.imgurLoggedIn = imgurLoggedIn
-        slideUpMenu.updateViews()
+        slideUpMenu.updateImgurViews()
     }
     
     func updateSlideUpMenu(wallpaperMode: Bool, wallhavenOnly: Bool, directImageUpload: Bool) {
         slideUpMenu.wallpaperMode = wallpaperMode
         slideUpMenu.wallhavenOnly = wallhavenOnly
         slideUpMenu.directImageUpload = directImageUpload
-        slideUpMenu.updateViews()
+        slideUpMenu.updateSwitchViews()
     }
     
     func showAlert(title: String, message: String) {

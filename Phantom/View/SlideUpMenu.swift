@@ -59,16 +59,26 @@ class SlideUpMenu {
         prepareToShowViews()
     }
     
-    func updateViews() { // todo: separate into 3 and use in didSet of properties?
+    func updateViews() {
+        updateSwitchViews()
+        updateRedditViews()
+        updateImgurViews()
+    }
+    
+    func updateSwitchViews() {
         wallpaperModeSwitch.isOn = wallpaperMode
         wallhavenOnlySwitch.isOn = wallhavenOnly
         directImageUploadSwitch.isOn = directImageUpload
-        
+    }
+    
+    func updateRedditViews() {
         redditNameLabel.text = redditName
         
         let redditTitle = redditLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
         redditButton.setTitle(redditTitle, for: .normal)
-        
+    }
+    
+    func updateImgurViews() {
         imgurNameLabel.text = imgurName
         
         let imgurTitle = imgurLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
