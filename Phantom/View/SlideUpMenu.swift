@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 370
-    private static let FADE_ALPHA: CGFloat = 0.5
-    private static let FADE_WHITE: CGFloat = 0.2 // works for both light and dark modes
+    private static let MENUVIEW_HEIGHT: CGFloat = 400
+    private static let FADE_ALPHA: CGFloat = 0.6
+    private static let FADE_WHITE: CGFloat = 0 // works for both light and dark modes
     private static let ANIMATION_DURATION: TimeInterval = 0.3
     
     private static let TEXT_LOG_IN = "Log In"

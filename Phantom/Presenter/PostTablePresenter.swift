@@ -236,12 +236,10 @@ class PostTablePresenter {
     // MARK: - Scene lifecycle methods
     
     func sceneWillEnterForeground() {
-        Log.p("scene will enter foreground")
         sceneInForeground = true
     }
     
     func sceneDidActivate() {
-        Log.p("scene did activate")
         sceneActivated = true
         
         if !postIdsToBeDeleted.isEmpty { // todo: move this to sceneWillEnterForeground!?
@@ -251,14 +249,12 @@ class PostTablePresenter {
     }
     
     func sceneWillDeactivate() {
-        Log.p("scene will deactivate")
         sceneActivated = false
         
         saveData()
     }
     
     func sceneDidEnterBackground() {
-        Log.p("scene did enter background")
         sceneInForeground = false
         
         updateAppBadge()
@@ -394,7 +390,6 @@ class PostTablePresenter {
         saveRedditAuth()
         saveImgurAuth()
         saveThumbnailResolverCache()
-        Log.p("saved data")
     }
     
     private func saveRedditAuth() {

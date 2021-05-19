@@ -126,28 +126,19 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.prepare(for: segue, sender: sender)
         
         switch Segue(rawValue: segue.identifier ?? "") {
-        case .addPost:
-            Log.p("add post segue")
-            
         case .editPost:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
             dest.supplyPost(selectedPost)
-            Log.p("edit post segue")
             
-        case .showIntroduction:
-            Log.p("introduction segue")
-            
-        case .menuRedditLogin:
-            Log.p("menu reddit login segue")
-        
-        case .menuImgurLogin:
-            Log.p("menu imgur login segue")
-            
-        case .menuBulkAdd:
-            Log.p("menu bulk add segue")
+        case .showIntroduction,
+             .addPost,
+             .menuRedditLogin,
+             .menuImgurLogin,
+             .menuBulkAdd:
+            break
             
         default:
             fatalError()
