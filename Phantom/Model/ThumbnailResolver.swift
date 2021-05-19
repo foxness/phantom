@@ -113,6 +113,8 @@ class ThumbnailResolver {
                 callback(.found(url: imgurUrl))
             } else if let wallhavenUrl = Wallhaven.calculateThumbnailUrl(from: url) {
                 callback(.found(url: wallhavenUrl))
+            } else if Helper.isImageUrl(url) { // regular/big images count as thumbnails too! :P
+                callback(.found(url: url))
             } else {
                 calculateGenericThumbnailUrl(from: url, callback: callback)
             }
@@ -120,12 +122,6 @@ class ThumbnailResolver {
     }
     
     private static func calculateGenericThumbnailUrl(from url: String, callback: @escaping (ThumbnailUrl) -> Void) {
-        guard !Helper.isImageUrl(url) else {
-            Log.p("none because it's img url", url)
-            callback(.calculatedNone)
-            return
-        }
-        
         let request = "generic thumbnail url"
         
         let params: Requests.GetParams = (url: URL(string: url)!, auth: nil)
@@ -135,7 +131,7 @@ class ThumbnailResolver {
               let rawHtml = String(data: goodData, encoding: .utf8),
               let thumbnailUrl = parseThumbnailUrl(rawHtml: rawHtml)
         else {
-            Log.p("none because idk", url)
+            Log.p("didn't find thumbnail in generic url", url)
             callback(.calculatedNone)
             return
         }

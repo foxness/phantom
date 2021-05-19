@@ -93,17 +93,8 @@ class PostCell: UITableViewCell {
             
             self.resolutionTaskId = nil
             
-            let finalUrl: String?
-            if let thumbnailUrl = thumbnailUrl {
-                finalUrl = thumbnailUrl
-            } else if Helper.isImageUrl(postUrl) {
-                finalUrl = postUrl
-            } else {
-                finalUrl = nil
-            }
-            
             DispatchQueue.main.async {
-                self.forceSetThumbnail(for: post, thumbnailUrl: finalUrl)
+                self.forceSetThumbnail(for: post, thumbnailUrl: thumbnailUrl)
             }
         }
     }
