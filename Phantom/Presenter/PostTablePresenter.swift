@@ -106,8 +106,8 @@ class PostTablePresenter {
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
-        let wallhavenOnly = database.wallhavenOnly
-        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, wallhavenOnly: wallhavenOnly)
+        let useWallhaven = database.useWallhaven
+        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
         submitter.submitPost(post, with: submitParams) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
@@ -180,8 +180,8 @@ class PostTablePresenter {
         database.wallpaperMode = on
     }
     
-    func wallhavenOnlySwitched(on: Bool) {
-        database.wallhavenOnly = on
+    func useWallhavenSwitched(on: Bool) {
+        database.useWallhaven = on
     }
     
     func directImageUploadSwitched(on: Bool) {
@@ -449,10 +449,10 @@ class PostTablePresenter {
     
     private func updateViews() {
         let wallpaperMode = database.wallpaperMode
-        let wallhavenOnly = database.wallhavenOnly
+        let useWallhaven = database.useWallhaven
         let directImageUpload = database.directImageUpload
         
-        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, wallhavenOnly: wallhavenOnly, directImageUpload: directImageUpload)
+        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven, directImageUpload: directImageUpload)
         
         let redditLoggedIn: Bool
         let redditName: String?

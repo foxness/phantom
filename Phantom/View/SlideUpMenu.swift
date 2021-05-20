@@ -26,7 +26,7 @@ class SlideUpMenu {
     private var menuView: UIView!
     
     private var wallpaperModeSwitch: UISwitch!
-    private var wallhavenOnlySwitch: UISwitch!
+    private var useWallhavenSwitch: UISwitch!
     private var directImageUploadSwitch: UISwitch!
     private var redditNameLabel: UILabel!
     private var redditButton: UIButton!
@@ -38,7 +38,7 @@ class SlideUpMenu {
     // MARK: - Settings // todo: add other marks
     
     var wallpaperMode = false
-    var wallhavenOnly = false
+    var useWallhaven = false
     var directImageUpload = false
     var redditName: String?
     var redditLoggedIn = false
@@ -67,7 +67,7 @@ class SlideUpMenu {
     
     func updateSwitchViews() {
         wallpaperModeSwitch.isOn = wallpaperMode
-        wallhavenOnlySwitch.isOn = wallhavenOnly
+        useWallhavenSwitch.isOn = useWallhaven
         directImageUploadSwitch.isOn = directImageUpload
     }
     
@@ -137,23 +137,23 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
-        let wallhavenOnlyLabel = UILabel()
-        wallhavenOnlyLabel.text = "Wallhaven Only"
-        menuView.addSubview(wallhavenOnlyLabel)
+        let useWallhavenLabel = UILabel()
+        useWallhavenLabel.text = "Use Wallhaven"
+        menuView.addSubview(useWallhavenLabel)
         
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: wallhavenOnlyLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallpaperModeLabel, wallhavenOnlyLabel)
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: useWallhavenLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallpaperModeLabel, useWallhavenLabel)
         
         // ---------------------------------------------------------------
         
-        wallhavenOnlySwitch = UISwitch()
-        wallhavenOnlySwitch.translatesAutoresizingMaskIntoConstraints = false
-        wallhavenOnlySwitch.addTarget(self, action: #selector(wallhavenOnlySwitched), for: .valueChanged)
-        menuView.addSubview(wallhavenOnlySwitch)
+        useWallhavenSwitch = UISwitch()
+        useWallhavenSwitch.translatesAutoresizingMaskIntoConstraints = false
+        useWallhavenSwitch.addTarget(self, action: #selector(useWallhavenSwitched), for: .valueChanged)
+        menuView.addSubview(useWallhavenSwitch)
         
-        constraints += [NSLayoutConstraint(item: wallhavenOnlySwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: wallhavenOnlyLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: wallhavenOnlyLabel, attribute: .centerY, relatedBy: .equal, toItem: wallhavenOnlySwitch, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: wallhavenOnlySwitch, attribute: .trailing, multiplier: 1, constant: 16)
+        constraints += [NSLayoutConstraint(item: useWallhavenSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: useWallhavenLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: useWallhavenLabel, attribute: .centerY, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .trailing, multiplier: 1, constant: 16)
         ]
         
         // ---------------------------------------------------------------
@@ -163,7 +163,7 @@ class SlideUpMenu {
         menuView.addSubview(directImageUploadLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: directImageUploadLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallhavenOnlyLabel, directImageUploadLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: useWallhavenLabel, directImageUploadLabel)
         
         // ---------------------------------------------------------------
         
@@ -336,10 +336,10 @@ class SlideUpMenu {
         delegate?.wallpaperModeSwitched(on: newState)
     }
     
-    @objc private func wallhavenOnlySwitched(`switch`: UISwitch) {
+    @objc private func useWallhavenSwitched(`switch`: UISwitch) {
         let newState = `switch`.isOn
-        wallhavenOnly = newState
-        delegate?.wallhavenOnlySwitched(on: newState)
+        useWallhaven = newState
+        delegate?.useWallhavenSwitched(on: newState)
     }
     
     @objc private func directImageUploadSwitched(`switch`: UISwitch) {

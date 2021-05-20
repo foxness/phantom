@@ -13,7 +13,8 @@ class PostSubmitter {
     
     struct SubmitParams {
         let wallpaperMode: Bool
-        let wallhavenOnly: Bool
+        let useWallhaven: Bool
+//        let directImageUpload: Bool
     }
     
     private struct RequiredMiddleware: SubmitterMiddleware {
@@ -59,10 +60,10 @@ class PostSubmitter {
         private static func getMiddlewares(submitParams: SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
             var mw = [RequiredMiddleware]()
             
-            // todo: allow user to submit indirect wallhaven links without
-            // automatically converting them to direct wallhaven links (aka "use wallhaven" setting)
-            let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: submitParams.wallhavenOnly)
-            mw.append(wallhavenMw)
+            if submitParams.useWallhaven {
+                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: submitParams.useWallhaven)
+                mw.append(wallhavenMw)
+            }
             
             if let imgur = imgur {
                 let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: submitParams.wallpaperMode)

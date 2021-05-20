@@ -17,7 +17,7 @@ class Database {
         case imgur_auth
         case introduction_shown
         case wallpaper_mode
-        case wallhaven_only
+        case use_wallhaven
         case direct_image_upload
     }
     
@@ -31,7 +31,7 @@ class Database {
     
     @UserDefaultsBacked(key: Key.introduction_shown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
     @UserDefaultsBacked(key: Key.wallpaper_mode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
-    @UserDefaultsBacked(key: Key.wallhaven_only.rawValue, defaultValue: false) private var internalWallhavenOnly: Bool
+    @UserDefaultsBacked(key: Key.use_wallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     @UserDefaultsBacked(key: Key.direct_image_upload.rawValue, defaultValue: false) private var internalDirectImageUpload: Bool
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
@@ -53,13 +53,13 @@ class Database {
     }
     
     var wallpaperMode: Bool {
-        get { internalWallhavenOnly }
-        set { internalWallhavenOnly = newValue }
-    }
-    
-    var wallhavenOnly: Bool {
         get { internalWallpaperMode }
         set { internalWallpaperMode = newValue }
+    }
+    
+    var useWallhaven: Bool {
+        get { internalUseWallhaven }
+        set { internalUseWallhaven = newValue }
     }
     
     var directImageUpload: Bool {
@@ -102,7 +102,7 @@ class Database {
         imgurAuth = nil
         introductionShown = false
         wallpaperMode = false
-        wallhavenOnly = false
+        useWallhaven = false
         directImageUpload = false
         thumbnailResolverCache = nil
         
