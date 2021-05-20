@@ -73,18 +73,18 @@ struct Requests {
         var response: URLResponse?
         var error: Error?
         
-        let dispatchGroup = DispatchGroup() // todo: use semaphore
-        dispatchGroup.enter()
+        let semaphore = DispatchSemaphore(value: 0)
         
         Requests.post(with: params) { (data_, response_, error_) in
             data = data_
             response = response_
             error = error_
             
-            dispatchGroup.leave()
+            semaphore.signal()
         }
         
-        dispatchGroup.wait()
+        semaphore.wait()
+        
         return (data, response, error)
     }
     
@@ -113,18 +113,18 @@ struct Requests {
         var response: URLResponse?
         var error: Error?
         
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
+        let semaphore = DispatchSemaphore(value: 0)
         
         Requests.get(with: params) { (data_, response_, error_) in
             data = data_
             response = response_
             error = error_
             
-            dispatchGroup.leave()
+            semaphore.signal()
         }
         
-        dispatchGroup.wait()
+        semaphore.wait()
+        
         return (data, response, error)
     }
 }
