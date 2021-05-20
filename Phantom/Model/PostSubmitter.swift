@@ -8,6 +8,11 @@
 
 import Foundation
 
+// todo: add SubmitterEndware that submits
+// 2 kinds of endware:
+// 1. regular endware that submits link and text posts
+// 2. upload endware that uploads an image directly to reddit
+
 class PostSubmitter {
     typealias SubmitCallback = (_ result: Result<String, PhantomError>) -> Void
     
@@ -31,45 +36,46 @@ class PostSubmitter {
         private let post: Post
         private let callback: SubmitCallback
         private let middlewares: [RequiredMiddleware]
-        private let submitParams: SubmitParams
-        
-        init(reddit: Reddit,
-             database: Database,
-             submitParams: SubmitParams,
-             imgur: Imgur? = nil,
-             callback: @escaping SubmitCallback) {
-            self.reddit = reddit
-            self.post = PostSubmission.getPost(database: database)
-            self.callback = callback
-            self.submitParams = submitParams
-            self.middlewares = PostSubmission.getMiddlewares(submitParams: submitParams, imgur: imgur)
-        }
+        private let params: SubmitParams
         
         init(reddit: Reddit,
              post: Post,
-             submitParams: SubmitParams,
+             params: SubmitParams,
              imgur: Imgur? = nil,
              callback: @escaping SubmitCallback) {
+            
             self.reddit = reddit
             self.post = post
             self.callback = callback
-            self.submitParams = submitParams
-            self.middlewares = PostSubmission.getMiddlewares(submitParams: submitParams, imgur: imgur)
+            self.params = params
+            
+            self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
         }
         
-        private static func getMiddlewares(submitParams: SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
+        convenience init(reddit: Reddit,
+                         database: Database,
+                         params: SubmitParams,
+                         imgur: Imgur? = nil,
+                         callback: @escaping SubmitCallback) {
+            
+            let post = PostSubmission.getPost(database: database)
+            
+            self.init(reddit: reddit, post: post, params: params, callback: callback)
+        }
+        
+        private static func getMiddlewares(params: SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
             var mw = [RequiredMiddleware]()
             
-            if submitParams.useWallhaven {
-                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: submitParams.useWallhaven)
+            if params.useWallhaven {
+                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: params.useWallhaven)
                 mw.append(wallhavenMw)
             }
             
             if let imgur = imgur {
-                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: submitParams.wallpaperMode)
-                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: submitParams.wallpaperMode)
+                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode)
+                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
                 mw.append(imgurMw)
-            } else if submitParams.wallpaperMode {
+            } else if params.wallpaperMode {
                 fatalError("Imgur is required for wallpaper mode") // todo: make this scenario unreachable
             }
             
@@ -175,25 +181,25 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, with submitParams: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
+    func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, post: post, submitParams: submitParams, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, post: post, params: params, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     
-    func submitPostInDatabase(_ database: Database, with submitParams: SubmitParams, callback: @escaping SubmitCallback) {
+    func submitPostInDatabase(_ database: Database, with params: SubmitParams, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, database: database, submitParams: submitParams, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit, database: database, params: params, imgur: imgur, callback: callback)
         addToQueue(submission: submission)
     }
     

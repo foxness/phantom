@@ -72,9 +72,9 @@ struct ZombieSubmitter {
             Log.p("zombie: used existing reddit")
         }
         
-        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let params = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
-        submitter.submitPost(post, with: submitParams) { result in
+        submitter.submitPost(post, with: params) { result in
             switch result {
             case .success(let url):
                 Log.p("reddit url", url)

@@ -107,9 +107,9 @@ class PostTablePresenter {
         
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
-        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let params = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
-        submitter.submitPost(post, with: submitParams) { [weak self] result in
+        submitter.submitPost(post, with: params) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
