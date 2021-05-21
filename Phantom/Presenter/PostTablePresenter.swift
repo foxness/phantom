@@ -106,10 +106,10 @@ class PostTablePresenter {
         viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
-        let wallhavenOnly = database.wallhavenOnly
-        let submitParams = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, wallhavenOnly: wallhavenOnly)
+        let useWallhaven = database.useWallhaven
+        let params = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
-        submitter.submitPost(post, with: submitParams) { [weak self] result in
+        submitter.submitPost(post, with: params) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
@@ -180,8 +180,8 @@ class PostTablePresenter {
         database.wallpaperMode = on
     }
     
-    func wallhavenOnlySwitched(on: Bool) {
-        database.wallhavenOnly = on
+    func useWallhavenSwitched(on: Bool) {
+        database.useWallhaven = on
     }
     
     func moreButtonPressed() {
@@ -232,12 +232,10 @@ class PostTablePresenter {
     // MARK: - Scene lifecycle methods
     
     func sceneWillEnterForeground() {
-        Log.p("scene will enter foreground")
         sceneInForeground = true
     }
     
     func sceneDidActivate() {
-        Log.p("scene did activate")
         sceneActivated = true
         
         if !postIdsToBeDeleted.isEmpty { // todo: move this to sceneWillEnterForeground!?
@@ -247,14 +245,12 @@ class PostTablePresenter {
     }
     
     func sceneWillDeactivate() {
-        Log.p("scene will deactivate")
         sceneActivated = false
         
         saveData()
     }
     
     func sceneDidEnterBackground() {
-        Log.p("scene did enter background")
         sceneInForeground = false
         
         updateAppBadge()
@@ -390,7 +386,6 @@ class PostTablePresenter {
         saveRedditAuth()
         saveImgurAuth()
         saveThumbnailResolverCache()
-        Log.p("saved data")
     }
     
     private func saveRedditAuth() {
@@ -450,7 +445,9 @@ class PostTablePresenter {
     
     private func updateViews() {
         let wallpaperMode = database.wallpaperMode
-        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode)
+        let useWallhaven = database.useWallhaven
+        
+        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
         let redditLoggedIn: Bool
         let redditName: String?

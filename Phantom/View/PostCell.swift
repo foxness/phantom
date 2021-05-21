@@ -68,10 +68,8 @@ class PostCell: UITableViewCell {
         
         if thumbnailResolver.isCached(url: postUrl) {
             let thumbnailUrl = thumbnailResolver.getCached(key: postUrl)
-//            Log.p("found in cache, key: \(postUrl), value: \(thumbnailUrl ?? "calculatedNone")")
             forceSetThumbnail(for: post, thumbnailUrl: thumbnailUrl)
         } else {
-//            Log.p("didn't find in cache, key: \(postUrl)")
             setThumbnailForUncachedLinkPost(post)
         }
     }

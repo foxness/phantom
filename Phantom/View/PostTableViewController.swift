@@ -126,28 +126,19 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.prepare(for: segue, sender: sender)
         
         switch Segue(rawValue: segue.identifier ?? "") {
-        case .addPost:
-            Log.p("add post segue")
-            
         case .editPost:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
             dest.supplyPost(selectedPost)
-            Log.p("edit post segue")
             
-        case .showIntroduction:
-            Log.p("introduction segue")
-            
-        case .menuRedditLogin:
-            Log.p("menu reddit login segue")
-        
-        case .menuImgurLogin:
-            Log.p("menu imgur login segue")
-            
-        case .menuBulkAdd:
-            Log.p("menu bulk add segue")
+        case .showIntroduction,
+             .addPost,
+             .menuRedditLogin,
+             .menuImgurLogin,
+             .menuBulkAdd:
+            break
             
         default:
             fatalError()
@@ -328,18 +319,19 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
         slideUpMenu.redditName = redditName
         slideUpMenu.redditLoggedIn = redditLoggedIn
-        slideUpMenu.updateViews()
+        slideUpMenu.updateRedditViews()
     }
     
     func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
         slideUpMenu.imgurName = imgurName
         slideUpMenu.imgurLoggedIn = imgurLoggedIn
-        slideUpMenu.updateViews()
+        slideUpMenu.updateImgurViews()
     }
     
-    func updateSlideUpMenu(wallpaperMode: Bool) {
+    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool) {
         slideUpMenu.wallpaperMode = wallpaperMode
-        slideUpMenu.updateViews()
+        slideUpMenu.useWallhaven = useWallhaven
+        slideUpMenu.updateSwitchViews()
     }
     
     func showAlert(title: String, message: String) {
@@ -364,8 +356,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.wallpaperModeSwitched(on: on)
     }
     
-    func wallhavenOnlySwitched(on: Bool) {
-        presenter.wallhavenOnlySwitched(on: on)
+    func useWallhavenSwitched(on: Bool) {
+        presenter.useWallhavenSwitched(on: on)
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {

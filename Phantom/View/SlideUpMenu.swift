@@ -11,8 +11,8 @@ import UIKit
 
 class SlideUpMenu {
     private static let MENUVIEW_HEIGHT: CGFloat = 370
-    private static let FADE_ALPHA: CGFloat = 0.5
-    private static let FADE_WHITE: CGFloat = 0.2 // works for both light and dark modes
+    private static let FADE_ALPHA: CGFloat = 0.6
+    private static let FADE_WHITE: CGFloat = 0 // works for both light and dark modes
     private static let ANIMATION_DURATION: TimeInterval = 0.3
     
     private static let TEXT_LOG_IN = "Log In"
@@ -20,11 +20,13 @@ class SlideUpMenu {
     
     weak var delegate: SlideUpMenuDelegate?
     
+    // MARK: - Views
+    
     private var fadeView: UIView!
     private var menuView: UIView!
     
     private var wallpaperModeSwitch: UISwitch!
-    private var wallhavenOnlySwitch: UISwitch!
+    private var useWallhavenSwitch: UISwitch!
     private var redditNameLabel: UILabel!
     private var redditButton: UIButton!
     private var imgurNameLabel: UILabel!
@@ -32,8 +34,10 @@ class SlideUpMenu {
     
     private unowned var window: UIWindow! // I think these should be unowned but I'm not 100% sure
     
+    // MARK: - Settings // todo: add other marks
+    
     var wallpaperMode = false
-    var wallhavenOnly = false
+    var useWallhaven = false
     var redditName: String?
     var redditLoggedIn = false
     var imgurName: String?
@@ -53,15 +57,25 @@ class SlideUpMenu {
         prepareToShowViews()
     }
     
-    func updateViews() { // todo: separate into 3 and use in didSet of properties?
+    func updateViews() {
+        updateSwitchViews()
+        updateRedditViews()
+        updateImgurViews()
+    }
+    
+    func updateSwitchViews() {
         wallpaperModeSwitch.isOn = wallpaperMode
-        wallhavenOnlySwitch.isOn = wallhavenOnly
-        
+        useWallhavenSwitch.isOn = useWallhaven
+    }
+    
+    func updateRedditViews() {
         redditNameLabel.text = redditName
         
         let redditTitle = redditLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
         redditButton.setTitle(redditTitle, for: .normal)
-        
+    }
+    
+    func updateImgurViews() {
         imgurNameLabel.text = imgurName
         
         let imgurTitle = imgurLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
@@ -120,23 +134,23 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
-        let wallhavenOnlyLabel = UILabel()
-        wallhavenOnlyLabel.text = "Wallhaven Only"
-        menuView.addSubview(wallhavenOnlyLabel)
+        let useWallhavenLabel = UILabel()
+        useWallhavenLabel.text = "Use Wallhaven"
+        menuView.addSubview(useWallhavenLabel)
         
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: wallhavenOnlyLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallpaperModeLabel, wallhavenOnlyLabel)
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: useWallhavenLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallpaperModeLabel, useWallhavenLabel)
         
         // ---------------------------------------------------------------
         
-        wallhavenOnlySwitch = UISwitch()
-        wallhavenOnlySwitch.translatesAutoresizingMaskIntoConstraints = false
-        wallhavenOnlySwitch.addTarget(self, action: #selector(wallhavenOnlySwitched), for: .valueChanged)
-        menuView.addSubview(wallhavenOnlySwitch)
+        useWallhavenSwitch = UISwitch()
+        useWallhavenSwitch.translatesAutoresizingMaskIntoConstraints = false
+        useWallhavenSwitch.addTarget(self, action: #selector(useWallhavenSwitched), for: .valueChanged)
+        menuView.addSubview(useWallhavenSwitch)
         
-        constraints += [NSLayoutConstraint(item: wallhavenOnlySwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: wallhavenOnlyLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: wallhavenOnlyLabel, attribute: .centerY, relatedBy: .equal, toItem: wallhavenOnlySwitch, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: wallhavenOnlySwitch, attribute: .trailing, multiplier: 1, constant: 16)
+        constraints += [NSLayoutConstraint(item: useWallhavenSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: useWallhavenLabel, attribute: .trailing, multiplier: 1, constant: 16),
+                        NSLayoutConstraint(item: useWallhavenLabel, attribute: .centerY, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .centerY, multiplier: 1, constant: 0),
+                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .trailing, multiplier: 1, constant: 16)
         ]
         
         // ---------------------------------------------------------------
@@ -146,7 +160,7 @@ class SlideUpMenu {
         menuView.addSubview(redditLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallhavenOnlyLabel, redditLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: useWallhavenLabel, redditLabel)
         
         // ---------------------------------------------------------------
         
@@ -298,10 +312,10 @@ class SlideUpMenu {
         delegate?.wallpaperModeSwitched(on: newState)
     }
     
-    @objc private func wallhavenOnlySwitched(`switch`: UISwitch) {
+    @objc private func useWallhavenSwitched(`switch`: UISwitch) {
         let newState = `switch`.isOn
-        wallhavenOnly = newState
-        delegate?.wallhavenOnlySwitched(on: newState)
+        useWallhaven = newState
+        delegate?.useWallhavenSwitched(on: newState)
     }
     
     private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {
