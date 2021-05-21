@@ -184,10 +184,6 @@ class PostTablePresenter {
         database.useWallhaven = on
     }
     
-    func directImageUploadSwitched(on: Bool) {
-        database.directImageUpload = on
-    }
-    
     func moreButtonPressed() {
         viewDelegate?.showSlideUpMenu()
     }
@@ -450,9 +446,8 @@ class PostTablePresenter {
     private func updateViews() {
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
-        let directImageUpload = database.directImageUpload
         
-        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven, directImageUpload: directImageUpload)
+        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
         let redditLoggedIn: Bool
         let redditName: String?

@@ -8,18 +8,12 @@
 
 import Foundation
 
-// todo: add SubmitterEndware that submits
-// 2 kinds of endware:
-// 1. regular endware that submits link and text posts
-// 2. upload endware that uploads an image directly to reddit
-
 class PostSubmitter {
     typealias SubmitCallback = (_ result: Result<String, PhantomError>) -> Void
     
     struct SubmitParams {
         let wallpaperMode: Bool
         let useWallhaven: Bool
-//        let directImageUpload: Bool
     }
     
     private struct RequiredMiddleware: SubmitterMiddleware {

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 400
+    private static let MENUVIEW_HEIGHT: CGFloat = 370
     private static let FADE_ALPHA: CGFloat = 0.6
     private static let FADE_WHITE: CGFloat = 0 // works for both light and dark modes
     private static let ANIMATION_DURATION: TimeInterval = 0.3
@@ -27,7 +27,6 @@ class SlideUpMenu {
     
     private var wallpaperModeSwitch: UISwitch!
     private var useWallhavenSwitch: UISwitch!
-    private var directImageUploadSwitch: UISwitch!
     private var redditNameLabel: UILabel!
     private var redditButton: UIButton!
     private var imgurNameLabel: UILabel!
@@ -39,7 +38,6 @@ class SlideUpMenu {
     
     var wallpaperMode = false
     var useWallhaven = false
-    var directImageUpload = false
     var redditName: String?
     var redditLoggedIn = false
     var imgurName: String?
@@ -68,7 +66,6 @@ class SlideUpMenu {
     func updateSwitchViews() {
         wallpaperModeSwitch.isOn = wallpaperMode
         useWallhavenSwitch.isOn = useWallhaven
-        directImageUploadSwitch.isOn = directImageUpload
     }
     
     func updateRedditViews() {
@@ -158,33 +155,12 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
-        let directImageUploadLabel = UILabel()
-        directImageUploadLabel.text = "Direct Image Upload"
-        menuView.addSubview(directImageUploadLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: directImageUploadLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: useWallhavenLabel, directImageUploadLabel)
-        
-        // ---------------------------------------------------------------
-        
-        directImageUploadSwitch = UISwitch()
-        directImageUploadSwitch.translatesAutoresizingMaskIntoConstraints = false
-        directImageUploadSwitch.addTarget(self, action: #selector(directImageUploadSwitched), for: .valueChanged)
-        menuView.addSubview(directImageUploadSwitch)
-        
-        constraints += [NSLayoutConstraint(item: directImageUploadSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: directImageUploadLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: directImageUploadLabel, attribute: .centerY, relatedBy: .equal, toItem: directImageUploadSwitch, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: directImageUploadSwitch, attribute: .trailing, multiplier: 1, constant: 16)
-        ]
-        
-        // ---------------------------------------------------------------
-        
         let redditLabel = UILabel()
         redditLabel.text = "Reddit account"
         menuView.addSubview(redditLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: directImageUploadLabel, redditLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: useWallhavenLabel, redditLabel)
         
         // ---------------------------------------------------------------
         
@@ -340,12 +316,6 @@ class SlideUpMenu {
         let newState = `switch`.isOn
         useWallhaven = newState
         delegate?.useWallhavenSwitched(on: newState)
-    }
-    
-    @objc private func directImageUploadSwitched(`switch`: UISwitch) {
-        let newState = `switch`.isOn
-        directImageUpload = newState
-        delegate?.directImageUploadSwitched(on: newState)
     }
     
     private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {

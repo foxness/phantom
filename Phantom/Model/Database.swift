@@ -18,7 +18,6 @@ class Database {
         case introduction_shown
         case wallpaper_mode
         case use_wallhaven
-        case direct_image_upload
     }
     
     static let instance = Database()
@@ -32,7 +31,6 @@ class Database {
     @UserDefaultsBacked(key: Key.introduction_shown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
     @UserDefaultsBacked(key: Key.wallpaper_mode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
     @UserDefaultsBacked(key: Key.use_wallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
-    @UserDefaultsBacked(key: Key.direct_image_upload.rawValue, defaultValue: false) private var internalDirectImageUpload: Bool
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
@@ -60,11 +58,6 @@ class Database {
     var useWallhaven: Bool {
         get { internalUseWallhaven }
         set { internalUseWallhaven = newValue }
-    }
-    
-    var directImageUpload: Bool {
-        get { internalDirectImageUpload }
-        set { internalDirectImageUpload = newValue }
     }
     
     var thumbnailResolverCache: [String: ThumbnailResolver.ThumbnailUrl]? {
@@ -103,7 +96,6 @@ class Database {
         introductionShown = false
         wallpaperMode = false
         useWallhaven = false
-        directImageUpload = false
         thumbnailResolverCache = nil
         
         posts = []

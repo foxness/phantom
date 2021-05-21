@@ -328,10 +328,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.updateImgurViews()
     }
     
-    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool, directImageUpload: Bool) {
+    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool) {
         slideUpMenu.wallpaperMode = wallpaperMode
         slideUpMenu.useWallhaven = useWallhaven
-        slideUpMenu.directImageUpload = directImageUpload
         slideUpMenu.updateSwitchViews()
     }
     
@@ -359,10 +358,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func useWallhavenSwitched(on: Bool) {
         presenter.useWallhavenSwitched(on: on)
-    }
-    
-    func directImageUploadSwitched(on: Bool) {
-        presenter.directImageUploadSwitched(on: on)
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {
