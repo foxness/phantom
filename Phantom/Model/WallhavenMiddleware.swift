@@ -12,8 +12,6 @@ struct WallhavenMiddleware: SubmitterMiddleware {
     func transform(post: Post) throws -> (post: Post, changed: Bool) {
         let (isIndirectUrl, isDirectUrl) = WallhavenMiddleware.isRightPost(post)
         
-        Log.p("wallhaven input url. indirect? \(isIndirectUrl) direct? \(isDirectUrl)")
-        
         let (right, alreadyChanged) = (isIndirectUrl, isDirectUrl)
         guard !alreadyChanged else { return (post, changed: true) }
         guard right else { return (post, changed: false) }

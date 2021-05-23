@@ -89,8 +89,8 @@ struct ZombieSubmitter {
                 
                 let posts = self.database.posts
                 PostNotifier.updateAppBadge(posts: posts)
-            case .failure(let apiError):
-                Log.p("got error", apiError)
+            case .failure(let error):
+                Log.p("got error", error)
                 
                 // todo: handle error !!1
                 

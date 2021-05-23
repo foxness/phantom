@@ -9,20 +9,11 @@
 import Foundation
 
 class PostSubmitter {
-    typealias SubmitCallback = (_ result: Result<String, PhantomError>) -> Void
+    typealias SubmitCallback = (_ result: Result<String, Error>) -> Void
     
     struct SubmitParams {
         let wallpaperMode: Bool
         let useWallhaven: Bool
-    }
-    
-    private struct RequiredMiddleware: SubmitterMiddleware {
-        let middleware: SubmitterMiddleware
-        let isRequired: Bool
-        
-        func transform(post: Post) throws -> (post: Post, changed: Bool) {
-            return try middleware.transform(post: post)
-        }
     }
     
     private class PostSubmission: Operation {
@@ -31,6 +22,7 @@ class PostSubmitter {
         private let callback: SubmitCallback
         private let middlewares: [RequiredMiddleware]
         private let params: SubmitParams
+        private let retryStrategy: RetryStrategy
         
         init(reddit: Reddit,
              post: Post,
@@ -42,6 +34,7 @@ class PostSubmitter {
             self.post = post
             self.callback = callback
             self.params = params
+            self.retryStrategy = RetryStrategy.delay(maxRetryCount: 5, retryInterval: 3)
             
             self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
         }
@@ -103,7 +96,7 @@ class PostSubmitter {
             return middlewaredPost
         }
         
-        private func submitPost(_ post: Post) throws -> String {
+        private func submitMiddlewaredPost(_ mp: Post) throws -> String {
             guard !DebugVariable.simulateReddit else {
                 sleep(3)
                 
@@ -111,42 +104,70 @@ class PostSubmitter {
             }
             
             // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-            let url = try reddit.submit(post: post)
+            let url = try reddit.submit(post: mp)
+            return url
+        }
+        
+        private func submitPost() throws -> String {
+            let middlewaredPost = try executeMiddlewares(on: post)
+            let url = try submitMiddlewaredPost(middlewaredPost)
+            
             return url
         }
         
         override func main() {
-            guard !isCancelled else { return } // we need more of these in this method
+            guard !isCancelled else { return } // we need more of these in this method (actually everywhere in this class)
             
             Log.p("submission task started")
             
-            let middlewaredPost: Post
-            do {
-                middlewaredPost = try executeMiddlewares(on: post)
-            } catch let e as PhantomError {
-                Log.p("Unexpected error while middlewaring", e)
-                callback(.failure(e))
-                return
-            } catch {
-                let e = error // todo: handle this error too
-                fatalError()
+            switch retryStrategy {
+            case .delay(let maxRetryCount, let retryInterval):
+                
+                var retryCount = 0
+                var lastError: Error?
+                
+                while retryCount < maxRetryCount {
+                    if retryCount > 0 {
+                        Log.p("Attempt #\(retryCount + 1)")
+                    }
+                    
+                    let errorHappened: Bool
+                    var url: String?
+                    do {
+                        url = try submitPost()
+                        errorHappened = false
+                    } catch {
+                        Log.p("Unexpected error while submitting", error)
+                        lastError = error
+                        errorHappened = true
+                    }
+                    
+                    if errorHappened {
+                        retryCount += 1
+                        Log.p("Waiting...")
+                        Thread.sleep(forTimeInterval: retryInterval)
+                        Log.p("Done waiting")
+                    } else {
+                        callback(.success(url!))
+                        return
+                    }
+                }
+                
+                callback(.failure(lastError!))
+                    
+            case .noRetry:
+                
+                let url: String
+                do {
+                    url = try submitPost()
+                } catch {
+                    Log.p("Unexpected error while submitting", error)
+                    callback(.failure(error))
+                    return
+                }
+                
+                callback(.success(url))
             }
-            
-            guard !isCancelled else { return }
-            
-            let url: String
-            do {
-                url = try submitPost(middlewaredPost)
-            } catch let e as PhantomError {
-                Log.p("Unexpected error while submitting", e)
-                callback(.failure(e))
-                return
-            } catch {
-                let e = error // todo: handle this error too
-                fatalError()
-            }
-            
-            callback(.success(url))
         }
     }
     
@@ -182,7 +203,12 @@ class PostSubmitter {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, post: post, params: params, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit,
+                                        post: post,
+                                        params: params,
+                                        imgur: imgur,
+                                        callback: callback)
+        
         addToQueue(submission: submission)
     }
     
@@ -193,7 +219,12 @@ class PostSubmitter {
             fatalError()
         }
         
-        let submission = PostSubmission(reddit: reddit, database: database, params: params, imgur: imgur, callback: callback)
+        let submission = PostSubmission(reddit: reddit,
+                                        database: database,
+                                        params: params,
+                                        imgur: imgur,
+                                        callback: callback)
+        
         addToQueue(submission: submission)
     }
     

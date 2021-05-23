@@ -118,15 +118,15 @@ class PostTablePresenter {
                     Log.p("reddit url", url)
                     
                     self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                case .failure(let phantomError):
-                    Log.p("got error", phantomError)
+                case .failure(let error):
+                    Log.p("got error", error)
                     
                     // todo: handle error !!1
                     PostNotifier.notifyUser(about: post)
                     // todo: notify user it's gone wrong
                     
                     let title = "An error has occurred"
-                    let message = "\(phantomError.localizedDescription)"
+                    let message = "\(error.localizedDescription)"
                     self.viewDelegate?.showAlert(title: title, message: message)
                 }
                 
