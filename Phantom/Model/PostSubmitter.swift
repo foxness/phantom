@@ -9,7 +9,8 @@
 import Foundation
 
 class PostSubmitter {
-    typealias SubmitCallback = (_ result: Result<String, Error>) -> Void
+    typealias SubmitResult = Result<String, Error> // string is reddit post url
+    typealias SubmitCallback = (_ result: SubmitResult) -> Void
     
     struct SubmitParams {
         let wallpaperMode: Bool
@@ -115,59 +116,68 @@ class PostSubmitter {
             return url
         }
         
+        private func submitWithDelayRetryStrategy(maxRetryCount: Int, retryInterval: TimeInterval) -> SubmitResult {
+            var retryCount = 0
+            var lastError: Error?
+            
+            while retryCount < maxRetryCount {
+                if retryCount > 0 {
+                    Log.p("Attempt #\(retryCount + 1)")
+                }
+                
+                let errorHappened: Bool
+                var url: String?
+                do {
+                    url = try submitPost()
+                    errorHappened = false
+                } catch {
+                    Log.p("Unexpected error while submitting", error)
+                    lastError = error
+                    errorHappened = true
+                }
+                
+                if errorHappened {
+                    retryCount += 1
+                    Log.p("Waiting...")
+                    Thread.sleep(forTimeInterval: retryInterval)
+                    Log.p("Done waiting")
+                } else {
+                    return .success(url!)
+                }
+            }
+            
+            return .failure(lastError!)
+        }
+        
+        private func submitWithNoRetryStrategy() -> SubmitResult { // todo: this can be simplified to submitWithDelayRetryStrategy(maxRetryCount: 1, retryInterval: nil). should I simplify?
+            let url: String
+            do {
+                url = try submitPost()
+            } catch {
+                Log.p("Unexpected error while submitting", error)
+                return .failure(error)
+            }
+            
+            return .success(url)
+        }
+        
+        private func submitWithRetryStrategy() -> SubmitResult {
+            switch retryStrategy {
+            case .delay(let maxRetryCount, let retryInterval):
+                return submitWithDelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: retryInterval)
+                    
+            case .noRetry:
+                return submitWithNoRetryStrategy()
+            }
+        }
+        
         override func main() {
             guard !isCancelled else { return } // we need more of these in this method (actually everywhere in this class)
             
             Log.p("submission task started")
             
-            switch retryStrategy {
-            case .delay(let maxRetryCount, let retryInterval):
-                
-                var retryCount = 0
-                var lastError: Error?
-                
-                while retryCount < maxRetryCount {
-                    if retryCount > 0 {
-                        Log.p("Attempt #\(retryCount + 1)")
-                    }
-                    
-                    let errorHappened: Bool
-                    var url: String?
-                    do {
-                        url = try submitPost()
-                        errorHappened = false
-                    } catch {
-                        Log.p("Unexpected error while submitting", error)
-                        lastError = error
-                        errorHappened = true
-                    }
-                    
-                    if errorHappened {
-                        retryCount += 1
-                        Log.p("Waiting...")
-                        Thread.sleep(forTimeInterval: retryInterval)
-                        Log.p("Done waiting")
-                    } else {
-                        callback(.success(url!))
-                        return
-                    }
-                }
-                
-                callback(.failure(lastError!))
-                    
-            case .noRetry:
-                
-                let url: String
-                do {
-                    url = try submitPost()
-                } catch {
-                    Log.p("Unexpected error while submitting", error)
-                    callback(.failure(error))
-                    return
-                }
-                
-                callback(.success(url))
-            }
+            let submitResult = submitWithRetryStrategy()
+            callback(submitResult)
         }
     }
     
