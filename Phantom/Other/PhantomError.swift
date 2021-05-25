@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import Kingfisher
 
 enum PhantomError: LocalizedError, CustomDebugStringConvertible {
     case responseHasError(request: String, error: Error, data: Data?, response: HTTPURLResponse?)
     case badResponse(request: String, response: HTTPURLResponse, data: Data?)
     case deserialization(request: String, raw: String)
     case requiredMiddlewareNoEffect(middleware: String)
+    case couldntDownloadImage(kfError: KingfisherError)
     
 //    var errorDescription: String?
 //    var failureReason: String?
@@ -30,6 +32,8 @@ enum PhantomError: LocalizedError, CustomDebugStringConvertible {
             return "An error occurred during \(request): unable to deserialize the response: \(raw.prefix(30))..."
         case .requiredMiddlewareNoEffect(let middleware):
             return "Required middleware \(middleware) had no effect"
+        case .couldntDownloadImage(let kfError):
+            return "Couldn't download image: \(kfError.localizedDescription)"
         }
     }
     
@@ -43,6 +47,8 @@ enum PhantomError: LocalizedError, CustomDebugStringConvertible {
             return "PhantomError.deserialization(request: \(String(reflecting: request)), raw: \(String(reflecting: raw)))"
         case .requiredMiddlewareNoEffect(let middleware):
             return "PhantomError.requiredMiddlewareNoEffect(middleware: \(String(describing: middleware)))"
+        case .couldntDownloadImage(let kfError):
+            return "PhantomError.couldntDownloadImage(kfError: \(String(reflecting: kfError)))"
         }
     }
     
