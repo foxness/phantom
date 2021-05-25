@@ -36,7 +36,11 @@ struct Requests {
         return 200..<300 ~= response.statusCode
     }
     
-    private static func getAuthField(_ auth: AuthParams) -> String {
+    static func getDataParams(dataDict: DataDict, dataType: DataType = .applicationXWwwFormUrlencoded) -> DataParams {
+        return (dataDict, dataType)
+    }
+    
+    private static func getAuthHeader(_ auth: AuthParams) -> String {
         let (username, password) = auth
         
         let authHeader: String
@@ -94,7 +98,7 @@ struct Requests {
         }
     }
     
-    static func formPostRequest(with params: PostParams) -> URLRequest {
+    private static func formPostRequest(with params: PostParams) -> URLRequest {
         let (url, data, auth) = params
         
         let (httpBody, contentType) = getRequestBodyWithType(data: data)
@@ -108,26 +112,26 @@ struct Requests {
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         if let auth = auth {
-            let authHeader = getAuthField(auth)
+            let authHeader = getAuthHeader(auth)
             request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }
         
         return request
     }
     
-    static func post(with params: PostParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    static func postAsync(with params: PostParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         let request = formPostRequest(with: params)
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
     
-    static func synchronousPost(with params: PostParams) -> (Data?, URLResponse?, Error?) {
+    static func postSync(with params: PostParams) -> (Data?, URLResponse?, Error?) {
         var data: Data?
         var response: URLResponse?
         var error: Error?
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        Requests.post(with: params) { (data_, response_, error_) in
+        Requests.postAsync(with: params) { (data_, response_, error_) in
             data = data_
             response = response_
             error = error_
@@ -140,7 +144,7 @@ struct Requests {
         return (data, response, error)
     }
     
-    static func formGetRequest(with params: GetParams) -> URLRequest {
+    private static func formGetRequest(with params: GetParams) -> URLRequest {
         var request = URLRequest(url: params.url)
         request.httpMethod = "GET"
         
@@ -148,26 +152,26 @@ struct Requests {
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         if let auth = params.auth {
-            let authHeader = getAuthField(auth)
+            let authHeader = getAuthHeader(auth)
             request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }
         
         return request
     }
     
-    static func get(with params: GetParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    static func getAsync(with params: GetParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         let request = formGetRequest(with: params)
         session.dataTask(with: request, completionHandler: completionHandler).resume()
     }
     
-    static func synchronousGet(with params: GetParams) -> (Data?, URLResponse?, Error?) {
+    static func getSync(with params: GetParams) -> (Data?, URLResponse?, Error?) {
         var data: Data?
         var response: URLResponse?
         var error: Error?
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        Requests.get(with: params) { (data_, response_, error_) in
+        Requests.getAsync(with: params) { (data_, response_, error_) in
             data = data_
             response = response_
             error = error_

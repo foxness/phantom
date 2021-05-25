@@ -128,7 +128,7 @@ class Imgur {
         try ensureValidAccessToken()
         
         let params = getUploadImageParams(imageUrl: imageUrl)
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -145,7 +145,7 @@ class Imgur {
         try ensureValidAccessToken()
         
         let params = getDirectImageUploadParams(imageData: imageData)
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -199,7 +199,7 @@ class Imgur {
         let request = "imgur access token refresh"
         
         let params = getAccessTokenRefreshParams()
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -303,10 +303,9 @@ class Imgur {
         let imageString = imageUrl.absoluteString
         
         let dataDict = [Symbols.IMAGE: imageString,
-                    Symbols.TYPE: Symbols.URL]
+                        Symbols.TYPE: Symbols.URL]
         
-        let dataType: Requests.DataType = .applicationXWwwFormUrlencoded
-        let data = (dataDict, dataType)
+        let data = Requests.getDataParams(dataDict: dataDict)
         
         let auth = getAuth()
         let url = getUploadEndpoint()
@@ -318,10 +317,9 @@ class Imgur {
         let imageString = imageData.base64EncodedString()
         
         let dataDict = [Symbols.IMAGE: imageString,
-                    Symbols.TYPE: Symbols.BASE64]
+                        Symbols.TYPE: Symbols.BASE64]
         
-        let dataType: Requests.DataType = .multipartFormData
-        let data = (dataDict, dataType)
+        let data = Requests.getDataParams(dataDict: dataDict, dataType: .multipartFormData)
         
         let auth = getAuth()
         let url = getUploadEndpoint()
@@ -330,12 +328,11 @@ class Imgur {
     
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
         let dataDict = [Symbols.REFRESH_TOKEN: refreshToken!,
-                    Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
-                    Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
-                    Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
+                        Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
+                        Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
+                        Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
         
-        let dataType: Requests.DataType = .applicationXWwwFormUrlencoded
-        let data = (dataDict, dataType)
+        let data = Requests.getDataParams(dataDict: dataDict)
         
         let auth: (String, String)? = nil
         let url = URL(string: Imgur.ENDPOINT_REFRESH)!

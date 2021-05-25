@@ -127,7 +127,7 @@ class Reddit {
         try ensureValidAccessToken()
 
         let params = getSubmitPostParams(post: post, resubmit: resubmit, sendReplies: sendReplies)
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -144,7 +144,7 @@ class Reddit {
         try ensureValidAccessToken()
 
         let params = getIdentityParams()
-        let (data, response, error) = Requests.synchronousGet(with: params)
+        let (data, response, error) = Requests.getSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -188,7 +188,7 @@ class Reddit {
         let request = "reddit auth token fetch"
         
         let params = getAuthTokenFetchParams()
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -205,7 +205,7 @@ class Reddit {
         let request = "reddit access token refresh"
         
         let params = getAccessTokenRefreshParams()
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -304,15 +304,11 @@ class Reddit {
         try refreshAccessToken()
     }
     
-    private func getDataParams(dataDict: Requests.DataDict) -> Requests.DataParams {
-        return (dataDict, .applicationXWwwFormUrlencoded)
-    }
-    
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
         let dataDict = [Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN,
-                    Symbols.REFRESH_TOKEN: refreshToken!]
+                        Symbols.REFRESH_TOKEN: refreshToken!]
         
-        let data = getDataParams(dataDict: dataDict)
+        let data = Requests.getDataParams(dataDict: dataDict)
         let (url, auth) = getAccessTokenRequestUrlAuth()
         
         return (url, data, auth)
@@ -320,10 +316,10 @@ class Reddit {
     
     private func getAuthTokenFetchParams() -> Requests.PostParams {
         let dataDict = [Symbols.GRANT_TYPE: Symbols.AUTHORIZATION_CODE,
-                    Symbols.CODE: authCode!,
-                    Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
+                        Symbols.CODE: authCode!,
+                        Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
         
-        let data = getDataParams(dataDict: dataDict)
+        let data = Requests.getDataParams(dataDict: dataDict)
         let (url, auth) = getAccessTokenRequestUrlAuth()
         
         return (url, data, auth)
@@ -336,10 +332,10 @@ class Reddit {
         let titleString = post.title
         
         var dataDict = [Symbols.API_TYPE: Symbols.JSON,
-                    Symbols.RESUBMIT: resubmitString,
-                    Symbols.SEND_REPLIES: sendRepliesString,
-                    Symbols.SUBREDDIT: subredditString,
-                    Symbols.TITLE: titleString]
+                        Symbols.RESUBMIT: resubmitString,
+                        Symbols.SEND_REPLIES: sendRepliesString,
+                        Symbols.SUBREDDIT: subredditString,
+                        Symbols.TITLE: titleString]
         
         switch post.type {
         case .link:
@@ -351,7 +347,7 @@ class Reddit {
             dataDict[Symbols.TEXT] = post.text ?? ""
         }
         
-        let data = getDataParams(dataDict: dataDict)
+        let data = Requests.getDataParams(dataDict: dataDict)
         let auth = getBearerAuth()
         let url = URL(string: Reddit.ENDPOINT_SUBMIT)!
         
