@@ -11,7 +11,7 @@ import Foundation
 struct Requests {
     typealias DataDict = [String: String]
     typealias DataParams = (dataDict: DataDict, dataType: DataType)
-    typealias AuthParams = (username: String, password: String) // todo: add basicAuth: Bool
+    typealias AuthParams = (username: String, password: String, basicAuth: Bool) // todo: add basicAuth: Bool
     typealias PostParams = (url: URL, data: DataParams, auth: AuthParams?)
     typealias GetParams = (url: URL, auth: AuthParams?)
     typealias RequestBodyWithType = (httpBody: Data, contentType: String)
@@ -40,16 +40,20 @@ struct Requests {
         return (dataDict, dataType)
     }
     
+    static func getAuthParams(username: String, password: String, basicAuth: Bool = false) -> AuthParams {
+        return (username, password, basicAuth)
+    }
+    
     private static func getAuthHeader(_ auth: AuthParams) -> String {
-        let (username, password) = auth
+        let (username, password, basicAuth) = auth
         
         let authHeader: String
-        if username == "bearer" {
-            authHeader = "\(username) \(password)"
-        } else {
-            let authString = String(format: "%@:%@", username, password)
-            let authBase64 = authString.data(using: .utf8)!.base64EncodedString()
+        if basicAuth {
+            let authString = "\(username):\(password)"
+            let authBase64 = Data(authString.utf8).base64EncodedString()
             authHeader = "Basic \(authBase64)"
+        } else {
+            authHeader = "\(username) \(password)"
         }
         
         return authHeader

@@ -279,18 +279,18 @@ class Reddit {
     
     // MARK: - Helper methods
     
-    private func getAccessTokenRequestUrlAuth() -> (url: URL, auth: (username: String, password: String)) {
+    private func getAccessTokenRequestUrlAuth() -> (url: URL, auth: Requests.AuthParams) {
         let username = Reddit.PARAM_CLIENT_ID
         let password = Symbols.CLIENT_SECRET
         
-        let auth = (username: username, password: password)
+        let auth = Requests.getAuthParams(username: username, password: password, basicAuth: true)
         let url = URL(string: Reddit.ENDPOINT_ACCESS_TOKEN)!
         
         return (url, auth)
     }
     
-    private func getBearerAuth() -> (username: String, password: String) {
-        return (username: Symbols.BEARER, password: accessToken!)
+    private func getBearerAuth() -> Requests.AuthParams {
+        return Requests.getAuthParams(username: Symbols.BEARER, password: accessToken!)
     }
     
     private func ensureValidAccessToken() throws {

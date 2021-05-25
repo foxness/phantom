@@ -307,7 +307,7 @@ class Imgur {
         
         let data = Requests.getDataParams(dataDict: dataDict)
         
-        let auth = getAuth()
+        let auth = getBearerAuth()
         let url = getUploadEndpoint()
         
         return (url, data, auth)
@@ -321,7 +321,7 @@ class Imgur {
         
         let data = Requests.getDataParams(dataDict: dataDict, dataType: .multipartFormData)
         
-        let auth = getAuth()
+        let auth = getBearerAuth()
         let url = getUploadEndpoint()
         return (url, data, auth)
     }
@@ -334,7 +334,7 @@ class Imgur {
         
         let data = Requests.getDataParams(dataDict: dataDict)
         
-        let auth: (String, String)? = nil
+        let auth: Requests.AuthParams? = nil
         let url = URL(string: Imgur.ENDPOINT_REFRESH)!
         
         return (url, data, auth)
@@ -344,12 +344,8 @@ class Imgur {
         return URL(string: Imgur.ENDPOINT_UPLOAD)!
     }
     
-    private func getAuth() -> (username: String, password: String) {
-        let username = Symbols.BEARER
-        let password = accessToken!
-        
-        let auth = (username: username, password: password)
-        return auth
+    private func getBearerAuth() -> Requests.AuthParams {
+        return Requests.getAuthParams(username: Symbols.BEARER, password: accessToken!)
     }
     
     private static func getFixedImgurResponse(url: URL) -> URL {
