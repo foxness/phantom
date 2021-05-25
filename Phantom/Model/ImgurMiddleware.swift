@@ -64,7 +64,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
             case .success(let downloadResult):
                 let origData = downloadResult.originalData
 //                let pngData = downloadResult.image.pngData()!
-                Log.p("image size 1: \(origData.count) bytes")
+                Log.p("image size: \(origData.count) bytes")
                 imageData = origData
             case .failure(let kingfisherError):
                 kfError = kingfisherError
@@ -76,8 +76,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
         semaphore.wait()
         
         if let imageData = imageData {
-            assert(!imageData.isEmpty)
-//            Log.p("image size 2: \(imageData.count) bytes")
+            assert(!imageData.isEmpty) // todo: throw error if empty? or retry?
             return imageData
         } else if let kfError = kfError {
             throw PhantomError.couldntDownloadImage(kfError: kfError)
