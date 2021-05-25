@@ -304,20 +304,28 @@ class Reddit {
         try refreshAccessToken()
     }
     
+    private func getDataParams(dataDict: Requests.DataDict) -> Requests.DataParams {
+        return (dataDict, .applicationXWwwFormUrlencoded)
+    }
+    
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
-        let data = [Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN,
+        let dataDict = [Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN,
                     Symbols.REFRESH_TOKEN: refreshToken!]
         
+        let data = getDataParams(dataDict: dataDict)
         let (url, auth) = getAccessTokenRequestUrlAuth()
+        
         return (url, data, auth)
     }
     
     private func getAuthTokenFetchParams() -> Requests.PostParams {
-        let data = [Symbols.GRANT_TYPE: Symbols.AUTHORIZATION_CODE,
+        let dataDict = [Symbols.GRANT_TYPE: Symbols.AUTHORIZATION_CODE,
                     Symbols.CODE: authCode!,
                     Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
         
+        let data = getDataParams(dataDict: dataDict)
         let (url, auth) = getAccessTokenRequestUrlAuth()
+        
         return (url, data, auth)
     }
     
@@ -327,7 +335,7 @@ class Reddit {
         let subredditString = post.subreddit
         let titleString = post.title
         
-        var data = [Symbols.API_TYPE: Symbols.JSON,
+        var dataDict = [Symbols.API_TYPE: Symbols.JSON,
                     Symbols.RESUBMIT: resubmitString,
                     Symbols.SEND_REPLIES: sendRepliesString,
                     Symbols.SUBREDDIT: subredditString,
@@ -335,16 +343,18 @@ class Reddit {
         
         switch post.type {
         case .link:
-            data[Symbols.KIND] = Symbols.LINK
-            data[Symbols.URL] = post.url!
+            dataDict[Symbols.KIND] = Symbols.LINK
+            dataDict[Symbols.URL] = post.url!
             
         case .text:
-            data[Symbols.KIND] = Symbols.SELF
-            data[Symbols.TEXT] = post.text ?? ""
+            dataDict[Symbols.KIND] = Symbols.SELF
+            dataDict[Symbols.TEXT] = post.text ?? ""
         }
         
+        let data = getDataParams(dataDict: dataDict)
         let auth = getBearerAuth()
         let url = URL(string: Reddit.ENDPOINT_SUBMIT)!
+        
         return (url, data, auth)
     }
     

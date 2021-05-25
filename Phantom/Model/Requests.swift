@@ -9,8 +9,16 @@
 import Foundation
 
 struct Requests {
-    typealias PostParams = (url: URL, data: [String : String], auth: (username: String, password: String)?)
-    typealias GetParams = (url: URL, auth: (username: String, password: String)?)
+    typealias DataDict = [String: String]
+    typealias DataParams = (dataDict: DataDict, dataType: DataType)
+    typealias AuthParams = (username: String, password: String) // todo: add basicAuth: Bool
+    typealias PostParams = (url: URL, data: DataParams, auth: AuthParams?)
+    typealias GetParams = (url: URL, auth: AuthParams?)
+    typealias RequestBodyWithType = (httpBody: Data, contentType: String)
+    
+    enum DataType {
+        case multipartFormData, applicationXWwwFormUrlencoded
+    }
     
     private static let session = URLSession.shared
     
@@ -28,7 +36,9 @@ struct Requests {
         return 200..<300 ~= response.statusCode
     }
     
-    private static func getAuthField(username: String, password: String) -> String {
+    private static func getAuthField(_ auth: AuthParams) -> String {
+        let (username, password) = auth
+        
         let authHeader: String
         if username == "bearer" {
             authHeader = "\(username) \(password)"
@@ -41,22 +51,64 @@ struct Requests {
         return authHeader
     }
     
+    private static func getFormUrlencodedBodyWithType(dataDict: DataDict) -> RequestBodyWithType {
+        let url = URL(string: "https://example.com/")! // this isn't used anywhere, but it's required
+        var urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        urlc.queryItems = Helper.toUrlQueryItems(query: dataDict)
+        let query = urlc.url!.query!
+        
+        let httpBody = Data(query.utf8)
+        let contentType = "application/x-www-form-urlencoded"
+        
+        return (httpBody, contentType)
+    }
+    
+    private static func getMultipartFormDataBodyWithType(dataDict: DataDict) -> RequestBodyWithType {
+        let randomString = UUID().uuidString
+        let boundary = "Boundary-\(randomString)"
+
+        var body = ""
+        for (paramKey, paramValue) in dataDict {
+            body += "--\(boundary)\r\n"
+            body += "Content-Disposition:form-data; name=\"\(paramKey)\""
+            body += "\r\n\r\n\(paramValue)\r\n"
+        }
+
+        body += "--\(boundary)--\r\n";
+
+        let httpBody = Data(body.utf8)
+        let contentType = "multipart/form-data; boundary=\(boundary)"
+        
+        return (httpBody, contentType)
+    }
+    
+    private static func getRequestBodyWithType(data: DataParams) -> RequestBodyWithType {
+        let (dataDict, dataType) = data
+        
+        switch dataType {
+        case .applicationXWwwFormUrlencoded:
+            return getFormUrlencodedBodyWithType(dataDict: dataDict)
+            
+        case .multipartFormData:
+            return getMultipartFormDataBodyWithType(dataDict: dataDict)
+        }
+    }
+    
     static func formPostRequest(with params: PostParams) -> URLRequest {
         let (url, data, auth) = params
         
-        var urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        urlc.queryItems = Helper.toUrlQueryItems(query: data)
-        let query = urlc.url!.query!
+        let (httpBody, contentType) = getRequestBodyWithType(data: data)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = Data(query.utf8)
+        request.httpBody = httpBody
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         
         let userAgent = getUserAgent()
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         if let auth = auth {
-            let authHeader = getAuthField(username: auth.username, password: auth.password)
+            let authHeader = getAuthField(auth)
             request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }
         
@@ -96,7 +148,7 @@ struct Requests {
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         
         if let auth = params.auth {
-            let authHeader = getAuthField(username: auth.username, password: auth.password)
+            let authHeader = getAuthField(auth)
             request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }
         
@@ -125,60 +177,6 @@ struct Requests {
         
         semaphore.wait()
         
-        return (data, response, error)
-    }
-    
-    static func formPostRequest2(with params: PostParams) -> URLRequest {
-        let (url, data, auth) = params
-
-        let boundary = "Boundary-\(UUID().uuidString)"
-
-        var body = ""
-        for (paramKey, paramValue) in data {
-            body += "--\(boundary)\r\n"
-            body += "Content-Disposition:form-data; name=\"\(paramKey)\""
-            body += "\r\n\r\n\(paramValue)\r\n"
-        }
-
-        body += "--\(boundary)--\r\n";
-
-        let httpBody = body.data(using: .utf8)
-
-        var request = URLRequest(url: url)
-        request.setValue("\(auth!.username) \(auth!.password)", forHTTPHeaderField: "Authorization")
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-        request.httpBody = httpBody
-
-        let userAgent = getUserAgent()
-        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-
-        return request
-    }
-
-    static func post2(with params: PostParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        let request = formPostRequest2(with: params)
-        session.dataTask(with: request, completionHandler: completionHandler).resume()
-    }
-
-    static func synchronousPost2(with params: PostParams) -> (Data?, URLResponse?, Error?) {
-        var data: Data?
-        var response: URLResponse?
-        var error: Error?
-
-        let semaphore = DispatchSemaphore(value: 0)
-
-        Requests.post2(with: params) { (data_, response_, error_) in
-            data = data_
-            response = response_
-            error = error_
-
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-
         return (data, response, error)
     }
 }

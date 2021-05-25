@@ -302,19 +302,26 @@ class Imgur {
     private func getUploadImageParams(imageUrl: URL) -> Requests.PostParams {
         let imageString = imageUrl.absoluteString
         
-        let data = [Symbols.IMAGE: imageString,
+        let dataDict = [Symbols.IMAGE: imageString,
                     Symbols.TYPE: Symbols.URL]
+        
+        let dataType: Requests.DataType = .applicationXWwwFormUrlencoded
+        let data = (dataDict, dataType)
         
         let auth = getAuth()
         let url = getUploadEndpoint()
+        
         return (url, data, auth)
     }
     
     private func getDirectImageUploadParams(imageData: Data) -> Requests.PostParams {
         let imageString = imageData.base64EncodedString()
         
-        let data = [Symbols.IMAGE: imageString,
+        let dataDict = [Symbols.IMAGE: imageString,
                     Symbols.TYPE: Symbols.BASE64]
+        
+        let dataType: Requests.DataType = .multipartFormData
+        let data = (dataDict, dataType)
         
         let auth = getAuth()
         let url = getUploadEndpoint()
@@ -322,10 +329,13 @@ class Imgur {
     }
     
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
-        let data = [Symbols.REFRESH_TOKEN: refreshToken!,
+        let dataDict = [Symbols.REFRESH_TOKEN: refreshToken!,
                     Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
                     Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
                     Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
+        
+        let dataType: Requests.DataType = .applicationXWwwFormUrlencoded
+        let data = (dataDict, dataType)
         
         let auth: (String, String)? = nil
         let url = URL(string: Imgur.ENDPOINT_REFRESH)!
