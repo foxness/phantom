@@ -35,7 +35,7 @@ class PostSubmitter {
             self.post = post
             self.callback = callback
             self.params = params
-            self.retryStrategy = RetryStrategy.delay(maxRetryCount: 5, retryInterval: 3)
+            self.retryStrategy = DebugVariable.disableRetry ? .noRetry : .delay(maxRetryCount: 5, retryInterval: 3)
             
             self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
         }
@@ -60,7 +60,7 @@ class PostSubmitter {
             }
             
             if let imgur = imgur {
-                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode)
+                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
                 let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
                 mw.append(imgurMw)
             } else if params.wallpaperMode {
@@ -99,7 +99,7 @@ class PostSubmitter {
         
         private static func submitProcessedPost(_ post: Post, using reddit: Reddit) throws -> String {
             guard !DebugVariable.simulateReddit else {
-                sleep(3)
+                sleep(1)
                 
                 return "https://simulated-url-lolz.com/"
             }
@@ -123,8 +123,8 @@ class PostSubmitter {
         }
         
         private func submitWithDelayRetryStrategy(maxRetryCount: Int, retryInterval: TimeInterval?) -> SubmitResult {
-            var retryCount = 0
-            var lastError: Error?
+            var retryCount = 0 // todo: show attempt count to user
+            var lastError: Error? // todo: let user change retry strategy
             
             while retryCount < maxRetryCount {
                 if retryCount > 0 {

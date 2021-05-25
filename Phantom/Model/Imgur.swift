@@ -71,6 +71,7 @@ class Imgur {
         static let WIDTH = "width"
         static let HEIGHT = "height"
         static let GRANT_TYPE = "grant_type"
+        static let BASE64 = "base64"
     }
     
     // MARK: - Constants
@@ -127,6 +128,23 @@ class Imgur {
         try ensureValidAccessToken()
         
         let params = getUploadImageParams(imageUrl: imageUrl)
+        let (data, response, error) = Requests.synchronousPost(with: params)
+        
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
+        let imgurImage = try Imgur.deserializeImgurImage(json: json, request: request)
+        
+        return imgurImage
+    }
+    
+    func directlyUploadImage(imageData: Data) throws -> Image {
+        assert(isLoggedIn)
+        
+        let request = "imgur upload direct"
+        
+        try ensureValidAccessToken()
+        
+        let params = getDirectImageUploadParams(imageData: imageData)
         let (data, response, error) = Requests.synchronousPost(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
@@ -287,11 +305,19 @@ class Imgur {
         let data = [Symbols.IMAGE: imageString,
                     Symbols.TYPE: Symbols.URL]
         
-        let username = Symbols.BEARER
-        let password = accessToken!
+        let auth = getAuth()
+        let url = getUploadEndpoint()
+        return (url, data, auth)
+    }
+    
+    private func getDirectImageUploadParams(imageData: Data) -> Requests.PostParams {
+        let imageString = imageData.base64EncodedString()
         
-        let auth = (username: username, password: password)
-        let url = URL(string: Imgur.ENDPOINT_UPLOAD)!
+        let data = [Symbols.IMAGE: imageString,
+                    Symbols.TYPE: Symbols.BASE64]
+        
+        let auth = getAuth()
+        let url = getUploadEndpoint()
         return (url, data, auth)
     }
     
@@ -305,6 +331,18 @@ class Imgur {
         let url = URL(string: Imgur.ENDPOINT_REFRESH)!
         
         return (url, data, auth)
+    }
+    
+    private func getUploadEndpoint() -> URL {
+        return URL(string: Imgur.ENDPOINT_UPLOAD)!
+    }
+    
+    private func getAuth() -> (username: String, password: String) {
+        let username = Symbols.BEARER
+        let password = accessToken!
+        
+        let auth = (username: username, password: password)
+        return auth
     }
     
     private static func getFixedImgurResponse(url: URL) -> URL {

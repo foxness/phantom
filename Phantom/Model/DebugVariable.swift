@@ -10,7 +10,9 @@ import Foundation
 
 struct DebugVariable {
     static let simulateMiddleware = false
-    static let simulateReddit = false
+    static let simulateReddit = true
+    static let disableRetry = true
+    static let directImgurUpload = false
     
     static let wipeDatabase = false
     static let wipeAuth = false

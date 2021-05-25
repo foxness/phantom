@@ -128,57 +128,57 @@ struct Requests {
         return (data, response, error)
     }
     
-//    static func formPostRequest2(with params: PostParams) -> URLRequest {
-//        let (url, data, auth) = params
-//
-//        let boundary = "Boundary-\(UUID().uuidString)"
-//
-//        var body = ""
-//        for (paramKey, paramValue) in data {
-//            body += "--\(boundary)\r\n"
-//            body += "Content-Disposition:form-data; name=\"\(paramKey)\""
-//            body += "\r\n\r\n\(paramValue)\r\n"
-//        }
-//
-//        body += "--\(boundary)--\r\n";
-//
-//        let httpBody = body.data(using: .utf8)
-//
-//        var request = URLRequest(url: url)
-//        request.setValue("\(auth!.username) \(auth!.password)", forHTTPHeaderField: "Authorization")
-//        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-//
-//        request.httpMethod = "POST"
-//        request.httpBody = httpBody
-//
-//        let userAgent = getUserAgent()
-//        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-//
-//        return request
-//    }
-//
-//    static func post2(with params: PostParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-//        let request = formPostRequest2(with: params)
-//        session.dataTask(with: request, completionHandler: completionHandler).resume()
-//    }
-//
-//    static func synchronousPost2(with params: PostParams) -> (Data?, URLResponse?, Error?) {
-//        var data: Data?
-//        var response: URLResponse?
-//        var error: Error?
-//
-//        let semaphore = DispatchSemaphore(value: 0)
-//
-//        Requests.post2(with: params) { (data_, response_, error_) in
-//            data = data_
-//            response = response_
-//            error = error_
-//
-//            semaphore.signal()
-//        }
-//
-//        semaphore.wait()
-//
-//        return (data, response, error)
-//    }
+    static func formPostRequest2(with params: PostParams) -> URLRequest {
+        let (url, data, auth) = params
+
+        let boundary = "Boundary-\(UUID().uuidString)"
+
+        var body = ""
+        for (paramKey, paramValue) in data {
+            body += "--\(boundary)\r\n"
+            body += "Content-Disposition:form-data; name=\"\(paramKey)\""
+            body += "\r\n\r\n\(paramValue)\r\n"
+        }
+
+        body += "--\(boundary)--\r\n";
+
+        let httpBody = body.data(using: .utf8)
+
+        var request = URLRequest(url: url)
+        request.setValue("\(auth!.username) \(auth!.password)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        request.httpMethod = "POST"
+        request.httpBody = httpBody
+
+        let userAgent = getUserAgent()
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+
+        return request
+    }
+
+    static func post2(with params: PostParams, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let request = formPostRequest2(with: params)
+        session.dataTask(with: request, completionHandler: completionHandler).resume()
+    }
+
+    static func synchronousPost2(with params: PostParams) -> (Data?, URLResponse?, Error?) {
+        var data: Data?
+        var response: URLResponse?
+        var error: Error?
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        Requests.post2(with: params) { (data_, response_, error_) in
+            data = data_
+            response = response_
+            error = error_
+
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+
+        return (data, response, error)
+    }
 }
