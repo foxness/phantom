@@ -75,6 +75,11 @@ class PostSubmitter {
         }
         
         private static func processPost(_ post: Post, using middlewares: [RequiredMiddleware]) throws -> Post {
+            guard !DebugVariable.simulateError else {
+                sleep(1)
+                throw PhantomError.requiredMiddlewareNoEffect(middleware: "SimulatedError")
+            }
+            
             guard !DebugVariable.simulateMiddleware else {
                 sleep(1)
                 return post

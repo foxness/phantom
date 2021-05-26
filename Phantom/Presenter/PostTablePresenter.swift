@@ -103,7 +103,7 @@ class PostTablePresenter {
         
         disabledPostIdBecauseMain = post.id // make the post uneditable
         
-        viewDelegate?.setSubmissionIndicator(start: true, onDisappear: nil) // let the user know
+        viewDelegate?.setSubmissionIndicator(.submitting, completion: nil) // let the user know
         
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
@@ -113,27 +113,29 @@ class PostTablePresenter {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
+                self.disabledPostIdBecauseMain = nil // make editable
+                
                 switch result {
                 case .success(let url):
                     Log.p("reddit url", url)
                     
                     self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
+                    
+                    self.viewDelegate?.setSubmissionIndicator(.done) {
+                        // when the indicator disappears:
+                        self.disableSubmissionBecauseMain = false
+                    }
                 case .failure(let error):
                     Log.p("got error", error)
                     
-                    // todo: handle error !!1
-                    PostNotifier.notifyUser(about: post)
-                    // todo: notify user it's gone wrong
+                    PostNotifier.notifyUser(about: post) // reschedule the canceled notification
+                    
+                    self.viewDelegate?.setSubmissionIndicator(.hidden, completion: nil)
+                    self.disableSubmissionBecauseMain = false
                     
                     let title = "An error has occurred"
                     let message = "\(error.localizedDescription)"
                     self.viewDelegate?.showAlert(title: title, message: message)
-                }
-                
-                self.disabledPostIdBecauseMain = nil // make editable
-                self.viewDelegate?.setSubmissionIndicator(start: false) {
-                    // when the indicator disappears:
-                    self.disableSubmissionBecauseMain = false
                 }
             }
         }
