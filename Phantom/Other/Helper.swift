@@ -11,6 +11,8 @@ import Foundation
 struct Helper {
     private static let RANDOM_STATE_LENGTH = 10
     
+    private init() { }
+    
     static func getQueryItems(url: URL) -> [String: String] {
         let urlc = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         let params = urlc.queryItems!.reduce(into: [String:String]()) { $0[$1.name] = $1.value }

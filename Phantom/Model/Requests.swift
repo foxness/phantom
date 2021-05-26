@@ -11,13 +11,13 @@ import Foundation
 struct Requests {
     typealias DataDict = [String: String]
     typealias DataParams = (dataDict: DataDict, dataType: DataType)
-    typealias AuthParams = (username: String, password: String, basicAuth: Bool) // todo: add basicAuth: Bool
+    typealias AuthParams = (username: String, password: String, basicAuth: Bool)
     typealias PostParams = (url: URL, data: DataParams, auth: AuthParams?)
     typealias GetParams = (url: URL, auth: AuthParams?)
     typealias RequestBodyWithType = (httpBody: Data, contentType: String)
     
     enum DataType {
-        case multipartFormData, applicationXWwwFormUrlencoded
+        case multipartFormData, formUrlEncoded
     }
     
     private static let session = URLSession.shared
@@ -36,7 +36,7 @@ struct Requests {
         return 200..<300 ~= response.statusCode
     }
     
-    static func getDataParams(dataDict: DataDict, dataType: DataType = .applicationXWwwFormUrlencoded) -> DataParams {
+    static func getDataParams(dataDict: DataDict, dataType: DataType = .formUrlEncoded) -> DataParams {
         return (dataDict, dataType)
     }
     
@@ -94,7 +94,7 @@ struct Requests {
         let (dataDict, dataType) = data
         
         switch dataType {
-        case .applicationXWwwFormUrlencoded:
+        case .formUrlEncoded:
             return getFormUrlencodedBodyWithType(dataDict: dataDict)
             
         case .multipartFormData:
@@ -110,15 +110,10 @@ struct Requests {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = httpBody
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         
-        let userAgent = getUserAgent()
-        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        
-        if let auth = auth {
-            let authHeader = getAuthHeader(auth)
-            request.setValue(authHeader, forHTTPHeaderField: "Authorization")
-        }
+        setContentType(for: &request, contentType: contentType)
+        setUserAgent(for: &request)
+        setAuthHeader(for: &request, auth: auth)
         
         return request
     }
@@ -152,13 +147,8 @@ struct Requests {
         var request = URLRequest(url: params.url)
         request.httpMethod = "GET"
         
-        let userAgent = getUserAgent()
-        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        
-        if let auth = params.auth {
-            let authHeader = getAuthHeader(auth)
-            request.setValue(authHeader, forHTTPHeaderField: "Authorization")
-        }
+        setUserAgent(for: &request)
+        setAuthHeader(for: &request, auth: params.auth)
         
         return request
     }
@@ -186,5 +176,21 @@ struct Requests {
         semaphore.wait()
         
         return (data, response, error)
+    }
+    
+    private static func setUserAgent(for request: inout URLRequest) {
+        let userAgent = getUserAgent()
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+    }
+    
+    private static func setAuthHeader(for request: inout URLRequest, auth: AuthParams?) {
+        guard let auth = auth else { return }
+        
+        let authHeader = getAuthHeader(auth)
+        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
+    }
+    
+    private static func setContentType(for request: inout URLRequest, contentType: String) {
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
     }
 }
