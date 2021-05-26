@@ -125,7 +125,7 @@ class ThumbnailResolver {
         let request = "generic thumbnail url"
         
         let params: Requests.GetParams = (url: URL(string: url)!, auth: nil)
-        let (data, response, error) = Requests.synchronousGet(with: params)
+        let (data, response, error) = Requests.getSync(with: params)
         
         guard let goodData = try? Helper.ensureGoodResponse(data: data, response: response, error: error, request: request),
               let rawHtml = String(data: goodData, encoding: .utf8),

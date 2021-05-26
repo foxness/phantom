@@ -33,7 +33,7 @@ struct Wallhaven {
         let request = "wallhaven direct url"
         
         let params: Requests.GetParams = (url: indirectWallhavenUrl, auth: nil)
-        let (data, response, error) = Requests.synchronousGet(with: params)
+        let (data, response, error) = Requests.getSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         

@@ -71,6 +71,7 @@ class Imgur {
         static let WIDTH = "width"
         static let HEIGHT = "height"
         static let GRANT_TYPE = "grant_type"
+        static let BASE64 = "base64"
     }
     
     // MARK: - Constants
@@ -127,7 +128,24 @@ class Imgur {
         try ensureValidAccessToken()
         
         let params = getUploadImageParams(imageUrl: imageUrl)
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
+        
+        let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
+        let json = try Helper.deserializeResponse(data: goodData, request: request)
+        let imgurImage = try Imgur.deserializeImgurImage(json: json, request: request)
+        
+        return imgurImage
+    }
+    
+    func directlyUploadImage(imageData: Data) throws -> Image {
+        assert(isLoggedIn)
+        
+        let request = "imgur upload direct"
+        
+        try ensureValidAccessToken()
+        
+        let params = getDirectImageUploadParams(imageData: imageData)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -181,7 +199,7 @@ class Imgur {
         let request = "imgur access token refresh"
         
         let params = getAccessTokenRefreshParams()
-        let (data, response, error) = Requests.synchronousPost(with: params)
+        let (data, response, error) = Requests.postSync(with: params)
         
         let goodData = try Helper.ensureGoodResponse(data: data, response: response, error: error, request: request)
         let json = try Helper.deserializeResponse(data: goodData, request: request)
@@ -284,27 +302,50 @@ class Imgur {
     private func getUploadImageParams(imageUrl: URL) -> Requests.PostParams {
         let imageString = imageUrl.absoluteString
         
-        let data = [Symbols.IMAGE: imageString,
-                    Symbols.TYPE: Symbols.URL]
+        let dataDict = [Symbols.IMAGE: imageString,
+                        Symbols.TYPE: Symbols.URL]
         
-        let username = Symbols.BEARER
-        let password = accessToken!
+        let data = Requests.getDataParams(dataDict: dataDict)
         
-        let auth = (username: username, password: password)
-        let url = URL(string: Imgur.ENDPOINT_UPLOAD)!
+        let auth = getBearerAuth()
+        let url = getUploadEndpoint()
+        
+        return (url, data, auth)
+    }
+    
+    private func getDirectImageUploadParams(imageData: Data) -> Requests.PostParams {
+        let imageString = imageData.base64EncodedString()
+        
+        let dataDict = [Symbols.IMAGE: imageString,
+                        Symbols.TYPE: Symbols.BASE64]
+        
+        let data = Requests.getDataParams(dataDict: dataDict, dataType: .multipartFormData)
+        
+        let auth = getBearerAuth()
+        let url = getUploadEndpoint()
         return (url, data, auth)
     }
     
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
-        let data = [Symbols.REFRESH_TOKEN: refreshToken!,
-                    Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
-                    Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
-                    Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
+        let dataDict = [Symbols.REFRESH_TOKEN: refreshToken!,
+                        Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
+                        Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
+                        Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
         
-        let auth: (String, String)? = nil
+        let data = Requests.getDataParams(dataDict: dataDict)
+        
+        let auth: Requests.AuthParams? = nil
         let url = URL(string: Imgur.ENDPOINT_REFRESH)!
         
         return (url, data, auth)
+    }
+    
+    private func getUploadEndpoint() -> URL {
+        return URL(string: Imgur.ENDPOINT_UPLOAD)!
+    }
+    
+    private func getBearerAuth() -> Requests.AuthParams {
+        return Requests.getAuthParams(username: Symbols.BEARER, password: accessToken!)
     }
     
     private static func getFixedImgurResponse(url: URL) -> URL {

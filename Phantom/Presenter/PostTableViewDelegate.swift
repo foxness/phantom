@@ -12,13 +12,17 @@ enum ListAnimation {
     case none, top, right, automatic
 }
 
+enum SubmissionIndicatorState {
+    case hidden, submitting, done
+}
+
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
     func segueToRedditLogin()
     func segueToImgurLogin()
     func segueToBulkAdd()
     
-    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)?)
+    func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)
     func showAlert(title: String, message: String)
     
     func showSlideUpMenu()

@@ -9,6 +9,8 @@
 import UIKit
 
 class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate {
+    // MARK: - Nested entities
+    
     enum Segue: String {
         case showIntroduction, menuRedditLogin, menuImgurLogin, menuBulkAdd, addPost, editPost
     }
@@ -32,7 +34,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     @IBOutlet private weak var submissionIndicatorView: UIView!
     @IBOutlet private weak var submissionIndicatorLabel: UILabel!
-    @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView!
+    @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView! // loading icon thing
     
     @IBOutlet weak var imgurButton: UIBarButtonItem!
     @IBOutlet weak var moreButtton: UIBarButtonItem!
@@ -202,23 +204,35 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         NSLayoutConstraint.activate(constraints)
     }
     
-    func setSubmissionIndicator(start: Bool, onDisappear: (() -> Void)? = nil) {
-        func set(show: Bool) { submissionIndicatorView.isHidden = !show }
-        
-        submissionIndicatorActivity.isHidden = !start
-        submissionIndicatorLabel.text = start ? PostTableViewController.TEXT_INDICATOR_SUBMITTING
-            : PostTableViewController.TEXT_INDICATOR_DONE
-        submissionIndicatorView.backgroundColor = start ? PostTableViewController.COLOR_INDICATOR_SUBMITTING
-            : PostTableViewController.COLOR_INDICATOR_DONE
-        
-        if start {
-            set(show: true)
-        } else {
+    func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?) {
+        switch state {
+        case .submitting:
+            
+            submissionIndicatorActivity.isHidden = false
+            submissionIndicatorLabel.text = PostTableViewController.TEXT_INDICATOR_SUBMITTING
+            submissionIndicatorView.backgroundColor = PostTableViewController.COLOR_INDICATOR_SUBMITTING
+            
+            submissionIndicatorView.isHidden = false
+            completion?()
+            
+        case .done:
+            
+            submissionIndicatorActivity.isHidden = true
+            submissionIndicatorLabel.text = PostTableViewController.TEXT_INDICATOR_DONE
+            submissionIndicatorView.backgroundColor = PostTableViewController.COLOR_INDICATOR_DONE
+            
             let disappearTime = DispatchTime.now() + PostTableViewController.DURATION_INDICATOR_DONE
-            DispatchQueue.main.asyncAfter(deadline: disappearTime) {
-                set(show: false)
-                onDisappear?()
+            DispatchQueue.main.asyncAfter(deadline: disappearTime) { [weak self] in
+                guard let self = self else { return }
+                
+                self.submissionIndicatorView.isHidden = true
+                completion?()
             }
+            
+        case .hidden:
+            
+            self.submissionIndicatorView.isHidden = true
+            completion?()
         }
     }
 

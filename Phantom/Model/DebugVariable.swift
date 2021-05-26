@@ -9,8 +9,33 @@
 import Foundation
 
 struct DebugVariable {
-    static let simulateMiddleware = false
-    static let simulateReddit = false
+    private static let phoneDeploy = false
+    
+    // Debug ---------------------------------------------
+    
+    private static let simulateMiddlewareDebug = false
+    private static let simulateRedditDebug = true
+    private static let disableRetryDebug = true
+    private static let directImgurUploadDebug = false
+    private static let simulateErrorDebug = false
+    
+    // Phone ---------------------------------------------
+    
+    private static let simulateMiddlewarePhone = false
+    private static let simulateRedditPhone = false
+    private static let disableRetryPhone = false
+    private static let directImgurUploadPhone = true
+    private static let simulateErrorPhone = false
+    
+    // Calculated ----------------------------------------
+    
+    static let simulateMiddleware = phoneDeploy ? simulateMiddlewarePhone : simulateMiddlewareDebug
+    static let simulateReddit = phoneDeploy ? simulateRedditPhone : simulateRedditDebug
+    static let disableRetry = phoneDeploy ? disableRetryPhone : disableRetryDebug
+    static let directImgurUpload = phoneDeploy ? directImgurUploadPhone : directImgurUploadDebug
+    static let simulateError = phoneDeploy ? simulateErrorPhone : simulateErrorDebug
+    
+    // Database wipe -------------------------------------
     
     static let wipeDatabase = false
     static let wipeAuth = false
