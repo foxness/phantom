@@ -60,7 +60,8 @@ struct Post: Equatable, Codable {
         case .text:
             goodContent = text == nil || text!.count < Reddit.LIMIT_TEXT_LENGTH
         case .link:
-            goodContent = url != nil && URL(string: url!) != nil
+            goodContent = url != nil && Helper.isValidUrlForgiving(url!)
+            Log.p("\(url) is \(goodContent ? "" : "not ")a valid url")
         }
         
         return goodTitle && goodSubreddit && goodContent

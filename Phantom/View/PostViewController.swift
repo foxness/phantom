@@ -9,7 +9,7 @@
 import UIKit
 
 class PostViewController: UIViewController, PostViewDelegate {
-    enum Segue: String {
+    enum Segue: String { // todo: move away from auto string segue enums to 'backSavePost = "backSavePost"'?
         case backSavePost // post to list
     }
     

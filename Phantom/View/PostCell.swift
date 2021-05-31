@@ -11,6 +11,9 @@ import Kingfisher
 
 // todo: add custom kingfisher image cache to avoid calculating wallhaven & imgur thumbnail urls?
 
+// todo: fix not showing thumbnail of "i.imgur.com/asd.jpg"????
+// todo: fix thumbnail resolver crashing on unreachable post url "a.com"
+
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     

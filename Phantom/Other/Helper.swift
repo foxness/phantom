@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Helper {
     private static let RANDOM_STATE_LENGTH = 10
@@ -68,6 +69,21 @@ struct Helper {
     
     static func isImageUrl(_ url: String) -> Bool {
         return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
+    }
+    
+    static func isValidUrlForgiving(_ url: String) -> Bool { // forgiving version of isValidUrl()
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let range = NSRange(location: 0, length: url.utf16.count)
+        
+        guard let match = detector.firstMatch(in: url, options: [], range: range) else { return false }
+        
+        return match.range.length == url.utf16.count // it is a link, if the match covers the whole string
+    }
+    
+    static func isValidUrl(_ url: String) -> Bool { // this is never used anywhere (yet)
+        guard let url_ = URL(string: url) else { return false }
+
+        return UIApplication.shared.canOpenURL(url_)
     }
     
     static func extractNamedGroup(_ namedGroup: String, from string: String, using regexes: [String]) -> String? {
