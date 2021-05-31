@@ -40,7 +40,7 @@ struct Helper {
     }
     
     static func ensureGoodResponse(data: Data?, response: URLResponse?, error: Error?, request: String) throws -> Data {
-        let httpResponse = response as! HTTPURLResponse
+        let httpResponse = response as! HTTPURLResponse // todo: fix trying to download thumbnail of non image posts (I typed "y" as url and it somehow got to this exception), todo 2: remove "as!" as I actually encountered a situation where it crashed an app
         
         if let error = error {
             throw PhantomError.responseHasError(request: request, error: error, data: data, response: httpResponse)

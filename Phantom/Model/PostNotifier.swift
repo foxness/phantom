@@ -28,19 +28,19 @@ struct PostNotifier {
         let date = post.date
         guard date > Date() else { return } // todo: dont notify if post is due in less than 1 min
         
+        let postId = post.id.uuidString
+        let postDate = dateToComponents(date)
+        
         let title = post.title
         let body = "Time to submit has come"
         let subtitle: String? = nil
-        let userInfo = [KEY_POST_ID: post.id.uuidString]
+        let userInfo = [KEY_POST_ID: postId]
         let categoryId = CATEGORY_DUE_POST
         let sound = UNNotificationSound.default
         let badgeCount = 1
         
-        let id = post.id.uuidString
-        let dc = dateToComponents(date)
-        
         let content = Notifications.ContentParams(title: title, body: body, subtitle: subtitle, userInfo: userInfo, categoryId: categoryId, sound: sound, badgeCount: badgeCount)
-        let params = Notifications.RequestParams(id: id, dc: dc, content: content)
+        let params = Notifications.RequestParams(id: postId, dc: postDate, content: content)
         
         Notifications.request(params: params) { error in
             if let error = error {
@@ -89,19 +89,21 @@ struct PostNotifier {
         default:
             fatalError()
         }
+        
+        // todo: call callback() in all instances (debug output warns about this)
     }
     
     static func getDuePostCategory() -> UNNotificationCategory {
         let actionId = ACTION_SUBMIT
         let actionTitle = TITLE_SUBMIT_ACTION
-        let actionOptions: UNNotificationActionOptions = []
+        let actionOptions: UNNotificationActionOptions = [] // todo: ".foreground" option that launches app into foreground and starts submitting?
         
         let submitAction = UNNotificationAction(identifier: actionId,
                                                 title: actionTitle,
                                                 options: actionOptions)
         
         let categoryId = CATEGORY_DUE_POST
-        let categoryActions = [submitAction]
+        let categoryActions: [UNNotificationAction] = [] // [submitAction] // todo: re-add submit action again?
         let categoryIntents: [String] = []
         let categoryPlaceholder = ""
         let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]

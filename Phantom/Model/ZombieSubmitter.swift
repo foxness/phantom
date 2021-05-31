@@ -10,6 +10,14 @@ import Foundation
 
 // todo: reverse dns names wherever possible
 
+// zombie submitter todo:
+// - create imgur instance for submitter if it's not created yet (similar to reddit ^)
+// - save imgur auth after submission (similar to reddit)
+// - upload image to imgur only with url and not directly in zombie because time is precious here?
+// - notify user if there was an error
+// - lots of refactor
+// - revive by enabling submit notification action again
+
 struct ZombieSubmitter {
     static let NOTIFICATION_WOKE_UP = Notification.Name("zombieWokeUp")
     static let NOTIFICATION_SUBMITTED = Notification.Name("zombieSubmittedFromBeyondTheGrave")

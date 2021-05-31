@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
+        // todo: make a callback here that calls completionHandler in main thread (required??, else crashes?)
+        
         PostNotifier.didReceiveResponse(response, callback: completionHandler)
     }
 
