@@ -9,8 +9,6 @@
 import UIKit
 import Kingfisher
 
-// todo: fix thumbnail resolver crashing on unreachable post url "a.com"
-
 class PostCell: UITableViewCell {
     static let IDENTIFIER = "PostCell"
     

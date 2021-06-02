@@ -13,6 +13,7 @@ enum PhantomError: LocalizedError, CustomDebugStringConvertible {
     case responseHasError(request: String, error: Error, data: Data?, response: HTTPURLResponse?)
     case badResponse(request: String, response: HTTPURLResponse, data: Data?)
     case deserialization(request: String, raw: String)
+    case noResponse(request: String)
     case requiredMiddlewareNoEffect(middleware: String)
     case couldntDownloadImage(kfError: KingfisherError)
     
@@ -34,6 +35,8 @@ enum PhantomError: LocalizedError, CustomDebugStringConvertible {
             return "Required middleware \(middleware) had no effect"
         case .couldntDownloadImage(let kfError):
             return "Couldn't download image: \(kfError.localizedDescription)"
+        case .noResponse(let request):
+            return "Didn't receive response to \(request)"
         }
     }
     
@@ -49,6 +52,8 @@ enum PhantomError: LocalizedError, CustomDebugStringConvertible {
             return "PhantomError.requiredMiddlewareNoEffect(middleware: \(String(describing: middleware)))"
         case .couldntDownloadImage(let kfError):
             return "PhantomError.couldntDownloadImage(kfError: \(String(reflecting: kfError)))"
+        case .noResponse(let request):
+            return "PhantomError.noResponse(request: \(String(reflecting: request))"
         }
     }
     
