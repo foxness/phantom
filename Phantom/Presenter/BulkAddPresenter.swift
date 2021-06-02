@@ -76,8 +76,8 @@ class BulkAddPresenter { // todo: add paste button
             
             guard properties.count == 2 else { return nil }
             
-            let title = properties[0]
-            let url = properties[1]
+            let title = properties[0].trim()
+            let url = properties[1].trim()
             
             guard !title.isEmpty && URL(string: url) != nil else { return nil }
             

@@ -27,11 +27,11 @@ class PostViewController: UIViewController, PostViewDelegate {
     private let presenter = PostPresenter()
     
     var postTitle: String {
-        return PostViewController.emptyIfNull(titleField.text)
+        return PostViewController.emptyIfNull(titleField.text?.trim())
     }
     
     var postSubreddit: String {
-        return PostViewController.emptyIfNull(subredditField.text)
+        return PostViewController.emptyIfNull(subredditField.text?.trim())
     }
     
     var postDate: Date {
@@ -43,11 +43,11 @@ class PostViewController: UIViewController, PostViewDelegate {
     }
     
     var postUrl: String? {
-        return contentField.text
+        return contentField.text?.trim()
     }
     
     var postText: String? {
-        return contentField.text
+        return contentField.text?.trim()
     }
     
     func setSaveButton(enabled: Bool) {

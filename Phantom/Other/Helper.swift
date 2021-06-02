@@ -71,7 +71,9 @@ struct Helper {
         return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
     }
     
-    static func isValidUrlForgiving(_ url: String) -> Bool { // forgiving version of isValidUrl()
+    static func isValidUrl(_ url: String) -> Bool {
+        guard url.hasPrefix("https://") || url.hasPrefix("http://") else { return false }
+        
         let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
         let range = NSRange(location: 0, length: url.utf16.count)
         
@@ -80,11 +82,20 @@ struct Helper {
         return match.range.length == url.utf16.count // it is a link, if the match covers the whole string
     }
     
-    static func isValidUrl(_ url: String) -> Bool { // this is never used anywhere (yet)
-        guard let url_ = URL(string: url) else { return false }
-
-        return UIApplication.shared.canOpenURL(url_)
-    }
+//    static func isValidUrlForgiving(_ url: String) -> Bool { // forgiving version of isValidUrl()
+//        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+//        let range = NSRange(location: 0, length: url.utf16.count)
+//
+//        guard let match = detector.firstMatch(in: url, options: [], range: range) else { return false }
+//
+//        return match.range.length == url.utf16.count // it is a link, if the match covers the whole string
+//    }
+    
+//    static func isValidUrl(_ url: String) -> Bool { // this is never used anywhere (yet)
+//        guard let url_ = URL(string: url) else { return false }
+//
+//        return UIApplication.shared.canOpenURL(url_)
+//    }
     
     static func extractNamedGroup(_ namedGroup: String, from string: String, using regexes: [String]) -> String? {
         for regex in regexes {
