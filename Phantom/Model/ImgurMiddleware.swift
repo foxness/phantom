@@ -21,7 +21,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
         self.directUpload = directUpload
     }
     
-    func transform(post: Post) throws -> (post: Post, changed: Bool) {
+    func transform(post: Post) throws -> MiddlewareResult {
         guard ImgurMiddleware.isRightPost(post) else { return (post, changed: false) }
         
         let url = URL(string: post.url!)!

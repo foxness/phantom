@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias MiddlewareResult = (post: Post, changed: Bool)
+
 protocol SubmitterMiddleware {
-    func transform(post: Post) throws -> (post: Post, changed: Bool)
+    func transform(post: Post) throws -> MiddlewareResult
 }

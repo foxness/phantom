@@ -9,7 +9,7 @@
 import Foundation
 
 struct WallhavenMiddleware: SubmitterMiddleware {
-    func transform(post: Post) throws -> (post: Post, changed: Bool) {
+    func transform(post: Post) throws -> MiddlewareResult {
         let (isIndirectUrl, isDirectUrl) = WallhavenMiddleware.isRightPost(post)
         
         let (right, alreadyChanged) = (isIndirectUrl, isDirectUrl)

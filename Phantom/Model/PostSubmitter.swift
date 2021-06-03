@@ -8,8 +8,13 @@
 
 import Foundation
 
+// todo: show attempt count to user
+// todo: let user change retry strategy
+// todo: handle imgur 10 MB error
+
 class PostSubmitter {
-    typealias SubmitResult = Result<String, Error> // string is reddit post url
+    typealias RedditPostUrl = String
+    typealias SubmitResult = Result<RedditPostUrl, Error>
     typealias SubmitCallback = (_ result: SubmitResult) -> Void
     
     struct SubmitParams {
@@ -18,6 +23,9 @@ class PostSubmitter {
     }
     
     private class PostSubmission: Operation {
+        private typealias ProcessResult = Result<Post, Error>
+        private typealias ProcessResultWithTries = Result<(post: Post, triesLeft: Int), Error>
+        
         private let reddit: Reddit
         private let post: Post
         private let callback: SubmitCallback
@@ -35,7 +43,7 @@ class PostSubmitter {
             self.post = post
             self.callback = callback
             self.params = params
-            self.retryStrategy = DebugVariable.disableRetry ? .noRetry : .delay(maxRetryCount: 5, retryInterval: 3)
+            self.retryStrategy = DebugVariable.disableRetry ? .noRetry : .delay(delayRetryStrategy: DelayRetryStrategy(maxRetryCount: 5, retryInterval: 3))
             
             self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
         }
@@ -74,69 +82,53 @@ class PostSubmitter {
             return database.posts.last!
         }
         
-        private static func processPost(_ post: Post, using middlewares: [RequiredMiddleware]) throws -> Post {
-            guard !DebugVariable.simulateError else {
-                sleep(1)
-                throw PhantomError.requiredMiddlewareNoEffect(middleware: "SimulatedError")
-            }
+        override func main() {
+            guard !isCancelled else { return } // we need more of these in this method (actually everywhere in this class)
             
-            guard !DebugVariable.simulateMiddleware else {
-                sleep(1)
-                return post
-            }
+            Log.p("submission task started")
             
-            var processedPost = post
-            for middleware in middlewares {
-                let middlewared = try middleware.transform(post: processedPost)
-                
-                processedPost = middlewared.post
-                let postChanged = middlewared.changed
-                
-                if middleware.isRequired && !postChanged {
-                    throw PhantomError.requiredMiddlewareNoEffect(middleware: String(describing: middleware.middleware))
-                }
-                
-                // todo: handle imgur 10 MB error
-            }
-            
-            return processedPost
+            let submitResult = processAndSubmit(retryStrategy: retryStrategy)
+            callback(submitResult)
         }
         
-        private static func submitProcessedPost(_ post: Post, using reddit: Reddit) throws -> String {
-            guard !DebugVariable.simulateReddit else {
-                sleep(1)
-                
-                return "https://simulated-url-lolz.com/"
+        private func processAndSubmit(retryStrategy: RetryStrategy) -> SubmitResult {
+            let strategy: DelayRetryStrategy
+            
+            switch retryStrategy {
+            case .delay(let delayRetryStrategy):
+                strategy = delayRetryStrategy
+            default:
+                strategy = DelayRetryStrategy(maxRetryCount: 1, retryInterval: nil)
             }
             
-            // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-            let url = try reddit.submit(post: post)
-            return url
-        }
-        
-        private func processAndSubmitPost() -> SubmitResult {
-            let url: String
-            do {
-                let processedPost = try PostSubmission.processPost(post, using: middlewares)
-                url = try PostSubmission.submitProcessedPost(processedPost, using: reddit)
-            } catch {
-                Log.p("Unexpected error while submitting", error)
+            let processedPost: Post
+            let triesLeft: Int
+            
+            let processResult = PostSubmission.fullProcessPost(post, using: middlewares, strategy: strategy)
+            switch processResult {
+            case .success((let processedPost_, let triesLeft_)):
+                processedPost = processedPost_
+                triesLeft = triesLeft_
+            case .failure(let error):
                 return .failure(error)
             }
             
-            return .success(url)
+            let updatedStrategy = DelayRetryStrategy(maxRetryCount: triesLeft, retryInterval: strategy.retryInterval)
+            
+            let submitResult = PostSubmission.submitPost(processedPost, using: reddit, strategy: updatedStrategy)
+            return submitResult
         }
         
-        private func submitWithDelayRetryStrategy(maxRetryCount: Int, retryInterval: TimeInterval?) -> SubmitResult {
-            var retryCount = 0 // todo: show attempt count to user
-            var lastError: Error? // todo: let user change retry strategy
+        private static func submitPost(_ post: Post, using reddit: Reddit, strategy: DelayRetryStrategy) -> SubmitResult {
+            var retryCount = 0
+            var lastError: Error?
             
-            while retryCount < maxRetryCount {
+            while retryCount < strategy.maxRetryCount {
                 if retryCount > 0 {
                     Log.p("Attempt #\(retryCount + 1)")
                 }
                 
-                let submitResult = processAndSubmitPost()
+                let submitResult = submitPost(post, using: reddit)
                 switch submitResult {
                 case .success(let url):
                     return .success(url)
@@ -144,7 +136,7 @@ class PostSubmitter {
                     lastError = error
                     retryCount += 1
                     
-                    if let retryInterval = retryInterval {
+                    if let retryInterval = strategy.retryInterval {
                         Log.p("Waiting...")
                         Thread.sleep(forTimeInterval: retryInterval)
                         Log.p("Done waiting")
@@ -155,27 +147,105 @@ class PostSubmitter {
             return .failure(lastError!)
         }
         
-        private func submitWithNoRetryStrategy() -> SubmitResult {
-            return processAndSubmitPost()
-        }
-        
-        private func submitWithRetryStrategy(_ retryStrategy: RetryStrategy) -> SubmitResult {
-            switch retryStrategy {
-            case .delay(let maxRetryCount, let retryInterval):
-                return submitWithDelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: retryInterval)
-                    
-            case .noRetry:
-                return submitWithNoRetryStrategy()
+        private static func submitPost(_ post: Post, using reddit: Reddit) -> SubmitResult {
+            guard !DebugVariable.simulateReddit else {
+                sleep(1)
+                
+                return .success("https://simulated-url-lolz.com/")
             }
+            
+            let url: RedditPostUrl
+            do {
+                // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
+                url = try reddit.submit(post: post)
+            } catch {
+                Log.p("Unexpected error while submitting", error)
+                return .failure(error)
+            }
+            
+            return .success(url)
         }
         
-        override func main() {
-            guard !isCancelled else { return } // we need more of these in this method (actually everywhere in this class)
+        private static func fullProcessPost(_ post: Post, using middlewares: [RequiredMiddleware], strategy: DelayRetryStrategy) -> ProcessResultWithTries {
             
-            Log.p("submission task started")
+            guard !DebugVariable.simulateError else {
+                sleep(1)
+                return .failure(PhantomError.requiredMiddlewareNoEffect(middleware: "SimulatedError"))
+            }
+
+            guard !DebugVariable.simulateMiddleware else {
+                sleep(1)
+                return .success((post: post, triesLeft: strategy.maxRetryCount))
+            }
             
-            let submitResult = submitWithRetryStrategy(retryStrategy)
-            callback(submitResult)
+            var currentStrategy = strategy
+            var processedPost = post
+            var triesLeft: Int?
+            
+            for middleware in middlewares {
+                let oneProcessResult = oneProcessPost(processedPost, using: middleware, strategy: currentStrategy)
+                switch oneProcessResult {
+                case .success((let processedPost_, let triesLeft_)):
+                    processedPost = processedPost_
+                    triesLeft = triesLeft_
+                    
+                    currentStrategy = DelayRetryStrategy(maxRetryCount: triesLeft_, retryInterval: currentStrategy.retryInterval)
+                case .failure(let error):
+                    return .failure(error)
+                }
+            }
+            
+            let postWithTries = (post: processedPost, triesLeft: triesLeft!)
+            return .success(postWithTries)
+        }
+        
+        private static func oneProcessPost(_ post: Post, using middleware: RequiredMiddleware, strategy: DelayRetryStrategy) -> ProcessResultWithTries {
+            var retryCount = 0
+            var lastError: Error?
+            
+            while retryCount < strategy.maxRetryCount {
+                if retryCount > 0 {
+                    Log.p("Attempt #\(retryCount + 1)")
+                }
+                
+                let oneProcessResult = oneProcessPost(post, using: middleware)
+                switch oneProcessResult {
+                case .success(let post):
+                    let resultWithTries = (post: post, triesLeft: strategy.maxRetryCount - retryCount)
+                    return .success(resultWithTries)
+                case .failure(let error): // todo: don't retry if error is imgur 10 mb error
+                    lastError = error
+                    retryCount += 1
+                    
+                    if let retryInterval = strategy.retryInterval {
+                        Log.p("Waiting...")
+                        Thread.sleep(forTimeInterval: retryInterval)
+                        Log.p("Done waiting")
+                    }
+                }
+            }
+            
+            return .failure(lastError!)
+        }
+        
+        private static func oneProcessPost(_ post: Post, using middleware: RequiredMiddleware) -> ProcessResult {
+            let processedPost: Post
+            
+            do {
+                let middlewared = try middleware.transform(post: post)
+                
+                processedPost = middlewared.post
+                let postChanged = middlewared.changed
+                
+                if middleware.isRequired && !postChanged {
+                    throw PhantomError.requiredMiddlewareNoEffect(middleware: String(describing: middleware.middleware))
+                }
+            } catch {
+                Log.p("Unexpected error while one processing", error)
+                return .failure(error)
+            }
+            
+            return .success(processedPost)
         }
     }
     

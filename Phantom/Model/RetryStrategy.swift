@@ -9,6 +9,11 @@
 import Foundation
 
 enum RetryStrategy {
-    case delay(maxRetryCount: Int, retryInterval: TimeInterval)
+    case delay(delayRetryStrategy: DelayRetryStrategy)
     case noRetry
+}
+
+struct DelayRetryStrategy {
+    let maxRetryCount: Int
+    let retryInterval: TimeInterval?
 }
