@@ -11,13 +11,13 @@ import Foundation
 // entirely UserDefaults-backed
 class Database {
     private enum Key: String {
-        case posts
-        case thumbnailResolverCache
-        case reddit_auth // todo: switch to camelCase
-        case imgur_auth
-        case introduction_shown
-        case wallpaper_mode
-        case use_wallhaven
+        case posts = "posts" // string literals left intentionally
+        case thumbnailResolverCache = "thumbnailResolverCache"
+        case redditAuth = "redditAuth"
+        case imgurAuth = "imgurAuth"
+        case introductionShown = "introductionShown"
+        case wallpaperMode = "wallpaperMode"
+        case useWallhaven = "useWallhaven"
     }
     
     static let instance = Database()
@@ -25,12 +25,12 @@ class Database {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     
-    @UserDefaultsBacked(key: Key.reddit_auth.rawValue) private var internalRedditAuth: String?
-    @UserDefaultsBacked(key: Key.imgur_auth.rawValue) private var internalImgurAuth: String?
+    @UserDefaultsBacked(key: Key.redditAuth.rawValue) private var internalRedditAuth: String?
+    @UserDefaultsBacked(key: Key.imgurAuth.rawValue) private var internalImgurAuth: String?
     
-    @UserDefaultsBacked(key: Key.introduction_shown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
-    @UserDefaultsBacked(key: Key.wallpaper_mode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
-    @UserDefaultsBacked(key: Key.use_wallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
+    @UserDefaultsBacked(key: Key.introductionShown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
+    @UserDefaultsBacked(key: Key.wallpaperMode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
+    @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
