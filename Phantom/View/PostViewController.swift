@@ -9,8 +9,8 @@
 import UIKit
 
 class PostViewController: UIViewController, PostViewDelegate {
-    enum Segue: String { // todo: move away from auto string segue enums to 'backSavePost = "backSavePost"'?
-        case backSavePost // post to list
+    enum Segue: String {
+        case postBackToList = "backSavePost"
     }
     
     static let TEXT_NEW_POST_TITLE = "New Post"

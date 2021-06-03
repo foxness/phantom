@@ -11,7 +11,7 @@ import WebKit
 
 class LoginViewController: UIViewController, WKNavigationDelegate {
     enum Segue: String {
-        case backLoginToList
+        case loginBackToList = "backLoginToList"
     }
     
     @IBOutlet weak var webView: WKWebView!
@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
                 try! self.reddit.fetchAuthTokens()
                 try! self.reddit.getIdentity()
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: LoginViewController.Segue.backLoginToList.rawValue, sender: nil)
+                    self.performSegue(withIdentifier: LoginViewController.Segue.loginBackToList.rawValue, sender: nil)
                 }
             }
         }

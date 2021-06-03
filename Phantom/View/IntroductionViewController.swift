@@ -10,7 +10,7 @@ import UIKit
 
 class IntroductionViewController: UIViewController {
     enum Segue: String {
-        case showLogin
+        case showLogin = "showLogin"
     }
     
     private let hideNavBar = true

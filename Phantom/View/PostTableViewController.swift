@@ -12,7 +12,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     // MARK: - Nested entities
     
     enum Segue: String {
-        case showIntroduction, menuRedditLogin, menuImgurLogin, menuBulkAdd, addPost, editPost
+        case showIntroduction = "showIntroduction"
+        case menuRedditLogin = "menuRedditLogin"
+        case menuImgurLogin = "menuImgurLogin"
+        case menuBulkAdd = "menuBulkAdd"
+        case addPost = "addPost"
+        case editPost = "editPost"
     }
     
     // MARK: - Constants
@@ -149,7 +154,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier ?? "" {
-        case PostViewController.Segue.backSavePost.rawValue:
+        case PostViewController.Segue.postBackToList.rawValue:
             if let pvc = unwindSegue.source as? PostViewController {
                 let (post, isNewPost) = pvc.getResultingPost()
                 
@@ -162,7 +167,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
                 fatalError()
             }
         
-        case BulkAddViewController.Segue.backBulkAdd.rawValue:
+        case BulkAddViewController.Segue.bulkBackToList.rawValue:
             if let bavc = unwindSegue.source as? BulkAddViewController {
                 if let bulkPosts = bavc.getResultingPosts() {
                     presenter.newPostsAdded(bulkPosts)
@@ -171,10 +176,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
                 fatalError()
             }
             
-        case LoginViewController.Segue.backLoginToList.rawValue:
+        case LoginViewController.Segue.loginBackToList.rawValue:
             break
             
-        case ImgurViewController.Segue.backImgurToList.rawValue:
+        case ImgurViewController.Segue.imgurBackToList.rawValue:
             break
             
         default:
