@@ -178,6 +178,11 @@ class PostTablePresenter {
         viewDelegate?.segueToBulkAdd()
     }
     
+    func settingsButtonPressed() {
+//        viewDelegate?.segueToBulkAdd()
+        Log.p("Settings button pressed")
+    }
+    
     func wallpaperModeSwitched(on: Bool) {
         database.wallpaperMode = on
     }

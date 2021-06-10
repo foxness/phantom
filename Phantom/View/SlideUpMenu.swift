@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 370
+    private static let MENUVIEW_HEIGHT: CGFloat = 390
     private static let FADE_ALPHA: CGFloat = 0.6
     private static let FADE_WHITE: CGFloat = 0 // works for both light and dark modes
     private static let ANIMATION_DURATION: TimeInterval = 0.3
@@ -113,12 +113,25 @@ class SlideUpMenu {
         
         // ---------------------------------------------------------------
         
+        let settingsButton = UIButton()
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.setTitle("Settings", for: .normal)
+        settingsButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        settingsButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
+        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+        menuView.addSubview(settingsButton)
+        
+        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: settingsButton)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, settingsButton)
+        
+        // ---------------------------------------------------------------
+        
         let wallpaperModeLabel = UILabel()
         wallpaperModeLabel.text = "Wallpaper Mode"
         menuView.addSubview(wallpaperModeLabel)
         
         menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: wallpaperModeLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, wallpaperModeLabel)
+        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: settingsButton, wallpaperModeLabel)
         
         // ---------------------------------------------------------------
         
@@ -303,6 +316,12 @@ class SlideUpMenu {
     @objc private func bulkAddButtonPressed() {
         animateHide() {
             self.delegate?.bulkAddButtonPressed()
+        }
+    }
+    
+    @objc private func settingsButtonPressed() {
+        animateHide() {
+            self.delegate?.settingsButtonPressed()
         }
     }
     

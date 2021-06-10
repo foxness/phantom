@@ -371,6 +371,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.bulkAddButtonPressed()
     }
     
+    func settingsButtonPressed() {
+        presenter.settingsButtonPressed()
+    }
+    
     func wallpaperModeSwitched(on: Bool) {
         presenter.wallpaperModeSwitched(on: on)
     }
