@@ -15,6 +15,7 @@
 		572D951B265ADA5600F0D454 /* RequiredMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */; };
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
+		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -60,6 +61,7 @@
 		572D9518265ACB1A00F0D454 /* RetryStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryStrategy.swift; sourceTree = "<group>"; };
 		572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiredMiddleware.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
+		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				71C031C824FA705B00D6E19F /* LoginViewController.swift */,
 				5768C3362639C9D400459260 /* ImgurViewController.swift */,
 				57F84DE8264074B200B10E75 /* BulkAddViewController.swift */,
+				57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */,
 				71684AD125024D83005BA857 /* PostCell.swift in Sources */,
 				5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */,
+				57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */,
 				5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,

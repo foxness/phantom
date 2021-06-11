@@ -37,6 +37,22 @@
             </objects>
             <point key="canvasLocation" x="187" y="863"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="xg1-N9-yAS">
+            <objects>
+                <viewController id="P40-mb-cKw" customClass="SettingsViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hI4-Tc-v0v">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="sZL-Wl-jRe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" largeTitleDisplayMode="always" id="6wO-fE-XGe"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1071" y="863"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="dns-d2-J9D">
             <objects>
@@ -265,6 +281,7 @@
                         <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
                         <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
                         <segue destination="H2E-tt-C7O" kind="presentation" identifier="menuBulkAdd" id="uyW-lq-5nh"/>
+                        <segue destination="P40-mb-cKw" kind="show" identifier="showSettings" id="Qgz-Ow-kmP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

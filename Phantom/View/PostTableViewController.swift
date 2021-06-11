@@ -13,6 +13,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     enum Segue: String {
         case showIntroduction = "showIntroduction"
+        case showSettings = "showSettings"
         case menuRedditLogin = "menuRedditLogin"
         case menuImgurLogin = "menuImgurLogin"
         case menuBulkAdd = "menuBulkAdd"
@@ -105,6 +106,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         segueTo(.showIntroduction)
     }
     
+    func segueToSettings() {
+        segueTo(.showSettings)
+    }
+    
     func segueToRedditLogin() {
         segueTo(.menuRedditLogin)
     }
@@ -143,6 +148,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
             dest.supplyPost(selectedPost)
             
         case .showIntroduction,
+             .showSettings,
              .addPost,
              .menuRedditLogin,
              .menuImgurLogin,
@@ -303,7 +309,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
             presenter.postDeleted(at: indexPath.row)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

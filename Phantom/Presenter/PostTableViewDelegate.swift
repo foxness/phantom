@@ -21,6 +21,7 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToRedditLogin()
     func segueToImgurLogin()
     func segueToBulkAdd()
+    func segueToSettings()
     
     func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)
     func showAlert(title: String, message: String)
