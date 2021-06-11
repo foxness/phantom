@@ -50,6 +50,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.viewDidLoad()
         
         subscribeToNotifications()
+        
+        styleTableView()
         addSubmissionIndicatorView()
         
         slideUpMenu.delegate = self
@@ -187,7 +189,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
-    // MARK: - Submission indicator
+    // MARK: - View
+    
+    private func styleTableView() {
+        tableView.tableFooterView = UIView() // a little hack to remove infinite divider lines below table cells
+    }
     
     private func addSubmissionIndicatorView() {
         // used: https://stackoverflow.com/questions/4641879/how-to-add-a-uiview-above-the-current-uitableviewcontroller
