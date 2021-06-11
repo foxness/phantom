@@ -24,7 +24,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.frame = view.bounds
-        tableView.register(SettingCell.self, forCellReuseIdentifier: SettingCell.IDENTIFIER)
+        tableView.register(StaticSettingCell.self, forCellReuseIdentifier: StaticSettingCell.IDENTIFIER)
+        tableView.register(SwitchSettingCell.self, forCellReuseIdentifier: SwitchSettingCell.IDENTIFIER)
         
         view.addSubview(tableView)
     }
@@ -44,15 +45,23 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let option = presenter.getOption(section: indexPath.section, at: indexPath.row)
-        option.handler?()
+        presenter.didSelectOption(section: indexPath.section, at: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SettingCell.IDENTIFIER, for: indexPath) as! SettingCell
         let option = presenter.getOption(section: indexPath.section, at: indexPath.row)
-        
-        cell.configure(with: option)
-        return cell
+        switch option {
+        case .staticOption(let option):
+            let staticCell = tableView.dequeueReusableCell(withIdentifier: StaticSettingCell.IDENTIFIER, for: indexPath) as! StaticSettingCell
+            
+            staticCell.configure(with: option)
+            return staticCell
+            
+        case .switchOption(let option):
+            let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingCell.IDENTIFIER, for: indexPath) as! SwitchSettingCell
+            
+            switchCell.configure(with: option)
+            return switchCell
+        }
     }
 }
