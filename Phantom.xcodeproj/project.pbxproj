@@ -16,6 +16,9 @@
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
+		57605EF12673586D00E4EE25 /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF02673586D00E4EE25 /* SettingsPresenter.swift */; };
+		57605EF32673590D00E4EE25 /* SettingsOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF22673590D00E4EE25 /* SettingsOption.swift */; };
+		57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -62,6 +65,9 @@
 		572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiredMiddleware.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
+		57605EF22673590D00E4EE25 /* SettingsOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOption.swift; sourceTree = "<group>"; };
+		57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -194,6 +200,7 @@
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
 				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
+				57605EF22673590D00E4EE25 /* SettingsOption.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -207,6 +214,8 @@
 				960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */,
 				57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */,
 				57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */,
+				57605EF02673586D00E4EE25 /* SettingsPresenter.swift */,
+				57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -309,6 +318,7 @@
 				57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */,
 				5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */,
 				57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */,
+				57605EF32673590D00E4EE25 /* SettingsOption.swift in Sources */,
 				71C031CB24FA8B4E00D6E19F /* Reddit.swift in Sources */,
 				96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */,
 				71C031CD24FA95CB00D6E19F /* Extensions.swift in Sources */,
@@ -317,6 +327,7 @@
 				572D951B265ADA5600F0D454 /* RequiredMiddleware.swift in Sources */,
 				96AA4D6B252B574B009488F6 /* PostViewDelegate.swift in Sources */,
 				576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */,
+				57605EF12673586D00E4EE25 /* SettingsPresenter.swift in Sources */,
 				71C031C924FA705B00D6E19F /* LoginViewController.swift in Sources */,
 				5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */,
 				71684AD125024D83005BA857 /* PostCell.swift in Sources */,
@@ -334,6 +345,7 @@
 				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
 				969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */,
+				57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
 				71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */,
 				57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */,
