@@ -47,7 +47,7 @@
                         <viewLayoutGuide key="safeArea" id="sZL-Wl-jRe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Settings" largeTitleDisplayMode="always" id="6wO-fE-XGe"/>
+                    <navigationItem key="navigationItem" title="Settings" id="6wO-fE-XGe"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -95,11 +95,11 @@
             <objects>
                 <viewController id="npb-aq-zMg" customClass="PostViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ICN-dW-pNn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="40" y="128" width="334" height="441"/>
+                                <rect key="frame" x="40" y="96" width="334" height="441"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-0i-hpg" userLabel="TypeControl">
                                         <rect key="frame" x="71" y="0.0" width="192" height="32"/>
@@ -465,7 +465,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="I6c-Og-Mxs"/>
+        <segue reference="qXM-qT-tiC"/>
         <segue reference="t8V-rm-KZc"/>
     </inferredMetricsTieBreakers>
     <resources>

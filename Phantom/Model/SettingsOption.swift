@@ -12,3 +12,8 @@ struct SettingsOption {
     let title: String
     let handler: (() -> Void)?
 }
+
+struct SettingsSection {
+    let title: String
+    let options: [SettingsOption]
+}
