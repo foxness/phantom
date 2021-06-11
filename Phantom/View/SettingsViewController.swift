@@ -11,7 +11,7 @@ import UIKit
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private var presenter = SettingsPresenter()
     
-    private var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,14 +20,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func setupViews() {
-        tableView = UITableView(frame: .zero, style: .grouped)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.frame = view.bounds
-        tableView.register(StaticSettingCell.self, forCellReuseIdentifier: StaticSettingCell.IDENTIFIER)
-        tableView.register(SwitchSettingCell.self, forCellReuseIdentifier: SwitchSettingCell.IDENTIFIER)
-        
-        view.addSubview(tableView)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
