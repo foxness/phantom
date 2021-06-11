@@ -36,7 +36,7 @@ class SettingsPresenter {
     private static func getSettingsOptions() -> [SettingsOption] {
         var options: [SettingsOption] = []
         
-        Array(1...10).map { SettingsOption(title: "Option \($0)", handler: nil) }.forEach {
+        Array(1...100).map { SettingsOption(title: "Option \($0)", handler: nil) }.forEach {
             options.append($0)
         }
         

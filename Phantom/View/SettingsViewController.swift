@@ -24,11 +24,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.frame = view.bounds
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SettingCell.self, forCellReuseIdentifier: SettingCell.IDENTIFIER)
         
         view.addSubview(tableView)
-        
-        title = "asd"
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -36,10 +34,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: SettingCell.IDENTIFIER, for: indexPath) as! SettingCell
         let option = presenter.getOption(at: indexPath.row)
         
-        cell.textLabel?.text = option.title
+        cell.configure(with: option)
         return cell
     }
 }

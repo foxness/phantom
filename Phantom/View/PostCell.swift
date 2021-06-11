@@ -29,17 +29,6 @@ class PostCell: UITableViewCell {
     
     private var resolutionTaskId: String?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
     func setPost(_ post: Post) {
         setMainViews(for: post)
         setThumbnail(for: post)

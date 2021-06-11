@@ -19,6 +19,7 @@
 		57605EF12673586D00E4EE25 /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF02673586D00E4EE25 /* SettingsPresenter.swift */; };
 		57605EF32673590D00E4EE25 /* SettingsOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF22673590D00E4EE25 /* SettingsOption.swift */; };
 		57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */; };
+		57605EF726735E4900E4EE25 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF626735E4900E4EE25 /* SettingCell.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -68,6 +69,7 @@
 		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		57605EF22673590D00E4EE25 /* SettingsOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOption.swift; sourceTree = "<group>"; };
 		57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
+		57605EF626735E4900E4EE25 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				5768C3362639C9D400459260 /* ImgurViewController.swift */,
 				57F84DE8264074B200B10E75 /* BulkAddViewController.swift */,
 				57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */,
+				57605EF626735E4900E4EE25 /* SettingCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				575D7877264C112000173E7A /* Wallhaven.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				572D9519265ACB1A00F0D454 /* RetryStrategy.swift in Sources */,
+				57605EF726735E4900E4EE25 /* SettingCell.swift in Sources */,
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
 				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
