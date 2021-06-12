@@ -28,6 +28,7 @@
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
 		57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */; };
+		57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */; };
 		57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C43512264AFB4B00226A24 /* DebugVariable.swift */; };
 		57C6352C26544FC90072D130 /* PhantomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6352B26544FC90072D130 /* PhantomError.swift */; };
 		57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DE8264074B200B10E75 /* BulkAddViewController.swift */; };
@@ -80,6 +81,7 @@
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
 		57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInAccountSettingCell.swift; sourceTree = "<group>"; };
+		57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedOutAccountSettingCell.swift; sourceTree = "<group>"; };
 		57C43512264AFB4B00226A24 /* DebugVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugVariable.swift; sourceTree = "<group>"; };
 		57C6352B26544FC90072D130 /* PhantomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomError.swift; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				57605EF626735E4900E4EE25 /* StaticSettingCell.swift */,
 				57605EF82673790700E4EE25 /* SwitchSettingCell.swift */,
 				57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */,
+				57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */,
 				57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */,
 				5768C3372639C9D400459260 /* ImgurViewController.swift in Sources */,
+				57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
 				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,

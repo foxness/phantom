@@ -53,7 +53,8 @@ class SettingsPresenter {
     private static func getSettingsSections() -> [SettingsSection] {
         var sections: [SettingsSection] = []
         
-        let redditOption = AccountSettingsOption(accountType: "Reddit account", accountName: "testy", signedIn: true, signInHandler: { Log.p("reddit sign in pressed") }, signOutHandler: { Log.p("reddit sign out pressed") })
+        let redditOption = AccountSettingsOption(accountType: "Reddit account", accountName: "testy", signedIn: false, signInPrompt: "Add Reddit Account", signInHandler: { Log.p("reddit sign in pressed") }, signOutHandler: { Log.p("reddit sign out pressed") })
+        
         let redditOptionType = SettingsOptionType.accountOption(option: redditOption)
         let generalOptions = [redditOptionType]
         let generalSection = SettingsSection(title: "General", options: generalOptions)

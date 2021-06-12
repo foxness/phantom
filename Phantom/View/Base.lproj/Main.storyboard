@@ -159,6 +159,32 @@
                                             <outlet property="signOutButton" destination="SAl-WH-E8g" id="GHQ-ps-wWV"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedOutAccountSettingCell" id="Aos-BU-UAu" customClass="SignedOutAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="228" width="414" height="52.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Aos-BU-UAu" id="sjC-BY-ZvS">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="52.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eEg-l6-umD">
+                                                    <rect key="frame" x="28" y="11" width="137" height="30.5"/>
+                                                    <state key="normal" title="Add Reddit Account"/>
+                                                    <connections>
+                                                        <action selector="signInButtonPressedWithSender:" destination="Aos-BU-UAu" eventType="touchUpInside" id="3Oy-lL-sWP"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="eEg-l6-umD" secondAttribute="trailing" constant="8" id="Sd1-rc-xDs"/>
+                                                <constraint firstItem="eEg-l6-umD" firstAttribute="leading" secondItem="sjC-BY-ZvS" secondAttribute="leadingMargin" constant="8" id="TGl-Hb-fab"/>
+                                                <constraint firstItem="eEg-l6-umD" firstAttribute="top" secondItem="sjC-BY-ZvS" secondAttribute="topMargin" id="nAg-H7-lx9"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="eEg-l6-umD" secondAttribute="bottom" id="sJe-4o-hUL"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="signInButton" destination="eEg-l6-umD" id="sec-nv-OuG"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>

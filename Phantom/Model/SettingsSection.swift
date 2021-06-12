@@ -36,6 +36,7 @@ struct AccountSettingsOption {
     let accountType: String
     var accountName: String?
     var signedIn: Bool
+    let signInPrompt: String
     let signInHandler: (() -> Void)?
     let signOutHandler: (() -> Void)?
 }

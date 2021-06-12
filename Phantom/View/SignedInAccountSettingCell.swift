@@ -22,6 +22,8 @@ class SignedInAccountSettingCell: UITableViewCell {
         
         accountTypeLabel.text = nil
         accountNameLabel.text = nil
+        
+        signOutHandler = nil
     }
     
     public func configure(with option: AccountSettingsOption) {

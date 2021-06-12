@@ -61,10 +61,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return switchCell
             
         case .accountOption(let option):
-            let accountCell = tableView.dequeueReusableCell(withIdentifier: SignedInAccountSettingCell.IDENTIFIER, for: indexPath) as! SignedInAccountSettingCell
+            if option.signedIn {
+                let signedInCell = tableView.dequeueReusableCell(withIdentifier: SignedInAccountSettingCell.IDENTIFIER, for: indexPath) as! SignedInAccountSettingCell
+                
+                signedInCell.configure(with: option)
+                return signedInCell
+            }
             
-            accountCell.configure(with: option)
-            return accountCell
+            let signedOutCell = tableView.dequeueReusableCell(withIdentifier: SignedOutAccountSettingCell.IDENTIFIER, for: indexPath) as! SignedOutAccountSettingCell
+            
+            signedOutCell.configure(with: option)
+            return signedOutCell
         }
     }
 }
