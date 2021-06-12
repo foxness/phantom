@@ -92,7 +92,7 @@ class PostCell: UITableViewCell {
         }
     }
     
-    private func setThumbnail(for post: Post, with imageUrl: URL) {
+    private func setThumbnail(for post: Post, with imageUrl: URL) { // todo: rounded corner by imageview not the image itself
         let placeholder = getPlaceholder(for: post.type)
         let transition = ImageTransition.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)
         let thumbnailExpiration = StorageExpiration.date(PostCell.getThumbnailExpirationDate(postDate: post.date))

@@ -20,6 +20,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func setupViews() {
+//        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.estimatedRowHeight = 50
+        
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -56,6 +59,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             switchCell.configure(with: option)
             return switchCell
+            
+        case .accountOption(let option):
+            let accountCell = tableView.dequeueReusableCell(withIdentifier: SignedInAccountSettingCell.IDENTIFIER, for: indexPath) as! SignedInAccountSettingCell
+            
+            accountCell.configure(with: option)
+            return accountCell
         }
     }
 }

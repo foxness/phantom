@@ -16,6 +16,7 @@ struct SettingsSection {
 enum SettingsOptionType {
     case staticOption(option: StaticSettingsOption)
     case switchOption(option: SwitchSettingsOption)
+    case accountOption(option: AccountSettingsOption)
 }
 
 struct StaticSettingsOption {
@@ -27,4 +28,14 @@ struct SwitchSettingsOption {
     let title: String
     var isOn: Bool
     let handler: ((_ isOn: Bool) -> Void)?
+}
+
+struct AccountSettingsOption {
+//    typealias SignInCallback = (_ signedIn: Bool) -> Void
+    
+    let accountType: String
+    var accountName: String?
+    var signedIn: Bool
+    let signInHandler: (() -> Void)?
+    let signOutHandler: (() -> Void)?
 }

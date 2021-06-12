@@ -56,7 +56,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="384.5" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Setting name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYj-Y9-xvD">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Setting name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYj-Y9-xvD">
                                                     <rect key="frame" x="28" y="11" width="340.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -81,7 +81,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="53.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Switch setting name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="664-pu-n4q">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Switch setting name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="664-pu-n4q">
                                                     <rect key="frame" x="28" y="16.5" width="309" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -109,6 +109,56 @@
                                             <outlet property="switchControl" destination="4TB-UA-2TI" id="WKR-E9-nKI"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedInAccountSettingCell" id="MlG-Vo-GOU" customClass="SignedInAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="146" width="414" height="82"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MlG-Vo-GOU" id="hdr-1B-VRk">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Account type" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocH-Hl-gGD">
+                                                    <rect key="frame" x="28" y="17" width="293" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" placeholder="YES" id="vNq-E6-1Zm"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Account name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e5u-Fy-Xih">
+                                                    <rect key="frame" x="28" y="42" width="293" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="300" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SAl-WH-E8g">
+                                                    <rect key="frame" x="329" y="26" width="57" height="30"/>
+                                                    <state key="normal" title="Sign out">
+                                                        <color key="titleColor" systemColor="systemRedColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="signOutButtonPressedWithSender:" destination="MlG-Vo-GOU" eventType="touchUpInside" id="0dB-LQ-hk7"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="e5u-Fy-Xih" firstAttribute="top" secondItem="ocH-Hl-gGD" secondAttribute="bottom" constant="4" id="2yw-Vk-rnK"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="centerY" secondItem="hdr-1B-VRk" secondAttribute="centerY" id="ZmM-3M-fBL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="SAl-WH-E8g" secondAttribute="trailing" constant="8" id="cHo-eh-5um"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="leading" secondItem="e5u-Fy-Xih" secondAttribute="trailing" constant="8" id="j7B-wq-Yau"/>
+                                                <constraint firstItem="e5u-Fy-Xih" firstAttribute="leading" secondItem="hdr-1B-VRk" secondAttribute="leadingMargin" constant="8" id="jJC-s8-Y5b"/>
+                                                <constraint firstItem="ocH-Hl-gGD" firstAttribute="top" secondItem="hdr-1B-VRk" secondAttribute="topMargin" constant="6" id="nAM-Fk-kWu"/>
+                                                <constraint firstItem="ocH-Hl-gGD" firstAttribute="leading" secondItem="e5u-Fy-Xih" secondAttribute="leading" id="nu9-5D-BZ4"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="e5u-Fy-Xih" secondAttribute="bottom" constant="8" id="tsQ-sA-UPY"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="leading" secondItem="ocH-Hl-gGD" secondAttribute="trailing" constant="8" id="yKR-ZN-d2D"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accountNameLabel" destination="e5u-Fy-Xih" id="puS-pI-1RT"/>
+                                            <outlet property="accountTypeLabel" destination="ocH-Hl-gGD" id="dnm-as-VU5"/>
+                                            <outlet property="signOutButton" destination="SAl-WH-E8g" id="GHQ-ps-wWV"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -128,7 +178,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1071" y="863"/>
+            <point key="canvasLocation" x="1069.5652173913045" y="862.5"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="dns-d2-J9D">
@@ -288,13 +338,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="20.5" width="288" height="49.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="26.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="32.5" width="288" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -560,6 +610,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
