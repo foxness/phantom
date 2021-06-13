@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver {
     enum Segue: String {
-        case showRedditSignIn = "settingsShowRedditSignIn" // todo: apply this naming scheme to all segues
+        case showRedditSignIn = "settingsShowRedditSignIn"
     }
     
     private var presenter = SettingsPresenter()

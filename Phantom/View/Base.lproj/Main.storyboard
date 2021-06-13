@@ -20,7 +20,7 @@
                                 <rect key="frame" x="186" y="433" width="42" height="30"/>
                                 <state key="normal" title="Log In"/>
                                 <connections>
-                                    <segue destination="cuc-xd-yKa" kind="presentation" identifier="showLogin" id="Fmp-8g-UON"/>
+                                    <segue destination="cuc-xd-yKa" kind="presentation" identifier="introductionShowRedditSignIn" id="Fmp-8g-UON"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -322,7 +322,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="7uj-8O-RgY">
                             <connections>
-                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="backSavePost" unwindAction="unwindToPostListWithUnwindSegue:" id="IYh-4B-QPD"/>
+                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="unwindPostSaved" unwindAction="unwindPostSavedWithUnwindSegue:" id="IYh-4B-QPD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -403,7 +403,7 @@
                                     <outlet property="subtitleLabel" destination="TVV-O9-k3g" id="827-aD-dmf"/>
                                     <outlet property="thumbnailView" destination="3Pq-EV-aRF" id="YWv-oc-NRD"/>
                                     <outlet property="titleLabel" destination="Ofh-Fe-P2l" id="M3V-7X-Uo8"/>
-                                    <segue destination="npb-aq-zMg" kind="show" identifier="editPost" id="I6c-Og-Mxs"/>
+                                    <segue destination="npb-aq-zMg" kind="show" identifier="postsShowEditPost" id="I6c-Og-Mxs"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -421,7 +421,7 @@
                             </barButtonItem>
                             <barButtonItem systemItem="add" id="5T6-h1-6Gd">
                                 <connections>
-                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
+                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="postsShowAddPost" id="dSw-7p-822"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -431,11 +431,11 @@
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showIntroduction" animates="NO" id="smv-r4-N41"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="postsShowIntroduction" animates="NO" id="smv-r4-N41"/>
                         <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
                         <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
-                        <segue destination="H2E-tt-C7O" kind="presentation" identifier="menuBulkAdd" id="uyW-lq-5nh"/>
-                        <segue destination="P40-mb-cKw" kind="show" identifier="showSettings" id="Qgz-Ow-kmP"/>
+                        <segue destination="H2E-tt-C7O" kind="presentation" identifier="postsShowBulkAdd" id="uyW-lq-5nh"/>
+                        <segue destination="P40-mb-cKw" kind="show" identifier="postsShowSettings" id="Qgz-Ow-kmP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -490,10 +490,10 @@
             </objects>
             <point key="canvasLocation" x="-723.1884057971015" y="115.84821428571428"/>
         </scene>
-        <!--Imgur-->
+        <!--Imgur Sign In View Controller-->
         <scene sceneID="ljq-DM-5bd">
             <objects>
-                <viewController title="Imgur" id="GW5-zR-qB6" customClass="ImgurSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="GW5-zR-qB6" customClass="ImgurSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mId-Tw-Qf4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -518,7 +518,7 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="ahD-Sv-y1C" id="hzT-F6-gDQ"/>
-                        <segue destination="IeG-JS-B1f" kind="unwind" identifier="backImgurToList" unwindAction="unwindToPostListWithUnwindSegue:" id="vCX-Pb-MD7"/>
+                        <segue destination="IeG-JS-B1f" kind="unwind" identifier="unwindImgurSignedIn" unwindAction="unwindImgurSignInUnwindSegue:" id="vCX-Pb-MD7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhD-Gp-bvR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -560,7 +560,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="H8r-SX-UcK">
                                 <connections>
-                                    <segue destination="yR2-lY-Bd5" kind="unwind" identifier="backBulkAdd" unwindAction="unwindToPostListWithUnwindSegue:" id="Vju-qS-40l"/>
+                                    <segue destination="yR2-lY-Bd5" kind="unwind" identifier="unwindBulkAdded" unwindAction="unwindBulkAddedWithUnwindSegue:" id="Vju-qS-40l"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Paste" id="xq2-B4-6Lt">
@@ -620,7 +620,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
-        <segue reference="bTN-eO-UuB"/>
+        <segue reference="Fmp-8g-UON"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>

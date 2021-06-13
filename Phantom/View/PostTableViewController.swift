@@ -8,17 +8,17 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver, ImgurSignInReceiver {
     // MARK: - Nested entities
     
     enum Segue: String {
-        case showIntroduction = "showIntroduction"
-        case showSettings = "showSettings"
-        case showRedditSignIn = "menuRedditLogin"
-        case showImgurSignIn = "menuImgurLogin"
-        case menuBulkAdd = "menuBulkAdd"
-        case addPost = "addPost"
-        case editPost = "editPost"
+        case showIntroduction = "postsShowIntroduction"
+        case showSettings = "postsShowSettings"
+        case showRedditSignIn = "menuRedditLogin" // todo: delete
+        case showImgurSignIn = "menuImgurLogin" // todo: delete
+        case showBulkAdd = "postsShowBulkAdd"
+        case showAddPost = "postsShowAddPost"
+        case showEditPost = "postsShowEditPost"
     }
     
     // MARK: - Constants
@@ -119,7 +119,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     func segueToBulkAdd() {
-        segueTo(.menuBulkAdd)
+        segueTo(.showBulkAdd)
     }
     
     private func segueTo(_ segue: Segue) {
@@ -140,7 +140,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.prepare(for: segue, sender: sender)
         
         switch Segue(rawValue: segue.identifier ?? "") {
-        case .editPost:
+        case .showEditPost:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
@@ -149,10 +149,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
             
         case .showIntroduction,
              .showSettings,
-             .addPost,
+             .showAddPost,
              .showRedditSignIn,
              .showImgurSignIn,
-             .menuBulkAdd:
+             .showBulkAdd:
             break
             
         default:
@@ -166,35 +166,35 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
-    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) { // todo: break this up into many unwind funcs
-        switch unwindSegue.identifier ?? "" {
-        case PostViewController.Segue.postBackToList.rawValue:
-            if let pvc = unwindSegue.source as? PostViewController {
-                let (post, isNewPost) = pvc.getResultingPost()
-                
-                if isNewPost {
-                    presenter.newPostAdded(post)
-                } else { // user edited a post
-                    presenter.postEdited(post)
-                }
-            } else {
-                fatalError()
-            }
+    @IBAction func unwindImgurSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
+    @IBAction func unwindPostSaved(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == PostViewController.Segue.unwindPostSaved.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
         
-        case BulkAddViewController.Segue.bulkBackToList.rawValue:
-            if let bavc = unwindSegue.source as? BulkAddViewController {
-                if let bulkPosts = bavc.getResultingPosts() {
-                    presenter.newPostsAdded(bulkPosts)
-                }
-            } else {
-                fatalError()
-            }
-            
-        case ImgurSignInViewController.Segue.imgurBackToList.rawValue:
-            break
-            
-        default:
-            fatalError()
+        let pvc = unwindSegue.source as! PostViewController
+        let (post, isNewPost) = pvc.getResultingPost()
+        
+        if isNewPost {
+            presenter.newPostAdded(post)
+        } else { // user edited a post
+            presenter.postEdited(post)
+        }
+    }
+    
+    @IBAction func unwindBulkAdded(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == BulkAddViewController.Segue.unwindBulkAdded.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+        
+        let bavc = unwindSegue.source as! BulkAddViewController
+        if let bulkPosts = bavc.getResultingPosts() {
+            presenter.newPostsAdded(bulkPosts)
         }
     }
     
