@@ -89,59 +89,86 @@ class SettingsPresenter {
     }
     
     private func getRedditOption() -> SettingsOptionType {
-        var redditAccountName: String? = nil
-        var redditSignedIn = false
+        let accountType = "Reddit Account"
+        let signInPrompt = "Add Reddit Account"
+        
+        var accountName: String? = nil
+        var signedIn = false
         
         if let redditAuth = database.redditAuth {
-            redditAccountName = "/u/\(redditAuth.username)"
-            redditSignedIn = true
+            accountName = "/u/\(redditAuth.username)"
+            signedIn = true
         }
         
-        let redditSignInHandler = { self.redditSignInPressed() }
-        let redditSignOutHandler = { self.redditSignOutPressed() }
+        let signInHandler = { self.redditSignInPressed() }
+        let signOutHandler = { self.redditSignOutPressed() }
         
-        let redditOption = AccountSettingsOption(
-            accountType: "Reddit account",
-            accountName: redditAccountName,
-            signedIn: redditSignedIn,
-            signInPrompt: "Add Reddit Account",
-            signInHandler: redditSignInHandler,
-            signOutHandler: redditSignOutHandler
+        let option = AccountSettingsOption(
+            accountType: accountType,
+            accountName: accountName,
+            signedIn: signedIn,
+            signInPrompt: signInPrompt,
+            signInHandler: signInHandler,
+            signOutHandler: signOutHandler
         )
         
-        let redditOptionType = SettingsOptionType.accountOption(option: redditOption)
-        return redditOptionType
+        let optionType = SettingsOptionType.accountOption(option: option)
+        return optionType
     }
     
     private func getImgurOption() -> SettingsOptionType {
-        var imgurAccountName: String? = nil
-        var imgurSignedIn = false
+        let accountType = "Imgur Account"
+        let signInPrompt = "Add Imgur Account"
+        
+        var accountName: String? = nil
+        var signedIn = false
         
         if let imgurAuth = database.imgurAuth {
-            imgurAccountName = imgurAuth.username
-            imgurSignedIn = true
+            accountName = imgurAuth.username
+            signedIn = true
         }
         
-        let imgurSignInHandler = { self.imgurSignInPressed() }
-        let imgurSignOutHandler = { self.imgurSignOutPressed() }
+        let signInHandler = { self.imgurSignInPressed() }
+        let signOutHandler = { self.imgurSignOutPressed() }
         
-        let imgurOption = AccountSettingsOption(
-            accountType: "Imgur account",
-            accountName: imgurAccountName,
-            signedIn: imgurSignedIn,
-            signInPrompt: "Add Imgur Account",
-            signInHandler: imgurSignInHandler,
-            signOutHandler: imgurSignOutHandler
+        let option = AccountSettingsOption(
+            accountType: accountType,
+            accountName: accountName,
+            signedIn: signedIn,
+            signInPrompt: signInPrompt,
+            signInHandler: signInHandler,
+            signOutHandler: signOutHandler
         )
         
-        let imgurOptionType = SettingsOptionType.accountOption(option: imgurOption)
-        return imgurOptionType
+        let optionType = SettingsOptionType.accountOption(option: option)
+        return optionType
+    }
+    
+    private func getWallpaperModeOption() -> SettingsOptionType {
+        let title = "Wallpaper Mode"
+        
+        let wallpaperMode = database.wallpaperMode
+        
+        let handler = { (isOn: Bool) in
+            self.database.wallpaperMode = isOn
+            self.updateSettings()
+        }
+        
+        let option = SwitchSettingsOption(title: title, isOn: wallpaperMode, handler: handler)
+        let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
     }
     
     private func getSettingsSections() -> [SettingsSection] {
         var sections: [SettingsSection] = []
         
-        let generalOptions = [getRedditOption(), getImgurOption()]
+        let generalOptions = [
+            getRedditOption(),
+            getImgurOption(),
+            getWallpaperModeOption()
+        ]
+        
         let generalSection = SettingsSection(title: "General", options: generalOptions)
         sections.append(generalSection)
         
