@@ -8,15 +8,23 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver {
+    enum Segue: String {
+        case showRedditSignIn = "showRedditSignIn"
+    }
+    
     private var presenter = SettingsPresenter()
     
     @IBOutlet private var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter.attachView(self)
 
         setupViews()
+        
+        presenter.viewDidLoad()
     }
     
     func setupViews() {
@@ -25,6 +33,43 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    func segueToRedditSignIn() {
+        segueTo(.showRedditSignIn)
+    }
+    
+    private func segueTo(_ segue: Segue) { // todo: extract this from VCs?
+        performSegue(withIdentifier: segue.rawValue, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        switch Segue(rawValue: segue.identifier ?? "") {
+        case .showRedditSignIn:
+            break
+            
+        default:
+            fatalError()
+        }
+    }
+    
+    @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == LoginViewController.Segue.unwindRedditSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
+    func redditSignedIn(with reddit: Reddit) {
+        presenter.redditSignedIn(reddit)
+        
+        // todo: remove the previous view controllers from the navigation stack
+    }
+    
+    func reloadSettingCell(section: Int, at index: Int) {
+        let indexPath = IndexPath(row: index, section: section)
+        tableView.reloadRows(at: [indexPath], with: .right)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

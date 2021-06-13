@@ -200,6 +200,7 @@
                     <navigationItem key="navigationItem" title="Settings" id="6wO-fE-XGe"/>
                     <connections>
                         <outlet property="tableView" destination="MmD-dY-zjA" id="cLw-Wt-jWl"/>
+                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="showRedditSignIn" id="bTN-eO-UuB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -235,7 +236,7 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
-                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="backLoginToList" unwindAction="unwindToPostListWithUnwindSegue:" id="E6H-4H-Nlk"/>
+                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="unwindRedditSignedIn" unwindAction="unwindRedditSignInUnwindSegue:" id="E6H-4H-Nlk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -619,7 +620,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
-        <segue reference="t8V-rm-KZc"/>
+        <segue reference="bTN-eO-UuB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>

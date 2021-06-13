@@ -9,5 +9,7 @@
 import Foundation
 
 protocol SettingsViewDelegate: AnyObject {
+    func segueToRedditSignIn()
     
+    func reloadSettingCell(section: Int, at index: Int) // todo: consistent table view method naming in view delegates (PostTableViewDelegate etc)
 }

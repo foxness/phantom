@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver {
     // MARK: - Nested entities
     
     enum Segue: String {
@@ -126,7 +126,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         performSegue(withIdentifier: segue.rawValue, sender: nil)
     }
     
-    func loginReddit(with reddit: Reddit) {
+    func redditSignedIn(with reddit: Reddit) {
         presenter.redditLoggedIn(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
@@ -160,6 +160,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
+    @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == LoginViewController.Segue.unwindRedditSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
     @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier ?? "" {
         case PostViewController.Segue.postBackToList.rawValue:
@@ -184,8 +190,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
                 fatalError()
             }
             
-        case LoginViewController.Segue.loginBackToList.rawValue:
-            break
+//        case LoginViewController.Segue.unwindRedditSignedIn.rawValue:
+//            break
             
         case ImgurViewController.Segue.imgurBackToList.rawValue:
             break

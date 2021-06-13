@@ -11,11 +11,9 @@ import Foundation
 class SettingsPresenter {
     private weak var viewDelegate: SettingsViewDelegate?
     
-    private var sections: [SettingsSection]
+    private let database: Database = .instance // todo: make them services? implement dip
     
-    init() {
-        sections = SettingsPresenter.getSettingsSections()
-    }
+    private var sections: [SettingsSection] = []
     
     func attachView(_ viewDelegate: SettingsViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -23,6 +21,14 @@ class SettingsPresenter {
     
     func detachView() {
         viewDelegate = nil
+    }
+    
+    func viewDidLoad() {
+        updateSettings()
+    }
+    
+    func updateSettings() {
+        sections = getSettingsSections()
     }
     
     func getOption(section: Int, at index: Int) -> SettingsOptionType {
@@ -50,35 +56,49 @@ class SettingsPresenter {
         }
     }
     
-    private static func getSettingsSections() -> [SettingsSection] {
+    func redditSignedIn(_ reddit: Reddit) {
+        database.redditAuth = reddit.auth
+        updateSettings()
+        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+    }
+    
+    func redditSignOutPressed() {
+        database.redditAuth = nil
+        updateSettings()
+        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+    }
+    
+    func redditSignInPressed() {
+        viewDelegate?.segueToRedditSignIn()
+    }
+    
+    private func getSettingsSections() -> [SettingsSection] {
         var sections: [SettingsSection] = []
         
-        let redditOption = AccountSettingsOption(accountType: "Reddit account", accountName: "testy", signedIn: false, signInPrompt: "Add Reddit Account", signInHandler: { Log.p("reddit sign in pressed") }, signOutHandler: { Log.p("reddit sign out pressed") })
+        var redditAccountName: String? = nil
+        var redditSignedIn = false
+        
+        if let redditAuth = database.redditAuth {
+            redditAccountName = redditAuth.username
+            redditSignedIn = true
+        }
+        
+        let redditSignInHandler = { self.redditSignInPressed() }
+        let redditSignOutHandler = { self.redditSignOutPressed() }
+        
+        let redditOption = AccountSettingsOption(
+            accountType: "Reddit account",
+            accountName: redditAccountName,
+            signedIn: redditSignedIn,
+            signInPrompt: "Add Reddit Account",
+            signInHandler: redditSignInHandler,
+            signOutHandler: redditSignOutHandler
+        )
         
         let redditOptionType = SettingsOptionType.accountOption(option: redditOption)
         let generalOptions = [redditOptionType]
         let generalSection = SettingsSection(title: "General", options: generalOptions)
-        
         sections.append(generalSection)
-        
-//        Array(1...3).map {
-//            let options: [SettingsOptionType] = Array(1...5).map {
-//                let n = $0
-//                switch n % 2 {
-//                case 0: return .staticOption(option: StaticSettingsOption(title: "Static Option \($0)") { Log.p("Static Option \(n) pressed") })
-//                case 1: return .switchOption(option: SwitchSettingsOption(title: "Switch Option \($0)", isOn: n % 2 == 1) { Log.p("Switch Option \(n) switched to \($0)") })
-//                default: fatalError()
-//                }
-//            }
-//
-//            return SettingsSection(title: "Section \($0)", options: options)
-//        }.forEach {
-//            sections.append($0)
-//        }
-        
-//        options.append(SettingsOption(title: "Option", handler: {
-//
-//        }))
         
         return sections
     }
