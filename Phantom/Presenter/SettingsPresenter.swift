@@ -27,7 +27,7 @@ class SettingsPresenter {
         updateSettings()
     }
     
-    func updateSettings() {
+    private func updateSettings() {
         sections = getSettingsSections()
     }
     
@@ -68,24 +68,42 @@ class SettingsPresenter {
         viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
     }
     
-    func redditSignOutPressed() {
+    private func redditSignOutPressed() {
         database.redditAuth = nil
         updateSettings()
         viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
     }
     
-    func imgurSignOutPressed() {
+    private func imgurSignOutPressed() {
         database.imgurAuth = nil
         updateSettings()
         viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
     }
     
-    func redditSignInPressed() {
+    private func redditSignInPressed() {
         viewDelegate?.segueToRedditSignIn()
     }
     
-    func imgurSignInPressed() {
+    private func imgurSignInPressed() {
         viewDelegate?.segueToImgurSignIn()
+    }
+    
+    private func getSettingsSections() -> [SettingsSection] {
+        let generalSectionTitle = "General"
+        
+        var sections: [SettingsSection] = []
+        
+        let generalOptions = [
+            getRedditOption(),
+            getImgurOption(),
+            getWallpaperModeOption(),
+            getUseWallhavenOption()
+        ]
+        
+        let generalSection = SettingsSection(title: generalSectionTitle, options: generalOptions)
+        sections.append(generalSection)
+        
+        return sections
     }
     
     private func getRedditOption() -> SettingsOptionType {
@@ -160,18 +178,19 @@ class SettingsPresenter {
         return optionType
     }
     
-    private func getSettingsSections() -> [SettingsSection] {
-        var sections: [SettingsSection] = []
+    private func getUseWallhavenOption() -> SettingsOptionType {
+        let title = "Use Wallhaven"
         
-        let generalOptions = [
-            getRedditOption(),
-            getImgurOption(),
-            getWallpaperModeOption()
-        ]
+        let useWallhaven = database.useWallhaven
         
-        let generalSection = SettingsSection(title: "General", options: generalOptions)
-        sections.append(generalSection)
+        let handler = { (isOn: Bool) in
+            self.database.useWallhaven = isOn
+            self.updateSettings()
+        }
         
-        return sections
+        let option = SwitchSettingsOption(title: title, isOn: useWallhaven, handler: handler)
+        let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
     }
 }
