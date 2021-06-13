@@ -201,6 +201,7 @@
                     <connections>
                         <outlet property="tableView" destination="MmD-dY-zjA" id="cLw-Wt-jWl"/>
                         <segue destination="cuc-xd-yKa" kind="presentation" identifier="settingsShowRedditSignIn" id="bTN-eO-UuB"/>
+                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="settingsShowImgurSignIn" id="41R-z2-s1Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -524,7 +525,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhD-Gp-bvR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="IeG-JS-B1f" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="186" y="-638"/>
+            <point key="canvasLocation" x="1071" y="1615"/>
         </scene>
         <!--Bulk Add-->
         <scene sceneID="Mi7-yR-3UK">
@@ -619,8 +620,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="41R-z2-s1Y"/>
         <segue reference="I6c-Og-Mxs"/>
-        <segue reference="Fmp-8g-UON"/>
+        <segue reference="bTN-eO-UuB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>

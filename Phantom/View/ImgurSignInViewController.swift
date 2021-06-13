@@ -52,7 +52,7 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dest = segue.destination as! PostTableViewController
+        let dest = segue.destination as! ImgurSignInReceiver
         dest.imgurSignedIn(with: imgur)
     }
 }

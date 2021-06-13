@@ -8,9 +8,10 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver {
+class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver, ImgurSignInReceiver {
     enum Segue: String {
         case showRedditSignIn = "settingsShowRedditSignIn"
+        case showImgurSignIn = "settingsShowImgurSignIn"
     }
     
     private var presenter = SettingsPresenter()
@@ -21,9 +22,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         
         presenter.attachView(self)
-
         setupViews()
-        
         presenter.viewDidLoad()
     }
     
@@ -39,6 +38,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         segueTo(.showRedditSignIn)
     }
     
+    func segueToImgurSignIn() {
+        segueTo(.showImgurSignIn)
+    }
+    
     private func segueTo(_ segue: Segue) { // todo: extract this from VCs?
         performSegue(withIdentifier: segue.rawValue, sender: nil)
     }
@@ -47,7 +50,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         super.prepare(for: segue, sender: sender)
         
         switch Segue(rawValue: segue.identifier ?? "") {
-        case .showRedditSignIn:
+        case .showRedditSignIn,
+             .showImgurSignIn:
             break
             
         default:
@@ -61,10 +65,20 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    @IBAction func unwindImgurSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
     func redditSignedIn(with reddit: Reddit) {
         presenter.redditSignedIn(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
+    }
+    
+    func imgurSignedIn(with imgur: Imgur) {
+        presenter.imgurSignedIn(imgur)
     }
     
     func reloadSettingCell(section: Int, at index: Int) {

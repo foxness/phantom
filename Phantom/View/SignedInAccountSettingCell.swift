@@ -30,7 +30,7 @@ class SignedInAccountSettingCell: UITableViewCell {
         guard option.signedIn else { fatalError("This cell is only for signed in accounts") }
         
         accountTypeLabel.text = option.accountType
-        accountNameLabel.text = "/u/\(option.accountName!)"
+        accountNameLabel.text = option.accountName!
         
         signOutHandler = option.signOutHandler
     }

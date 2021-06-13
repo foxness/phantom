@@ -62,24 +62,38 @@ class SettingsPresenter {
         viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
     }
     
+    func imgurSignedIn(_ imgur: Imgur) {
+        database.imgurAuth = imgur.auth
+        updateSettings()
+        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+    }
+    
     func redditSignOutPressed() {
         database.redditAuth = nil
         updateSettings()
         viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
     }
     
+    func imgurSignOutPressed() {
+        database.imgurAuth = nil
+        updateSettings()
+        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+    }
+    
     func redditSignInPressed() {
         viewDelegate?.segueToRedditSignIn()
     }
     
-    private func getSettingsSections() -> [SettingsSection] {
-        var sections: [SettingsSection] = []
-        
+    func imgurSignInPressed() {
+        viewDelegate?.segueToImgurSignIn()
+    }
+    
+    private func getRedditOption() -> SettingsOptionType {
         var redditAccountName: String? = nil
         var redditSignedIn = false
         
         if let redditAuth = database.redditAuth {
-            redditAccountName = redditAuth.username
+            redditAccountName = "/u/\(redditAuth.username)"
             redditSignedIn = true
         }
         
@@ -96,7 +110,38 @@ class SettingsPresenter {
         )
         
         let redditOptionType = SettingsOptionType.accountOption(option: redditOption)
-        let generalOptions = [redditOptionType]
+        return redditOptionType
+    }
+    
+    private func getImgurOption() -> SettingsOptionType {
+        var imgurAccountName: String? = nil
+        var imgurSignedIn = false
+        
+        if let imgurAuth = database.imgurAuth {
+            imgurAccountName = imgurAuth.username
+            imgurSignedIn = true
+        }
+        
+        let imgurSignInHandler = { self.imgurSignInPressed() }
+        let imgurSignOutHandler = { self.imgurSignOutPressed() }
+        
+        let imgurOption = AccountSettingsOption(
+            accountType: "Imgur account",
+            accountName: imgurAccountName,
+            signedIn: imgurSignedIn,
+            signInPrompt: "Add Imgur Account",
+            signInHandler: imgurSignInHandler,
+            signOutHandler: imgurSignOutHandler
+        )
+        
+        let imgurOptionType = SettingsOptionType.accountOption(option: imgurOption)
+        return imgurOptionType
+    }
+    
+    private func getSettingsSections() -> [SettingsSection] {
+        var sections: [SettingsSection] = []
+        
+        let generalOptions = [getRedditOption(), getImgurOption()]
         let generalSection = SettingsSection(title: "General", options: generalOptions)
         sections.append(generalSection)
         
