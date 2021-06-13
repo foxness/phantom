@@ -18,8 +18,8 @@ enum SubmissionIndicatorState {
 
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
-    func segueToRedditLogin()
-    func segueToImgurLogin()
+    func segueToRedditSignIn()
+    func segueToImgurSignIn()
     func segueToBulkAdd()
     func segueToSettings()
     

@@ -14,8 +14,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     enum Segue: String {
         case showIntroduction = "showIntroduction"
         case showSettings = "showSettings"
-        case menuRedditLogin = "menuRedditLogin"
-        case menuImgurLogin = "menuImgurLogin"
+        case showRedditSignIn = "menuRedditLogin"
+        case showImgurSignIn = "menuImgurLogin"
         case menuBulkAdd = "menuBulkAdd"
         case addPost = "addPost"
         case editPost = "editPost"
@@ -110,12 +110,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         segueTo(.showSettings)
     }
     
-    func segueToRedditLogin() {
-        segueTo(.menuRedditLogin)
+    func segueToRedditSignIn() {
+        segueTo(.showRedditSignIn)
     }
     
-    func segueToImgurLogin() {
-        segueTo(.menuImgurLogin)
+    func segueToImgurSignIn() {
+        segueTo(.showImgurSignIn)
     }
     
     func segueToBulkAdd() {
@@ -132,8 +132,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         // todo: remove the previous view controllers from the navigation stack
     }
     
-    func loginImgur(with imgur: Imgur) {
-        presenter.imgurLoggedIn(imgur)
+    func imgurSignedIn(with imgur: Imgur) {
+        presenter.imgurSignedIn(imgur)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -150,8 +150,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         case .showIntroduction,
              .showSettings,
              .addPost,
-             .menuRedditLogin,
-             .menuImgurLogin,
+             .showRedditSignIn,
+             .showImgurSignIn,
              .menuBulkAdd:
             break
             
@@ -161,12 +161,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == LoginViewController.Segue.unwindRedditSignedIn.rawValue else {
+        guard unwindSegue.identifier == RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue else {
             fatalError("Got unexpected unwind segue")
         }
     }
     
-    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
+    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) { // todo: break this up into many unwind funcs
         switch unwindSegue.identifier ?? "" {
         case PostViewController.Segue.postBackToList.rawValue:
             if let pvc = unwindSegue.source as? PostViewController {
@@ -190,10 +190,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
                 fatalError()
             }
             
-//        case LoginViewController.Segue.unwindRedditSignedIn.rawValue:
-//            break
-            
-        case ImgurViewController.Segue.imgurBackToList.rawValue:
+        case ImgurSignInViewController.Segue.imgurBackToList.rawValue:
             break
             
         default:

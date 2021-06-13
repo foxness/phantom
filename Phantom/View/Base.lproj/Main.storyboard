@@ -200,17 +200,17 @@
                     <navigationItem key="navigationItem" title="Settings" id="6wO-fE-XGe"/>
                     <connections>
                         <outlet property="tableView" destination="MmD-dY-zjA" id="cLw-Wt-jWl"/>
-                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="showRedditSignIn" id="bTN-eO-UuB"/>
+                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="settingsShowRedditSignIn" id="bTN-eO-UuB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1069.5652173913045" y="862.5"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Reddit Sign In View Controller-->
         <scene sceneID="dns-d2-J9D">
             <objects>
-                <viewController id="cuc-xd-yKa" customClass="LoginViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cuc-xd-yKa" customClass="RedditSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CWL-vU-4ZL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -493,7 +493,7 @@
         <!--Imgur-->
         <scene sceneID="ljq-DM-5bd">
             <objects>
-                <viewController title="Imgur" id="GW5-zR-qB6" customClass="ImgurViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Imgur" id="GW5-zR-qB6" customClass="ImgurSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mId-Tw-Qf4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

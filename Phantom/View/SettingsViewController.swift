@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver {
     enum Segue: String {
-        case showRedditSignIn = "showRedditSignIn"
+        case showRedditSignIn = "settingsShowRedditSignIn" // todo: apply this naming scheme to all segues
     }
     
     private var presenter = SettingsPresenter()
@@ -56,7 +56,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == LoginViewController.Segue.unwindRedditSignedIn.rawValue else {
+        guard unwindSegue.identifier == RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue else {
             fatalError("Got unexpected unwind segue")
         }
     }

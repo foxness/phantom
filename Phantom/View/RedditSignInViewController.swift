@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  RedditSignInViewController.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/08/29.
@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class LoginViewController: UIViewController, WKNavigationDelegate { // todo: rename to RedditSignInVC
+class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     enum Segue: String {
         case unwindRedditSignedIn = "unwindRedditSignedIn"
     }
@@ -26,8 +26,8 @@ class LoginViewController: UIViewController, WKNavigationDelegate { // todo: ren
 
         let url = reddit.getAuthUrl()
         
-        let rememberLogin = true
-        if rememberLogin {
+        let rememberSignIn = true // todo: remove this or add to debugvariable
+        if rememberSignIn {
             webView.load(URLRequest(url: url))
         } else {
             deleteCookies {
@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate { // todo: ren
                 try! self.reddit.fetchAuthTokens()
                 try! self.reddit.getIdentity()
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: LoginViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
+                    self.performSegue(withIdentifier: RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
                 }
             }
         }

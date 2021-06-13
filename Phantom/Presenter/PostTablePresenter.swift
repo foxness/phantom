@@ -84,7 +84,7 @@ class PostTablePresenter {
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
-    func imgurLoggedIn(_ imgur: Imgur) {
+    func imgurSignedIn(_ imgur: Imgur) {
         submitter.imgur.mutate { $0 = imgur }
         Log.p("I logged in imgur")
         
@@ -154,7 +154,7 @@ class PostTablePresenter {
         }
         
         if !redditLoggedIn {
-            viewDelegate?.segueToRedditLogin()
+            viewDelegate?.segueToRedditSignIn()
         }
     }
     
@@ -170,7 +170,7 @@ class PostTablePresenter {
         }
         
         if !imgurLoggedIn {
-            viewDelegate?.segueToImgurLogin()
+            viewDelegate?.segueToImgurSignIn()
         }
     }
     
