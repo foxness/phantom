@@ -433,8 +433,6 @@
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="postsShowIntroduction" animates="NO" id="smv-r4-N41"/>
-                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
-                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
                         <segue destination="H2E-tt-C7O" kind="presentation" identifier="postsShowBulkAdd" id="uyW-lq-5nh"/>
                         <segue destination="P40-mb-cKw" kind="show" identifier="postsShowSettings" id="Qgz-Ow-kmP"/>
                     </connections>
@@ -620,7 +618,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="41R-z2-s1Y"/>
         <segue reference="I6c-Og-Mxs"/>
         <segue reference="bTN-eO-UuB"/>
     </inferredMetricsTieBreakers>

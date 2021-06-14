@@ -74,25 +74,9 @@ class PostTablePresenter {
         Log.p("I logged in reddit")
         
         database.introductionShown = true // todo: move this somewhere else?
-        
-        let redditName = reddit.username
-        let redditLoggedIn = true
-        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
-        
         disableSubmissionBecauseNoReddit = false
         
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
-    }
-    
-    func imgurSignedIn(_ imgur: Imgur) {
-        submitter.imgur.mutate { $0 = imgur }
-        Log.p("I logged in imgur")
-        
-        let imgurName = imgur.username
-        let imgurLoggedIn = true
-        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
-        
-        saveImgurAuth()
     }
     
     func submitPressed(postIndex: Int) {
@@ -141,53 +125,12 @@ class PostTablePresenter {
         }
     }
     
-    func redditButtonPressed() { // todo: disable pressing the button while submitting
-        var redditLoggedIn = false
-        
-        if let reddit = submitter.reddit.value {
-            redditLoggedIn = reddit.isLoggedIn
-            if redditLoggedIn {
-                reddit.logout()
-                viewDelegate?.updateSlideUpMenu(redditName: nil, redditLoggedIn: false)
-                disableSubmissionBecauseNoReddit = true
-            }
-        }
-        
-        if !redditLoggedIn {
-            viewDelegate?.segueToRedditSignIn()
-        }
-    }
-    
-    func imgurButtonPressed() { // todo: disable pressing the button while submitting
-        var imgurLoggedIn = false
-        
-        if let imgur = submitter.imgur.value {
-            imgurLoggedIn = imgur.isLoggedIn
-            if imgurLoggedIn {
-                imgur.logout()
-                viewDelegate?.updateSlideUpMenu(imgurName: nil, imgurLoggedIn: false)
-            }
-        }
-        
-        if !imgurLoggedIn {
-            viewDelegate?.segueToImgurSignIn()
-        }
-    }
-    
     func bulkAddButtonPressed() {
         viewDelegate?.segueToBulkAdd()
     }
     
     func settingsButtonPressed() {
         viewDelegate?.segueToSettings()
-    }
-    
-    func wallpaperModeSwitched(on: Bool) {
-        database.wallpaperMode = on
-    }
-    
-    func useWallhavenSwitched(on: Bool) {
-        database.useWallhaven = on
     }
     
     func moreButtonPressed() {
@@ -450,32 +393,8 @@ class PostTablePresenter {
     }
     
     private func updateViews() {
-        let wallpaperMode = database.wallpaperMode
-        let useWallhaven = database.useWallhaven
-        
-        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
-        
-        let redditLoggedIn: Bool
-        let redditName: String?
-        if let reddit = submitter.reddit.value {
-            redditLoggedIn = reddit.isLoggedIn
-            redditName = reddit.username
-        } else {
-            redditLoggedIn = false
-            redditName = nil
-        }
-
-        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
+        let redditLoggedIn = submitter.reddit.value?.isLoggedIn ?? false
         disableSubmissionBecauseNoReddit = !redditLoggedIn
-        
-        var imgurLoggedIn = false
-        var imgurName: String? = nil
-        if let imgur = submitter.imgur.value {
-            imgurLoggedIn = imgur.isLoggedIn
-            imgurName = imgur.username
-        }
-        
-        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
     }
     
     private func setupPostSubmitter() {

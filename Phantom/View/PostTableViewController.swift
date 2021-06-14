@@ -8,14 +8,12 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver, ImgurSignInReceiver {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver {
     // MARK: - Nested entities
     
     enum Segue: String {
         case showIntroduction = "postsShowIntroduction"
         case showSettings = "postsShowSettings"
-        case showRedditSignIn = "menuRedditLogin" // todo: delete
-        case showImgurSignIn = "menuImgurLogin" // todo: delete
         case showBulkAdd = "postsShowBulkAdd"
         case showAddPost = "postsShowAddPost"
         case showEditPost = "postsShowEditPost"
@@ -42,7 +40,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     @IBOutlet private weak var submissionIndicatorLabel: UILabel!
     @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView! // loading icon thing
     
-    @IBOutlet weak var imgurButton: UIBarButtonItem!
     @IBOutlet weak var moreButtton: UIBarButtonItem!
     
     // MARK: - View lifecycle
@@ -110,14 +107,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         segueTo(.showSettings)
     }
     
-    func segueToRedditSignIn() {
-        segueTo(.showRedditSignIn)
-    }
-    
-    func segueToImgurSignIn() {
-        segueTo(.showImgurSignIn)
-    }
-    
     func segueToBulkAdd() {
         segueTo(.showBulkAdd)
     }
@@ -130,10 +119,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.redditLoggedIn(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
-    }
-    
-    func imgurSignedIn(with imgur: Imgur) {
-        presenter.imgurSignedIn(imgur)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -150,8 +135,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         case .showIntroduction,
              .showSettings,
              .showAddPost,
-             .showRedditSignIn,
-             .showImgurSignIn,
              .showBulkAdd:
             break
             
@@ -350,37 +333,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.show()
     }
     
-    func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
-        slideUpMenu.redditName = redditName
-        slideUpMenu.redditLoggedIn = redditLoggedIn
-        slideUpMenu.updateRedditViews()
-    }
-    
-    func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
-        slideUpMenu.imgurName = imgurName
-        slideUpMenu.imgurLoggedIn = imgurLoggedIn
-        slideUpMenu.updateImgurViews()
-    }
-    
-    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool) {
-        slideUpMenu.wallpaperMode = wallpaperMode
-        slideUpMenu.useWallhaven = useWallhaven
-        slideUpMenu.updateSwitchViews()
-    }
-    
     func showAlert(title: String, message: String) {
         displayAlert(title: title, message: message)
     }
     
     // MARK: - Emitter methods
-    
-    func redditButtonPressed() {
-        presenter.redditButtonPressed()
-    }
-    
-    func imgurButtonPressed() {
-        presenter.imgurButtonPressed()
-    }
     
     func bulkAddButtonPressed() {
         presenter.bulkAddButtonPressed()
@@ -388,14 +345,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func settingsButtonPressed() {
         presenter.settingsButtonPressed()
-    }
-    
-    func wallpaperModeSwitched(on: Bool) {
-        presenter.wallpaperModeSwitched(on: on)
-    }
-    
-    func useWallhavenSwitched(on: Bool) {
-        presenter.useWallhavenSwitched(on: on)
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {

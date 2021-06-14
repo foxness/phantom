@@ -56,28 +56,36 @@ class SettingsPresenter {
         }
     }
     
+    func updateRedditCell() {
+        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+    }
+    
+    func updateImgurCell() {
+        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+    }
+    
     func redditSignedIn(_ reddit: Reddit) {
         database.redditAuth = reddit.auth
         updateSettings()
-        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+        updateRedditCell()
     }
     
     func imgurSignedIn(_ imgur: Imgur) {
         database.imgurAuth = imgur.auth
         updateSettings()
-        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+        updateImgurCell()
     }
     
     private func redditSignOutPressed() {
         database.redditAuth = nil
         updateSettings()
-        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+        updateRedditCell()
     }
     
     private func imgurSignOutPressed() {
         database.imgurAuth = nil
         updateSettings()
-        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+        updateImgurCell()
     }
     
     private func redditSignInPressed() {

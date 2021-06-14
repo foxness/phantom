@@ -9,11 +9,6 @@
 import Foundation
 
 protocol SlideUpMenuDelegate: AnyObject {
-    func redditButtonPressed()
-    func imgurButtonPressed()
     func bulkAddButtonPressed()
     func settingsButtonPressed()
-    
-    func wallpaperModeSwitched(on: Bool)
-    func useWallhavenSwitched(on: Bool)
 }

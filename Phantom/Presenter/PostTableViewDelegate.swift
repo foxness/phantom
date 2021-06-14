@@ -18,8 +18,6 @@ enum SubmissionIndicatorState {
 
 protocol PostTableViewDelegate: AnyObject {
     func segueToIntroduction()
-    func segueToRedditSignIn()
-    func segueToImgurSignIn()
     func segueToBulkAdd()
     func segueToSettings()
     
@@ -27,9 +25,6 @@ protocol PostTableViewDelegate: AnyObject {
     func showAlert(title: String, message: String)
     
     func showSlideUpMenu()
-    func updateSlideUpMenu(redditName: String?,  redditLoggedIn: Bool)
-    func updateSlideUpMenu(imgurName: String?,  imgurLoggedIn: Bool)
-    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool)
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)
