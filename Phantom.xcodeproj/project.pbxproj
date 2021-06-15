@@ -13,6 +13,8 @@
 		5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */; };
 		572D9519265ACB1A00F0D454 /* RetryStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D9518265ACB1A00F0D454 /* RetryStrategy.swift */; };
 		572D951B265ADA5600F0D454 /* RequiredMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */; };
+		5732365B2678A611004CEB72 /* SlideUpMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */; };
+		5732365D2678ADA3004CEB72 /* SlideUpMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */; };
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
@@ -69,6 +71,8 @@
 		5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallhavenMiddleware.swift; sourceTree = "<group>"; };
 		572D9518265ACB1A00F0D454 /* RetryStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryStrategy.swift; sourceTree = "<group>"; };
 		572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiredMiddleware.swift; sourceTree = "<group>"; };
+		5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuCell.swift; sourceTree = "<group>"; };
+		5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuItem.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
@@ -194,6 +198,8 @@
 				57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */,
 				57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */,
 				57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */,
+				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
+				5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -358,8 +364,10 @@
 				57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
+				5732365B2678A611004CEB72 /* SlideUpMenuCell.swift in Sources */,
 				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,
 				575D7877264C112000173E7A /* Wallhaven.swift in Sources */,
+				5732365D2678ADA3004CEB72 /* SlideUpMenuItem.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				572D9519265ACB1A00F0D454 /* RetryStrategy.swift in Sources */,
 				57B3F5BB26760049007F5821 /* ImgurSignInReceiver.swift in Sources */,
