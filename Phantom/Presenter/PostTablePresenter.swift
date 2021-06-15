@@ -8,6 +8,9 @@
 
 import Foundation
 
+// todo: save posts only when they change
+// todo: save reddit and imgur only when they change (after submit & on receive new)
+
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -135,6 +138,16 @@ class PostTablePresenter {
     
     func moreButtonPressed() {
         viewDelegate?.showSlideUpMenu()
+    }
+    
+    func redditAccountChanged(_ newReddit: Reddit?) { // called when the account is changed in settings
+        submitter.reddit.mutate { $0 = newReddit }
+        
+        disableSubmissionBecauseNoReddit = newReddit == nil
+    }
+    
+    func imgurAccountChanged(_ newImgur: Imgur?) { // called when the account is changed in settings
+        submitter.imgur.mutate { $0 = newImgur }
     }
     
     // MARK: - View lifecycle methods

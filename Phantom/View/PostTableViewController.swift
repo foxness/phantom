@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver, SettingsDelegate {
     // MARK: - Nested entities
     
     enum Segue: String {
@@ -131,9 +131,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
             dest.supplyPost(selectedPost)
+        
+        case .showSettings:
+            let dest = segue.destination as! SettingsViewController
+            dest.delegate = self
             
         case .showIntroduction,
-             .showSettings,
              .showAddPost,
              .showBulkAdd:
             break
@@ -349,6 +352,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     @IBAction func moreButtonPressed(_ sender: Any) {
         presenter.moreButtonPressed()
+    }
+    
+    func redditAccountChanged(_ newReddit: Reddit?) {
+        presenter.redditAccountChanged(newReddit)
+    }
+    
+    func imgurAccountChanged(_ newImgur: Imgur?) {
+        presenter.imgurAccountChanged(newImgur)
     }
     
     // MARK: - Helper methods

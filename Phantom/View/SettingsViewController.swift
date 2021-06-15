@@ -8,15 +8,22 @@
 
 import UIKit
 
+// todo: replace instances of "loggedIn" with "signedIn" (reddit etc)
+
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver, ImgurSignInReceiver {
     enum Segue: String {
         case showRedditSignIn = "settingsShowRedditSignIn"
         case showImgurSignIn = "settingsShowImgurSignIn"
     }
     
+    @IBOutlet private var tableView: UITableView!
+    
     private var presenter = SettingsPresenter()
     
-    @IBOutlet private var tableView: UITableView!
+    weak var delegate: SettingsDelegate? {
+        get { presenter.delegate }
+        set { presenter.delegate = newValue }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

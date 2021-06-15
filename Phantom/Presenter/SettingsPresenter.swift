@@ -10,6 +10,7 @@ import Foundation
 
 class SettingsPresenter {
     private weak var viewDelegate: SettingsViewDelegate?
+    weak var delegate: SettingsDelegate?
     
     private let database: Database = .instance // todo: make them services? implement dip
     
@@ -68,24 +69,32 @@ class SettingsPresenter {
         database.redditAuth = reddit.auth
         updateSettings()
         updateRedditCell()
+        
+        delegate?.redditAccountChanged(reddit)
     }
     
     func imgurSignedIn(_ imgur: Imgur) {
         database.imgurAuth = imgur.auth
         updateSettings()
         updateImgurCell()
+        
+        delegate?.imgurAccountChanged(imgur)
     }
     
     private func redditSignOutPressed() {
         database.redditAuth = nil
         updateSettings()
         updateRedditCell()
+        
+        delegate?.redditAccountChanged(nil)
     }
     
     private func imgurSignOutPressed() {
         database.imgurAuth = nil
         updateSettings()
         updateImgurCell()
+        
+        delegate?.imgurAccountChanged(nil)
     }
     
     private func redditSignInPressed() {
