@@ -44,7 +44,7 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = imgur.getUserResponse(to: url)
-        if response == .allow && imgur.isLoggedIn {
+        if response == .allow && imgur.isSignedIn {
             performSegue(withIdentifier: ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue, sender: nil)
         }
         

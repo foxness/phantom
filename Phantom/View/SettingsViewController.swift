@@ -8,7 +8,8 @@
 
 import UIKit
 
-// todo: replace instances of "loggedIn" with "signedIn" (reddit etc)
+// todo: add settings for reddit resubmit & sendReplies
+// todo: add settings for retry strategy
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SettingsViewDelegate, RedditSignInReceiver, ImgurSignInReceiver {
     enum Segue: String {

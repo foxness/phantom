@@ -116,7 +116,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     func redditSignedIn(with reddit: Reddit) {
-        presenter.redditLoggedIn(reddit)
+        presenter.redditSignedInFromIntroduction(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
     }

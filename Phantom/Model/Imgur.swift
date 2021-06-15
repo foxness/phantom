@@ -97,7 +97,7 @@ class Imgur {
     // MARK: - Computed properties
     
     var auth: AuthParams? {
-        guard isLoggedIn else { return nil }
+        guard isSignedIn else { return nil }
         
         return AuthParams(refreshToken: refreshToken!,
                           accessToken: accessToken!,
@@ -105,7 +105,7 @@ class Imgur {
                           username: username!)
     }
     
-    var isLoggedIn: Bool { refreshToken != nil }
+    var isSignedIn: Bool { refreshToken != nil }
     
     // MARK: - Constructors
     
@@ -121,7 +121,7 @@ class Imgur {
     // MARK: - Main methods
     
     func uploadImage(imageUrl: URL) throws -> Image { // synchronous
-        assert(isLoggedIn) // todo: throw error instead
+        assert(isSignedIn) // todo: throw error instead
         
         let request = "imgur upload"
         
@@ -138,7 +138,7 @@ class Imgur {
     }
     
     func directlyUploadImage(imageData: Data) throws -> Image {
-        assert(isLoggedIn)
+        assert(isSignedIn)
         
         let request = "imgur upload direct"
         
@@ -194,7 +194,7 @@ class Imgur {
     }
     
     private func refreshAccessToken() throws {
-        assert(isLoggedIn)
+        assert(isSignedIn)
         
         let request = "imgur access token refresh"
         
@@ -210,7 +210,7 @@ class Imgur {
     }
     
     func logout() {
-        assert(isLoggedIn)
+        assert(isSignedIn)
         
         username = nil
         refreshToken = nil

@@ -32,7 +32,7 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var disableSubmissionBecauseNoReddit = false // no reddit = logged out
+    private var disableSubmissionBecauseNoReddit = false // no reddit = signed out
     
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true
@@ -72,13 +72,12 @@ class PostTablePresenter {
     
     // MARK: - Receiver methods
     
-    func redditLoggedIn(_ reddit: Reddit) {
+    func redditSignedInFromIntroduction(_ reddit: Reddit) {
         submitter.reddit.mutate { $0 = reddit }
-        Log.p("I logged in reddit")
         
         database.introductionShown = true // todo: move this somewhere else?
-        disableSubmissionBecauseNoReddit = false
         
+        updateSubmitButton()
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
@@ -140,13 +139,12 @@ class PostTablePresenter {
         viewDelegate?.showSlideUpMenu()
     }
     
-    func redditAccountChanged(_ newReddit: Reddit?) { // called when the account is changed in settings
+    func redditAccountChanged(_ newReddit: Reddit?) { // means account changed in settings
         submitter.reddit.mutate { $0 = newReddit }
-        
-        disableSubmissionBecauseNoReddit = newReddit == nil
+        updateSubmitButton()
     }
     
-    func imgurAccountChanged(_ newImgur: Imgur?) { // called when the account is changed in settings
+    func imgurAccountChanged(_ newImgur: Imgur?) { // means account changed in settings
         submitter.imgur.mutate { $0 = newImgur }
     }
     
@@ -188,7 +186,7 @@ class PostTablePresenter {
         
         showIntroductionIfNeeded()
         setupPostSubmitter()
-        updateViews()
+        updateSubmitButton()
     }
     
     // MARK: - Scene lifecycle methods
@@ -405,9 +403,9 @@ class PostTablePresenter {
         viewDelegate?.segueToIntroduction()
     }
     
-    private func updateViews() {
-        let redditLoggedIn = submitter.reddit.value?.isLoggedIn ?? false
-        disableSubmissionBecauseNoReddit = !redditLoggedIn
+    private func updateSubmitButton() {
+        let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
+        disableSubmissionBecauseNoReddit = !redditSignedIn
     }
     
     private func setupPostSubmitter() {
