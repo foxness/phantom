@@ -8,6 +8,9 @@
 
 import Foundation
 
+// todo: save posts only when they change
+// todo: save reddit and imgur only when they change (after submit & on receive new)
+
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -29,7 +32,7 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var disableSubmissionBecauseNoReddit = false // no reddit = logged out
+    private var disableSubmissionBecauseNoReddit = false // no reddit = signed out
     
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true
@@ -69,30 +72,13 @@ class PostTablePresenter {
     
     // MARK: - Receiver methods
     
-    func redditLoggedIn(_ reddit: Reddit) {
+    func redditSignedInFromIntroduction(_ reddit: Reddit) {
         submitter.reddit.mutate { $0 = reddit }
-        Log.p("I logged in reddit")
         
         database.introductionShown = true // todo: move this somewhere else?
         
-        let redditName = reddit.username
-        let redditLoggedIn = true
-        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
-        
-        disableSubmissionBecauseNoReddit = false
-        
+        updateSubmitButton()
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
-    }
-    
-    func imgurLoggedIn(_ imgur: Imgur) {
-        submitter.imgur.mutate { $0 = imgur }
-        Log.p("I logged in imgur")
-        
-        let imgurName = imgur.username
-        let imgurLoggedIn = true
-        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
-        
-        saveImgurAuth()
     }
     
     func submitPressed(postIndex: Int) {
@@ -141,53 +127,25 @@ class PostTablePresenter {
         }
     }
     
-    func redditButtonPressed() { // todo: disable pressing the button while submitting
-        var redditLoggedIn = false
-        
-        if let reddit = submitter.reddit.value {
-            redditLoggedIn = reddit.isLoggedIn
-            if redditLoggedIn {
-                reddit.logout()
-                viewDelegate?.updateSlideUpMenu(redditName: nil, redditLoggedIn: false)
-                disableSubmissionBecauseNoReddit = true
-            }
-        }
-        
-        if !redditLoggedIn {
-            viewDelegate?.segueToRedditLogin()
-        }
-    }
-    
-    func imgurButtonPressed() { // todo: disable pressing the button while submitting
-        var imgurLoggedIn = false
-        
-        if let imgur = submitter.imgur.value {
-            imgurLoggedIn = imgur.isLoggedIn
-            if imgurLoggedIn {
-                imgur.logout()
-                viewDelegate?.updateSlideUpMenu(imgurName: nil, imgurLoggedIn: false)
-            }
-        }
-        
-        if !imgurLoggedIn {
-            viewDelegate?.segueToImgurLogin()
-        }
-    }
-    
     func bulkAddButtonPressed() {
         viewDelegate?.segueToBulkAdd()
     }
     
-    func wallpaperModeSwitched(on: Bool) {
-        database.wallpaperMode = on
-    }
-    
-    func useWallhavenSwitched(on: Bool) {
-        database.useWallhaven = on
+    func settingsButtonPressed() {
+        viewDelegate?.segueToSettings()
     }
     
     func moreButtonPressed() {
         viewDelegate?.showSlideUpMenu()
+    }
+    
+    func redditAccountChanged(_ newReddit: Reddit?) { // means account changed in settings
+        submitter.reddit.mutate { $0 = newReddit }
+        updateSubmitButton()
+    }
+    
+    func imgurAccountChanged(_ newImgur: Imgur?) { // means account changed in settings
+        submitter.imgur.mutate { $0 = newImgur }
     }
     
     // MARK: - View lifecycle methods
@@ -228,7 +186,7 @@ class PostTablePresenter {
         
         showIntroductionIfNeeded()
         setupPostSubmitter()
-        updateViews()
+        updateSubmitButton()
     }
     
     // MARK: - Scene lifecycle methods
@@ -445,33 +403,9 @@ class PostTablePresenter {
         viewDelegate?.segueToIntroduction()
     }
     
-    private func updateViews() {
-        let wallpaperMode = database.wallpaperMode
-        let useWallhaven = database.useWallhaven
-        
-        viewDelegate?.updateSlideUpMenu(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
-        
-        let redditLoggedIn: Bool
-        let redditName: String?
-        if let reddit = submitter.reddit.value {
-            redditLoggedIn = reddit.isLoggedIn
-            redditName = reddit.username
-        } else {
-            redditLoggedIn = false
-            redditName = nil
-        }
-
-        viewDelegate?.updateSlideUpMenu(redditName: redditName, redditLoggedIn: redditLoggedIn)
-        disableSubmissionBecauseNoReddit = !redditLoggedIn
-        
-        var imgurLoggedIn = false
-        var imgurName: String? = nil
-        if let imgur = submitter.imgur.value {
-            imgurLoggedIn = imgur.isLoggedIn
-            imgurName = imgur.username
-        }
-        
-        viewDelegate?.updateSlideUpMenu(imgurName: imgurName, imgurLoggedIn: imgurLoggedIn)
+    private func updateSubmitButton() {
+        let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
+        disableSubmissionBecauseNoReddit = !redditSignedIn
     }
     
     private func setupPostSubmitter() {

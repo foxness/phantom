@@ -29,17 +29,6 @@ class PostCell: UITableViewCell {
     
     private var resolutionTaskId: String?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
     func setPost(_ post: Post) {
         setMainViews(for: post)
         setThumbnail(for: post)
@@ -103,7 +92,7 @@ class PostCell: UITableViewCell {
         }
     }
     
-    private func setThumbnail(for post: Post, with imageUrl: URL) {
+    private func setThumbnail(for post: Post, with imageUrl: URL) { // todo: rounded corner by imageview not the image itself
         let placeholder = getPlaceholder(for: post.type)
         let transition = ImageTransition.flipFromRight(PostCell.THUMBNAIL_TRANSITION_DURATION)
         let thumbnailExpiration = StorageExpiration.date(PostCell.getThumbnailExpirationDate(postDate: post.date))

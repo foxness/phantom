@@ -10,7 +10,6 @@ import Foundation
 
 // todo: show attempt count to user
 // todo: let user change retry strategy
-// todo: handle imgur 10 MB error
 
 class PostSubmitter {
     typealias RedditPostUrl = String
@@ -213,7 +212,7 @@ class PostSubmitter {
                 case .success(let post):
                     let resultWithTries = (post: post, triesLeft: strategy.maxRetryCount - retryCount)
                     return .success(resultWithTries)
-                case .failure(let error): // todo: don't retry if error is imgur 10 mb error
+                case .failure(let error):
                     lastError = error
                     retryCount += 1
                     
@@ -274,7 +273,7 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while logged out
+    func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while signed out
         guard let reddit = reddit.value,
               let imgur = imgur.value
         else {

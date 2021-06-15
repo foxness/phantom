@@ -1,5 +1,5 @@
 //
-//  ImgurViewController.swift
+//  ImgurSignInViewController.swift
 //  Phantom
 //
 //  Created by River on 2021/04/28.
@@ -9,9 +9,9 @@
 import UIKit
 import WebKit
 
-class ImgurViewController: UIViewController, WKNavigationDelegate {
+class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     enum Segue: String {
-        case imgurBackToList = "backImgurToList"
+        case unwindImgurSignedIn = "unwindImgurSignedIn"
     }
     
     @IBOutlet weak var webView: WKWebView!
@@ -26,8 +26,8 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
 
         let url = imgur.getAuthUrl()
         
-        let rememberLogin = true
-        if rememberLogin {
+        let rememberSignIn = true // todo: remove this or add to debugvariable
+        if rememberSignIn {
             webView.load(URLRequest(url: url))
         } else {
             deleteCookies {
@@ -44,15 +44,15 @@ class ImgurViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = imgur.getUserResponse(to: url)
-        if response == .allow && imgur.isLoggedIn {
-            performSegue(withIdentifier: ImgurViewController.Segue.imgurBackToList.rawValue, sender: nil)
+        if response == .allow && imgur.isSignedIn {
+            performSegue(withIdentifier: ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue, sender: nil)
         }
         
         decisionHandler(.allow)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dest = segue.destination as! PostTableViewController
-        dest.loginImgur(with: imgur)
+        let dest = segue.destination as! ImgurSignInReceiver
+        dest.imgurSignedIn(with: imgur)
     }
 }

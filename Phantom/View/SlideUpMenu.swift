@@ -9,224 +9,111 @@
 import Foundation
 import UIKit
 
-class SlideUpMenu {
-    private static let MENUVIEW_HEIGHT: CGFloat = 370
-    private static let FADE_ALPHA: CGFloat = 0.6
-    private static let FADE_WHITE: CGFloat = 0 // works for both light and dark modes
+class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    // MARK: - Constants
+    
+    private static let MENU_ITEM_HEIGHT: CGFloat = 50
+    private static let MENU_LEEWAY_HEIGHT: CGFloat = 60 // so that the last menu item isn't on the very bottom of the screen
+    
     private static let ANIMATION_DURATION: TimeInterval = 0.3
     
-    private static let TEXT_LOG_IN = "Log In"
-    private static let TEXT_LOG_OUT = "Log Out"
+    private static let FADE_DARK_MODE_ALPHA: CGFloat = 0.5
+    private static let FADE_DARK_MODE_WHITE: CGFloat = 0.2
     
-    weak var delegate: SlideUpMenuDelegate?
+    private static let FADE_LIGHT_MODE_ALPHA: CGFloat = 0.5
+    private static let FADE_LIGHT_MODE_WHITE: CGFloat = 0
     
     // MARK: - Views
     
     private var fadeView: UIView!
     private var menuView: UIView!
+    private var collectionView: UICollectionView!
     
-    private var wallpaperModeSwitch: UISwitch!
-    private var useWallhavenSwitch: UISwitch!
-    private var redditNameLabel: UILabel!
-    private var redditButton: UIButton!
-    private var imgurNameLabel: UILabel!
-    private var imgurButton: UIButton!
+    // MARK: - Properties
     
-    private unowned var window: UIWindow! // I think these should be unowned but I'm not 100% sure
+    weak var delegate: SlideUpMenuDelegate?
+    private var windowFrame: CGRect!
+    private var items: [SlideUpMenuItem] = []
     
-    // MARK: - Settings // todo: add other marks
+    // MARK: - Constructors
     
-    var wallpaperMode = false
-    var useWallhaven = false
-    var redditName: String?
-    var redditLoggedIn = false
-    var imgurName: String?
-    var imgurLoggedIn = false
+    override init() {
+        super.init()
+        
+        items = getMenuItems()
+    }
+    
+    // MARK: - Menu items
+    
+    private func getMenuItems() -> [SlideUpMenuItem] {
+        return [
+            SlideUpMenuItem(title: "Bulk Add", iconSystemName: "plus.app.fill", handler: bulkAddButtonPressed),
+            SlideUpMenuItem(title: "Settings", iconSystemName: "gearshape.fill", handler: settingsButtonPressed),
+            SlideUpMenuItem(title: "Cancel", iconSystemName: "xmark", handler: cancelButtonPressed)
+        ]
+    }
+    
+    // MARK: - Public methods
     
     func show() {
         animateShow()
     }
     
     func setupViews(window: UIWindow) {
-        self.window = window
+        self.windowFrame = window.frame
         
         setupFadeView()
         setupMenuView()
         
-        updateViews()
-        prepareToShowViews()
+        prepareToShowViews(in: window)
     }
     
-    func updateViews() {
-        updateSwitchViews()
-        updateRedditViews()
-        updateImgurViews()
-    }
-    
-    func updateSwitchViews() {
-        wallpaperModeSwitch.isOn = wallpaperMode
-        useWallhavenSwitch.isOn = useWallhaven
-    }
-    
-    func updateRedditViews() {
-        redditNameLabel.text = redditName
-        
-        let redditTitle = redditLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
-        redditButton.setTitle(redditTitle, for: .normal)
-    }
-    
-    func updateImgurViews() {
-        imgurNameLabel.text = imgurName
-        
-        let imgurTitle = imgurLoggedIn ? SlideUpMenu.TEXT_LOG_OUT : SlideUpMenu.TEXT_LOG_IN
-        imgurButton.setTitle(imgurTitle, for: .normal)
-    }
+    // MARK: - View setup methods
     
     private func setupFadeView() {
         fadeView = UIView()
-        fadeView.backgroundColor = UIColor(white: SlideUpMenu.FADE_WHITE, alpha: SlideUpMenu.FADE_ALPHA)
+        
+        let fadeColorProvider: (UITraitCollection) -> UIColor = { traitCollection in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(white: SlideUpMenu.FADE_DARK_MODE_WHITE, alpha: SlideUpMenu.FADE_DARK_MODE_ALPHA)
+            } else {
+                return UIColor(white: SlideUpMenu.FADE_LIGHT_MODE_WHITE, alpha: SlideUpMenu.FADE_LIGHT_MODE_ALPHA)
+            }
+        }
+        
+        fadeView.backgroundColor = UIColor(dynamicProvider: fadeColorProvider)
         
         let tapper = UITapGestureRecognizer(target: self, action: #selector(fadeViewTapped))
         fadeView.addGestureRecognizer(tapper)
         
-        fadeView.frame = window.frame
+        fadeView.frame = windowFrame
     }
     
     private func setupMenuView() {
         menuView = UIView()
-        menuView.backgroundColor = UIColor.systemBackground
         
-        var constraints = [NSLayoutConstraint]()
+        let layout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.systemBackground
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(SlideUpMenuCell.self, forCellWithReuseIdentifier: SlideUpMenuCell.IDENTIFIER)
         
-        // ---------------------------------------------------------------
+        menuView.addSubview(collectionView)
         
-        let bulkAddButton = UIButton()
-        bulkAddButton.translatesAutoresizingMaskIntoConstraints = false
-        bulkAddButton.setTitle("Bulk Add", for: .normal)
-        bulkAddButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        bulkAddButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-        bulkAddButton.addTarget(self, action: #selector(bulkAddButtonPressed), for: .touchUpInside)
-        menuView.addSubview(bulkAddButton)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: bulkAddButton)
-        menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: bulkAddButton)
-        
-        // ---------------------------------------------------------------
-        
-        let wallpaperModeLabel = UILabel()
-        wallpaperModeLabel.text = "Wallpaper Mode"
-        menuView.addSubview(wallpaperModeLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: wallpaperModeLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, wallpaperModeLabel)
-        
-        // ---------------------------------------------------------------
-        
-        wallpaperModeSwitch = UISwitch()
-        wallpaperModeSwitch.translatesAutoresizingMaskIntoConstraints = false
-        wallpaperModeSwitch.addTarget(self, action: #selector(wallpaperModeSwitched), for: .valueChanged)
-        menuView.addSubview(wallpaperModeSwitch)
-        
-        constraints += [NSLayoutConstraint(item: wallpaperModeSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: wallpaperModeLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: wallpaperModeLabel, attribute: .centerY, relatedBy: .equal, toItem: wallpaperModeSwitch, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: wallpaperModeSwitch, attribute: .trailing, multiplier: 1, constant: 16)
-        ]
-        
-        // ---------------------------------------------------------------
-        
-        let useWallhavenLabel = UILabel()
-        useWallhavenLabel.text = "Use Wallhaven"
-        menuView.addSubview(useWallhavenLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: useWallhavenLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: wallpaperModeLabel, useWallhavenLabel)
-        
-        // ---------------------------------------------------------------
-        
-        useWallhavenSwitch = UISwitch()
-        useWallhavenSwitch.translatesAutoresizingMaskIntoConstraints = false
-        useWallhavenSwitch.addTarget(self, action: #selector(useWallhavenSwitched), for: .valueChanged)
-        menuView.addSubview(useWallhavenSwitch)
-        
-        constraints += [NSLayoutConstraint(item: useWallhavenSwitch!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: useWallhavenLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: useWallhavenLabel, attribute: .centerY, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: useWallhavenSwitch, attribute: .trailing, multiplier: 1, constant: 16)
-        ]
-        
-        // ---------------------------------------------------------------
-        
-        let redditLabel = UILabel()
-        redditLabel.text = "Reddit account"
-        menuView.addSubview(redditLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: redditLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-24-[v1]", views: useWallhavenLabel, redditLabel)
-        
-        // ---------------------------------------------------------------
-        
-        redditNameLabel = UILabel()
-        menuView.addSubview(redditNameLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: redditNameLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditLabel, redditNameLabel)
-        
-        // ---------------------------------------------------------------
-        
-        redditButton = UIButton()
-        redditButton.translatesAutoresizingMaskIntoConstraints = false
-        redditButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        redditButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-        redditButton.addTarget(self, action: #selector(redditButtonPressed), for: .touchUpInside)
-        menuView.addSubview(redditButton)
-        
-        constraints += [NSLayoutConstraint(item: redditButton!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: redditNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: redditNameLabel!, attribute: .centerY, relatedBy: .equal, toItem: redditButton, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: redditButton, attribute: .trailing, multiplier: 1, constant: 16)
-        ]
-        
-        // ---------------------------------------------------------------
-        
-        let imgurLabel = UILabel()
-        imgurLabel.text = "Imgur account"
-        menuView.addSubview(imgurLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: imgurLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: redditNameLabel, imgurLabel)
-        
-        // ---------------------------------------------------------------
-        
-        imgurNameLabel = UILabel()
-        menuView.addSubview(imgurNameLabel)
-        
-        menuView.addConstraintsWithFormat(format: "H:|-32-[v0]", views: imgurNameLabel)
-        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: imgurLabel, imgurNameLabel)
-        
-        // ---------------------------------------------------------------
-        
-        imgurButton = UIButton()
-        imgurButton.translatesAutoresizingMaskIntoConstraints = false
-        imgurButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        imgurButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-        imgurButton.addTarget(self, action: #selector(imgurButtonPressed), for: .touchUpInside)
-        menuView.addSubview(imgurButton)
-        
-        constraints += [NSLayoutConstraint(item: imgurButton!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: imgurNameLabel, attribute: .trailing, multiplier: 1, constant: 16),
-                        NSLayoutConstraint(item: imgurNameLabel!, attribute: .centerY, relatedBy: .equal, toItem: imgurButton, attribute: .centerY, multiplier: 1, constant: 0),
-                        NSLayoutConstraint(item: menuView!, attribute: .trailing, relatedBy: .equal, toItem: imgurButton, attribute: .trailing, multiplier: 1, constant: 16)
-        ]
-        
-        // ---------------------------------------------------------------
-        
-        menuView.addConstraints(constraints)
+        menuView.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView) // make collectionView take up
+        menuView.addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView) // all the space of menuView
     }
     
-    private func prepareToShowViews() {
+    private func prepareToShowViews(in window: UIWindow) {
         window.addSubview(fadeView)
         window.addSubview(menuView)
         
         hideFadeView()
         hideMenuView()
     }
+    
+    // MARK: - Animation methods
     
     private func animateShow() {
         let duration = SlideUpMenu.ANIMATION_DURATION
@@ -251,7 +138,7 @@ class SlideUpMenu {
             self.hideMenuView()
         }
         
-        let completion: (Bool) -> Void = { completed in
+        let completion: ((Bool) -> Void)? = onCompleted == nil ? nil : { completed in
             onCompleted?()
         }
         
@@ -267,64 +154,71 @@ class SlideUpMenu {
     }
     
     private func hideMenuView() {
-        let hiddenMenuFrame = SlideUpMenu.getMenuFrame(hidden: true, windowFrame: window.frame)
-        menuView.frame = hiddenMenuFrame
+        menuView.frame = getMenuFrame(hidden: true)
     }
     
     private func showMenuView() {
-        let shownMenuFrame = SlideUpMenu.getMenuFrame(hidden: false, windowFrame: window.frame)
-        menuView.frame = shownMenuFrame
+        menuView.frame = getMenuFrame(hidden: false)
     }
+    
+    private func getMenuFrame(hidden: Bool) -> CGRect {
+        let width: CGFloat = windowFrame.width
+        let height: CGFloat = CGFloat(items.count) * SlideUpMenu.MENU_ITEM_HEIGHT + SlideUpMenu.MENU_LEEWAY_HEIGHT
+        
+        let x: CGFloat = 0
+        let y: CGFloat = windowFrame.height - (hidden ? 0 : height)
+        
+        let menuFrame = CGRect(x: x, y: y, width: width, height: height)
+        return menuFrame
+    }
+    
+    // MARK: - User intereaction methods
     
     @objc private func fadeViewTapped() {
         animateHide()
     }
     
-    @objc private func redditButtonPressed() {
-        if redditLoggedIn {
-            delegate?.redditButtonPressed()
-        } else {
-            animateHide() {
-                self.delegate?.redditButtonPressed()
-            }
-        }
-    }
-    
-    @objc private func imgurButtonPressed() {
-        if imgurLoggedIn {
-            delegate?.imgurButtonPressed()
-        } else {
-            animateHide() {
-                self.delegate?.imgurButtonPressed()
-            }
-        }
-    }
-    
-    @objc private func bulkAddButtonPressed() {
+    private func bulkAddButtonPressed() {
         animateHide() {
             self.delegate?.bulkAddButtonPressed()
         }
     }
     
-    @objc private func wallpaperModeSwitched(`switch`: UISwitch) {
-        let newState = `switch`.isOn
-        wallpaperMode = newState
-        delegate?.wallpaperModeSwitched(on: newState)
+    private func settingsButtonPressed() {
+        animateHide() {
+            self.delegate?.settingsButtonPressed()
+        }
     }
     
-    @objc private func useWallhavenSwitched(`switch`: UISwitch) {
-        let newState = `switch`.isOn
-        useWallhaven = newState
-        delegate?.useWallhavenSwitched(on: newState)
+    private func cancelButtonPressed() {
+        animateHide()
     }
     
-    private static func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {
-        let x: CGFloat = 0
-        let y: CGFloat = windowFrame.height - (hidden ? 0 : SlideUpMenu.MENUVIEW_HEIGHT)
-        let width: CGFloat = windowFrame.width
-        let height: CGFloat = SlideUpMenu.MENUVIEW_HEIGHT
+    // MARK: - Collection View methods
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SlideUpMenuCell.IDENTIFIER, for: indexPath) as! SlideUpMenuCell
         
-        let menuFrame = CGRect(x: x, y: y, width: width, height: height)
-        return menuFrame
+        let item = items[indexPath.item]
+        cell.configure(for: item)
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = items[indexPath.item]
+        item.handler?()
     }
 }

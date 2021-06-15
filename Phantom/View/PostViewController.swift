@@ -10,7 +10,7 @@ import UIKit
 
 class PostViewController: UIViewController, PostViewDelegate {
     enum Segue: String {
-        case postBackToList = "backSavePost"
+        case unwindPostSaved = "unwindPostSaved"
     }
     
     static let TEXT_NEW_POST_TITLE = "New Post"

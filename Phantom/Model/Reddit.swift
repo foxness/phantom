@@ -96,7 +96,7 @@ class Reddit {
     // MARK: - Computed properties
     
     var auth: AuthParams? {
-        guard isLoggedIn else { return nil }
+        guard isSignedIn else { return nil }
         
         return AuthParams(refreshToken: refreshToken!,
                           accessToken: accessToken!,
@@ -104,7 +104,7 @@ class Reddit {
                           username: username!)
     }
     
-    var isLoggedIn: Bool { refreshToken != nil }
+    var isSignedIn: Bool { refreshToken != nil }
     
     // MARK: - Constructors
     
@@ -120,7 +120,7 @@ class Reddit {
     // MARK: - Main methods
     
     func submit(post: Post, resubmit: Bool = true, sendReplies: Bool = true) throws -> String {
-        assert(isLoggedIn) // todo: throw error instead if not logged in
+        assert(isSignedIn) // todo: throw error instead if not signed in
         
         let request = "reddit submit"
         
@@ -137,7 +137,7 @@ class Reddit {
     }
     
     func getIdentity() throws { // identity = account username
-        assert(isLoggedIn) // todo: throw error instead if not logged in
+        assert(isSignedIn) // todo: throw error instead if not signed in
         
         let request = "reddit identity"
         
@@ -200,7 +200,7 @@ class Reddit {
     }
     
     private func refreshAccessToken() throws {
-        assert(isLoggedIn)
+        assert(isSignedIn)
         
         let request = "reddit access token refresh"
         
@@ -216,7 +216,7 @@ class Reddit {
     }
     
     func logout() {
-        assert(isLoggedIn)
+        assert(isSignedIn)
         
         authCode = nil
         refreshToken = nil

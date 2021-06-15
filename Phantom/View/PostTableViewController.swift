@@ -8,16 +8,15 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate {
+class PostTableViewController: UITableViewController, PostTableViewDelegate, SlideUpMenuDelegate, RedditSignInReceiver, SettingsDelegate {
     // MARK: - Nested entities
     
     enum Segue: String {
-        case showIntroduction = "showIntroduction"
-        case menuRedditLogin = "menuRedditLogin"
-        case menuImgurLogin = "menuImgurLogin"
-        case menuBulkAdd = "menuBulkAdd"
-        case addPost = "addPost"
-        case editPost = "editPost"
+        case showIntroduction = "postsShowIntroduction"
+        case showSettings = "postsShowSettings"
+        case showBulkAdd = "postsShowBulkAdd"
+        case showAddPost = "postsShowAddPost"
+        case showEditPost = "postsShowEditPost"
     }
     
     // MARK: - Constants
@@ -41,7 +40,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     @IBOutlet private weak var submissionIndicatorLabel: UILabel!
     @IBOutlet private weak var submissionIndicatorActivity: UIActivityIndicatorView! // loading icon thing
     
-    @IBOutlet weak var imgurButton: UIBarButtonItem!
     @IBOutlet weak var moreButtton: UIBarButtonItem!
     
     // MARK: - View lifecycle
@@ -50,6 +48,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.viewDidLoad()
         
         subscribeToNotifications()
+        
+        styleTableView()
         addSubmissionIndicatorView()
         
         slideUpMenu.delegate = self
@@ -103,48 +103,42 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         segueTo(.showIntroduction)
     }
     
-    func segueToRedditLogin() {
-        segueTo(.menuRedditLogin)
-    }
-    
-    func segueToImgurLogin() {
-        segueTo(.menuImgurLogin)
+    func segueToSettings() {
+        segueTo(.showSettings)
     }
     
     func segueToBulkAdd() {
-        segueTo(.menuBulkAdd)
+        segueTo(.showBulkAdd)
     }
     
     private func segueTo(_ segue: Segue) {
         performSegue(withIdentifier: segue.rawValue, sender: nil)
     }
     
-    func loginReddit(with reddit: Reddit) {
-        presenter.redditLoggedIn(reddit)
+    func redditSignedIn(with reddit: Reddit) {
+        presenter.redditSignedInFromIntroduction(reddit)
         
         // todo: remove the previous view controllers from the navigation stack
-    }
-    
-    func loginImgur(with imgur: Imgur) {
-        presenter.imgurLoggedIn(imgur)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
         switch Segue(rawValue: segue.identifier ?? "") {
-        case .editPost:
+        case .showEditPost:
             let dest = segue.destination as! PostViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
             dest.supplyPost(selectedPost)
+        
+        case .showSettings:
+            let dest = segue.destination as! SettingsViewController
+            dest.delegate = self
             
         case .showIntroduction,
-             .addPost,
-             .menuRedditLogin,
-             .menuImgurLogin,
-             .menuBulkAdd:
+             .showAddPost,
+             .showBulkAdd:
             break
             
         default:
@@ -152,42 +146,49 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
-    @IBAction func unwindToPostList(unwindSegue: UIStoryboardSegue) {
-        switch unwindSegue.identifier ?? "" {
-        case PostViewController.Segue.postBackToList.rawValue:
-            if let pvc = unwindSegue.source as? PostViewController {
-                let (post, isNewPost) = pvc.getResultingPost()
-                
-                if isNewPost {
-                    presenter.newPostAdded(post)
-                } else { // user edited a post
-                    presenter.postEdited(post)
-                }
-            } else {
-                fatalError()
-            }
+    @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
+    @IBAction func unwindImgurSignIn(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+    }
+    
+    @IBAction func unwindPostSaved(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == PostViewController.Segue.unwindPostSaved.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
         
-        case BulkAddViewController.Segue.bulkBackToList.rawValue:
-            if let bavc = unwindSegue.source as? BulkAddViewController {
-                if let bulkPosts = bavc.getResultingPosts() {
-                    presenter.newPostsAdded(bulkPosts)
-                }
-            } else {
-                fatalError()
-            }
-            
-        case LoginViewController.Segue.loginBackToList.rawValue:
-            break
-            
-        case ImgurViewController.Segue.imgurBackToList.rawValue:
-            break
-            
-        default:
-            fatalError()
+        let pvc = unwindSegue.source as! PostViewController
+        let (post, isNewPost) = pvc.getResultingPost()
+        
+        if isNewPost {
+            presenter.newPostAdded(post)
+        } else { // user edited a post
+            presenter.postEdited(post)
         }
     }
     
-    // MARK: - Submission indicator
+    @IBAction func unwindBulkAdded(unwindSegue: UIStoryboardSegue) {
+        guard unwindSegue.identifier == BulkAddViewController.Segue.unwindBulkAdded.rawValue else {
+            fatalError("Got unexpected unwind segue")
+        }
+        
+        let bavc = unwindSegue.source as! BulkAddViewController
+        if let bulkPosts = bavc.getResultingPosts() {
+            presenter.newPostsAdded(bulkPosts)
+        }
+    }
+    
+    // MARK: - View
+    
+    private func styleTableView() {
+        tableView.tableFooterView = UIView() // a little hack to remove infinite divider lines below table cells
+    }
     
     private func addSubmissionIndicatorView() {
         // used: https://stackoverflow.com/questions/4641879/how-to-add-a-uiview-above-the-current-uitableviewcontroller
@@ -297,7 +298,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
             presenter.postDeleted(at: indexPath.row)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -335,52 +336,30 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.show()
     }
     
-    func updateSlideUpMenu(redditName: String?, redditLoggedIn: Bool) {
-        slideUpMenu.redditName = redditName
-        slideUpMenu.redditLoggedIn = redditLoggedIn
-        slideUpMenu.updateRedditViews()
-    }
-    
-    func updateSlideUpMenu(imgurName: String?, imgurLoggedIn: Bool) {
-        slideUpMenu.imgurName = imgurName
-        slideUpMenu.imgurLoggedIn = imgurLoggedIn
-        slideUpMenu.updateImgurViews()
-    }
-    
-    func updateSlideUpMenu(wallpaperMode: Bool, useWallhaven: Bool) {
-        slideUpMenu.wallpaperMode = wallpaperMode
-        slideUpMenu.useWallhaven = useWallhaven
-        slideUpMenu.updateSwitchViews()
-    }
-    
     func showAlert(title: String, message: String) {
         displayAlert(title: title, message: message)
     }
     
     // MARK: - Emitter methods
     
-    func redditButtonPressed() {
-        presenter.redditButtonPressed()
-    }
-    
-    func imgurButtonPressed() {
-        presenter.imgurButtonPressed()
-    }
-    
     func bulkAddButtonPressed() {
         presenter.bulkAddButtonPressed()
     }
     
-    func wallpaperModeSwitched(on: Bool) {
-        presenter.wallpaperModeSwitched(on: on)
-    }
-    
-    func useWallhavenSwitched(on: Bool) {
-        presenter.useWallhavenSwitched(on: on)
+    func settingsButtonPressed() {
+        presenter.settingsButtonPressed()
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {
         presenter.moreButtonPressed()
+    }
+    
+    func redditAccountChanged(_ newReddit: Reddit?) {
+        presenter.redditAccountChanged(newReddit)
+    }
+    
+    func imgurAccountChanged(_ newImgur: Imgur?) {
+        presenter.imgurAccountChanged(newImgur)
     }
     
     // MARK: - Helper methods

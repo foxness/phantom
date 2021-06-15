@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  RedditSignInViewController.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/08/29.
@@ -9,9 +9,9 @@
 import UIKit
 import WebKit
 
-class LoginViewController: UIViewController, WKNavigationDelegate {
+class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     enum Segue: String {
-        case loginBackToList = "backLoginToList"
+        case unwindRedditSignedIn = "unwindRedditSignedIn"
     }
     
     @IBOutlet weak var webView: WKWebView!
@@ -26,8 +26,8 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
 
         let url = reddit.getAuthUrl()
         
-        let rememberLogin = true
-        if rememberLogin {
+        let rememberSignIn = true // todo: remove this or add to debugvariable
+        if rememberSignIn {
             webView.load(URLRequest(url: url))
         } else {
             deleteCookies {
@@ -50,7 +50,7 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
                 try! self.reddit.fetchAuthTokens()
                 try! self.reddit.getIdentity()
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: LoginViewController.Segue.loginBackToList.rawValue, sender: nil)
+                    self.performSegue(withIdentifier: RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
                 }
             }
         }
@@ -59,7 +59,12 @@ class LoginViewController: UIViewController, WKNavigationDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dest = segue.destination as! PostTableViewController
-        dest.loginReddit(with: reddit)
+        switch Segue(rawValue: segue.identifier ?? "") {
+        case .unwindRedditSignedIn:
+            let dest = segue.destination as! RedditSignInReceiver
+            dest.redditSignedIn(with: reddit)
+        default:
+            fatalError()
+        }
     }
 }

@@ -20,7 +20,7 @@
                                 <rect key="frame" x="186" y="433" width="42" height="30"/>
                                 <state key="normal" title="Log In"/>
                                 <connections>
-                                    <segue destination="cuc-xd-yKa" kind="presentation" identifier="showLogin" id="Fmp-8g-UON"/>
+                                    <segue destination="cuc-xd-yKa" kind="presentation" identifier="introductionShowRedditSignIn" id="Fmp-8g-UON"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -37,10 +37,181 @@
             </objects>
             <point key="canvasLocation" x="187" y="863"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Settings-->
+        <scene sceneID="xg1-N9-yAS">
+            <objects>
+                <viewController id="P40-mb-cKw" customClass="SettingsViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hI4-Tc-v0v">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="MmD-dY-zjA">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="StaticSettingCell" id="7IO-pT-Vqj" customClass="StaticSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="49.5" width="414" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7IO-pT-Vqj" id="bX8-H7-U6X">
+                                            <rect key="frame" x="0.0" y="0.0" width="384.5" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Setting name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yYj-Y9-xvD">
+                                                    <rect key="frame" x="28" y="11" width="340.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="yYj-Y9-xvD" secondAttribute="trailing" constant="8" id="6Pf-fh-UyI"/>
+                                                <constraint firstItem="yYj-Y9-xvD" firstAttribute="leading" secondItem="bX8-H7-U6X" secondAttribute="leadingMargin" constant="8" id="HZv-vk-fFK"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="yYj-Y9-xvD" secondAttribute="bottom" id="dhe-k1-1ze"/>
+                                                <constraint firstItem="yYj-Y9-xvD" firstAttribute="top" secondItem="bX8-H7-U6X" secondAttribute="topMargin" id="hpi-up-rhR"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="label" destination="yYj-Y9-xvD" id="Vv1-gP-End"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchSettingCell" id="7AP-Ke-oLB" customClass="SwitchSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="92.5" width="414" height="53.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7AP-Ke-oLB" id="1g5-S8-t3V">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="53.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Switch setting name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="664-pu-n4q">
+                                                    <rect key="frame" x="28" y="16.5" width="309" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4TB-UA-2TI">
+                                                    <rect key="frame" x="337" y="11" width="51" height="31.5"/>
+                                                    <color key="onTintColor" systemColor="systemBlueColor"/>
+                                                    <connections>
+                                                        <action selector="switchValueChangedWithSender:" destination="7AP-Ke-oLB" eventType="valueChanged" id="TBu-bM-3mt"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="664-pu-n4q" firstAttribute="centerY" secondItem="1g5-S8-t3V" secondAttribute="centerY" id="1d5-TX-4yb"/>
+                                                <constraint firstItem="4TB-UA-2TI" firstAttribute="leading" secondItem="664-pu-n4q" secondAttribute="trailingMargin" constant="8" id="Nsp-4D-5bd"/>
+                                                <constraint firstItem="4TB-UA-2TI" firstAttribute="top" secondItem="1g5-S8-t3V" secondAttribute="topMargin" id="dYN-US-JZE"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="4TB-UA-2TI" secondAttribute="bottom" id="iDp-Fs-K95"/>
+                                                <constraint firstItem="664-pu-n4q" firstAttribute="leading" secondItem="1g5-S8-t3V" secondAttribute="leadingMargin" constant="8" id="lo4-q4-csg"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="4TB-UA-2TI" secondAttribute="trailing" constant="8" id="pVF-8q-NNU"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="label" destination="664-pu-n4q" id="Lxb-H6-iZP"/>
+                                            <outlet property="switchControl" destination="4TB-UA-2TI" id="WKR-E9-nKI"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedInAccountSettingCell" id="MlG-Vo-GOU" customClass="SignedInAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="146" width="414" height="82"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MlG-Vo-GOU" id="hdr-1B-VRk">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="82"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Account type" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocH-Hl-gGD">
+                                                    <rect key="frame" x="28" y="17" width="293" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" placeholder="YES" id="vNq-E6-1Zm"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Account name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e5u-Fy-Xih">
+                                                    <rect key="frame" x="28" y="42" width="293" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="300" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SAl-WH-E8g">
+                                                    <rect key="frame" x="329" y="26" width="57" height="30"/>
+                                                    <state key="normal" title="Sign out">
+                                                        <color key="titleColor" systemColor="systemRedColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="signOutButtonPressedWithSender:" destination="MlG-Vo-GOU" eventType="touchUpInside" id="0dB-LQ-hk7"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="e5u-Fy-Xih" firstAttribute="top" secondItem="ocH-Hl-gGD" secondAttribute="bottom" constant="4" id="2yw-Vk-rnK"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="centerY" secondItem="hdr-1B-VRk" secondAttribute="centerY" id="ZmM-3M-fBL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="SAl-WH-E8g" secondAttribute="trailing" constant="8" id="cHo-eh-5um"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="leading" secondItem="e5u-Fy-Xih" secondAttribute="trailing" constant="8" id="j7B-wq-Yau"/>
+                                                <constraint firstItem="e5u-Fy-Xih" firstAttribute="leading" secondItem="hdr-1B-VRk" secondAttribute="leadingMargin" constant="8" id="jJC-s8-Y5b"/>
+                                                <constraint firstItem="ocH-Hl-gGD" firstAttribute="top" secondItem="hdr-1B-VRk" secondAttribute="topMargin" constant="6" id="nAM-Fk-kWu"/>
+                                                <constraint firstItem="ocH-Hl-gGD" firstAttribute="leading" secondItem="e5u-Fy-Xih" secondAttribute="leading" id="nu9-5D-BZ4"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="e5u-Fy-Xih" secondAttribute="bottom" constant="8" id="tsQ-sA-UPY"/>
+                                                <constraint firstItem="SAl-WH-E8g" firstAttribute="leading" secondItem="ocH-Hl-gGD" secondAttribute="trailing" constant="8" id="yKR-ZN-d2D"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accountNameLabel" destination="e5u-Fy-Xih" id="puS-pI-1RT"/>
+                                            <outlet property="accountTypeLabel" destination="ocH-Hl-gGD" id="dnm-as-VU5"/>
+                                            <outlet property="signOutButton" destination="SAl-WH-E8g" id="GHQ-ps-wWV"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedOutAccountSettingCell" id="Aos-BU-UAu" customClass="SignedOutAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="228" width="414" height="52.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Aos-BU-UAu" id="sjC-BY-ZvS">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="52.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eEg-l6-umD">
+                                                    <rect key="frame" x="28" y="11" width="137" height="30.5"/>
+                                                    <state key="normal" title="Add Reddit Account"/>
+                                                    <connections>
+                                                        <action selector="signInButtonPressedWithSender:" destination="Aos-BU-UAu" eventType="touchUpInside" id="3Oy-lL-sWP"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="eEg-l6-umD" secondAttribute="trailing" constant="8" id="Sd1-rc-xDs"/>
+                                                <constraint firstItem="eEg-l6-umD" firstAttribute="leading" secondItem="sjC-BY-ZvS" secondAttribute="leadingMargin" constant="8" id="TGl-Hb-fab"/>
+                                                <constraint firstItem="eEg-l6-umD" firstAttribute="top" secondItem="sjC-BY-ZvS" secondAttribute="topMargin" id="nAg-H7-lx9"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="eEg-l6-umD" secondAttribute="bottom" id="sJe-4o-hUL"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="signInButton" destination="eEg-l6-umD" id="sec-nv-OuG"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sZL-Wl-jRe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MmD-dY-zjA" firstAttribute="leading" secondItem="sZL-Wl-jRe" secondAttribute="leading" id="6vw-fl-7l3"/>
+                            <constraint firstItem="MmD-dY-zjA" firstAttribute="trailing" secondItem="sZL-Wl-jRe" secondAttribute="trailing" id="MT0-XB-ZzK"/>
+                            <constraint firstItem="MmD-dY-zjA" firstAttribute="top" secondItem="sZL-Wl-jRe" secondAttribute="top" id="eqx-PU-eUo"/>
+                            <constraint firstItem="MmD-dY-zjA" firstAttribute="bottom" secondItem="sZL-Wl-jRe" secondAttribute="bottom" id="hCv-iZ-edS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="6wO-fE-XGe"/>
+                    <connections>
+                        <outlet property="tableView" destination="MmD-dY-zjA" id="cLw-Wt-jWl"/>
+                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="settingsShowRedditSignIn" id="bTN-eO-UuB"/>
+                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="settingsShowImgurSignIn" id="41R-z2-s1Y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oMw-FX-r5B" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1069.5652173913045" y="862.5"/>
+        </scene>
+        <!--Reddit Sign In View Controller-->
         <scene sceneID="dns-d2-J9D">
             <objects>
-                <viewController id="cuc-xd-yKa" customClass="LoginViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cuc-xd-yKa" customClass="RedditSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CWL-vU-4ZL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,7 +237,7 @@
                     <navigationItem key="navigationItem" id="BG1-ab-aKI"/>
                     <connections>
                         <outlet property="webView" destination="q4O-dH-oVP" id="j7Q-Ok-TyV"/>
-                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="backLoginToList" unwindAction="unwindToPostListWithUnwindSegue:" id="E6H-4H-Nlk"/>
+                        <segue destination="rbg-DY-9xX" kind="unwind" identifier="unwindRedditSignedIn" unwindAction="unwindRedditSignInUnwindSegue:" id="E6H-4H-Nlk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b8M-yq-DBC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -152,7 +323,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="7uj-8O-RgY">
                             <connections>
-                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="backSavePost" unwindAction="unwindToPostListWithUnwindSegue:" id="IYh-4B-QPD"/>
+                                <segue destination="fU7-SM-d0T" kind="unwind" identifier="unwindPostSaved" unwindAction="unwindPostSavedWithUnwindSegue:" id="IYh-4B-QPD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -195,13 +366,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="20.5" width="288" height="49.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="26.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="32.5" width="288" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -233,7 +404,7 @@
                                     <outlet property="subtitleLabel" destination="TVV-O9-k3g" id="827-aD-dmf"/>
                                     <outlet property="thumbnailView" destination="3Pq-EV-aRF" id="YWv-oc-NRD"/>
                                     <outlet property="titleLabel" destination="Ofh-Fe-P2l" id="M3V-7X-Uo8"/>
-                                    <segue destination="npb-aq-zMg" kind="show" identifier="editPost" id="I6c-Og-Mxs"/>
+                                    <segue destination="npb-aq-zMg" kind="show" identifier="postsShowEditPost" id="I6c-Og-Mxs"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -251,7 +422,7 @@
                             </barButtonItem>
                             <barButtonItem systemItem="add" id="5T6-h1-6Gd">
                                 <connections>
-                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="addPost" id="dSw-7p-822"/>
+                                    <segue destination="aXe-y4-pS3" kind="presentation" identifier="postsShowAddPost" id="dSw-7p-822"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -261,10 +432,9 @@
                         <outlet property="submissionIndicatorActivity" destination="tnP-O2-wpQ" id="I4n-69-tzt"/>
                         <outlet property="submissionIndicatorLabel" destination="Jcx-zf-kTm" id="cLb-KB-HKE"/>
                         <outlet property="submissionIndicatorView" destination="LHg-vz-60n" id="oRB-4B-KYj"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="showIntroduction" animates="NO" id="smv-r4-N41"/>
-                        <segue destination="cuc-xd-yKa" kind="presentation" identifier="menuRedditLogin" id="t8V-rm-KZc"/>
-                        <segue destination="GW5-zR-qB6" kind="presentation" identifier="menuImgurLogin" id="fD4-f1-fE3"/>
-                        <segue destination="H2E-tt-C7O" kind="presentation" identifier="menuBulkAdd" id="uyW-lq-5nh"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="postsShowIntroduction" animates="NO" id="smv-r4-N41"/>
+                        <segue destination="H2E-tt-C7O" kind="presentation" identifier="postsShowBulkAdd" id="uyW-lq-5nh"/>
+                        <segue destination="P40-mb-cKw" kind="show" identifier="postsShowSettings" id="Qgz-Ow-kmP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBD-Bb-1QT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -319,10 +489,10 @@
             </objects>
             <point key="canvasLocation" x="-723.1884057971015" y="115.84821428571428"/>
         </scene>
-        <!--Imgur-->
+        <!--Imgur Sign In View Controller-->
         <scene sceneID="ljq-DM-5bd">
             <objects>
-                <viewController title="Imgur" id="GW5-zR-qB6" customClass="ImgurViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="GW5-zR-qB6" customClass="ImgurSignInViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mId-Tw-Qf4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -347,13 +517,13 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="ahD-Sv-y1C" id="hzT-F6-gDQ"/>
-                        <segue destination="IeG-JS-B1f" kind="unwind" identifier="backImgurToList" unwindAction="unwindToPostListWithUnwindSegue:" id="vCX-Pb-MD7"/>
+                        <segue destination="IeG-JS-B1f" kind="unwind" identifier="unwindImgurSignedIn" unwindAction="unwindImgurSignInUnwindSegue:" id="vCX-Pb-MD7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhD-Gp-bvR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="IeG-JS-B1f" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="186" y="-638"/>
+            <point key="canvasLocation" x="1071" y="1615"/>
         </scene>
         <!--Bulk Add-->
         <scene sceneID="Mi7-yR-3UK">
@@ -389,7 +559,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="H8r-SX-UcK">
                                 <connections>
-                                    <segue destination="yR2-lY-Bd5" kind="unwind" identifier="backBulkAdd" unwindAction="unwindToPostListWithUnwindSegue:" id="Vju-qS-40l"/>
+                                    <segue destination="yR2-lY-Bd5" kind="unwind" identifier="unwindBulkAdded" unwindAction="unwindBulkAddedWithUnwindSegue:" id="Vju-qS-40l"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Paste" id="xq2-B4-6Lt">
@@ -449,7 +619,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
-        <segue reference="t8V-rm-KZc"/>
+        <segue reference="bTN-eO-UuB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
@@ -466,6 +636,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
