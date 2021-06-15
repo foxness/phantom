@@ -10,8 +10,10 @@ import Foundation
 import UIKit
 
 class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    // MARK: - Constants
+    
     private static let MENU_ITEM_HEIGHT: CGFloat = 50
-    private static let MENU_LEEWAY_HEIGHT: CGFloat = 60
+    private static let MENU_LEEWAY_HEIGHT: CGFloat = 60 // so that the last menu item isn't on the very bottom of the screen
     
     private static let ANIMATION_DURATION: TimeInterval = 0.3
     
@@ -21,23 +23,27 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
     private static let FADE_LIGHT_MODE_ALPHA: CGFloat = 0.5
     private static let FADE_LIGHT_MODE_WHITE: CGFloat = 0
     
-    weak var delegate: SlideUpMenuDelegate?
-    
     // MARK: - Views
     
     private var fadeView: UIView!
     private var menuView: UIView!
     private var collectionView: UICollectionView!
     
-    private unowned var window: UIWindow! // I think these should be unowned but I'm not 100% sure
+    // MARK: - Properties
     
+    weak var delegate: SlideUpMenuDelegate?
+    private var windowFrame: CGRect!
     private var items: [SlideUpMenuItem] = []
+    
+    // MARK: - Constructors
     
     override init() {
         super.init()
         
         items = getMenuItems()
     }
+    
+    // MARK: - Menu items
     
     private func getMenuItems() -> [SlideUpMenuItem] {
         return [
@@ -47,45 +53,44 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
         ]
     }
     
+    // MARK: - Public methods
+    
     func show() {
         animateShow()
     }
     
     func setupViews(window: UIWindow) {
-        self.window = window
+        self.windowFrame = window.frame
         
         setupFadeView()
         setupMenuView()
         
-        updateViews()
-        prepareToShowViews()
+        prepareToShowViews(in: window)
     }
     
-    func updateViews() {
-        
-    }
+    // MARK: - View setup methods
     
     private func setupFadeView() {
-        let fadeColorProvider: (UITraitCollection) -> UIColor = { tc in
-            if tc.userInterfaceStyle == .dark {
+        fadeView = UIView()
+        
+        let fadeColorProvider: (UITraitCollection) -> UIColor = { traitCollection in
+            if traitCollection.userInterfaceStyle == .dark {
                 return UIColor(white: SlideUpMenu.FADE_DARK_MODE_WHITE, alpha: SlideUpMenu.FADE_DARK_MODE_ALPHA)
             } else {
                 return UIColor(white: SlideUpMenu.FADE_LIGHT_MODE_WHITE, alpha: SlideUpMenu.FADE_LIGHT_MODE_ALPHA)
             }
         }
         
-        fadeView = UIView()
         fadeView.backgroundColor = UIColor(dynamicProvider: fadeColorProvider)
         
         let tapper = UITapGestureRecognizer(target: self, action: #selector(fadeViewTapped))
         fadeView.addGestureRecognizer(tapper)
         
-        fadeView.frame = window.frame
+        fadeView.frame = windowFrame
     }
     
     private func setupMenuView() {
         menuView = UIView()
-//        menuView.backgroundColor = UIColor.systemBackground
         
         let layout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -96,43 +101,19 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
         
         menuView.addSubview(collectionView)
         
-        menuView.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
-        menuView.addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
-        
-//        // ---------------------------------------------------------------
-//
-//        let bulkAddButton = UIButton()
-//        bulkAddButton.translatesAutoresizingMaskIntoConstraints = false
-//        bulkAddButton.setTitle("Bulk Add", for: .normal)
-//        bulkAddButton.setTitleColor(UIColor.systemBlue, for: .normal)
-//        bulkAddButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-//        bulkAddButton.addTarget(self, action: #selector(bulkAddButtonPressed), for: .touchUpInside)
-//        menuView.addSubview(bulkAddButton)
-//
-//        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: bulkAddButton)
-//        menuView.addConstraintsWithFormat(format: "V:|-16-[v0]", views: bulkAddButton)
-//
-//        // ---------------------------------------------------------------
-//
-//        let settingsButton = UIButton()
-//        settingsButton.translatesAutoresizingMaskIntoConstraints = false
-//        settingsButton.setTitle("Settings", for: .normal)
-//        settingsButton.setTitleColor(UIColor.systemBlue, for: .normal)
-//        settingsButton.setTitleColor(UIColor.systemTeal, for: .highlighted)
-//        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
-//        menuView.addSubview(settingsButton)
-//
-//        menuView.addConstraintsWithFormat(format: "H:|-16-[v0]", views: settingsButton)
-//        menuView.addConstraintsWithFormat(format: "V:[v0]-16-[v1]", views: bulkAddButton, settingsButton)
+        menuView.addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView) // make collectionView take up
+        menuView.addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView) // all the space of menuView
     }
     
-    private func prepareToShowViews() {
+    private func prepareToShowViews(in window: UIWindow) {
         window.addSubview(fadeView)
         window.addSubview(menuView)
         
         hideFadeView()
         hideMenuView()
     }
+    
+    // MARK: - Animation methods
     
     private func animateShow() {
         let duration = SlideUpMenu.ANIMATION_DURATION
@@ -157,7 +138,7 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
             self.hideMenuView()
         }
         
-        let completion: (Bool) -> Void = { completed in
+        let completion: ((Bool) -> Void)? = onCompleted == nil ? nil : { completed in
             onCompleted?()
         }
         
@@ -173,14 +154,25 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
     }
     
     private func hideMenuView() {
-        let hiddenMenuFrame = getMenuFrame(hidden: true, windowFrame: window.frame)
-        menuView.frame = hiddenMenuFrame
+        menuView.frame = getMenuFrame(hidden: true)
     }
     
     private func showMenuView() {
-        let shownMenuFrame = getMenuFrame(hidden: false, windowFrame: window.frame)
-        menuView.frame = shownMenuFrame
+        menuView.frame = getMenuFrame(hidden: false)
     }
+    
+    private func getMenuFrame(hidden: Bool) -> CGRect {
+        let width: CGFloat = windowFrame.width
+        let height: CGFloat = CGFloat(items.count) * SlideUpMenu.MENU_ITEM_HEIGHT + SlideUpMenu.MENU_LEEWAY_HEIGHT
+        
+        let x: CGFloat = 0
+        let y: CGFloat = windowFrame.height - (hidden ? 0 : height)
+        
+        let menuFrame = CGRect(x: x, y: y, width: width, height: height)
+        return menuFrame
+    }
+    
+    // MARK: - User intereaction methods
     
     @objc private func fadeViewTapped() {
         animateHide()
@@ -201,6 +193,8 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
     private func cancelButtonPressed() {
         animateHide()
     }
+    
+    // MARK: - Collection View methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
@@ -226,17 +220,5 @@ class SlideUpMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.item]
         item.handler?()
-    }
-    
-    private func getMenuFrame(hidden: Bool, windowFrame: CGRect) -> CGRect {
-        let calculatedHeight = CGFloat(items.count) * SlideUpMenu.MENU_ITEM_HEIGHT + SlideUpMenu.MENU_LEEWAY_HEIGHT
-        
-        let x: CGFloat = 0
-        let y: CGFloat = windowFrame.height - (hidden ? 0 : calculatedHeight)
-        let width: CGFloat = windowFrame.width
-        let height: CGFloat = calculatedHeight
-        
-        let menuFrame = CGRect(x: x, y: y, width: width, height: height)
-        return menuFrame
     }
 }
