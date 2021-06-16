@@ -10,7 +10,7 @@ import Foundation
 
 typealias BarePost = (title: String, url: String)
 
-class BulkAddPresenter { // todo: add paste button
+class BulkAddPresenter {
     private weak var viewDelegate: BulkAddViewDelegate?
     
     var posts: [BarePost]?

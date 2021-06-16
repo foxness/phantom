@@ -9,22 +9,25 @@
 import UIKit
 
 class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDelegate {
+    // MARK: - Segue
+    
     enum Segue: String {
         case unwindBulkAdded = "unwindBulkAdded"
     }
     
+    // MARK: - Views
+    
     @IBOutlet var keyboardHeightConstraint: NSLayoutConstraint!
-    private var bottomLeewayHeight: CGFloat! // height between the bottom of postsView and superview bottom
     
     @IBOutlet weak var bulkView: UITextView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
+    // MARK: - Properties
+    
+    private var bottomLeewayHeight: CGFloat! // height between the bottom of postsView and superview bottom
     private let presenter = BulkAddPresenter()
     
-    var bulkText: String? {
-        get { bulkView.text }
-        set { bulkView.text = newValue }
-    }
+    // MARK: - View lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +43,14 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         unsubscribeFromNotifications()
     }
     
-    func setupViews() {
+    private func setupViews() {
         bottomLeewayHeight = keyboardHeightConstraint.constant
         
         bulkView.becomeFirstResponder()
         bulkView.delegate = self
     }
+    
+    // MARK: - Keyboard notification
     
     private func subscribeToKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
@@ -58,27 +63,33 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     @objc private func keyboardNotification(notification: NSNotification) {
         guard let userInfo = notification.userInfo else { return }
         
-        let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        let keyboardFrameTop = keyboardFrame?.origin.y ?? 0
-        
-        let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-        let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
-        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+        let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        let animationCurveRaw = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).uintValue
         let animationCurve = UIView.AnimationOptions(rawValue: animationCurveRaw)
         
-        if keyboardFrameTop >= UIScreen.main.bounds.size.height {
-            keyboardHeightConstraint.constant = bottomLeewayHeight
+        let keyboardShown = keyboardFrame.origin.y < UIScreen.main.bounds.size.height
+        if keyboardShown {
+            keyboardHeightConstraint.constant = keyboardFrame.size.height
         } else {
-            keyboardHeightConstraint.constant = keyboardFrame?.size.height ?? 0
+            keyboardHeightConstraint.constant = bottomLeewayHeight
         }
         
-        UIView.animate(
-            withDuration: duration,
-            delay: 0,
-            options: animationCurve,
-            animations: { self.view.layoutIfNeeded() },
-            completion: nil
-        )
+        let delay: TimeInterval = 0
+        let animations = { self.view.layoutIfNeeded() }
+        
+        UIView.animate(withDuration: duration,
+                       delay: delay,
+                       options: animationCurve,
+                       animations: animations,
+                       completion: nil)
+    }
+    
+    // MARK: - Bulk Add view delegate
+    
+    var bulkText: String? {
+        get { bulkView.text }
+        set { bulkView.text = newValue }
     }
     
     func setAddButton(enabled: Bool) {
@@ -89,12 +100,18 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         dismiss(animated: true)
     }
     
+    func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
+        return UIPasteboard.general.string
+    }
+    
+    // MARK: - Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
         guard let button = sender as? UIBarButtonItem, button === addButton else { return }
         
-        // todo: cancel segue if posts arent parsing
+        // todo: tell user if posts arent parsing
         
         presenter.addButtonPressed()
     }
@@ -108,17 +125,9 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         return presenter.posts
     }
     
-    func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
-        return UIPasteboard.general.string
-    }
-    
     // MARK: - User interaction
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        presenter.cancelButtonPressed()
-    }
-    
-    @IBAction func textChanged(_ sender: Any) {
         presenter.cancelButtonPressed()
     }
     
