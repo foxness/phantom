@@ -66,7 +66,6 @@ class PostViewController: UIViewController, PostViewDelegate {
         super.viewDidLoad()
         
         presenter.attachView(self)
-        
         presenter.viewDidLoad()
     }
     

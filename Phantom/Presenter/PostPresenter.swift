@@ -31,7 +31,6 @@ class PostPresenter {
     func viewDidLoad() {
         if post == nil {
             isNewPost = true
-            Log.p("new post")
             post = PostPresenter.getDefaultPost()
             viewDelegate?.indicateNewPost()
         }

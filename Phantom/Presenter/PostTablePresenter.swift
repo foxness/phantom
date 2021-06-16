@@ -310,13 +310,13 @@ class PostTablePresenter {
         deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
-    func newPostsAdded(_ barePosts: [BarePost]) {
+    func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
         var lastDate = posts.last?.date
         
-        for barePost in barePosts {
-            let title = barePost.title
+        for bulkPost in bulkPosts {
+            let title = bulkPost.title
             let subreddit = "wallpapers"
-            let url = barePost.url
+            let url = bulkPost.url
             
             let date = PostScheduler.getNextDate(previous: lastDate)
             lastDate = date

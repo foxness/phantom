@@ -122,7 +122,7 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
 //        presenter.addButtonPressed()
     }
     
-    func getResultingPosts() -> [BarePost]? {
+    func getResultingPosts() -> [BulkPost]? {
         return presenter.posts
     }
     

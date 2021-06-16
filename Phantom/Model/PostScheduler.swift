@@ -23,23 +23,12 @@ struct PostScheduler {
     static func getNextDate(previous: Date?) -> Date {
         let now = Date()
         
-        var nextDate: Date
-        if let previous = previous {
-            repeat {
-                nextDate = addDay(to: previous)
-            } while nextDate < now
-        } else {
-            let dayStart = getDayStart(of: now)
-            var desiredDate = makeDesired(dayStart: dayStart)
-            
-            if now > desiredDate {
-                desiredDate = addDay(to: desiredDate)
-            }
-            
-            nextDate = desiredDate
+        if let previous = previous, isToday(date: previous) || previous > now {
+            return makeDesired(dayStart: addDay(to: getDayStart(of: previous)))
         }
         
-        return nextDate
+        let desiredDate = makeDesired(dayStart: getDayStart(of: now))
+        return now < desiredDate ? desiredDate : addDay(to: desiredDate)
     }
     
     private static func getDayStart(of date: Date) -> Date {
@@ -56,5 +45,9 @@ struct PostScheduler {
     
     private static func makeDesired(dayStart: Date) -> Date {
         return dayStart + desiredTime
+    }
+    
+    private static func isToday(date: Date) -> Bool {
+        return getDayStart(of: date) == getDayStart(of: Date())
     }
 }

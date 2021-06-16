@@ -8,14 +8,14 @@
 
 import Foundation
 
-typealias BarePost = (title: String, url: String)
+typealias BulkPost = (title: String, url: String)
 
 // todo: add bulk adding text posts?
 
 class BulkAddPresenter {
     private weak var viewDelegate: BulkAddViewDelegate?
     
-    private(set) var posts: [BarePost]?
+    private(set) var posts: [BulkPost]?
     
     func attachView(_ viewDelegate: BulkAddViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -58,13 +58,13 @@ class BulkAddPresenter {
         updateAddButton()
     }
     
-    private static func constructPosts(text: String) -> [BarePost]? {
+    private static func constructPosts(text: String) -> [BulkPost]? {
         let trimmed = text.trim()
         let rawPosts = trimmed.components(separatedBy: "\n\n")
         
         guard !rawPosts.isEmpty else { return nil }
         
-        var constructedPosts = [BarePost]()
+        var constructedPosts = [BulkPost]()
         for rawPost in rawPosts {
             let properties = rawPost.components(separatedBy: "\n")
             

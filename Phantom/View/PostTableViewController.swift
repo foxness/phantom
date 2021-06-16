@@ -180,7 +180,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         
         let bavc = unwindSegue.source as! BulkAddViewController
         if let bulkPosts = bavc.getResultingPosts() {
-            presenter.newPostsAdded(bulkPosts)
+            presenter.bulkPostsAdded(bulkPosts)
         }
     }
     
