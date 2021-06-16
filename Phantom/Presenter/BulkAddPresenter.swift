@@ -10,6 +10,8 @@ import Foundation
 
 typealias BarePost = (title: String, url: String)
 
+// todo: add bulk adding text posts?
+
 class BulkAddPresenter {
     private weak var viewDelegate: BulkAddViewDelegate?
     
@@ -79,7 +81,7 @@ class BulkAddPresenter {
             let title = properties[0].trim()
             let url = properties[1].trim()
             
-            guard !title.isEmpty && URL(string: url) != nil else { return nil }
+            guard Post.isValidTitle(title) && Post.isValidContent(type: .link, text: nil, url: url) else { return nil }
             
             let post = (title: title, url: url)
             constructedPosts.append(post)

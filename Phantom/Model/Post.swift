@@ -52,18 +52,7 @@ struct Post: Equatable, Codable {
     func isValid() -> Bool { Post.isValid(self) }
     
     static func isValid(title: String, subreddit: String, type: PostType, text: String?, url: String?) -> Bool {
-        let goodTitle = !title.isEmpty && title.count < Reddit.LIMIT_TITLE_LENGTH
-        let goodSubreddit = !subreddit.isEmpty && subreddit.count < Reddit.LIMIT_SUBREDDIT_LENGTH
-        
-        let goodContent: Bool
-        switch type {
-        case .text:
-            goodContent = text == nil || text!.count < Reddit.LIMIT_TEXT_LENGTH
-        case .link:
-            goodContent = url != nil && Helper.isValidUrl(url!)
-        }
-        
-        return goodTitle && goodSubreddit && goodContent
+        return isValidTitle(title) && isValidSubreddit(subreddit) && isValidContent(type: type, text: text, url: url)
     }
     
     static func isValid(_ post: Post) -> Bool {
@@ -72,5 +61,25 @@ struct Post: Equatable, Codable {
                 type: post.type,
                 text: post.text,
                 url: post.url)
+    }
+    
+    static func isValidTitle(_ title: String) -> Bool {
+        return !title.isEmpty && title.count < Reddit.LIMIT_TITLE_LENGTH
+    }
+    
+    static func isValidSubreddit(_ subreddit: String) -> Bool {
+        return !subreddit.isEmpty && subreddit.count < Reddit.LIMIT_SUBREDDIT_LENGTH
+    }
+    
+    static func isValidContent(type: PostType, text: String?, url: String?) -> Bool {
+        let goodContent: Bool
+        switch type {
+        case .text:
+            goodContent = text == nil || text!.count < Reddit.LIMIT_TEXT_LENGTH
+        case .link:
+            goodContent = url != nil && Helper.isValidUrl(url!)
+        }
+        
+        return goodContent
     }
 }
