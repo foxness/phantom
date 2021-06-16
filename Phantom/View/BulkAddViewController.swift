@@ -104,6 +104,12 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         segueTo(.unwindBulkAdded)
     }
     
+    func showInvalidSyntaxAlert() {
+        let title = "Error"
+        let message = "Invalid post syntax"
+        displayAlert(title: title, message: message)
+    }
+    
     // MARK: - Navigation
     
     func segueTo(_ segue: Segue) {

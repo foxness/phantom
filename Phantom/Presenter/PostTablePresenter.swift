@@ -123,7 +123,7 @@ class PostTablePresenter {
                     
                     let title = "An error has occurred"
                     let message = "\(error.localizedDescription)"
-                    self.viewDelegate?.showAlert(title: title, message: message)
+                    self.viewDelegate?.showAlert(title: title, message: message) // todo: replace with showErrorAlert(error:) ?
                 }
             }
         }

@@ -41,9 +41,7 @@ class BulkAddPresenter {
             posts = constructedPosts
             viewDelegate?.segueBack()
         } else {
-            // todo: tell user invalid syntax
-            
-            Log.p("bad posts")
+            viewDelegate?.showInvalidSyntaxAlert()
         }
     }
     

@@ -13,4 +13,5 @@ protocol BulkAddViewDelegate: AnyObject {
     func setAddButton(enabled: Bool)
     func getClipboard() -> String?
     func segueBack()
+    func showInvalidSyntaxAlert()
 }
