@@ -15,7 +15,7 @@ typealias BarePost = (title: String, url: String)
 class BulkAddPresenter {
     private weak var viewDelegate: BulkAddViewDelegate?
     
-    var posts: [BarePost]?
+    private(set) var posts: [BarePost]?
     
     func attachView(_ viewDelegate: BulkAddViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -35,12 +35,16 @@ class BulkAddPresenter {
     }
     
     func addButtonPressed() {
-        let raw = viewDelegate!.bulkText!
-        posts = BulkAddPresenter.constructPosts(text: raw)
-    }
-    
-    func cancelButtonPressed() {
-        viewDelegate?.dismiss()
+        if let text = viewDelegate?.bulkText,
+           let constructedPosts = BulkAddPresenter.constructPosts(text: text) {
+            
+            posts = constructedPosts
+            viewDelegate?.segueBack()
+        } else {
+            // todo: tell user invalid syntax
+            
+            Log.p("bad posts")
+        }
     }
     
     func pasteButtonPressed() {
@@ -52,18 +56,6 @@ class BulkAddPresenter {
     
     func textChanged() {
         updateAddButton()
-    }
-    
-    func shouldPerformAddSegue() -> Bool {
-        return isTextValid()
-    }
-    
-    private func isTextValid() -> Bool {
-        if let text = viewDelegate?.bulkText {
-            return BulkAddPresenter.constructPosts(text: text) != nil
-        } else {
-            return false
-        }
     }
     
     private static func constructPosts(text: String) -> [BarePost]? {

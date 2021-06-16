@@ -366,13 +366,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="rNW-wZ-2T3">
                                             <rect key="frame" x="106" y="20.5" width="288" height="49.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofh-Fe-P2l">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="26.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Post text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVV-O9-k3g">
                                                     <rect key="frame" x="0.0" y="32.5" width="288" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -559,7 +559,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="H8r-SX-UcK">
                                 <connections>
-                                    <segue destination="yR2-lY-Bd5" kind="unwind" identifier="unwindBulkAdded" unwindAction="unwindBulkAddedWithUnwindSegue:" id="Vju-qS-40l"/>
+                                    <action selector="addButtonPressed:" destination="aIT-Jj-7Ba" id="aP5-rR-Jws"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Paste" id="xq2-B4-6Lt">
@@ -573,6 +573,7 @@
                         <outlet property="addButton" destination="H8r-SX-UcK" id="IpK-Ew-3Y7"/>
                         <outlet property="bulkView" destination="w41-oz-lme" id="EN7-5G-Kmh"/>
                         <outlet property="keyboardHeightConstraint" destination="I6t-9k-Sig" id="5pL-X7-uqR"/>
+                        <segue destination="yR2-lY-Bd5" kind="unwind" identifier="unwindBulkAdded" unwindAction="unwindBulkAddedWithUnwindSegue:" id="8xX-9g-Dfh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hAp-zG-WPI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -96,29 +96,30 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         addButton.isEnabled = enabled
     }
     
-    func dismiss() {
-        dismiss(animated: true)
-    }
-    
     func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
         return UIPasteboard.general.string
     }
     
+    func segueBack() {
+        segueTo(.unwindBulkAdded)
+    }
+    
     // MARK: - Navigation
+    
+    func segueTo(_ segue: Segue) {
+        performSegue(withIdentifier: segue.rawValue, sender: nil)
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        guard let button = sender as? UIBarButtonItem, button === addButton else { return }
+        guard segue.identifier == Segue.unwindBulkAdded.rawValue else { fatalError() }
         
-        // todo: tell user if posts arent parsing
-        
-        presenter.addButtonPressed()
-    }
-    
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return identifier == BulkAddViewController.Segue.unwindBulkAdded.rawValue
-            && presenter.shouldPerformAddSegue()
+//        guard let button = sender as? UIBarButtonItem, button === addButton else { return }
+//
+//        // todo: tell user if posts arent parsing
+//
+//        presenter.addButtonPressed()
     }
     
     func getResultingPosts() -> [BarePost]? {
@@ -128,11 +129,15 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     // MARK: - User interaction
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        presenter.cancelButtonPressed()
+        dismiss(animated: true)
     }
     
     @IBAction func pasteButtonPressed(_ sender: Any) {
         presenter.pasteButtonPressed()
+    }
+    
+    @IBAction func addButtonPressed(_ sender: Any) {
+        presenter.addButtonPressed()
     }
     
     // MARK: - Text view delegate

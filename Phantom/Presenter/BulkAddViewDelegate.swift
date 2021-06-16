@@ -11,6 +11,6 @@ import Foundation
 protocol BulkAddViewDelegate: AnyObject {
     var bulkText: String? { get set }
     func setAddButton(enabled: Bool)
-    func dismiss()
     func getClipboard() -> String?
+    func segueBack()
 }
