@@ -10,6 +10,8 @@ import Foundation
 
 // todo: save posts only when they change
 // todo: save reddit and imgur only when they change (after submit & on receive new)
+// todo: add graceful asking for notification permissions
+// todo: add nice introduction
 
 class PostTablePresenter {
     // MARK: - Properties

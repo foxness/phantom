@@ -534,7 +534,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="w41-oz-lme">
-                                <rect key="frame" x="12" y="68" width="390" height="762"/>
+                                <rect key="frame" x="12" y="68" width="390" height="690"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="16"/>
@@ -544,7 +544,7 @@
                         <viewLayoutGuide key="safeArea" id="MMk-Ox-c8G"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="w41-oz-lme" secondAttribute="bottom" constant="12" id="I6t-9k-Sig"/>
+                            <constraint firstItem="MMk-Ox-c8G" firstAttribute="bottom" secondItem="w41-oz-lme" secondAttribute="bottom" constant="50" id="I6t-9k-Sig"/>
                             <constraint firstItem="w41-oz-lme" firstAttribute="top" secondItem="MMk-Ox-c8G" secondAttribute="top" constant="12" id="Kub-om-Crb"/>
                             <constraint firstItem="w41-oz-lme" firstAttribute="leading" secondItem="MMk-Ox-c8G" secondAttribute="leading" constant="12" id="ktU-W7-Dhd"/>
                             <constraint firstItem="MMk-Ox-c8G" firstAttribute="trailing" secondItem="w41-oz-lme" secondAttribute="trailing" constant="12" id="rnq-g6-bTf"/>
@@ -571,7 +571,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="H8r-SX-UcK" id="IpK-Ew-3Y7"/>
-                        <outlet property="postsView" destination="w41-oz-lme" id="EN7-5G-Kmh"/>
+                        <outlet property="bulkView" destination="w41-oz-lme" id="EN7-5G-Kmh"/>
+                        <outlet property="keyboardHeightConstraint" destination="I6t-9k-Sig" id="5pL-X7-uqR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hAp-zG-WPI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

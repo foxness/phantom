@@ -28,12 +28,12 @@ class BulkAddPresenter { // todo: add paste button
     }
     
     private func updateAddButton() {
-        let enabled = !(viewDelegate?.postsText?.isEmpty ?? true)
+        let enabled = !(viewDelegate?.bulkText?.trim().isEmpty ?? true)
         viewDelegate?.setAddButton(enabled: enabled)
     }
     
     func addButtonPressed() {
-        let raw = viewDelegate!.postsText!
+        let raw = viewDelegate!.bulkText!
         posts = BulkAddPresenter.constructPosts(text: raw)
     }
     
@@ -43,7 +43,7 @@ class BulkAddPresenter { // todo: add paste button
     
     func pasteButtonPressed() {
         if let clipboard = viewDelegate?.getClipboard() {
-            viewDelegate?.postsText = clipboard
+            viewDelegate?.bulkText = clipboard
             updateAddButton()
         }
     }
@@ -57,7 +57,7 @@ class BulkAddPresenter { // todo: add paste button
     }
     
     private func isTextValid() -> Bool {
-        if let text = viewDelegate?.postsText {
+        if let text = viewDelegate?.bulkText {
             return BulkAddPresenter.constructPosts(text: text) != nil
         } else {
             return false

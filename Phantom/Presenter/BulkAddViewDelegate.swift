@@ -9,11 +9,8 @@
 import Foundation
 
 protocol BulkAddViewDelegate: AnyObject {
-    var postsText: String? { get set }
-    
+    var bulkText: String? { get set }
     func setAddButton(enabled: Bool)
-    
     func dismiss()
-    
     func getClipboard() -> String?
 }

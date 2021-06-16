@@ -13,25 +13,72 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         case unwindBulkAdded = "unwindBulkAdded"
     }
     
-    @IBOutlet weak var postsView: UITextView!
+    @IBOutlet var keyboardHeightConstraint: NSLayoutConstraint!
+    private var bottomLeewayHeight: CGFloat! // height between the bottom of postsView and superview bottom
+    
+    @IBOutlet weak var bulkView: UITextView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var postsText: String? {
-        get { postsView.text }
-        set { postsView.text = newValue }
-    }
-    
     private let presenter = BulkAddPresenter()
+    
+    var bulkText: String? {
+        get { bulkView.text }
+        set { bulkView.text = newValue }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        postsView.becomeFirstResponder()
+        subscribeToKeyboardNotification()
+        setupViews()
         
-        postsView.delegate = self
-
         presenter.attachView(self)
         presenter.viewDidLoad()
+    }
+    
+    deinit {
+        unsubscribeFromNotifications()
+    }
+    
+    func setupViews() {
+        bottomLeewayHeight = keyboardHeightConstraint.constant
+        
+        bulkView.becomeFirstResponder()
+        bulkView.delegate = self
+    }
+    
+    private func subscribeToKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
+    
+    private func unsubscribeFromNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardNotification(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        
+        let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let keyboardFrameTop = keyboardFrame?.origin.y ?? 0
+        
+        let duration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
+        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+        let animationCurve = UIView.AnimationOptions(rawValue: animationCurveRaw)
+        
+        if keyboardFrameTop >= UIScreen.main.bounds.size.height {
+            keyboardHeightConstraint.constant = bottomLeewayHeight
+        } else {
+            keyboardHeightConstraint.constant = keyboardFrame?.size.height ?? 0
+        }
+        
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: animationCurve,
+            animations: { self.view.layoutIfNeeded() },
+            completion: nil
+        )
     }
     
     func setAddButton(enabled: Bool) {
@@ -57,10 +104,6 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
             && presenter.shouldPerformAddSegue()
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        presenter.textChanged()
-    }
-    
     func getResultingPosts() -> [BarePost]? {
         return presenter.posts
     }
@@ -68,6 +111,8 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
         return UIPasteboard.general.string
     }
+    
+    // MARK: - User interaction
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         presenter.cancelButtonPressed()
@@ -79,5 +124,11 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     
     @IBAction func pasteButtonPressed(_ sender: Any) {
         presenter.pasteButtonPressed()
+    }
+    
+    // MARK: - Text view delegate
+    
+    func textViewDidChange(_ textView: UITextView) {
+        presenter.textChanged()
     }
 }
