@@ -17,6 +17,7 @@ class PostSubmitter {
     typealias SubmitCallback = (_ result: SubmitResult) -> Void
     
     struct SubmitParams {
+        let useImgur: Bool
         let wallpaperMode: Bool
         let useWallhaven: Bool
     }
@@ -62,14 +63,18 @@ class PostSubmitter {
             var mw = [RequiredMiddleware]()
             
             if params.useWallhaven {
-                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: params.useWallhaven)
+                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: true)
                 mw.append(wallhavenMw)
             }
             
-            if let imgur = imgur {
-                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
-                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
-                mw.append(imgurMw)
+            if params.useImgur {
+                if let imgur = imgur {
+                    let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
+                    let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
+                    mw.append(imgurMw)
+                } else {
+                    fatalError("Imgur account required")
+                }
             } else if params.wallpaperMode {
                 fatalError("Imgur is required for wallpaper mode") // todo: make this scenario unreachable
             }

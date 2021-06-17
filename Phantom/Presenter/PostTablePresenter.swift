@@ -14,6 +14,9 @@ import Foundation
 // todo: add graceful asking for notification permissions
 // todo: add nice introduction
 
+// todo: fix crash on submit with no imgur
+// todo: fix crash on submit with wallpaper mode but no imgur
+
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -96,7 +99,9 @@ class PostTablePresenter {
         
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
-        let params = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let useImgur = database.useImgur
+        
+        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
         submitter.submitPost(post, with: params) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
