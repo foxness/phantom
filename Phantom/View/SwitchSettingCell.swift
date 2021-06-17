@@ -21,13 +21,18 @@ class SwitchSettingCell: UITableViewCell {
         
         label.text = nil
         switchControl.isOn = false
+        switchControl.isEnabled = true
+        selectionStyle = .default
     }
     
     public func configure(with option: SwitchSettingsOption) {
         label.text = option.title
         
         switchControl.isOn = option.isOn
+        switchControl.isEnabled = option.isEnabled
         handler = option.handler
+        
+        selectionStyle = option.isEnabled ? .default : .none
     }
     
     @IBAction private func switchValueChanged(sender: UISwitch) {

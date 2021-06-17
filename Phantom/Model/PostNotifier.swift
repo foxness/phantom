@@ -46,7 +46,7 @@ struct PostNotifier {
             if let error = error {
                 Log.p("notify error", error)
             } else {
-                Log.p("notification scheduled")
+//                Log.p("notification scheduled")
             }
         }
     }

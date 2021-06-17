@@ -62,7 +62,7 @@ class SettingsPresenter {
     }
     
     func updateImgurCell() {
-        viewDelegate?.reloadSettingCell(section: 0, at: 1) // unhardcode this
+        viewDelegate?.reloadSettingCell(section: 1, at: 0) // unhardcode this
     }
     
     func redditSignedIn(_ reddit: Reddit) {
@@ -107,12 +107,12 @@ class SettingsPresenter {
     
     private func getSettingsSections() -> [SettingsSection] {
         let generalSectionTitle = "General"
+        let imgurSectionTitle = "Imgur"
         
         var sections: [SettingsSection] = []
         
         let generalOptions = [
-            getRedditOption(),
-            getImgurOption(),
+            getRedditAccountOption(),
             getWallpaperModeOption(),
             getUseWallhavenOption()
         ]
@@ -120,10 +120,18 @@ class SettingsPresenter {
         let generalSection = SettingsSection(title: generalSectionTitle, options: generalOptions)
         sections.append(generalSection)
         
+        let imgurOptions = [
+            getImgurAccountOption(),
+            getUseImgurOption()
+        ]
+        
+        let imgurSection = SettingsSection(title: imgurSectionTitle, options: imgurOptions)
+        sections.append(imgurSection)
+        
         return sections
     }
     
-    private func getRedditOption() -> SettingsOptionType {
+    private func getRedditAccountOption() -> SettingsOptionType {
         let accountType = "Reddit Account"
         let signInPrompt = "Add Reddit Account"
         
@@ -151,7 +159,7 @@ class SettingsPresenter {
         return optionType
     }
     
-    private func getImgurOption() -> SettingsOptionType {
+    private func getImgurAccountOption() -> SettingsOptionType {
         let accountType = "Imgur Account"
         let signInPrompt = "Add Imgur Account"
         
@@ -206,6 +214,25 @@ class SettingsPresenter {
         }
         
         let option = SwitchSettingsOption(title: title, isOn: useWallhaven, handler: handler)
+        let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
+    }
+    
+    private func getUseImgurOption() -> SettingsOptionType {
+        let title = "Upload images to Imgur"
+        
+        let imgurAuth = database.imgurAuth
+        
+        let useImgur = imgurAuth == nil ? false : true
+        let isEnabled = imgurAuth == nil ? false : true
+        
+        let handler = { (isOn: Bool) in
+//            self.database.useWallhaven = isOn
+            self.updateSettings()
+        }
+        
+        let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
         let optionType = SettingsOptionType.switchOption(option: option)
         
         return optionType

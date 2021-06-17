@@ -8,6 +8,7 @@
 
 import Foundation
 
+// todo: update app icon badge when it actually should change instead of on going in bg
 // todo: save posts only when they change
 // todo: save reddit and imgur only when they change (after submit & on receive new)
 // todo: add graceful asking for notification permissions

@@ -28,6 +28,7 @@ struct SwitchSettingsOption {
     let title: String
     var isOn: Bool
     let handler: ((_ isOn: Bool) -> Void)?
+    var isEnabled = true
 }
 
 struct AccountSettingsOption {
