@@ -9,12 +9,16 @@
 import Foundation
 
 class SettingsPresenter {
+    // MARK: - Properties
+    
     private weak var viewDelegate: SettingsViewDelegate?
     weak var delegate: SettingsDelegate?
     
     private let database: Database = .instance // todo: make them services? implement dip
     
     private var sections: [SettingsSection] = []
+    
+    // MARK: - View delegate
     
     func attachView(_ viewDelegate: SettingsViewDelegate) {
         self.viewDelegate = viewDelegate
@@ -24,6 +28,8 @@ class SettingsPresenter {
         viewDelegate = nil
     }
     
+    // MARK: - Public methods
+    
     func viewDidLoad() {
         updateSettings()
     }
@@ -31,6 +37,8 @@ class SettingsPresenter {
     private func updateSettings() {
         sections = getSettingsSections()
     }
+    
+    // MARK: - Settings option data source
     
     func getOption(section: Int, at index: Int) -> SettingsOptionType {
         return sections[section].options[index]
@@ -70,42 +78,54 @@ class SettingsPresenter {
         }
     }
     
-    func updateRedditCell() {
+    // MARK: - Cell update methods
+    
+    func updateRedditAccountCell() {
         viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
     }
     
-    func updateImgurCell() {
+    func updateImgurCells() {
         viewDelegate?.reloadSettingCell(section: 1, at: 0) // unhardcode this
+        viewDelegate?.reloadSettingCell(section: 1, at: 1)
     }
+    
+    // MARK: - Receiver methods
     
     func redditSignedIn(_ reddit: Reddit) {
         database.redditAuth = reddit.auth
         updateSettings()
-        updateRedditCell()
+        updateRedditAccountCell()
         
         delegate?.redditAccountChanged(reddit)
     }
     
     func imgurSignedIn(_ imgur: Imgur) {
         database.imgurAuth = imgur.auth
+        database.useImgur = true
+        
         updateSettings()
-        updateImgurCell()
+        updateImgurCells()
         
         delegate?.imgurAccountChanged(imgur)
     }
     
+    // MARK: - User interaction methods
+    
     private func redditSignOutPressed() {
         database.redditAuth = nil
+        
         updateSettings()
-        updateRedditCell()
+        updateRedditAccountCell()
         
         delegate?.redditAccountChanged(nil)
     }
     
     private func imgurSignOutPressed() {
         database.imgurAuth = nil
+        database.useImgur = false
+        
         updateSettings()
-        updateImgurCell()
+        updateImgurCells()
         
         delegate?.imgurAccountChanged(nil)
     }
@@ -117,6 +137,8 @@ class SettingsPresenter {
     private func imgurSignInPressed() {
         viewDelegate?.segueToImgurSignIn()
     }
+    
+    // MARK: - Settings sections
     
     private func getSettingsSections() -> [SettingsSection] {
         let generalSectionTitle = "General"
@@ -235,13 +257,11 @@ class SettingsPresenter {
     private func getUseImgurOption() -> SettingsOptionType {
         let title = "Upload images to Imgur"
         
-        let imgurAuth = database.imgurAuth
-        
-        let useImgur = imgurAuth == nil ? false : true
-        let isEnabled = imgurAuth == nil ? false : true
+        let useImgur = database.useImgur
+        let isEnabled = database.imgurAuth != nil
         
         let handler = { (isOn: Bool) in
-//            self.database.useWallhaven = isOn
+            self.database.useImgur = isOn
             self.updateSettings()
         }
         

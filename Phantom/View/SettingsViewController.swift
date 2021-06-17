@@ -91,7 +91,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func reloadSettingCell(section: Int, at index: Int) {
         let indexPath = IndexPath(row: index, section: section)
-        tableView.reloadRows(at: [indexPath], with: .right)
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
