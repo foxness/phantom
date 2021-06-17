@@ -32,8 +32,6 @@ struct SwitchSettingsOption {
 }
 
 struct AccountSettingsOption {
-//    typealias SignInCallback = (_ signedIn: Bool) -> Void
-    
     let accountType: String
     var accountName: String?
     var signedIn: Bool

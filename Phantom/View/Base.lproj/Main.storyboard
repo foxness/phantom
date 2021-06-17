@@ -74,7 +74,7 @@
                                             <outlet property="label" destination="yYj-Y9-xvD" id="Vv1-gP-End"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchSettingCell" id="7AP-Ke-oLB" customClass="SwitchSettingCell" customModule="Phantom" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SwitchSettingCell" id="7AP-Ke-oLB" customClass="SwitchSettingCell" customModule="Phantom" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="92.5" width="414" height="53.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7AP-Ke-oLB" id="1g5-S8-t3V">
@@ -109,7 +109,7 @@
                                             <outlet property="switchControl" destination="4TB-UA-2TI" id="WKR-E9-nKI"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedInAccountSettingCell" id="MlG-Vo-GOU" customClass="SignedInAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="SignedInAccountSettingCell" id="MlG-Vo-GOU" customClass="SignedInAccountSettingCell" customModule="Phantom" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="146" width="414" height="82"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MlG-Vo-GOU" id="hdr-1B-VRk">
@@ -159,19 +159,16 @@
                                             <outlet property="signOutButton" destination="SAl-WH-E8g" id="GHQ-ps-wWV"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SignedOutAccountSettingCell" id="Aos-BU-UAu" customClass="SignedOutAccountSettingCell" customModule="Phantom" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SignedOutAccountSettingCell" id="Aos-BU-UAu" customClass="SignedOutAccountSettingCell" customModule="Phantom" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="228" width="414" height="52.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Aos-BU-UAu" id="sjC-BY-ZvS">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="52.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="384.5" height="52.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eEg-l6-umD">
+                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eEg-l6-umD">
                                                     <rect key="frame" x="28" y="11" width="137" height="30.5"/>
                                                     <state key="normal" title="Add Reddit Account"/>
-                                                    <connections>
-                                                        <action selector="signInButtonPressedWithSender:" destination="Aos-BU-UAu" eventType="touchUpInside" id="3Oy-lL-sWP"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>

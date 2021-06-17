@@ -48,12 +48,25 @@ class SettingsPresenter {
         return sections.count
     }
     
+    func isSelectableOption(section: Int, at index: Int) -> Bool { // selectable means triggering didSelectOption
+        let option = sections[section].options[index]
+        switch option {
+        case .staticOption: return true
+        case .accountOption(let accountOption): return !accountOption.signedIn
+        default: return false
+        }
+    }
+    
     func didSelectOption(section: Int, at index: Int) {
         let option = sections[section].options[index]
         switch option {
         case .staticOption(let staticOption):
             staticOption.handler?()
-        default: break
+        case .accountOption(let accountOption):
+            guard !accountOption.signedIn else { break }
+            accountOption.signInHandler?()
+        default:
+            fatalError("This option should not be able to be selected")
         }
     }
     

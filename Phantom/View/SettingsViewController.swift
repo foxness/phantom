@@ -112,6 +112,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         presenter.didSelectOption(section: indexPath.section, at: indexPath.row)
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let selectable = presenter.isSelectableOption(section: indexPath.section, at: indexPath.row)
+        return selectable ? indexPath : nil
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let option = presenter.getOption(section: indexPath.section, at: indexPath.row)
         switch option {
