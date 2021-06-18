@@ -12,5 +12,7 @@ protocol SettingsViewDelegate: AnyObject {
     func segueToRedditSignIn()
     func segueToImgurSignIn()
     
+    func showImgurRequiredForWallpaperModeAlert()
+    
     func reloadSettingCell(section: Int, at index: Int) // todo: consistent table view method naming in view delegates (PostTableViewDelegate etc)
 }

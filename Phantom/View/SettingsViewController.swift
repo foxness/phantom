@@ -79,6 +79,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func showImgurRequiredForWallpaperModeAlert() {
+        let title = "Wallpaper Mode"
+        let message = "An Imgur account is required for Wallpaper Mode"
+        displayAlert(title: title, message: message)
+    }
+    
     func redditSignedIn(with reddit: Reddit) {
         presenter.redditSignedIn(reddit)
         

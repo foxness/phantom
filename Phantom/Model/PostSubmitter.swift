@@ -78,7 +78,7 @@ class PostSubmitter {
                     fatalError("Imgur account required")
                 }
             } else if params.wallpaperMode {
-                fatalError("Imgur is required for wallpaper mode") // todo: make this scenario unreachable
+                fatalError("Imgur is required for wallpaper mode")
             }
             
             return mw

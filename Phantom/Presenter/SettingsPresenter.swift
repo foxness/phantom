@@ -8,6 +8,9 @@
 
 import Foundation
 
+// todo: make wallpaper mode independent from imgur middleware (get img dimensions from direct download)
+// todo: add wallpaper mode section
+
 class SettingsPresenter {
     // MARK: - Properties
     
@@ -78,15 +81,27 @@ class SettingsPresenter {
         }
     }
     
-    // MARK: - Cell update methods
+    // MARK: - Cell update methods // todo: unhardcode this
     
-    func updateRedditAccountCell() {
-        viewDelegate?.reloadSettingCell(section: 0, at: 0) // unhardcode this
+    private func updateRedditAccountCell() {
+        viewDelegate?.reloadSettingCell(section: 0, at: 0)
     }
     
-    func updateImgurCells() {
-        viewDelegate?.reloadSettingCell(section: 1, at: 0) // unhardcode this
+    private func updateImgurAccountCell() {
+        viewDelegate?.reloadSettingCell(section: 1, at: 0)
+    }
+    
+    private func updateUseImgurCell() {
         viewDelegate?.reloadSettingCell(section: 1, at: 1)
+    }
+    
+    private func updateWallpaperModeCell() {
+        viewDelegate?.reloadSettingCell(section: 0, at: 1)
+    }
+    
+    private func updateImgurCells() {
+        updateImgurAccountCell()
+        updateUseImgurCell()
     }
     
     // MARK: - Receiver methods
@@ -227,9 +242,24 @@ class SettingsPresenter {
         
         let wallpaperMode = database.wallpaperMode
         
-        let handler = { (isOn: Bool) in
-            self.database.wallpaperMode = isOn
-            self.updateSettings()
+        let handler = { [self] (isOn: Bool) in
+            if isOn && !database.useImgur {
+                if database.imgurAuth == nil {
+                    updateWallpaperModeCell()
+                    viewDelegate?.showImgurRequiredForWallpaperModeAlert()
+                } else {
+                    database.useImgur = true
+                    database.wallpaperMode = true
+                    
+                    updateSettings()
+                    updateUseImgurCell()
+                }
+                
+                return
+            }
+            
+            database.wallpaperMode = isOn
+            updateSettings()
         }
         
         let option = SwitchSettingsOption(title: title, isOn: wallpaperMode, handler: handler)
@@ -243,9 +273,9 @@ class SettingsPresenter {
         
         let useWallhaven = database.useWallhaven
         
-        let handler = { (isOn: Bool) in
-            self.database.useWallhaven = isOn
-            self.updateSettings()
+        let handler = { [self] (isOn: Bool) in
+            database.useWallhaven = isOn
+            updateSettings()
         }
         
         let option = SwitchSettingsOption(title: title, isOn: useWallhaven, handler: handler)
@@ -260,9 +290,18 @@ class SettingsPresenter {
         let useImgur = database.useImgur
         let isEnabled = database.imgurAuth != nil
         
-        let handler = { (isOn: Bool) in
-            self.database.useImgur = isOn
-            self.updateSettings()
+        let handler = { [self] (isOn: Bool) in
+            if !isOn && database.wallpaperMode {
+                database.wallpaperMode = false
+                database.useImgur = false
+                
+                updateSettings()
+                updateWallpaperModeCell()
+                return
+            }
+            
+            database.useImgur = isOn
+            updateSettings()
         }
         
         let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
