@@ -14,7 +14,6 @@ import Foundation
 // todo: add graceful asking for notification permissions
 // todo: add nice introduction
 
-// todo: fix crash on submit with no imgur
 // todo: fix crash on submit with wallpaper mode but no imgur
 
 class PostTablePresenter {
