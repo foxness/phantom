@@ -21,8 +21,10 @@ struct ImgurMiddleware: SubmitterMiddleware {
         self.directUpload = directUpload
     }
     
-    func transform(post: Post) throws -> MiddlewareResult {
-        guard ImgurMiddleware.isRightPost(post) else { return (post, changed: false) }
+    func transform(mwp: MiddlewarePost) throws -> MiddlewareResult {
+        let post = mwp.post
+        
+        guard ImgurMiddleware.isRightPost(post) else { return (mwp, changed: false) }
         
         let url = URL(string: post.url!)!
         
@@ -47,7 +49,9 @@ struct ImgurMiddleware: SubmitterMiddleware {
                                 subreddit: post.subreddit,
                                 date: post.date,
                                 url: imgurImage.url)
-        return (newPost, changed: true)
+        
+        let newMwp = MiddlewarePost(post: newPost) // todo: put image width and height into mwp
+        return (newMwp, changed: true)
     }
     
     private static func downloadImage(imageUrl: URL) throws -> Data {

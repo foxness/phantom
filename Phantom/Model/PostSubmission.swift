@@ -9,7 +9,8 @@
 import Foundation
 
 class PostSubmission: Operation {
-    private typealias ProcessResult = Result<Post, Error>
+    private typealias ProcessResult = Result<MiddlewarePost, Error>
+    private typealias InternalProcessResultWithTries = Result<(post: MiddlewarePost, triesLeft: Int), Error>
     private typealias ProcessResultWithTries = Result<(post: Post, triesLeft: Int), Error>
     
     private let reddit: Reddit
@@ -169,7 +170,7 @@ class PostSubmission: Operation {
         }
         
         var currentStrategy = strategy
-        var processedPost = post
+        var processedPost = MiddlewarePost(post: post)
         var triesLeft: Int?
         
         for middleware in middlewares {
@@ -185,11 +186,11 @@ class PostSubmission: Operation {
             }
         }
         
-        let postWithTries = (post: processedPost, triesLeft: triesLeft!)
+        let postWithTries = (post: processedPost.post, triesLeft: triesLeft!)
         return .success(postWithTries)
     }
     
-    private static func oneProcessPost(_ post: Post, using middleware: RequiredMiddleware, strategy: DelayRetryStrategy) -> ProcessResultWithTries {
+    private static func oneProcessPost(_ post: MiddlewarePost, using middleware: RequiredMiddleware, strategy: DelayRetryStrategy) -> InternalProcessResultWithTries {
         var retryCount = 0
         var lastError: Error?
         
@@ -218,13 +219,13 @@ class PostSubmission: Operation {
         return .failure(lastError!)
     }
     
-    private static func oneProcessPost(_ post: Post, using middleware: RequiredMiddleware) -> ProcessResult {
-        let processedPost: Post
+    private static func oneProcessPost(_ post: MiddlewarePost, using middleware: RequiredMiddleware) -> ProcessResult {
+        let processedPost: MiddlewarePost
         
         do {
-            let middlewared = try middleware.transform(post: post)
+            let middlewared = try middleware.transform(mwp: post)
             
-            processedPost = middlewared.post
+            processedPost = middlewared.mwp
             let postChanged = middlewared.changed
             
             if middleware.isRequired && !postChanged {
