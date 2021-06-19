@@ -10,6 +10,7 @@ import Foundation
 
 // todo: make wallpaper mode independent from imgur middleware (get img dimensions from direct download)
 // todo: add wallpaper mode section
+// todo: add bulk add section (set subreddit, date schedule type etc)
 
 class SettingsPresenter {
     // MARK: - Properties

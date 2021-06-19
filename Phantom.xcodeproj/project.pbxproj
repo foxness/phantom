@@ -16,6 +16,7 @@
 		5732365B2678A611004CEB72 /* SlideUpMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */; };
 		5732365D2678ADA3004CEB72 /* SlideUpMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */; };
 		5732365F2678CDB3004CEB72 /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */; };
+		573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CE68E267E2F170083CE30 /* PostSubmission.swift */; };
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
@@ -75,6 +76,7 @@
 		5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuCell.swift; sourceTree = "<group>"; };
 		5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuItem.swift; sourceTree = "<group>"; };
 		5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
+		573CE68E267E2F170083CE30 /* PostSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmission.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				71614EF024FD195C00FA8B76 /* Database.swift */,
 				718181DD24FBFEE200059658 /* Requests.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
+				573CE68E267E2F170083CE30 /* PostSubmission.swift */,
 				572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */,
 				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
 				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
@@ -379,6 +382,7 @@
 				96AA4D68252B56CB009488F6 /* PostPresenter.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
 				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
+				573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
 				969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */,
 				57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */,
