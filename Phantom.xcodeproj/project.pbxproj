@@ -17,6 +17,7 @@
 		5732365D2678ADA3004CEB72 /* SlideUpMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */; };
 		5732365F2678CDB3004CEB72 /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */; };
 		573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CE68E267E2F170083CE30 /* PostSubmission.swift */; };
+		573CE691267E3C5E0083CE30 /* WallpaperModeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */; };
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
@@ -77,6 +78,7 @@
 		5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuItem.swift; sourceTree = "<group>"; };
 		5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		573CE68E267E2F170083CE30 /* PostSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmission.swift; sourceTree = "<group>"; };
+		573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperModeMiddleware.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
+				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
 				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
 				57605EF22673590D00E4EE25 /* SettingsSection.swift */,
@@ -370,6 +373,7 @@
 				5768C3372639C9D400459260 /* ImgurSignInViewController.swift in Sources */,
 				57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */,
 				71C031B624FA6B5600D6E19F /* IntroductionViewController.swift in Sources */,
+				573CE691267E3C5E0083CE30 /* WallpaperModeMiddleware.swift in Sources */,
 				578358E1263C7E0E00320607 /* Helper.swift in Sources */,
 				5732365B2678A611004CEB72 /* SlideUpMenuCell.swift in Sources */,
 				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,

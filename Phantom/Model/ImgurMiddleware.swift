@@ -10,15 +10,17 @@ import Foundation
 import Kingfisher
 import UIKit
 
+// todo: don't spend time extracting image dimensions if it is false?
+
 struct ImgurMiddleware: SubmitterMiddleware {
     private let imgur: Imgur
-    private let wallpaperMode: Bool
     private let directUpload: Bool
+    private let extractImageDimensions: Bool
     
-    init(_ imgur: Imgur, wallpaperMode: Bool, directUpload: Bool) {
+    init(_ imgur: Imgur, directUpload: Bool, extractImageDimensions: Bool) {
         self.imgur = imgur
-        self.wallpaperMode = wallpaperMode
         self.directUpload = directUpload
+        self.extractImageDimensions = extractImageDimensions
     }
     
     func transform(mwp: MiddlewarePost) throws -> MiddlewareResult {
@@ -43,14 +45,19 @@ struct ImgurMiddleware: SubmitterMiddleware {
         
         Log.p("imgur image uploaded", imgurImage)
         
-        let title = wallpaperMode ? "\(post.title) [\(imgurImage.width)×\(imgurImage.height)]" : post.title
         let newPost = Post.Link(id: post.id,
-                                title: title,
+                                title: post.title,
                                 subreddit: post.subreddit,
                                 date: post.date,
                                 url: imgurImage.url)
         
-        let newMwp = MiddlewarePost(post: newPost) // todo: put image width and height into mwp
+        var newMwp = MiddlewarePost(post: newPost)
+        
+        if extractImageDimensions {
+            newMwp.imageWidth = imgurImage.width
+            newMwp.imageHeight = imgurImage.height
+        }
+        
         return (newMwp, changed: true)
     }
     

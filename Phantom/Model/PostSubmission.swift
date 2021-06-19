@@ -56,14 +56,23 @@ class PostSubmission: Operation {
         
         if params.useImgur {
             if let imgur = imgur {
-                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
-                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
-                mw.append(imgurMw)
+                let imgurMw = ImgurMiddleware(imgur,
+                                              directUpload: DebugVariable.directImgurUpload,
+                                              extractImageDimensions: params.wallpaperMode)
+                
+                let imgurRmw = RequiredMiddleware(middleware: imgurMw, isRequired: params.wallpaperMode)
+                mw.append(imgurRmw)
             } else {
                 fatalError("Imgur account required")
             }
         } else if params.wallpaperMode {
             fatalError("Imgur is required for wallpaper mode")
+        }
+        
+        if params.wallpaperMode {
+            let wallpaperModeMw = WallpaperModeMiddleware()
+            let wallpaperModeRmw = RequiredMiddleware(middleware: wallpaperModeMw, isRequired: true)
+            mw.append(wallpaperModeRmw)
         }
         
         return mw
