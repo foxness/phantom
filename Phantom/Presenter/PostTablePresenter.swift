@@ -8,6 +8,7 @@
 
 import Foundation
 
+// todo: update app icon badge when it actually should change instead of on going in bg
 // todo: save posts only when they change
 // todo: save reddit and imgur only when they change (after submit & on receive new)
 // todo: add graceful asking for notification permissions
@@ -95,7 +96,9 @@ class PostTablePresenter {
         
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
-        let params = PostSubmitter.SubmitParams(wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let useImgur = database.useImgur
+        
+        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
         
         submitter.submitPost(post, with: params) { [weak self] result in
             DispatchQueue.main.async { [weak self] in

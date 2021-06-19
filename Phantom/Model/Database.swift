@@ -18,6 +18,7 @@ class Database {
         case introductionShown = "introductionShown"
         case wallpaperMode = "wallpaperMode"
         case useWallhaven = "useWallhaven"
+        case useImgur = "useImgur"
     }
     
     static let instance = Database()
@@ -31,6 +32,7 @@ class Database {
     @UserDefaultsBacked(key: Key.introductionShown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
     @UserDefaultsBacked(key: Key.wallpaperMode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
     @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
+    @UserDefaultsBacked(key: Key.useImgur.rawValue, defaultValue: false) private var internalUseImgur: Bool
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
@@ -58,6 +60,11 @@ class Database {
     var useWallhaven: Bool {
         get { internalUseWallhaven }
         set { internalUseWallhaven = newValue }
+    }
+    
+    var useImgur: Bool {
+        get { internalUseImgur }
+        set { internalUseImgur = newValue }
     }
     
     var thumbnailResolverCache: [String: ThumbnailResolver.ThumbnailUrl]? {
@@ -96,6 +103,7 @@ class Database {
         introductionShown = false
         wallpaperMode = false
         useWallhaven = false
+        useImgur = false
         thumbnailResolverCache = nil
         
         posts = []

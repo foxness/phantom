@@ -11,12 +11,15 @@ import Foundation
 // todo: show attempt count to user
 // todo: let user change retry strategy
 
+// todo: make own source file for PostSubmission
+
 class PostSubmitter {
     typealias RedditPostUrl = String
     typealias SubmitResult = Result<RedditPostUrl, Error>
     typealias SubmitCallback = (_ result: SubmitResult) -> Void
     
     struct SubmitParams {
+        let useImgur: Bool
         let wallpaperMode: Bool
         let useWallhaven: Bool
     }
@@ -62,16 +65,20 @@ class PostSubmitter {
             var mw = [RequiredMiddleware]()
             
             if params.useWallhaven {
-                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: params.useWallhaven)
+                let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: true)
                 mw.append(wallhavenMw)
             }
             
-            if let imgur = imgur {
-                let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
-                let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
-                mw.append(imgurMw)
+            if params.useImgur {
+                if let imgur = imgur {
+                    let innerImgurMw = ImgurMiddleware(imgur, wallpaperMode: params.wallpaperMode, directUpload: DebugVariable.directImgurUpload)
+                    let imgurMw = RequiredMiddleware(middleware: innerImgurMw, isRequired: params.wallpaperMode)
+                    mw.append(imgurMw)
+                } else {
+                    fatalError("Imgur account required")
+                }
             } else if params.wallpaperMode {
-                fatalError("Imgur is required for wallpaper mode") // todo: make this scenario unreachable
+                fatalError("Imgur is required for wallpaper mode")
             }
             
             return mw
@@ -274,33 +281,34 @@ class PostSubmitter {
     }
     
     func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while signed out
-        guard let reddit = reddit.value,
-              let imgur = imgur.value
-        else {
-            fatalError()
-        }
+        submitPostInternal(post: post, database: nil, params: params, callback: callback)
+    }
+    
+    func submitPostInDatabase(_ database: Database, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: get rid of zombiesubmitter and this method?
+        submitPostInternal(post: nil, database: database, params: params, callback: callback)
+    }
+    
+    private func submitPostInternal(post: Post?, database: Database?, params: SubmitParams, callback: @escaping SubmitCallback) {
+        guard let reddit = reddit.value else { fatalError("Reddit account not found") }
         
-        let submission = PostSubmission(reddit: reddit,
+        let imgur = imgur.value
+        
+        let submission: PostSubmission
+        if let post = post {
+            submission = PostSubmission(reddit: reddit,
                                         post: post,
                                         params: params,
                                         imgur: imgur,
                                         callback: callback)
-        
-        addToQueue(submission: submission)
-    }
-    
-    func submitPostInDatabase(_ database: Database, with params: SubmitParams, callback: @escaping SubmitCallback) {
-        guard let reddit = reddit.value,
-              let imgur = imgur.value
-        else {
-            fatalError()
-        }
-        
-        let submission = PostSubmission(reddit: reddit,
+        } else if let database = database {
+            submission = PostSubmission(reddit: reddit,
                                         database: database,
                                         params: params,
                                         imgur: imgur,
                                         callback: callback)
+        } else {
+            fatalError("Either post or database must be passed to this method")
+        }
         
         addToQueue(submission: submission)
     }

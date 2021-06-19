@@ -79,6 +79,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func showImgurRequiredForWallpaperModeAlert() {
+        let title = "Wallpaper Mode"
+        let message = "An Imgur account is required for Wallpaper Mode"
+        displayAlert(title: title, message: message)
+    }
+    
     func redditSignedIn(with reddit: Reddit) {
         presenter.redditSignedIn(reddit)
         
@@ -91,7 +97,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func reloadSettingCell(section: Int, at index: Int) {
         let indexPath = IndexPath(row: index, section: section)
-        tableView.reloadRows(at: [indexPath], with: .right)
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -110,6 +116,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.deselectRow(at: indexPath, animated: true)
         
         presenter.didSelectOption(section: indexPath.section, at: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let selectable = presenter.isSelectableOption(section: indexPath.section, at: indexPath.row)
+        return selectable ? indexPath : nil
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
