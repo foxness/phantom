@@ -8,8 +8,8 @@
 
 import Foundation
 
-// todo: add wallpaper mode section
 // todo: add bulk add section (set subreddit, date schedule type etc)
+// todo: "use wallhaven" -> "Convert Wallhaven links into image URLs"?
 
 class SettingsPresenter {
     // MARK: - Properties
@@ -154,17 +154,20 @@ class SettingsPresenter {
     private func getSettingsSections() -> [SettingsSection] {
         let generalSectionTitle = "General"
         let imgurSectionTitle = "Imgur"
+        let wallpaperModeSectionTitle = "Wallpaper Mode"
         
         var sections: [SettingsSection] = []
         
+        // General section ------------------------------------------------
+        
         let generalOptions = [
-            getRedditAccountOption(),
-            getWallpaperModeOption(),
-            getUseWallhavenOption()
+            getRedditAccountOption()
         ]
         
         let generalSection = SettingsSection(title: generalSectionTitle, options: generalOptions)
         sections.append(generalSection)
+        
+        // Imgur section --------------------------------------------------
         
         let imgurOptions = [
             getImgurAccountOption(),
@@ -173,6 +176,18 @@ class SettingsPresenter {
         
         let imgurSection = SettingsSection(title: imgurSectionTitle, options: imgurOptions)
         sections.append(imgurSection)
+        
+        // Wallpaper Mode section -----------------------------------------
+        
+        let wallpaperModeOptions = [
+            getWallpaperModeOption(),
+            getUseWallhavenOption()
+        ]
+        
+        let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle, options: wallpaperModeOptions)
+        sections.append(wallpaperModeSection)
+        
+        // ----------------------------------------------------------------
         
         return sections
     }
