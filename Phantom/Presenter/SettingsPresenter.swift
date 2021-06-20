@@ -9,7 +9,6 @@
 import Foundation
 
 // todo: add bulk add section (set subreddit, date schedule type etc)
-// todo: "use wallhaven" -> "Convert Wallhaven links into image URLs"?
 
 class SettingsPresenter {
     // MARK: - Properties
@@ -265,7 +264,7 @@ class SettingsPresenter {
     }
     
     private func getUseWallhavenOption() -> SettingsOptionType {
-        let title = "Use Wallhaven"
+        let title = "Convert Wallhaven links into image URLs"
         
         let useWallhaven = database.useWallhaven
         
