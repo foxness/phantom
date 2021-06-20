@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -89,7 +90,7 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4TB-UA-2TI">
                                                     <rect key="frame" x="337" y="11.5" width="51" height="31"/>
-                                                    <color key="onTintColor" systemColor="systemBlueColor"/>
+                                                    <color key="onTintColor" name="AccentColor"/>
                                                     <connections>
                                                         <action selector="switchValueChangedWithSender:" destination="7AP-Ke-oLB" eventType="valueChanged" id="TBu-bM-3mt"/>
                                                     </connections>
@@ -623,10 +624,14 @@
         <segue reference="I6c-Og-Mxs"/>
         <segue reference="bTN-eO-UuB"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" name="AccentColor"/>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="link" catalog="system" width="128" height="122"/>
         <image name="square.and.pencil" catalog="system" width="128" height="115"/>
+        <namedColor name="AccentColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

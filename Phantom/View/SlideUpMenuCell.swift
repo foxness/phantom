@@ -8,6 +8,8 @@
 
 import UIKit
 
+// todo: transfer view layout to storyboard?
+
 class SlideUpMenuCell: BaseCollectionViewCell {
     static let IDENTIFIER = "SlideUpMenuCell"
     
@@ -25,6 +27,8 @@ class SlideUpMenuCell: BaseCollectionViewCell {
     
     override func setupViews() {
         super.setupViews()
+        
+        tintColor = UIColor(named: "AccentColor")!
         
         nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
