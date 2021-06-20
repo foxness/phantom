@@ -17,9 +17,9 @@ class SlideUpMenuCell: BaseCollectionViewCell {
     override var isHighlighted: Bool {
         didSet {
             nameLabel.textColor = isHighlighted ? .systemBackground : .label
-            iconView.tintColor = isHighlighted ? .systemBackground : .secondaryLabel
-            
-            backgroundColor = isHighlighted ? .secondaryLabel : .systemBackground
+            iconView.tintColor = isHighlighted ? .systemBackground : tintColor
+
+            backgroundColor = isHighlighted ? tintColor : .systemBackground
         }
     }
     
@@ -27,15 +27,12 @@ class SlideUpMenuCell: BaseCollectionViewCell {
         super.setupViews()
         
         nameLabel = UILabel()
-        nameLabel.text = "Testy"
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(nameLabel)
         
         iconView = UIImageView()
-        iconView.image = UIImage(systemName: "gearshape.fill")
         iconView.contentMode = .scaleAspectFit
-        iconView.tintColor = .secondaryLabel
         iconView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(iconView)
