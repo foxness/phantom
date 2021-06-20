@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: add isPostImagePost check in PostTable.onSubmit instead of here if wallpapermode is on?
+
 class PostSubmission: Operation {
     private typealias ProcessResult = Result<MiddlewarePost, Error>
     private typealias InternalProcessResultWithTries = Result<(post: MiddlewarePost, triesLeft: Int), Error>
@@ -66,7 +68,9 @@ class PostSubmission: Operation {
                 fatalError("Imgur account required")
             }
         } else if params.wallpaperMode {
-            fatalError("Imgur is required for wallpaper mode")
+            let imageDimensionMw = ImageDimensionMiddleware()
+            let imageDimensionRmw = RequiredMiddleware(middleware: imageDimensionMw, isRequired: true)
+            mw.append(imageDimensionRmw)
         }
         
         if params.wallpaperMode {

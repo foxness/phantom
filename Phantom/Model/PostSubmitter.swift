@@ -49,6 +49,10 @@ class PostSubmitter {
         submitPostInternal(post: nil, database: database, params: params, callback: callback)
     }
     
+    func cancelEverything() {
+        submitQueue.cancelAllOperations()
+    }
+    
     private func submitPostInternal(post: Post?, database: Database?, params: SubmitParams, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value else { fatalError("Reddit account not found") }
         
@@ -72,10 +76,6 @@ class PostSubmitter {
         }
         
         addToQueue(submission: submission)
-    }
-    
-    func cancelEverything() {
-        submitQueue.cancelAllOperations()
     }
     
     private static func getSubmitQueue() -> OperationQueue {

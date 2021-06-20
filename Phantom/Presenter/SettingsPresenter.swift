@@ -8,7 +8,7 @@
 
 import Foundation
 
-// todo: make wallpaper mode independent from imgur middleware (get img dimensions from direct download)
+// todo: make wallpaper mode independent from imgur setting
 // todo: add wallpaper mode section
 // todo: add bulk add section (set subreddit, date schedule type etc)
 

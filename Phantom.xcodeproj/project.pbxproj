@@ -26,6 +26,7 @@
 		57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */; };
 		57605EF726735E4900E4EE25 /* StaticSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF626735E4900E4EE25 /* StaticSettingCell.swift */; };
 		57605EF92673790700E4EE25 /* SwitchSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF82673790700E4EE25 /* SwitchSettingCell.swift */; };
+		57626FC4267F586D00850E31 /* ImageDimensionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurSignInViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -86,6 +87,7 @@
 		57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		57605EF626735E4900E4EE25 /* StaticSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticSettingCell.swift; sourceTree = "<group>"; };
 		57605EF82673790700E4EE25 /* SwitchSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchSettingCell.swift; sourceTree = "<group>"; };
+		57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDimensionMiddleware.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurSignInViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				718181DD24FBFEE200059658 /* Requests.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
 				573CE68E267E2F170083CE30 /* PostSubmission.swift */,
+				57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */,
 				572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */,
 				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
 				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
@@ -350,6 +353,7 @@
 				57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */,
 				5768C33B2639CE9C00459260 /* Imgur.swift in Sources */,
 				57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */,
+				57626FC4267F586D00850E31 /* ImageDimensionMiddleware.swift in Sources */,
 				5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */,
 				57B3F5B92675F3CA007F5821 /* RedditSignInReceiver.swift in Sources */,
 				57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */,
