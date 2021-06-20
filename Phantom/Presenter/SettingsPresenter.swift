@@ -8,7 +8,6 @@
 
 import Foundation
 
-// todo: make wallpaper mode independent from imgur setting
 // todo: add wallpaper mode section
 // todo: add bulk add section (set subreddit, date schedule type etc)
 
@@ -94,10 +93,6 @@ class SettingsPresenter {
     
     private func updateUseImgurCell() {
         viewDelegate?.reloadSettingCell(section: 1, at: 1)
-    }
-    
-    private func updateWallpaperModeCell() {
-        viewDelegate?.reloadSettingCell(section: 0, at: 1)
     }
     
     private func updateImgurCells() {
@@ -244,21 +239,6 @@ class SettingsPresenter {
         let wallpaperMode = database.wallpaperMode
         
         let handler = { [self] (isOn: Bool) in
-            if isOn && !database.useImgur {
-                if database.imgurAuth == nil {
-                    updateWallpaperModeCell()
-                    viewDelegate?.showImgurRequiredForWallpaperModeAlert()
-                } else {
-                    database.useImgur = true
-                    database.wallpaperMode = true
-                    
-                    updateSettings()
-                    updateUseImgurCell()
-                }
-                
-                return
-            }
-            
             database.wallpaperMode = isOn
             updateSettings()
         }
@@ -292,15 +272,6 @@ class SettingsPresenter {
         let isEnabled = database.imgurAuth != nil
         
         let handler = { [self] (isOn: Bool) in
-            if !isOn && database.wallpaperMode {
-                database.wallpaperMode = false
-                database.useImgur = false
-                
-                updateSettings()
-                updateWallpaperModeCell()
-                return
-            }
-            
             database.useImgur = isOn
             updateSettings()
         }
