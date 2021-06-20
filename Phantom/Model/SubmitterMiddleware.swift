@@ -8,8 +8,14 @@
 
 import Foundation
 
-typealias MiddlewareResult = (post: Post, changed: Bool)
+typealias MiddlewareResult = (mwp: MiddlewarePost, changed: Bool)
 
 protocol SubmitterMiddleware {
-    func transform(post: Post) throws -> MiddlewareResult
+    func transform(mwp: MiddlewarePost) throws -> MiddlewareResult
+}
+
+struct MiddlewarePost {
+    var post: Post
+    var imageWidth: Int? = nil
+    var imageHeight: Int? = nil
 }

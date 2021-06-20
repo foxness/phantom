@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
+
 struct DebugVariable {
     private static let phoneDeploy = false
     
@@ -16,7 +18,7 @@ struct DebugVariable {
     private static let simulateMiddlewareDebug = false
     private static let simulateRedditDebug = true
     private static let disableRetryDebug = true
-    private static let directImgurUploadDebug = true
+    private static let directImgurUploadDebug = false
     private static let simulateErrorDebug = false
     
     // Phone ---------------------------------------------

@@ -12,7 +12,7 @@ struct RequiredMiddleware: SubmitterMiddleware {
     let middleware: SubmitterMiddleware
     let isRequired: Bool
     
-    func transform(post: Post) throws -> MiddlewareResult {
-        return try middleware.transform(post: post)
+    func transform(mwp: MiddlewarePost) throws -> MiddlewareResult {
+        return try middleware.transform(mwp: mwp)
     }
 }

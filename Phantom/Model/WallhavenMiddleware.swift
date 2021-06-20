@@ -8,16 +8,20 @@
 
 import Foundation
 
+// todo: add image dimension extracting from html for mwp?
+
 struct WallhavenMiddleware: SubmitterMiddleware {
-    func transform(post: Post) throws -> MiddlewareResult {
+    func transform(mwp: MiddlewarePost) throws -> MiddlewareResult {
+        let post = mwp.post
+        
         let (isIndirectUrl, isDirectUrl) = WallhavenMiddleware.isRightPost(post)
         
         let (right, alreadyChanged) = (isIndirectUrl, isDirectUrl)
-        guard !alreadyChanged else { return (post, changed: true) }
-        guard right else { return (post, changed: false) }
+        guard !alreadyChanged else { return (mwp, changed: true) }
+        guard right else { return (mwp, changed: false) }
         
         let url = URL(string: post.url!)!
-        guard let directUrl = try? Wallhaven.getDirectUrl(indirectWallhavenUrl: url) else { return (post, changed: false) }
+        guard let directUrl = try? Wallhaven.getDirectUrl(indirectWallhavenUrl: url) else { return (mwp, changed: false) }
         
         Log.p("wallhaven direct url found", directUrl)
         
@@ -26,7 +30,9 @@ struct WallhavenMiddleware: SubmitterMiddleware {
                                 subreddit: post.subreddit,
                                 date: post.date,
                                 url: directUrl)
-        return (newPost, changed: true)
+        
+        let newMwp = MiddlewarePost(post: newPost)
+        return (newMwp, changed: true)
     }
     
     private static func isRightPost(_ post: Post) -> (isIndirectUrl: Bool, isDirectUrl: Bool) {
