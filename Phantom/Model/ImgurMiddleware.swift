@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Kingfisher
-import UIKit
 
 // todo: don't spend time extracting image dimensions if it is false?
 
@@ -33,7 +31,7 @@ struct ImgurMiddleware: SubmitterMiddleware {
         let imgurImage: Imgur.Image
         if directUpload {
             Log.p("downloading image...")
-            let imageData = try ImgurMiddleware.downloadImage(imageUrl: url)
+            let imageData = try Helper.downloadImage(url: url).originalData
             Log.p("downloaded!")
             
             Log.p("uploading imgur image directly...")
@@ -59,41 +57,6 @@ struct ImgurMiddleware: SubmitterMiddleware {
         }
         
         return (newMwp, changed: true)
-    }
-    
-    private static func downloadImage(imageUrl: URL) throws -> Data {
-        let downloader = ImageDownloader(name: "com.rivershy.Phantom.ImgurMiddlware()")
-        let options: [KingfisherOptionsInfoItem] = []
-        
-        var imageData: Data?
-        var kfError: KingfisherError?
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        downloader.downloadImage(with: imageUrl, options: options) { result in
-            switch result {
-            case .success(let downloadResult):
-                let origData = downloadResult.originalData
-//                let pngData = downloadResult.image.pngData()!
-                Log.p("image size: \(origData.count) bytes")
-                imageData = origData
-            case .failure(let kingfisherError):
-                kfError = kingfisherError
-            }
-            
-            semaphore.signal()
-        }
-        
-        semaphore.wait()
-        
-        if let imageData = imageData {
-            assert(!imageData.isEmpty) // todo: throw error if empty? or retry?
-            return imageData
-        } else if let kfError = kfError {
-            throw PhantomError.couldntDownloadImage(kfError: kfError)
-        }
-        
-        fatalError("This should be unreachable")
     }
     
     private static func isRightPost(_ post: Post) -> Bool {

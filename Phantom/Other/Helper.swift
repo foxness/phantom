@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 struct Helper {
     private static let RANDOM_STATE_LENGTH = 10
@@ -111,5 +112,36 @@ struct Helper {
         }
         
         return nil
+    }
+    
+    static func downloadImage(url: URL) throws -> ImageLoadingResult {
+        let downloader = ImageDownloader(name: "com.rivershy.Phantom.Helper")
+        let options: [KingfisherOptionsInfoItem] = []
+        
+        var imageDownloadResult: ImageLoadingResult?
+        var kfError: KingfisherError?
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        downloader.downloadImage(with: url, options: options) { result in
+            switch result {
+            case .success(let downloadResult):
+                imageDownloadResult = downloadResult
+            case .failure(let kingfisherError):
+                kfError = kingfisherError
+            }
+            
+            semaphore.signal()
+        }
+        
+        semaphore.wait()
+        
+        if let imageDownloadResult = imageDownloadResult {
+            return imageDownloadResult
+        } else if let kfError = kfError {
+            throw PhantomError.couldntDownloadImage(kfError: kfError)
+        }
+        
+        fatalError("Neither image nor error were found")
     }
 }
