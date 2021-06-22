@@ -37,8 +37,9 @@ class PostCell: UITableViewCell {
     
     private func setMainViews(for post: Post) {
         let title = post.title
-        let subtitle = post.type == .text ? post.text : post.url
+        
         let date = PostCell.dateToString(post.date)
+        let subtitle = "/r/\(post.subreddit) • \(date)"
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
@@ -154,10 +155,12 @@ class PostCell: UITableViewCell {
         return KingfisherOptionsInfoItem.scaleFactor(UIScreen.main.scale)
     }
     
-    private static func dateToString(_ date: Date) -> String { // "in X hours"
+    private static func dateToString(_ date: Date) -> String { // example: "in 2 hours"
+        let now = Date()
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .full
-        return formatter.localizedString(for: date, relativeTo: Date())
+        formatter.dateTimeStyle = .numeric
+        return formatter.localizedString(for: date, relativeTo: now)
     }
     
     private static func getThumbnailExpirationDate(postDate: Date) -> Date {
