@@ -23,7 +23,6 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var thumbnailView: UIImageView!
-    @IBOutlet weak var dateLabel: UILabel!
     
     private let thumbnailResolver: ThumbnailResolver = .instance
     
@@ -43,7 +42,6 @@ class PostCell: UITableViewCell {
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
-        dateLabel.text = date
     }
     
     private func setThumbnail(for post: Post) {

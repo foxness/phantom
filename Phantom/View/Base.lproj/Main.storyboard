@@ -382,19 +382,11 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in X hours" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgm-cb-kOL">
-                                            <rect key="frame" x="317" y="12" width="73" height="19.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" systemColor="secondaryLabelColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="pgm-cb-kOL" secondAttribute="trailing" constant="24" id="3zo-BV-xaY"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="3Pq-EV-aRF" secondAttribute="bottom" id="ALl-aS-JvB"/>
                                         <constraint firstItem="3Pq-EV-aRF" firstAttribute="centerY" secondItem="2aj-oF-P2P" secondAttribute="centerY" id="Ajo-nw-iyp"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="rNW-wZ-2T3" secondAttribute="trailing" id="GaI-Mb-vk4"/>
-                                        <constraint firstItem="pgm-cb-kOL" firstAttribute="top" secondItem="2aj-oF-P2P" secondAttribute="top" constant="12" id="IgN-pV-Uqf"/>
                                         <constraint firstItem="3Pq-EV-aRF" firstAttribute="top" relation="greaterThanOrEqual" secondItem="2aj-oF-P2P" secondAttribute="topMargin" id="Wws-ET-C05"/>
                                         <constraint firstItem="rNW-wZ-2T3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="2aj-oF-P2P" secondAttribute="topMargin" constant="4" id="cyU-7e-G26"/>
                                         <constraint firstItem="rNW-wZ-2T3" firstAttribute="leading" secondItem="3Pq-EV-aRF" secondAttribute="trailing" constant="20" id="gUk-g9-Gdw"/>
@@ -402,14 +394,8 @@
                                         <constraint firstItem="3Pq-EV-aRF" firstAttribute="leading" secondItem="2aj-oF-P2P" secondAttribute="leadingMargin" id="pE9-DK-d2O"/>
                                         <constraint firstItem="rNW-wZ-2T3" firstAttribute="centerY" secondItem="2aj-oF-P2P" secondAttribute="centerY" id="vps-DH-vRO"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="subviews">
-                                            <exclude reference="pgm-cb-kOL"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="dateLabel" destination="pgm-cb-kOL" id="1Av-Sj-VSE"/>
                                     <outlet property="subtitleLabel" destination="TVV-O9-k3g" id="827-aD-dmf"/>
                                     <outlet property="thumbnailView" destination="3Pq-EV-aRF" id="YWv-oc-NRD"/>
                                     <outlet property="titleLabel" destination="Ofh-Fe-P2l" id="M3V-7X-Uo8"/>
