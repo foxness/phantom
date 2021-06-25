@@ -94,6 +94,10 @@ class SettingsPresenter {
         viewDelegate?.reloadSettingCell(section: 1, at: 1)
     }
     
+    private func updateBulkAddSubredditCell() {
+        viewDelegate?.reloadSettingCell(section: 3, at: 0)
+    }
+    
     private func updateImgurCells() {
         updateImgurAccountCell()
         updateUseImgurCell()
@@ -120,7 +124,12 @@ class SettingsPresenter {
     }
     
     func bulkAddSubredditSet(_ subreddit: String?) {
-        Log.p("subreddit: \(subreddit)")
+        guard let subreddit = subreddit, !subreddit.isEmpty else { return }
+        
+        database.bulkAddSubreddit = subreddit
+        
+        updateSettings()
+        updateBulkAddSubredditCell()
     }
     
     // MARK: - User interaction methods
@@ -311,10 +320,16 @@ class SettingsPresenter {
     }
     
     private func getBulkAddSubredditOption() -> SettingsOptionType {
-        let title = "Subreddit: asd"
+        let subreddit = database.bulkAddSubreddit
+        
+        let title = "Subreddit: /r/\(subreddit)"
+        
+        // todo: make this option functional
+//        xxx
         
         // todo: add valid subreddit check & reprompt if invalid
         // todo: add subreddit length limit to the alert textfield itself
+        // todo: add a custom settings option cell?
         
         let handler: () -> Void = { self.viewDelegate?.showBulkAddSubredditAlert() }
         
