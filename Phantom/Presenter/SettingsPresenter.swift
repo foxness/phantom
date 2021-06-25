@@ -154,6 +154,7 @@ class SettingsPresenter {
         let generalSectionTitle = "General"
         let imgurSectionTitle = "Imgur"
         let wallpaperModeSectionTitle = "Wallpaper Mode"
+        let bulkAddSectionTitle = "Bulk Add"
         
         var sections: [SettingsSection] = []
         
@@ -185,6 +186,15 @@ class SettingsPresenter {
         
         let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle, options: wallpaperModeOptions)
         sections.append(wallpaperModeSection)
+        
+        // Bulk Add section --------------------------------------------------
+        
+        let bulkAddOptions = [
+            getBulkAddSubredditOption()
+        ]
+        
+        let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
+        sections.append(bulkAddSection)
         
         // ----------------------------------------------------------------
         
@@ -292,6 +302,19 @@ class SettingsPresenter {
         
         let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
         let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
+    }
+    
+    private func getBulkAddSubredditOption() -> SettingsOptionType {
+        let title = "Subreddit: asd"
+        
+        let handler = { [self]
+            Log.p("bulk add subreddit")
+        }
+        
+        let option = StaticSettingsOption(title: title, handler: handler)
+        let optionType = SettingsOptionType.staticOption(option: option)
         
         return optionType
     }
