@@ -324,9 +324,6 @@ class SettingsPresenter {
         
         let title = "Subreddit: /r/\(subreddit)"
         
-        // todo: make this option functional
-//        xxx
-        
         // todo: add valid subreddit check & reprompt if invalid
         // todo: add subreddit length limit to the alert textfield itself
         // todo: add a custom settings option cell?

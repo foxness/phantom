@@ -314,11 +314,12 @@ class PostTablePresenter {
     }
     
     func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
+        let subreddit = database.bulkAddSubreddit
+        
         var lastDate = posts.last?.date
         
         for bulkPost in bulkPosts {
             let title = bulkPost.title
-            let subreddit = "wallpapers"
             let url = bulkPost.url
             
             let date = PostScheduler.getNextDate(previous: lastDate)
