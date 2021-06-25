@@ -313,6 +313,9 @@ class SettingsPresenter {
     private func getBulkAddSubredditOption() -> SettingsOptionType {
         let title = "Subreddit: asd"
         
+        // todo: add valid subreddit check & reprompt if invalid
+        // todo: add subreddit length limit to the alert textfield itself
+        
         let handler: () -> Void = { self.viewDelegate?.showBulkAddSubredditAlert() }
         
         let option = StaticSettingsOption(title: title, handler: handler)
