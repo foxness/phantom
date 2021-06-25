@@ -42,6 +42,34 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
     }
     
+    func showBulkAddSubredditAlert() {
+        let title = "Set subreddit"
+        let placeholder = "Bulk Add Subreddit"
+        let message: String? = nil
+        let saveTitle = "Save"
+        let cancelTitle = "Cancel"
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = placeholder
+        }
+        
+        let saveHandler = { (action: UIAlertAction) -> Void in
+            let textField = alertController.textFields![0] as UITextField
+            let subreddit = textField.text
+            
+            self.presenter.bulkAddSubredditSet(subreddit)
+        }
+        
+        let saveAction = UIAlertAction(title: saveTitle, style: UIAlertAction.Style.default, handler: saveHandler)
+        let cancelAction = UIAlertAction(title: cancelTitle, style: UIAlertAction.Style.default, handler: nil)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(saveAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     func segueToRedditSignIn() {
         segueTo(.showRedditSignIn)
     }
@@ -79,7 +107,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func showImgurRequiredForWallpaperModeAlert() {
+    func showImgurRequiredForWallpaperModeAlert() { // todo: remove this, unused
         let title = "Wallpaper Mode"
         let message = "An Imgur account is required for Wallpaper Mode"
         displayAlert(title: title, message: message)

@@ -119,6 +119,10 @@ class SettingsPresenter {
         delegate?.imgurAccountChanged(imgur)
     }
     
+    func bulkAddSubredditSet(_ subreddit: String?) {
+        Log.p("subreddit: \(subreddit)")
+    }
+    
     // MARK: - User interaction methods
     
     private func redditSignOutPressed() {
@@ -309,9 +313,7 @@ class SettingsPresenter {
     private func getBulkAddSubredditOption() -> SettingsOptionType {
         let title = "Subreddit: asd"
         
-        let handler = { [self]
-            Log.p("bulk add subreddit")
-        }
+        let handler: () -> Void = { self.viewDelegate?.showBulkAddSubredditAlert() }
         
         let option = StaticSettingsOption(title: title, handler: handler)
         let optionType = SettingsOptionType.staticOption(option: option)
