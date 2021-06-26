@@ -187,32 +187,32 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextSettingCell" id="E0R-DB-0Q8" customClass="TextSettingCell" customModule="Phantom" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="280.5" width="414" height="43"/>
+                                        <rect key="frame" x="0.0" y="280.5" width="414" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E0R-DB-0Q8" id="KYr-33-f17">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="47"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text setting name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hcQ-I8-mLD">
-                                                    <rect key="frame" x="28" y="11" width="136" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="751" text="Text setting name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hcQ-I8-mLD">
+                                                    <rect key="frame" x="28" y="13" width="135.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bOS-0j-8rz">
-                                                    <rect key="frame" x="283.5" y="11" width="102.5" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Current value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bOS-0j-8rz">
+                                                    <rect key="frame" x="283.5" y="13" width="102.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="hcQ-I8-mLD" secondAttribute="bottom" id="1uc-S1-cTK"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="hcQ-I8-mLD" secondAttribute="bottom" constant="2" id="1uc-S1-cTK"/>
                                                 <constraint firstItem="hcQ-I8-mLD" firstAttribute="leading" secondItem="KYr-33-f17" secondAttribute="leadingMargin" constant="8" id="DJb-K5-N7i"/>
+                                                <constraint firstItem="hcQ-I8-mLD" firstAttribute="top" secondItem="KYr-33-f17" secondAttribute="topMargin" constant="2" id="HCU-jF-9T1"/>
                                                 <constraint firstItem="bOS-0j-8rz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hcQ-I8-mLD" secondAttribute="trailing" constant="8" id="HaG-HC-JPn"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="bOS-0j-8rz" secondAttribute="bottom" id="NlK-tr-S0w"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="bOS-0j-8rz" secondAttribute="trailing" constant="8" id="eEf-5X-6Oi"/>
-                                                <constraint firstItem="bOS-0j-8rz" firstAttribute="top" secondItem="KYr-33-f17" secondAttribute="topMargin" id="ygR-n5-Gn9"/>
+                                                <constraint firstItem="bOS-0j-8rz" firstAttribute="centerY" secondItem="KYr-33-f17" secondAttribute="centerY" id="l1P-dR-DEn"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
