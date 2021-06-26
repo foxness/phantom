@@ -126,9 +126,17 @@ class SettingsPresenter {
     }
     
     func bulkAddSubredditSet(_ subreddit: String?) {
-        guard let subreddit = subreddit, !subreddit.isEmpty else { return }
+        guard let subreddit = subreddit else { return }
         
-        database.bulkAddSubreddit = subreddit
+        let trimmed = subreddit.trim()
+        guard !trimmed.isEmpty && database.bulkAddSubreddit != trimmed else { return }
+        
+        guard Post.isValidSubreddit(trimmed) else {
+            Log.p("invalid")
+            return
+        }
+        
+        database.bulkAddSubreddit = trimmed
         
         updateSettings()
         updateBulkAddSubredditCell()

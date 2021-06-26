@@ -64,18 +64,19 @@ struct Post: Equatable, Codable {
     }
     
     static func isValidTitle(_ title: String) -> Bool {
-        return !title.isEmpty && title.count < Reddit.LIMIT_TITLE_LENGTH
+        return !title.isEmpty && title.count <= Reddit.LIMIT_TITLE_LENGTH
     }
     
     static func isValidSubreddit(_ subreddit: String) -> Bool {
-        return !subreddit.isEmpty && subreddit.count < Reddit.LIMIT_SUBREDDIT_LENGTH
+        let regex = NSRegularExpression("^[a-zA-Z0-9_]{1,\(Reddit.LIMIT_SUBREDDIT_LENGTH)}$")
+        return regex.matches(subreddit)
     }
     
     static func isValidContent(type: PostType, text: String?, url: String?) -> Bool {
         let goodContent: Bool
         switch type {
         case .text:
-            goodContent = text == nil || text!.count < Reddit.LIMIT_TEXT_LENGTH
+            goodContent = text == nil || text!.count <= Reddit.LIMIT_TEXT_LENGTH
         case .link:
             goodContent = url != nil && Helper.isValidUrl(url!)
         }
