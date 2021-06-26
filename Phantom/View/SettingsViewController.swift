@@ -50,6 +50,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cancelTitle = "Cancel"
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alertController.view.tintColor = view.tintColor
+        
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = placeholder
         }
