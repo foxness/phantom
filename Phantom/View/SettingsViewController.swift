@@ -42,6 +42,61 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
     }
     
+    func showBulkAddSubredditAlert(currentSubreddit: String) {
+        let title = "Set subreddit"
+        let placeholder = "Bulk Add Subreddit"
+        let message: String? = nil
+        let saveTitle = "Save"
+        let cancelTitle = "Cancel"
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alertController.view.tintColor = view.tintColor
+        
+        var textField: UITextField? = nil
+        
+        alertController.addTextField { (textField_ : UITextField!) -> Void in
+            textField_.placeholder = placeholder
+            textField_.text = currentSubreddit
+            
+            textField = textField_
+        }
+        
+        let presentCompletion = { () -> Void in
+            textField?.selectAll(nil)
+        }
+        
+        let saveHandler = { (action: UIAlertAction) -> Void in
+            let textField = alertController.textFields![0] as UITextField
+            let subreddit = textField.text
+            
+            self.presenter.bulkAddSubredditSet(subreddit)
+        }
+        
+        let saveAction = UIAlertAction(title: saveTitle, style: UIAlertAction.Style.default, handler: saveHandler)
+        let cancelAction = UIAlertAction(title: cancelTitle, style: UIAlertAction.Style.default, handler: nil)
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(saveAction)
+        
+        present(alertController, animated: true, completion: presentCompletion)
+    }
+    
+    func showInvalidSubredditAlert(tryAgainHandler: (() -> Void)?) {
+        let title = "Invalid subreddit name"
+        let message: String? = nil
+        let okTitle = "OK"
+        
+        let handler = { (action: UIAlertAction) -> Void in
+            tryAgainHandler?()
+        }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: okTitle, style: .default, handler: handler)
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
     func segueToRedditSignIn() {
         segueTo(.showRedditSignIn)
     }
@@ -77,12 +132,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
             fatalError("Got unexpected unwind segue")
         }
-    }
-    
-    func showImgurRequiredForWallpaperModeAlert() {
-        let title = "Wallpaper Mode"
-        let message = "An Imgur account is required for Wallpaper Mode"
-        displayAlert(title: title, message: message)
     }
     
     func redditSignedIn(with reddit: Reddit) {
@@ -150,6 +199,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             signedOutCell.configure(with: option)
             return signedOutCell
+        
+        case .textOption(let option):
+            let textCell = tableView.dequeueReusableCell(withIdentifier: TextSettingCell.IDENTIFIER, for: indexPath) as! TextSettingCell
+            
+            textCell.configure(with: option)
+            return textCell
         }
     }
 }

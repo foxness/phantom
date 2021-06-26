@@ -61,9 +61,9 @@ class SettingsPresenter {
     func isSelectableOption(section: Int, at index: Int) -> Bool { // selectable means triggering didSelectOption
         let option = sections[section].options[index]
         switch option {
-        case .staticOption: return true
+        case .staticOption, .textOption: return true
         case .accountOption(let accountOption): return !accountOption.signedIn
-        default: return false
+        case .switchOption: return false
         }
     }
     
@@ -75,6 +75,8 @@ class SettingsPresenter {
         case .accountOption(let accountOption):
             guard !accountOption.signedIn else { break }
             accountOption.signInHandler?()
+        case .textOption(let textOption):
+            textOption.handler?()
         default:
             fatalError("This option should not be able to be selected")
         }
@@ -92,6 +94,10 @@ class SettingsPresenter {
     
     private func updateUseImgurCell() {
         viewDelegate?.reloadSettingCell(section: 1, at: 1)
+    }
+    
+    private func updateBulkAddSubredditCell() {
+        viewDelegate?.reloadSettingCell(section: 3, at: 0)
     }
     
     private func updateImgurCells() {
@@ -117,6 +123,26 @@ class SettingsPresenter {
         updateImgurCells()
         
         delegate?.imgurAccountChanged(imgur)
+    }
+    
+    func bulkAddSubredditSet(_ subreddit: String?) {
+        guard let subreddit = subreddit else { return }
+        
+        let trimmed = subreddit.trim()
+        guard !trimmed.isEmpty && database.bulkAddSubreddit != trimmed else { return }
+        
+        guard Post.isValidSubreddit(trimmed) else {
+            viewDelegate?.showInvalidSubredditAlert { [self] in
+                viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: database.bulkAddSubreddit)
+            }
+            
+            return
+        }
+        
+        database.bulkAddSubreddit = trimmed
+        
+        updateSettings()
+        updateBulkAddSubredditCell()
     }
     
     // MARK: - User interaction methods
@@ -154,6 +180,7 @@ class SettingsPresenter {
         let generalSectionTitle = "General"
         let imgurSectionTitle = "Imgur"
         let wallpaperModeSectionTitle = "Wallpaper Mode"
+        let bulkAddSectionTitle = "Bulk Add"
         
         var sections: [SettingsSection] = []
         
@@ -185,6 +212,15 @@ class SettingsPresenter {
         
         let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle, options: wallpaperModeOptions)
         sections.append(wallpaperModeSection)
+        
+        // Bulk Add section --------------------------------------------------
+        
+        let bulkAddOptions = [
+            getBulkAddSubredditOption()
+        ]
+        
+        let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
+        sections.append(bulkAddSection)
         
         // ----------------------------------------------------------------
         
@@ -292,6 +328,26 @@ class SettingsPresenter {
         
         let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
         let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
+    }
+    
+    private func getBulkAddSubredditOption() -> SettingsOptionType {
+        let subreddit = database.bulkAddSubreddit
+        
+        let title = "Subreddit"
+        let text = "/r/\(subreddit)"
+        
+        // todo: add valid subreddit check & reprompt if invalid
+        // todo: add subreddit length limit to the alert textfield itself
+        // todo: add a custom settings option cell?
+        
+        let handler: () -> Void = { [self] in
+            viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: subreddit)
+        }
+        
+        let option = TextSettingsOption(title: title, text: text, handler: handler)
+        let optionType = SettingsOptionType.textOption(option: option)
         
         return optionType
     }

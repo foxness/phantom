@@ -13,6 +13,7 @@ class Database {
     private enum Key: String {
         case posts = "posts" // string literals left intentionally
         case thumbnailResolverCache = "thumbnailResolverCache"
+        case bulkAddSubreddit = "bulkAddSubreddit"
         case redditAuth = "redditAuth"
         case imgurAuth = "imgurAuth"
         case introductionShown = "introductionShown"
@@ -20,6 +21,8 @@ class Database {
         case useWallhaven = "useWallhaven"
         case useImgur = "useImgur"
     }
+    
+    private static let DEFAULT_BULK_ADD_SUBREDDIT = "test" // todo: change to "pics" or something
     
     static let instance = Database()
     
@@ -36,6 +39,7 @@ class Database {
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
+    @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue) private var internalBulkAddSubreddit: String?
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -72,6 +76,11 @@ class Database {
         set { internalThumbnailResolverCache = serializeThumbnailResolverCache(newValue) }
     }
     
+    var bulkAddSubreddit: String {
+        get { internalBulkAddSubreddit ?? Database.DEFAULT_BULK_ADD_SUBREDDIT }
+        set { internalBulkAddSubreddit = newValue }
+    }
+    
     var posts: [Post] = []
     
     private init() {
@@ -105,6 +114,7 @@ class Database {
         useWallhaven = false
         useImgur = false
         thumbnailResolverCache = nil
+        internalBulkAddSubreddit = nil // intentionally 'internal'
         
         posts = []
         savePosts()

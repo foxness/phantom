@@ -134,7 +134,7 @@ class PostCell: UITableViewCell {
         return processedPlaceholder
     }
     
-    private func setBackground(for post: Post) {
+    private func setBackground(for post: Post) { // todo: use prepareForReuse() instead
         let overdue = post.date < Date()
         let bg: UIColor = overdue ? .secondarySystemBackground : .systemBackground
         contentView.backgroundColor = bg
