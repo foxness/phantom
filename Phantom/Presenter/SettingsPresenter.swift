@@ -132,7 +132,10 @@ class SettingsPresenter {
         guard !trimmed.isEmpty && database.bulkAddSubreddit != trimmed else { return }
         
         guard Post.isValidSubreddit(trimmed) else {
-            Log.p("invalid")
+            viewDelegate?.showInvalidSubredditAlert { [self] in
+                viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: database.bulkAddSubreddit)
+            }
+            
             return
         }
         
