@@ -42,7 +42,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
     }
     
-    func showBulkAddSubredditAlert() {
+    func showBulkAddSubredditAlert(currentSubreddit: String) {
         let title = "Set subreddit"
         let placeholder = "Bulk Add Subreddit"
         let message: String? = nil
@@ -52,8 +52,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alertController.view.tintColor = view.tintColor
         
-        alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = placeholder
+        var textField: UITextField? = nil
+        
+        alertController.addTextField { (textField_ : UITextField!) -> Void in
+            textField_.placeholder = placeholder
+            textField_.text = currentSubreddit
+            
+            textField = textField_
+        }
+        
+        let presentCompletion = { () -> Void in
+            textField?.selectAll(nil)
         }
         
         let saveHandler = { (action: UIAlertAction) -> Void in
@@ -69,7 +78,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         alertController.addAction(cancelAction)
         alertController.addAction(saveAction)
         
-        present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: presentCompletion)
     }
     
     func segueToRedditSignIn() {

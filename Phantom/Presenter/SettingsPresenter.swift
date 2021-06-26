@@ -328,7 +328,9 @@ class SettingsPresenter {
         // todo: add subreddit length limit to the alert textfield itself
         // todo: add a custom settings option cell?
         
-        let handler: () -> Void = { self.viewDelegate?.showBulkAddSubredditAlert() }
+        let handler: () -> Void = { [self] in
+            viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: subreddit)
+        }
         
         let option = StaticSettingsOption(title: title, handler: handler)
         let optionType = SettingsOptionType.staticOption(option: option)
