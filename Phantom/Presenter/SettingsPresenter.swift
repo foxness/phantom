@@ -61,9 +61,9 @@ class SettingsPresenter {
     func isSelectableOption(section: Int, at index: Int) -> Bool { // selectable means triggering didSelectOption
         let option = sections[section].options[index]
         switch option {
-        case .staticOption: return true
+        case .staticOption, .textOption: return true
         case .accountOption(let accountOption): return !accountOption.signedIn
-        default: return false
+        case .switchOption: return false
         }
     }
     
@@ -75,6 +75,8 @@ class SettingsPresenter {
         case .accountOption(let accountOption):
             guard !accountOption.signedIn else { break }
             accountOption.signInHandler?()
+        case .textOption(let textOption):
+            textOption.handler?()
         default:
             fatalError("This option should not be able to be selected")
         }
@@ -322,7 +324,8 @@ class SettingsPresenter {
     private func getBulkAddSubredditOption() -> SettingsOptionType {
         let subreddit = database.bulkAddSubreddit
         
-        let title = "Subreddit: /r/\(subreddit)"
+        let title = "Subreddit"
+        let text = "/r/\(subreddit)"
         
         // todo: add valid subreddit check & reprompt if invalid
         // todo: add subreddit length limit to the alert textfield itself
@@ -332,8 +335,8 @@ class SettingsPresenter {
             viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: subreddit)
         }
         
-        let option = StaticSettingsOption(title: title, handler: handler)
-        let optionType = SettingsOptionType.staticOption(option: option)
+        let option = TextSettingsOption(title: title, text: text, handler: handler)
+        let optionType = SettingsOptionType.textOption(option: option)
         
         return optionType
     }

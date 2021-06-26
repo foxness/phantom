@@ -17,6 +17,7 @@ enum SettingsOptionType {
     case staticOption(option: StaticSettingsOption)
     case switchOption(option: SwitchSettingsOption)
     case accountOption(option: AccountSettingsOption)
+    case textOption(option: TextSettingsOption)
 }
 
 struct StaticSettingsOption {
@@ -38,4 +39,10 @@ struct AccountSettingsOption {
     let signInPrompt: String
     let signInHandler: (() -> Void)?
     let signOutHandler: (() -> Void)?
+}
+
+struct TextSettingsOption {
+    let title: String
+    let text: String?
+    let handler: (() -> Void)?
 }

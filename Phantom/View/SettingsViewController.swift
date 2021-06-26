@@ -183,6 +183,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             signedOutCell.configure(with: option)
             return signedOutCell
+        
+        case .textOption(let option):
+            let textCell = tableView.dequeueReusableCell(withIdentifier: TextSettingCell.IDENTIFIER, for: indexPath) as! TextSettingCell
+            
+            textCell.configure(with: option)
+            return textCell
         }
     }
 }
