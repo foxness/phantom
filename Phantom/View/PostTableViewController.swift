@@ -337,7 +337,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     func showAlert(title: String, message: String) {
-        displayAlert(title: title, message: message)
+        displayOkAlert(title: title, message: message)
     }
     
     // MARK: - Emitter methods

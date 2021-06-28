@@ -83,18 +83,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func showInvalidSubredditAlert(tryAgainHandler: (() -> Void)?) {
         let title = "Invalid subreddit name"
-        let message: String? = nil
-        let okTitle = "OK"
         
-        let handler = { (action: UIAlertAction) -> Void in
-            tryAgainHandler?()
-        }
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: okTitle, style: .default, handler: handler)
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        displayOkAlert(title: title, message: nil, dismissHandler: tryAgainHandler)
     }
     
     func segueToRedditSignIn() {

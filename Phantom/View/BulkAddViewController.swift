@@ -107,7 +107,7 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     func showInvalidSyntaxAlert() {
         let title = "Error"
         let message = "Invalid post syntax"
-        displayAlert(title: title, message: message)
+        displayOkAlert(title: title, message: message)
     }
     
     // MARK: - Navigation

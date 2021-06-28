@@ -93,11 +93,17 @@ extension UIViewController {
         }
     }
     
-    func displayAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: nil)
+    func displayOkAlert(title: String, message: String?, dismissHandler: (() -> Void)? = nil) {
+        let handler = { (action: UIAlertAction) -> Void in
+            dismissHandler?()
+        }
         
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = view.tintColor
+        
+        let action = UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: handler)
         alert.addAction(action)
+        
         present(alert, animated: true, completion: nil)
     }
 }
