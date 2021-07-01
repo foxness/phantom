@@ -24,19 +24,11 @@ struct PostScheduler {
         let now = Date()
         
         if let previous = previous, isToday(date: previous) || previous > now {
-            return makeDesired(dayStart: addDay(to: getDayStart(of: previous)))
+            return makeDesired(dayStart: addDay(to: previous.startOfDay))
         }
         
-        let desiredDate = makeDesired(dayStart: getDayStart(of: now))
+        let desiredDate = makeDesired(dayStart: now.startOfDay)
         return now < desiredDate ? desiredDate : addDay(to: desiredDate)
-    }
-    
-    private static func getDayStart(of date: Date) -> Date {
-        var dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-        dateComponents.timeZone = tz
-        
-        let dayStart = calendar.date(from: dateComponents)!
-        return dayStart
     }
     
     private static func addDay(to date: Date) -> Date {
@@ -48,6 +40,6 @@ struct PostScheduler {
     }
     
     private static func isToday(date: Date) -> Bool {
-        return getDayStart(of: date) == getDayStart(of: Date())
+        return date.startOfDay == Date().startOfDay
     }
 }

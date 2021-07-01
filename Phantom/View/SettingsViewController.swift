@@ -42,7 +42,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
     }
     
-    func showBulkAddSubredditAlert(currentSubreddit: String) {
+    func showBulkAddSubredditAlert(subreddit: String) {
         let title = "Set subreddit"
         let placeholder = "Bulk Add Subreddit"
         let message: String? = nil
@@ -56,7 +56,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         alertController.addTextField { (textField_ : UITextField!) -> Void in
             textField_.placeholder = placeholder
-            textField_.text = currentSubreddit
+            textField_.text = subreddit
             
             textField = textField_
         }
@@ -85,6 +85,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let title = "Invalid subreddit name"
         
         displayOkAlert(title: title, message: nil, dismissHandler: tryAgainHandler)
+    }
+    
+    func showBulkAddTimeAlert(timeOfDay: TimeInterval) {
+        Log.p("time setting pressed")
     }
     
     func segueToRedditSignIn() {

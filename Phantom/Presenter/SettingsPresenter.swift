@@ -133,7 +133,7 @@ class SettingsPresenter {
         
         guard Post.isValidSubreddit(trimmed) else {
             viewDelegate?.showInvalidSubredditAlert { [self] in
-                viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: database.bulkAddSubreddit)
+                viewDelegate?.showBulkAddSubredditAlert(subreddit: database.bulkAddSubreddit)
             }
             
             return
@@ -216,7 +216,8 @@ class SettingsPresenter {
         // Bulk Add section --------------------------------------------------
         
         let bulkAddOptions = [
-            getBulkAddSubredditOption()
+            getBulkAddSubredditOption(),
+            getBulkAddTimeOption()
         ]
         
         let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
@@ -338,12 +339,27 @@ class SettingsPresenter {
         let title = "Subreddit"
         let text = "/r/\(subreddit)"
         
-        // todo: add valid subreddit check & reprompt if invalid
-        // todo: add subreddit length limit to the alert textfield itself
-        // todo: add a custom settings option cell?
+        let handler: () -> Void = { [self] in
+            viewDelegate?.showBulkAddSubredditAlert(subreddit: subreddit)
+        }
+        
+        let option = TextSettingsOption(title: title, text: text, handler: handler)
+        let optionType = SettingsOptionType.textOption(option: option)
+        
+        return optionType
+    }
+    
+    private func getBulkAddTimeOption() -> SettingsOptionType {
+        let h = 16
+        let m = 0
+        
+        let timeOfDay = TimeInterval((h * 60 + m) * 60)
+        
+        let title = "Time of day"
+        let text = Helper.getTimeOfDayString(timeOfDay)
         
         let handler: () -> Void = { [self] in
-            viewDelegate?.showBulkAddSubredditAlert(currentSubreddit: subreddit)
+            viewDelegate?.showBulkAddTimeAlert(timeOfDay: timeOfDay)
         }
         
         let option = TextSettingsOption(title: title, text: text, handler: handler)
