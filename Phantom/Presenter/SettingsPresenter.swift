@@ -350,10 +350,7 @@ class SettingsPresenter {
     }
     
     private func getBulkAddTimeOption() -> SettingsOptionType {
-        let h = 16
-        let m = 0
-        
-        let timeOfDay = TimeInterval((h * 60 + m) * 60)
+        let timeOfDay = database.bulkAddTime
         
         let title = "Time of day"
         let text = Helper.getTimeOfDayString(timeOfDay)
