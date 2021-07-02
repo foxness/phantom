@@ -220,6 +220,53 @@
                                             <outlet property="valueLabel" destination="bOS-0j-8rz" id="bLA-kk-Rqf"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TimeSettingCell" id="5Q5-1L-4uN" customClass="TimeSettingCell" customModule="Phantom" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="327.5" width="414" height="53.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Q5-1L-4uN" id="u1s-iW-han">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="53.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time of day" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F8c-vp-5ng">
+                                                    <rect key="frame" x="28" y="16.5" width="89.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <datePicker contentMode="scaleToFill" horizontalHuggingPriority="251" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="IAM-Hg-64A">
+                                                    <rect key="frame" x="286" y="15" width="100" height="53"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" placeholder="YES" id="LBr-5h-Ior"/>
+                                                        <constraint firstAttribute="height" constant="50" placeholder="YES" id="YqF-Be-yTt"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="LBr-5h-Ior"/>
+                                                            <exclude reference="YqF-Be-yTt"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <connections>
+                                                        <action selector="dateEditingDidEndWithDatePicker:" destination="5Q5-1L-4uN" eventType="editingDidEnd" id="LNa-AE-9Pj"/>
+                                                    </connections>
+                                                </datePicker>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="F8c-vp-5ng" firstAttribute="centerY" secondItem="u1s-iW-han" secondAttribute="centerY" id="8BM-nL-G6r"/>
+                                                <constraint firstItem="IAM-Hg-64A" firstAttribute="top" relation="greaterThanOrEqual" secondItem="u1s-iW-han" secondAttribute="topMargin" id="Ad7-RT-UaO"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="IAM-Hg-64A" secondAttribute="bottom" id="OV7-Cv-bS2"/>
+                                                <constraint firstItem="IAM-Hg-64A" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="F8c-vp-5ng" secondAttribute="trailing" constant="8" id="Qvj-dK-cf5"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="F8c-vp-5ng" secondAttribute="bottom" id="Rb5-yI-8RL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="IAM-Hg-64A" secondAttribute="trailing" constant="8" id="ZBE-SM-Cdn"/>
+                                                <constraint firstItem="IAM-Hg-64A" firstAttribute="centerY" secondItem="u1s-iW-han" secondAttribute="centerY" id="gAL-UV-sZs"/>
+                                                <constraint firstItem="F8c-vp-5ng" firstAttribute="top" relation="greaterThanOrEqual" secondItem="u1s-iW-han" secondAttribute="topMargin" id="glu-z3-jOu"/>
+                                                <constraint firstItem="F8c-vp-5ng" firstAttribute="leading" secondItem="u1s-iW-han" secondAttribute="leadingMargin" constant="8" id="mOE-X3-ZlA"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="datePicker" destination="IAM-Hg-64A" id="2Y3-ze-lxM"/>
+                                            <outlet property="titleLabel" destination="F8c-vp-5ng" id="dGh-S9-0Kd"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>

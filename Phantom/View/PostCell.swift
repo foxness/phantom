@@ -154,7 +154,7 @@ class PostCell: UITableViewCell {
     }
     
     private static func dateToString(_ date: Date) -> String { // example: "in 2 hours"
-        let now = Date()
+        let now = Date() // todo: refactor into Helper
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .full
         formatter.dateTimeStyle = .numeric

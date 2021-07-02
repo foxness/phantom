@@ -42,7 +42,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
     }
     
-    func showBulkAddSubredditAlert(currentSubreddit: String) {
+    func showBulkAddSubredditAlert(subreddit: String) {
         let title = "Set subreddit"
         let placeholder = "Bulk Add Subreddit"
         let message: String? = nil
@@ -56,7 +56,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         alertController.addTextField { (textField_ : UITextField!) -> Void in
             textField_.placeholder = placeholder
-            textField_.text = currentSubreddit
+            textField_.text = subreddit
             
             textField = textField_
         }
@@ -195,6 +195,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             textCell.configure(with: option)
             return textCell
+        
+        case .timeOption(let option):
+            let timeCell = tableView.dequeueReusableCell(withIdentifier: TimeSettingCell.IDENTIFIER, for: indexPath) as! TimeSettingCell
+            
+            timeCell.configure(with: option)
+            return timeCell
         }
     }
 }

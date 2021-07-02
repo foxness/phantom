@@ -14,6 +14,7 @@ class Database {
         case posts = "posts" // string literals left intentionally
         case thumbnailResolverCache = "thumbnailResolverCache"
         case bulkAddSubreddit = "bulkAddSubreddit"
+        case bulkAddTime = "bulkAddTime"
         case redditAuth = "redditAuth"
         case imgurAuth = "imgurAuth"
         case introductionShown = "introductionShown"
@@ -23,6 +24,7 @@ class Database {
     }
     
     private static let DEFAULT_BULK_ADD_SUBREDDIT = "test" // todo: change to "pics" or something
+    private static let DEFAULT_BULK_ADD_TIME = TimeInterval(12 * 60 * 60) // 12:00
     
     static let instance = Database()
     
@@ -40,6 +42,7 @@ class Database {
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
     @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue) private var internalBulkAddSubreddit: String?
+    @UserDefaultsBacked(key: Key.bulkAddTime.rawValue) private var internalBulkAddTime: TimeInterval?
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -81,6 +84,11 @@ class Database {
         set { internalBulkAddSubreddit = newValue }
     }
     
+    var bulkAddTime: TimeInterval {
+        get { internalBulkAddTime ?? Database.DEFAULT_BULK_ADD_TIME }
+        set { internalBulkAddTime = newValue }
+    }
+    
     var posts: [Post] = []
     
     private init() {
@@ -115,6 +123,7 @@ class Database {
         useImgur = false
         thumbnailResolverCache = nil
         internalBulkAddSubreddit = nil // intentionally 'internal'
+        internalBulkAddTime = nil // intentionally 'internal'
         
         posts = []
         savePosts()

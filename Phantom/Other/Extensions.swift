@@ -70,7 +70,16 @@ extension Int {
 }
 
 extension Date {
-    static var random: Date { Date(timeIntervalSinceNow: TimeInterval.random(in: 0..<(2 * 24 * 60 * 60))) }
+//    static var random: Date { Date(timeIntervalSinceNow: TimeInterval.random(in: 0..<(2 * 24 * 60 * 60))) }
+    
+    var startOfDay: Date {
+        let calendar = Calendar.current
+        
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: self)
+        let dayStart = calendar.date(from: dateComponents)!
+        
+        return dayStart
+    }
 }
 
 extension UIViewController {

@@ -18,6 +18,7 @@ enum SettingsOptionType {
     case switchOption(option: SwitchSettingsOption)
     case accountOption(option: AccountSettingsOption)
     case textOption(option: TextSettingsOption)
+    case timeOption(option: TimeSettingsOption)
 }
 
 struct StaticSettingsOption {
@@ -45,4 +46,10 @@ struct TextSettingsOption {
     let title: String
     let text: String?
     let handler: (() -> Void)?
+}
+
+struct TimeSettingsOption {
+    let title: String
+    let timeOfDay: TimeInterval
+    let handler: ((TimeInterval) -> Void)?
 }
