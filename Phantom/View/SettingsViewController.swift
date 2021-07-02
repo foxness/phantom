@@ -87,10 +87,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         displayOkAlert(title: title, message: nil, dismissHandler: tryAgainHandler)
     }
     
-    func showBulkAddTimeAlert(timeOfDay: TimeInterval) {
-        Log.p("time setting pressed")
-    }
-    
     func segueToRedditSignIn() {
         segueTo(.showRedditSignIn)
     }
@@ -199,6 +195,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             textCell.configure(with: option)
             return textCell
+        
+        case .timeOption(let option):
+            let timeCell = tableView.dequeueReusableCell(withIdentifier: TimeSettingCell.IDENTIFIER, for: indexPath) as! TimeSettingCell
+            
+            timeCell.configure(with: option)
+            return timeCell
         }
     }
 }

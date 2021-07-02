@@ -63,7 +63,7 @@ class SettingsPresenter {
         switch option {
         case .staticOption, .textOption: return true
         case .accountOption(let accountOption): return !accountOption.signedIn
-        case .switchOption: return false
+        case .switchOption, .timeOption: return false
         }
     }
     
@@ -339,7 +339,7 @@ class SettingsPresenter {
         let title = "Subreddit"
         let text = "/r/\(subreddit)"
         
-        let handler: () -> Void = { [self] in
+        let handler = { [self] () -> Void in
             viewDelegate?.showBulkAddSubredditAlert(subreddit: subreddit)
         }
         
@@ -353,14 +353,14 @@ class SettingsPresenter {
         let timeOfDay = database.bulkAddTime
         
         let title = "Time of day"
-        let text = Helper.getTimeOfDayString(timeOfDay)
         
-        let handler: () -> Void = { [self] in
-            viewDelegate?.showBulkAddTimeAlert(timeOfDay: timeOfDay)
+        let handler = { [self] (newTime: TimeInterval) -> Void in
+            database.bulkAddTime = newTime
+            updateSettings()
         }
         
-        let option = TextSettingsOption(title: title, text: text, handler: handler)
-        let optionType = SettingsOptionType.textOption(option: option)
+        let option = TimeSettingsOption(title: title, timeOfDay: timeOfDay, handler: handler)
+        let optionType = SettingsOptionType.timeOption(option: option)
         
         return optionType
     }

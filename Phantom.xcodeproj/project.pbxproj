@@ -19,6 +19,7 @@
 		5732365F2678CDB3004CEB72 /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */; };
 		573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CE68E267E2F170083CE30 /* PostSubmission.swift */; };
 		573CE691267E3C5E0083CE30 /* WallpaperModeMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */; };
+		575BEC39268F51BB00D804BA /* TimeSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575BEC38268F51BB00D804BA /* TimeSettingCell.swift */; };
 		575D7877264C112000173E7A /* Wallhaven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D7876264C112000173E7A /* Wallhaven.swift */; };
 		575D787A264C264800173E7A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 575D7879264C264800173E7A /* Kingfisher */; };
 		57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */; };
@@ -82,6 +83,7 @@
 		5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		573CE68E267E2F170083CE30 /* PostSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSubmission.swift; sourceTree = "<group>"; };
 		573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperModeMiddleware.swift; sourceTree = "<group>"; };
+		575BEC38268F51BB00D804BA /* TimeSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSettingCell.swift; sourceTree = "<group>"; };
 		575D7876264C112000173E7A /* Wallhaven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallhaven.swift; sourceTree = "<group>"; };
 		57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		57605EF02673586D00E4EE25 /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */,
 				57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */,
 				572AA66C2687562B0016BE43 /* TextSettingCell.swift */,
+				575BEC38268F51BB00D804BA /* TimeSettingCell.swift */,
 				57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */,
 				57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */,
 				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
@@ -367,6 +370,7 @@
 				718181DE24FBFEE200059658 /* Requests.swift in Sources */,
 				718181DC24FBEDF500059658 /* Post.swift in Sources */,
 				572D951B265ADA5600F0D454 /* RequiredMiddleware.swift in Sources */,
+				575BEC39268F51BB00D804BA /* TimeSettingCell.swift in Sources */,
 				96AA4D6B252B574B009488F6 /* PostViewDelegate.swift in Sources */,
 				576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */,
 				57605EF12673586D00E4EE25 /* SettingsPresenter.swift in Sources */,

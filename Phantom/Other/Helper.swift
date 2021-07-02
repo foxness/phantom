@@ -144,9 +144,4 @@ struct Helper {
         
         fatalError("Neither image nor error were found")
     }
-    
-    static func getTimeOfDayString(_ timeOfDay: TimeInterval) -> String {
-        let date = Date().startOfDay + timeOfDay
-        return DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .short)
-    }
 }
