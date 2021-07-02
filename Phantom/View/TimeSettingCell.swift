@@ -25,14 +25,14 @@ class TimeSettingCell: UITableViewCell {
     
     public func configure(with option: TimeSettingsOption) {
         titleLabel.text = option.title
-        datePicker.date = Date().startOfDay + option.timeOfDay
+        datePicker.date = Helper.timeOfDayToDate(option.timeOfDay)
         handler = option.handler
     }
     
     @IBAction func dateEditingDidEnd(datePicker: UIDatePicker) {
         guard let handler = handler else { return }
         
-        let timeOfDay = datePicker.date.startOfDay.distance(to: datePicker.date)
+        let timeOfDay = Helper.dateToTimeOfDay(datePicker.date)
         handler(timeOfDay)
     }
 }

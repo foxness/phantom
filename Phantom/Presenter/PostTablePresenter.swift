@@ -315,6 +315,9 @@ class PostTablePresenter {
     
     func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
         let subreddit = database.bulkAddSubreddit
+        let timeOfDay = database.bulkAddTime
+        
+        let scheduler = PostScheduler(timeOfDay: timeOfDay)
         
         var lastDate = posts.last?.date
         
@@ -322,7 +325,7 @@ class PostTablePresenter {
             let title = bulkPost.title
             let url = bulkPost.url
             
-            let date = PostScheduler.getNextDate(previous: lastDate)
+            let date = scheduler.getNextDate(previous: lastDate)
             lastDate = date
             
             let newPost = Post.Link(title: title, subreddit: subreddit, date: date, url: url)

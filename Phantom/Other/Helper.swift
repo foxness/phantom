@@ -144,4 +144,12 @@ struct Helper {
         
         fatalError("Neither image nor error were found")
     }
+    
+    static func timeOfDayToDate(_ timeOfDay: TimeInterval) -> Date {
+        return Date().startOfDay + timeOfDay
+    }
+    
+    static func dateToTimeOfDay(_ date: Date) -> TimeInterval {
+        return date.startOfDay.distance(to: date)
+    }
 }
