@@ -20,6 +20,7 @@ struct DebugVariable {
     private static let disableRetryDebug = true
     private static let directImgurUploadDebug = false
     private static let simulateErrorDebug = false
+    private static let instantNotificationsDebug = true
     
     // Phone ---------------------------------------------
     
@@ -28,6 +29,7 @@ struct DebugVariable {
     private static let disableRetryPhone = false
     private static let directImgurUploadPhone = true
     private static let simulateErrorPhone = false
+    private static let instantNotificationsPhone = false
     
     // Calculated ----------------------------------------
     
@@ -36,6 +38,7 @@ struct DebugVariable {
     static let disableRetry = phoneDeploy ? disableRetryPhone : disableRetryDebug
     static let directImgurUpload = phoneDeploy ? directImgurUploadPhone : directImgurUploadDebug
     static let simulateError = phoneDeploy ? simulateErrorPhone : simulateErrorDebug
+    static let instantNotifications = phoneDeploy ? instantNotificationsPhone : instantNotificationsDebug
     
     // Database wipe -------------------------------------
     
