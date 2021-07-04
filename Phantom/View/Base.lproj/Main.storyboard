@@ -220,7 +220,7 @@
                                             <outlet property="valueLabel" destination="bOS-0j-8rz" id="bLA-kk-Rqf"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TimeSettingCell" id="5Q5-1L-4uN" customClass="TimeSettingCell" customModule="Phantom" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TimeSettingCell" id="5Q5-1L-4uN" customClass="TimeSettingCell" customModule="Phantom" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="327.5" width="414" height="53.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Q5-1L-4uN" id="u1s-iW-han">
