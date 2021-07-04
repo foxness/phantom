@@ -17,6 +17,8 @@ struct PostNotifier {
     static let NOTIFICATION_ZOMBIE_SUBMITTED = ZombieSubmitter.NOTIFICATION_SUBMITTED
     static let NOTIFICATION_ZOMBIE_FAILED = ZombieSubmitter.NOTIFICATION_FAILED
     
+    static let NOTIFICATION_SUBMIT_REQUESTED = Notification.Name("SubmitRequested")
+    
     private static let ACTION_SUBMIT = "submit"
     private static let CATEGORY_DUE_POST = "duePost"
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
@@ -45,8 +47,6 @@ struct PostNotifier {
         Notifications.request(params: params) { error in
             if let error = error {
                 Log.p("notify error", error)
-            } else {
-//                Log.p("notification scheduled")
             }
         }
     }
@@ -83,8 +83,11 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
+            // todo: remove zombiesubmitter
 //            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
-            Log.p("notification submit pressed")
+            
+            notifyAppSubmitRequested(postId: postId)
+            
         case UNNotificationDefaultActionIdentifier:
             break
         default:
@@ -120,6 +123,15 @@ struct PostNotifier {
     
     static func getPostId(notification: Notification) -> UUID {
         return ZombieSubmitter.getPostId(notification: notification)
+    }
+    
+    private static func notifyApp(name: Notification.Name, postId: UUID) { // todo: extract into helper?
+        let userInfo = [KEY_POST_ID: postId]
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
+    }
+    
+    private static func notifyAppSubmitRequested(postId: UUID) {
+        notifyApp(name: NOTIFICATION_SUBMIT_REQUESTED, postId: postId)
     }
     
     private static func dateToComponents(_ date: Date) -> DateComponents {

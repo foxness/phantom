@@ -13,20 +13,28 @@ import BackgroundTasks
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        registerForNotifications()
+        
+        return true
+    }
+    
+    private func registerForNotifications() {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
         let categories = Set(arrayLiteral: PostNotifier.getDuePostCategory())
         center.setNotificationCategories(categories)
-        
-        return true
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        Log.p("I will present notification")
+        
         completionHandler([.badge, .list, .banner])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        Log.p("I received a notification response")
         
         PostNotifier.didReceiveResponse(response, callback: completionHandler)
     }

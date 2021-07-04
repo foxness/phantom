@@ -257,6 +257,10 @@ class PostTablePresenter {
         disabledPostIdBecauseZombie = nil
     }
     
+    func submitRequestedFromUserNotification(postId: UUID) {
+        Log.p("submit requested for \(postId)")
+    }
+    
     // MARK: - Post list methods
     
     func getPost(at index: Int) -> Post { posts[index] }

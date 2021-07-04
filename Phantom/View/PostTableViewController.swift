@@ -97,6 +97,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.zombieFailed(notification: notification)
     }
     
+    @objc private func submitRequestedFromUserNotification(notification: Notification) {
+        let postId = PostNotifier.getPostId(notification: notification)
+        presenter.submitRequestedFromUserNotification(postId: postId)
+    }
+    
     // MARK: - Navigation
     
     func segueToIntroduction() {
@@ -381,6 +386,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         center.addObserver(self, selector: #selector(zombieWokeUp), name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
         center.addObserver(self, selector: #selector(zombieSubmitted), name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
         center.addObserver(self, selector: #selector(zombieFailed), name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
+        
+        center.addObserver(self, selector: #selector(submitRequestedFromUserNotification), name: PostNotifier.NOTIFICATION_SUBMIT_REQUESTED, object: nil)
     }
     
     private func unsubscribeFromNotifications() {
@@ -394,6 +401,8 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
         center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
         center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
+        
+        center.removeObserver(self, name: PostNotifier.NOTIFICATION_SUBMIT_REQUESTED, object: nil)
     }
     
     deinit {
