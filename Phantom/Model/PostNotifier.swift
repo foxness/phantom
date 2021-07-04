@@ -83,7 +83,8 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
-            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
+//            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
+            Log.p("notification submit pressed")
         case UNNotificationDefaultActionIdentifier:
             break
         default:
@@ -96,14 +97,14 @@ struct PostNotifier {
     static func getDuePostCategory() -> UNNotificationCategory {
         let actionId = ACTION_SUBMIT
         let actionTitle = TITLE_SUBMIT_ACTION
-        let actionOptions: UNNotificationActionOptions = [] // todo: ".foreground" option that launches app into foreground and starts submitting?
+        let actionOptions: UNNotificationActionOptions = [.foreground]
         
         let submitAction = UNNotificationAction(identifier: actionId,
                                                 title: actionTitle,
                                                 options: actionOptions)
         
         let categoryId = CATEGORY_DUE_POST
-        let categoryActions: [UNNotificationAction] = [] // [submitAction] // todo: re-add submit action again?
+        let categoryActions = [submitAction]
         let categoryIntents: [String] = []
         let categoryPlaceholder = ""
         let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]

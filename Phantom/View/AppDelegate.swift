@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let categories = Set(arrayLiteral: PostNotifier.getDuePostCategory())
         center.setNotificationCategories(categories)
         
-        //PostScheduler.registerPostTask()
-        
         return true
     }
     
