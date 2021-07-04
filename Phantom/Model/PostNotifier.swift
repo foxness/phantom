@@ -91,7 +91,7 @@ struct PostNotifier {
             fatalError()
         }
         
-        // todo: call callback() in all instances (debug output warns about this)
+        callback()
     }
     
     static func getDuePostCategory() -> UNNotificationCategory {
