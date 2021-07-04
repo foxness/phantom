@@ -393,15 +393,13 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     private func subscribeToNotifications() {
-        let notifications = getNotifications()
-        for notification in notifications {
+        for notification in getNotifications() {
             NotificationCenter.default.addObserver(self, selector: notification.0, name: notification.1, object: nil)
         }
     }
     
     private func unsubscribeFromNotifications() {
-        let notifications = getNotifications()
-        for notification in notifications {
+        for notification in getNotifications() {
             NotificationCenter.default.removeObserver(self, name: notification.1, object: nil)
         }
     }

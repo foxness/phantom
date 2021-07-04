@@ -14,6 +14,9 @@ import Foundation
 // todo: add graceful asking for notification permissions
 // todo: add nice introduction
 
+// todo: !!! add submitting from user notification even if app was dead while notification action pressed
+// todo: handle cases where there's no reddit and submit is still requested
+
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -85,12 +88,15 @@ class PostTablePresenter {
     }
     
     func submitPressed(postIndex: Int) {
-        disableSubmissionBecauseMain = true
-        
         let post = posts[postIndex]
-        PostNotifier.cancel(for: post)
-        
+        submitPost(post)
+    }
+    
+    func submitPost(_ post: Post) {
+        disableSubmissionBecauseMain = true
         disabledPostIdBecauseMain = post.id // make the post uneditable
+        
+        PostNotifier.cancel(for: post)
         
         viewDelegate?.setSubmissionIndicator(.submitting, completion: nil) // let the user know
         
@@ -259,6 +265,14 @@ class PostTablePresenter {
     
     func submitRequestedFromUserNotification(postId: UUID) {
         Log.p("submit requested for \(postId)")
+//        viewDelegate?.showAlert(title: "testy", message: "besty")
+        
+        guard let post = posts.first(where: { $0.id == postId }) else {
+            Log.p("post not found")
+            return
+        }
+        
+        submitPost(post)
     }
     
     // MARK: - Post list methods
