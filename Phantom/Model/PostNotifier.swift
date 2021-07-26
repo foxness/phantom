@@ -20,8 +20,12 @@ struct PostNotifier {
     static let NOTIFICATION_SUBMIT_REQUESTED = Notification.Name("SubmitRequested")
     
     private static let ACTION_SUBMIT = "submit"
-    private static let CATEGORY_DUE_POST = "duePost"
+    private static let ACTION_SUBMIT_TEST = "submitTest" // todo: remove
+    
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
+    private static let TITLE_SUBMIT_ACTION_TEST = "Submit Post Test" // todo: remove
+    
+    private static let CATEGORY_DUE_POST = "duePost"
     private static let KEY_POST_ID = "postId"
     
     private init() { }
@@ -87,11 +91,13 @@ struct PostNotifier {
 //            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
             
             notifyAppSubmitRequested(postId: postId)
+        
+        case ACTION_SUBMIT_TEST:
+            notifyAppSubmitRequested(postId: postId)
+            Log.p("action submit test")
             
-        case UNNotificationDefaultActionIdentifier:
-            break
-        default:
-            fatalError()
+        case UNNotificationDefaultActionIdentifier: break
+        default: fatalError()
         }
         
         callback()
@@ -108,6 +114,38 @@ struct PostNotifier {
         
         let categoryId = CATEGORY_DUE_POST
         let categoryActions = [submitAction]
+        let categoryIntents: [String] = []
+        let categoryPlaceholder = ""
+        let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]
+        
+        let duePostCategory = UNNotificationCategory(identifier: categoryId,
+                                                     actions: categoryActions,
+                                                     intentIdentifiers: categoryIntents,
+                                                     hiddenPreviewsBodyPlaceholder: categoryPlaceholder,
+                                                     options: categoryOptions)
+        
+        return duePostCategory
+    }
+    
+    static func getDuePostCategoryTest() -> UNNotificationCategory {
+        let actionId = ACTION_SUBMIT
+        let actionTitle = TITLE_SUBMIT_ACTION
+        let actionOptions: UNNotificationActionOptions = [.foreground]
+        
+        let submitAction = UNNotificationAction(identifier: actionId,
+                                                title: actionTitle,
+                                                options: actionOptions)
+        
+        let actionIdTest = ACTION_SUBMIT_TEST
+        let actionTitleTest = TITLE_SUBMIT_ACTION_TEST
+        let actionOptionsTest: UNNotificationActionOptions = [.foreground]
+        
+        let submitActionTest = UNNotificationAction(identifier: actionIdTest,
+                                                    title: actionTitleTest,
+                                                    options: actionOptionsTest)
+        
+        let categoryId = CATEGORY_DUE_POST
+        let categoryActions = [submitAction, submitActionTest]
         let categoryIntents: [String] = []
         let categoryPlaceholder = ""
         let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]

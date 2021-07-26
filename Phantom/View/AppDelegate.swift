@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
-        let categories = Set(arrayLiteral: PostNotifier.getDuePostCategory())
+        let categories = Set(arrayLiteral: PostNotifier.getDuePostCategoryTest())
         center.setNotificationCategories(categories)
     }
     

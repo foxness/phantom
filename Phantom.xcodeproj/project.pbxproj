@@ -190,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				71C031B724FA6B5600D6E19F /* Main.storyboard */,
+				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
 				7192A40924FFD76500CB54A8 /* Notifications.swift */,
 				71684AD025024D83005BA857 /* PostCell.swift */,
 				718181D924FBE01D00059658 /* PostViewController.swift */,
@@ -197,7 +198,6 @@
 				576E515A2644708200B0047F /* SlideUpMenu.swift */,
 				571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */,
 				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
-				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
 				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
 				71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */,
 				71C031C824FA705B00D6E19F /* RedditSignInViewController.swift */,
