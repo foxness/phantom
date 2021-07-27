@@ -79,7 +79,7 @@ struct PostNotifier {
         }
     }
     
-    static func didReceiveResponse(_ response: UNNotificationResponse, callback: @escaping () -> Void) {
+    static func didReceiveResponse(_ response: UNNotificationResponse, window: UIWindow?, callback: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         let postIdString = userInfo[KEY_POST_ID] as! String
         let postId = UUID(uuidString: postIdString)!
@@ -87,17 +87,40 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
-            // todo: remove zombiesubmitter
-//            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
-            
             notifyAppSubmitRequested(postId: postId)
         
         case ACTION_SUBMIT_TEST:
-            notifyAppSubmitRequested(postId: postId)
-            Log.p("action submit test")
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            Log.p("action is submit test")
+            if let navVC = window?.rootViewController as? UINavigationController {
+                Log.p("root is navvc")
+                
+                if let postTableVC = navVC.viewControllers.first as? PostTableViewController {
+                    Log.p("it works")
+                    postTableVC.displayOkAlert(title: "it works", message: "yay: \(postIdString)")
+                }
+            }
+               
+            
+//            // instantiate the view controller we want to show from storyboard
+//            // root view controller is tab bar controller
+//            // the selected tab is a navigation controller
+//            // then we push the new view controller to it
+//            if  let conversationVC = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as? ConversationViewController,
+//                let tabBarController = self.window?.rootViewController as? UITabBarController,
+//                let navController = tabBarController.selectedViewController as? UINavigationController {
+//
+//                // we can modify variable of the new view controller using notification data
+//                // (eg: title of notification)
+//                conversationVC.senderDisplayName = response.notification.request.content.title
+//                // you can access custom data of the push notification by using userInfo property
+//                // response.notification.request.content.userInfo
+//                navController.pushViewController(conversationVC, animated: true)
+//            }
             
         case UNNotificationDefaultActionIdentifier: break
-        default: fatalError()
+        default: fatalError("Unexpected notification action")
         }
         
         callback()
