@@ -14,6 +14,9 @@ import Foundation
 // todo: add graceful asking for notification permissions
 // todo: add nice introduction
 
+// todo: !!! add submitting from user notification even if app was dead while notification action pressed
+// todo: handle cases where there's no reddit and submit is still requested
+
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -38,9 +41,10 @@ class PostTablePresenter {
     private var disableSubmissionBecauseNoReddit = false // no reddit = signed out
     
     private var sceneActivated = true // todo: move back to view controller?
-    private var sceneInForeground = true
+    private var sceneInForeground = true // todo: remove?
     
     private var postIdsToBeDeleted: [UUID] = []
+    private var postIdToBeSubmitted: UUID?
     private var posts: [Post] = []
     
     // MARK: - Computed properties
@@ -84,52 +88,21 @@ class PostTablePresenter {
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
-    func submitPressed(postIndex: Int) {
-        disableSubmissionBecauseMain = true
+    func submitRequestedFromUserNotification(postId: UUID) {
+        // requestedFromDeadApp == true means that the notification action was pressed while the
+        // app was dead and we need to wait for it to load and attach the view delegate first to submit
+        let requestedFromDeadApp = viewDelegate == nil
         
-        let post = posts[postIndex]
-        PostNotifier.cancel(for: post)
-        
-        disabledPostIdBecauseMain = post.id // make the post uneditable
-        
-        viewDelegate?.setSubmissionIndicator(.submitting, completion: nil) // let the user know
-        
-        let wallpaperMode = database.wallpaperMode
-        let useWallhaven = database.useWallhaven
-        let useImgur = database.useImgur
-        
-        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
-        
-        submitter.submitPost(post, with: params) { [weak self] result in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.disabledPostIdBecauseMain = nil // make editable
-                
-                switch result {
-                case .success(let url):
-                    Log.p("reddit url", url)
-                    
-                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
-                    
-                    self.viewDelegate?.setSubmissionIndicator(.done) {
-                        // when the indicator disappears:
-                        self.disableSubmissionBecauseMain = false
-                    }
-                case .failure(let error):
-                    Log.p("got error", error)
-                    
-                    PostNotifier.notifyUser(about: post) // reschedule the canceled notification
-                    
-                    self.viewDelegate?.setSubmissionIndicator(.hidden, completion: nil)
-                    self.disableSubmissionBecauseMain = false
-                    
-                    let title = "An error has occurred"
-                    let message = "\(error.localizedDescription)"
-                    self.viewDelegate?.showAlert(title: title, message: message) // todo: replace with showErrorAlert(error:) ?
-                }
-            }
+        if requestedFromDeadApp {
+            postIdToBeSubmitted = postId
+        } else {
+            submitFromUserNotification(postId: postId)
         }
+    }
+    
+    func submitPressed(postIndex: Int) {
+        let post = posts[postIndex]
+        submitPost(post)
     }
     
     func bulkAddButtonPressed() {
@@ -151,6 +124,32 @@ class PostTablePresenter {
     
     func imgurAccountChanged(_ newImgur: Imgur?) { // means account changed in settings
         submitter.imgur.mutate { $0 = newImgur }
+    }
+    
+    func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
+        let subreddit = database.bulkAddSubreddit
+        let timeOfDay = database.bulkAddTime
+        
+        let scheduler = PostScheduler(timeOfDay: timeOfDay)
+        
+        var lastDate = posts.last?.date
+        
+        for bulkPost in bulkPosts {
+            let title = bulkPost.title
+            let url = bulkPost.url
+            
+            let date = scheduler.getNextDate(previous: lastDate)
+            lastDate = date
+            
+            let newPost = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
+            
+            PostNotifier.notifyUser(about: newPost)
+            posts.append(newPost)
+        }
+        
+        sortPosts()
+        
+        viewDelegate?.reloadPostRows(with: .right)
     }
     
     // MARK: - View lifecycle methods
@@ -179,19 +178,11 @@ class PostTablePresenter {
     }
     
     func viewDidAppear() {
-        Notifications.requestPermissions { granted, error in
-            if !granted {
-                Log.p("permissions not granted :0")
-            }
-            
-            if let error = error {
-                Log.p("permissions error", error)
-            }
-        }
-        
+        requestNotificationPermissions() // todo: remove, move or leave it be?
         showIntroductionIfNeeded()
         setupPostSubmitter()
         updateSubmitButton()
+        submitPostIfNeeded()
     }
     
     // MARK: - Scene lifecycle methods
@@ -313,32 +304,6 @@ class PostTablePresenter {
         deletePosts(ids: [id], withAnimation: .top, cancelNotify: true)
     }
     
-    func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
-        let subreddit = database.bulkAddSubreddit
-        let timeOfDay = database.bulkAddTime
-        
-        let scheduler = PostScheduler(timeOfDay: timeOfDay)
-        
-        var lastDate = posts.last?.date
-        
-        for bulkPost in bulkPosts {
-            let title = bulkPost.title
-            let url = bulkPost.url
-            
-            let date = scheduler.getNextDate(previous: lastDate)
-            lastDate = date
-            
-            let newPost = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
-            
-            PostNotifier.notifyUser(about: newPost)
-            posts.append(newPost)
-        }
-        
-        sortPosts()
-        
-        viewDelegate?.reloadPostRows(with: .right)
-    }
-    
     // MARK: - Database methods
     
     private func loadPostsFromDatabase() {
@@ -380,7 +345,53 @@ class PostTablePresenter {
         posts.sort { $0.date < $1.date }
     }
     
-    // MARK: - Misc methods
+    // MARK: - Other methods
+    
+    func submitPost(_ post: Post) {
+        disableSubmissionBecauseMain = true
+        disabledPostIdBecauseMain = post.id // make the post uneditable
+        
+        PostNotifier.cancel(for: post)
+        
+        viewDelegate?.setSubmissionIndicator(.submitting, completion: nil) // let the user know
+        
+        let wallpaperMode = database.wallpaperMode
+        let useWallhaven = database.useWallhaven
+        let useImgur = database.useImgur
+        
+        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        
+        submitter.submitPost(post, with: params) { [weak self] result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.disabledPostIdBecauseMain = nil // make editable
+                
+                switch result {
+                case .success(let url):
+                    Log.p("reddit url", url)
+                    
+                    self.deletePosts(ids: [post.id], withAnimation: .right, cancelNotify: false) // because already cancelled
+                    
+                    self.viewDelegate?.setSubmissionIndicator(.done) {
+                        // when the indicator disappears:
+                        self.disableSubmissionBecauseMain = false
+                    }
+                case .failure(let error):
+                    Log.p("got error", error)
+                    
+                    PostNotifier.notifyUser(about: post) // reschedule the canceled notification
+                    
+                    self.viewDelegate?.setSubmissionIndicator(.hidden, completion: nil)
+                    self.disableSubmissionBecauseMain = false
+                    
+                    let title = "An error has occurred"
+                    let message = "\(error.localizedDescription)"
+                    self.viewDelegate?.showAlert(title: title, message: message) // todo: replace with showErrorAlert(error:) ?
+                }
+            }
+        }
+    }
     
     private func deletePosts(ids postIds: [UUID], withAnimation animation: ListAnimation = .none, cancelNotify: Bool = true) {
         let indicesToDelete = posts.indices.filter { postIds.contains(posts[$0].id) }
@@ -412,6 +423,22 @@ class PostTablePresenter {
         viewDelegate?.segueToIntroduction()
     }
     
+    private func submitPostIfNeeded() {
+        guard let postIdToBeSubmitted = postIdToBeSubmitted else { return }
+        self.postIdToBeSubmitted = nil
+        
+        submitFromUserNotification(postId: postIdToBeSubmitted)
+    }
+    
+    private func submitFromUserNotification(postId: UUID) {
+        guard let post = posts.first(where: { $0.id == postId }) else {
+            Log.p("post not found")
+            return
+        }
+        
+        submitPost(post)
+    }
+    
     private func updateSubmitButton() {
         let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
         disableSubmissionBecauseNoReddit = !redditSignedIn
@@ -431,6 +458,18 @@ class PostTablePresenter {
             
             if let imgurAuth = database.imgurAuth {
                 imgur = Imgur(auth: imgurAuth)
+            }
+        }
+    }
+    
+    private func requestNotificationPermissions() {
+        Notifications.requestPermissions { granted, error in
+            if !granted {
+                Log.p("permissions not granted :0")
+            }
+            
+            if let error = error {
+                Log.p("permissions error", error)
             }
         }
     }

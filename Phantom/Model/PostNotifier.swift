@@ -18,8 +18,8 @@ struct PostNotifier {
     static let NOTIFICATION_ZOMBIE_FAILED = ZombieSubmitter.NOTIFICATION_FAILED
     
     private static let ACTION_SUBMIT = "submit"
-    private static let CATEGORY_DUE_POST = "duePost"
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
+    private static let CATEGORY_DUE_POST = "duePost"
     private static let KEY_POST_ID = "postId"
     
     private init() { }
@@ -45,8 +45,6 @@ struct PostNotifier {
         Notifications.request(params: params) { error in
             if let error = error {
                 Log.p("notify error", error)
-            } else {
-//                Log.p("notification scheduled")
             }
         }
     }
@@ -75,7 +73,7 @@ struct PostNotifier {
         }
     }
     
-    static func didReceiveResponse(_ response: UNNotificationResponse, callback: @escaping () -> Void) {
+    static func didReceiveResponse(_ response: UNNotificationResponse, window: UIWindow?, callback: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         let postIdString = userInfo[KEY_POST_ID] as! String
         let postId = UUID(uuidString: postIdString)!
@@ -83,27 +81,38 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
-            ZombieSubmitter.instance.submitPost(id: postId, callback: callback)
+            // the thing that helped me a frickton with this: https://fluffy.es/open-specific-view-push-notification-tapped/
+            
+            if let navVC = window?.rootViewController as? UINavigationController,
+               let postTableVC = navVC.viewControllers.first as? PostTableViewController {
+                postTableVC.submitRequestedFromUserNotification(postId: postId)
+            }
+            
         case UNNotificationDefaultActionIdentifier:
             break
+            
         default:
-            fatalError()
+            fatalError("Unexpected notification action")
         }
         
-        // todo: call callback() in all instances (debug output warns about this)
+        callback()
     }
     
-    static func getDuePostCategory() -> UNNotificationCategory {
+    static func getNotificationCategories() -> Set<UNNotificationCategory> {
+        return [getDuePostCategory()]
+    }
+    
+    private static func getDuePostCategory() -> UNNotificationCategory {
         let actionId = ACTION_SUBMIT
         let actionTitle = TITLE_SUBMIT_ACTION
-        let actionOptions: UNNotificationActionOptions = [] // todo: ".foreground" option that launches app into foreground and starts submitting?
+        let actionOptions: UNNotificationActionOptions = [.foreground]
         
         let submitAction = UNNotificationAction(identifier: actionId,
                                                 title: actionTitle,
                                                 options: actionOptions)
         
         let categoryId = CATEGORY_DUE_POST
-        let categoryActions: [UNNotificationAction] = [] // [submitAction] // todo: re-add submit action again?
+        let categoryActions = [submitAction]
         let categoryIntents: [String] = []
         let categoryPlaceholder = ""
         let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]

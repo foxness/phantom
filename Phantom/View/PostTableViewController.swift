@@ -336,7 +336,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.show()
     }
     
-    func showAlert(title: String, message: String) {
+    func showAlert(title: String, message: String) { // todo: split into alerts for every situation intead of generic
         displayOkAlert(title: title, message: message)
     }
     
@@ -362,38 +362,43 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.imgurAccountChanged(newImgur)
     }
     
+    func submitRequestedFromUserNotification(postId: UUID) {
+        presenter.submitRequestedFromUserNotification(postId: postId)
+    }
+    
     // MARK: - Helper methods
     
     private static func getWindow() -> UIWindow? {
         return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
     }
     
-    // MARK: - Lifecycle notifications
+    // MARK: - Internal notifications
+    
+    private func getNotifications() -> [(Selector, Notification.Name)] {
+        var notifications = [(Selector, Notification.Name)]()
+        
+        notifications.append((#selector(sceneWillEnterForeground), UIScene.willEnterForegroundNotification))
+        notifications.append((#selector(sceneDidActivate), UIScene.didActivateNotification))
+        notifications.append((#selector(sceneWillDeactivate), UIScene.willDeactivateNotification))
+        notifications.append((#selector(sceneDidEnterBackground), UIScene.didEnterBackgroundNotification))
+        
+        notifications.append((#selector(zombieWokeUp), PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP))
+        notifications.append((#selector(zombieSubmitted), PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED))
+        notifications.append((#selector(zombieFailed), PostNotifier.NOTIFICATION_ZOMBIE_FAILED))
+        
+        return notifications
+    }
     
     private func subscribeToNotifications() {
-        let center = NotificationCenter.default
-        
-        center.addObserver(self, selector: #selector(sceneWillEnterForeground), name: UIScene.willEnterForegroundNotification, object: nil)
-        center.addObserver(self, selector: #selector(sceneDidActivate), name: UIScene.didActivateNotification, object: nil)
-        center.addObserver(self, selector: #selector(sceneWillDeactivate), name: UIScene.willDeactivateNotification, object: nil)
-        center.addObserver(self, selector: #selector(sceneDidEnterBackground), name: UIScene.didEnterBackgroundNotification, object: nil)
-        
-        center.addObserver(self, selector: #selector(zombieWokeUp), name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
-        center.addObserver(self, selector: #selector(zombieSubmitted), name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
-        center.addObserver(self, selector: #selector(zombieFailed), name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
+        for notification in getNotifications() {
+            NotificationCenter.default.addObserver(self, selector: notification.0, name: notification.1, object: nil)
+        }
     }
     
     private func unsubscribeFromNotifications() {
-        let center = NotificationCenter.default
-        
-        center.removeObserver(self, name: UIScene.willEnterForegroundNotification, object: nil)
-        center.removeObserver(self, name: UIScene.didActivateNotification, object: nil)
-        center.removeObserver(self, name: UIScene.willDeactivateNotification, object: nil)
-        center.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
-        
-        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP, object: nil)
-        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED, object: nil)
-        center.removeObserver(self, name: PostNotifier.NOTIFICATION_ZOMBIE_FAILED, object: nil)
+        for notification in getNotifications() {
+            NotificationCenter.default.removeObserver(self, name: notification.1, object: nil)
+        }
     }
     
     deinit {
