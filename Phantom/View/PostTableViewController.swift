@@ -97,8 +97,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.zombieFailed(notification: notification)
     }
     
-    @objc private func submitRequestedFromUserNotification(notification: Notification) {
+    @objc private func submitRequestedFromUserNotification(notification: Notification) { // todo: remove
         let postId = PostNotifier.getPostId(notification: notification)
+        presenter.submitRequestedFromUserNotification(postId: postId)
+    }
+    
+    func submitRequestedFromUserNotification(postId: UUID) {
         presenter.submitRequestedFromUserNotification(postId: postId)
     }
     
@@ -341,7 +345,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.show()
     }
     
-    func showAlert(title: String, message: String) {
+    func showAlert(title: String, message: String) { // todo: split into alerts for every situation intead of generic
         displayOkAlert(title: title, message: message)
     }
     
@@ -387,7 +391,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         notifications.append((#selector(zombieSubmitted), PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED))
         notifications.append((#selector(zombieFailed), PostNotifier.NOTIFICATION_ZOMBIE_FAILED))
         
-        notifications.append((#selector(submitRequestedFromUserNotification), PostNotifier.NOTIFICATION_SUBMIT_REQUESTED))
+        notifications.append((#selector(submitRequestedFromUserNotification(notification:)), PostNotifier.NOTIFICATION_SUBMIT_REQUESTED))
         
         return notifications
     }

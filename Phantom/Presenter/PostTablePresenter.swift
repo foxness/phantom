@@ -41,9 +41,10 @@ class PostTablePresenter {
     private var disableSubmissionBecauseNoReddit = false // no reddit = signed out
     
     private var sceneActivated = true // todo: move back to view controller?
-    private var sceneInForeground = true
+    private var sceneInForeground = true // todo: remove?
     
     private var postIdsToBeDeleted: [UUID] = []
+    private var postIdToBeSubmitted: UUID?
     private var posts: [Post] = []
     
     // MARK: - Computed properties
@@ -185,19 +186,11 @@ class PostTablePresenter {
     }
     
     func viewDidAppear() {
-        Notifications.requestPermissions { granted, error in
-            if !granted {
-                Log.p("permissions not granted :0")
-            }
-            
-            if let error = error {
-                Log.p("permissions error", error)
-            }
-        }
-        
+        requestNotificationPermissions() // todo: remove, move or leave it be?
         showIntroductionIfNeeded()
         setupPostSubmitter()
         updateSubmitButton()
+        submitPostIfNeeded()
     }
     
     // MARK: - Scene lifecycle methods
@@ -263,16 +256,25 @@ class PostTablePresenter {
         disabledPostIdBecauseZombie = nil
     }
     
-    func submitRequestedFromUserNotification(postId: UUID) {
-        Log.p("submit requested for \(postId)")
-//        viewDelegate?.showAlert(title: "testy", message: "besty")
-        
+    private func submitFromUserNotification(postId: UUID) {
         guard let post = posts.first(where: { $0.id == postId }) else {
             Log.p("post not found")
             return
         }
         
         submitPost(post)
+    }
+    
+    func submitRequestedFromUserNotification(postId: UUID) {
+        // requestedFromDeadApp == true means that the notification action was pressed while the
+        // app was dead and we need to wait for it to load and attach the view delegate first to submit
+        let requestedFromDeadApp = viewDelegate == nil
+        
+        if requestedFromDeadApp {
+            postIdToBeSubmitted = postId
+        } else {
+            submitFromUserNotification(postId: postId)
+        }
     }
     
     // MARK: - Post list methods
@@ -430,6 +432,13 @@ class PostTablePresenter {
         viewDelegate?.segueToIntroduction()
     }
     
+    private func submitPostIfNeeded() {
+        guard let postIdToBeSubmitted = postIdToBeSubmitted else { return }
+        self.postIdToBeSubmitted = nil
+        
+        submitFromUserNotification(postId: postIdToBeSubmitted)
+    }
+    
     private func updateSubmitButton() {
         let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
         disableSubmissionBecauseNoReddit = !redditSignedIn
@@ -449,6 +458,18 @@ class PostTablePresenter {
             
             if let imgurAuth = database.imgurAuth {
                 imgur = Imgur(auth: imgurAuth)
+            }
+        }
+    }
+    
+    private func requestNotificationPermissions() {
+        Notifications.requestPermissions { granted, error in
+            if !granted {
+                Log.p("permissions not granted :0")
+            }
+            
+            if let error = error {
+                Log.p("permissions error", error)
             }
         }
     }

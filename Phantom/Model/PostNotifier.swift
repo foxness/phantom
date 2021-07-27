@@ -90,37 +90,18 @@ struct PostNotifier {
             notifyAppSubmitRequested(postId: postId)
         
         case ACTION_SUBMIT_TEST:
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            // the thing that helped me a frickton with this: https://fluffy.es/open-specific-view-push-notification-tapped/
             
-            Log.p("action is submit test")
-            if let navVC = window?.rootViewController as? UINavigationController {
-                Log.p("root is navvc")
-                
-                if let postTableVC = navVC.viewControllers.first as? PostTableViewController {
-                    Log.p("it works")
-                    postTableVC.displayOkAlert(title: "it works", message: "yay: \(postIdString)")
-                }
+            if let navVC = window?.rootViewController as? UINavigationController,
+               let postTableVC = navVC.viewControllers.first as? PostTableViewController {
+                postTableVC.submitRequestedFromUserNotification(postId: postId)
             }
-               
             
-//            // instantiate the view controller we want to show from storyboard
-//            // root view controller is tab bar controller
-//            // the selected tab is a navigation controller
-//            // then we push the new view controller to it
-//            if  let conversationVC = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as? ConversationViewController,
-//                let tabBarController = self.window?.rootViewController as? UITabBarController,
-//                let navController = tabBarController.selectedViewController as? UINavigationController {
-//
-//                // we can modify variable of the new view controller using notification data
-//                // (eg: title of notification)
-//                conversationVC.senderDisplayName = response.notification.request.content.title
-//                // you can access custom data of the push notification by using userInfo property
-//                // response.notification.request.content.userInfo
-//                navController.pushViewController(conversationVC, animated: true)
-//            }
+        case UNNotificationDefaultActionIdentifier:
+            break
             
-        case UNNotificationDefaultActionIdentifier: break
-        default: fatalError("Unexpected notification action")
+        default:
+            fatalError("Unexpected notification action")
         }
         
         callback()

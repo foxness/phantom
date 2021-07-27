@@ -15,7 +15,7 @@ struct DebugVariable {
     
     // Debug ---------------------------------------------
     
-    private static let simulateMiddlewareDebug = false
+    private static let simulateMiddlewareDebug = true
     private static let simulateRedditDebug = true
     private static let disableRetryDebug = true
     private static let directImgurUploadDebug = false
