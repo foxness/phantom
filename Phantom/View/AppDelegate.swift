@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func registerForNotifications() {
         let center = UNUserNotificationCenter.current()
-        let categories = Set(arrayLiteral: PostNotifier.getDuePostCategoryTest())
+        let categories = PostNotifier.getNotificationCategories()
         center.setNotificationCategories(categories)
     }
 

@@ -17,14 +17,8 @@ struct PostNotifier {
     static let NOTIFICATION_ZOMBIE_SUBMITTED = ZombieSubmitter.NOTIFICATION_SUBMITTED
     static let NOTIFICATION_ZOMBIE_FAILED = ZombieSubmitter.NOTIFICATION_FAILED
     
-    static let NOTIFICATION_SUBMIT_REQUESTED = Notification.Name("SubmitRequested")
-    
     private static let ACTION_SUBMIT = "submit"
-    private static let ACTION_SUBMIT_TEST = "submitTest" // todo: remove
-    
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
-    private static let TITLE_SUBMIT_ACTION_TEST = "Submit Post Test" // todo: remove
-    
     private static let CATEGORY_DUE_POST = "duePost"
     private static let KEY_POST_ID = "postId"
     
@@ -87,9 +81,6 @@ struct PostNotifier {
         
         switch actionId {
         case ACTION_SUBMIT:
-            notifyAppSubmitRequested(postId: postId)
-        
-        case ACTION_SUBMIT_TEST:
             // the thing that helped me a frickton with this: https://fluffy.es/open-specific-view-push-notification-tapped/
             
             if let navVC = window?.rootViewController as? UINavigationController,
@@ -107,7 +98,11 @@ struct PostNotifier {
         callback()
     }
     
-    static func getDuePostCategory() -> UNNotificationCategory {
+    static func getNotificationCategories() -> Set<UNNotificationCategory> {
+        return [getDuePostCategory()]
+    }
+    
+    private static func getDuePostCategory() -> UNNotificationCategory {
         let actionId = ACTION_SUBMIT
         let actionTitle = TITLE_SUBMIT_ACTION
         let actionOptions: UNNotificationActionOptions = [.foreground]
@@ -131,49 +126,8 @@ struct PostNotifier {
         return duePostCategory
     }
     
-    static func getDuePostCategoryTest() -> UNNotificationCategory {
-        let actionId = ACTION_SUBMIT
-        let actionTitle = TITLE_SUBMIT_ACTION
-        let actionOptions: UNNotificationActionOptions = [.foreground]
-        
-        let submitAction = UNNotificationAction(identifier: actionId,
-                                                title: actionTitle,
-                                                options: actionOptions)
-        
-        let actionIdTest = ACTION_SUBMIT_TEST
-        let actionTitleTest = TITLE_SUBMIT_ACTION_TEST
-        let actionOptionsTest: UNNotificationActionOptions = [.foreground]
-        
-        let submitActionTest = UNNotificationAction(identifier: actionIdTest,
-                                                    title: actionTitleTest,
-                                                    options: actionOptionsTest)
-        
-        let categoryId = CATEGORY_DUE_POST
-        let categoryActions = [submitAction, submitActionTest]
-        let categoryIntents: [String] = []
-        let categoryPlaceholder = ""
-        let categoryOptions: UNNotificationCategoryOptions = [.allowAnnouncement]
-        
-        let duePostCategory = UNNotificationCategory(identifier: categoryId,
-                                                     actions: categoryActions,
-                                                     intentIdentifiers: categoryIntents,
-                                                     hiddenPreviewsBodyPlaceholder: categoryPlaceholder,
-                                                     options: categoryOptions)
-        
-        return duePostCategory
-    }
-    
     static func getPostId(notification: Notification) -> UUID {
         return ZombieSubmitter.getPostId(notification: notification)
-    }
-    
-    private static func notifyApp(name: Notification.Name, postId: UUID) { // todo: extract into helper?
-        let userInfo = [KEY_POST_ID: postId]
-        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
-    }
-    
-    private static func notifyAppSubmitRequested(postId: UUID) {
-        notifyApp(name: NOTIFICATION_SUBMIT_REQUESTED, postId: postId)
     }
     
     private static func dateToComponents(_ date: Date) -> DateComponents {

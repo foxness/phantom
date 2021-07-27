@@ -97,15 +97,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.zombieFailed(notification: notification)
     }
     
-    @objc private func submitRequestedFromUserNotification(notification: Notification) { // todo: remove
-        let postId = PostNotifier.getPostId(notification: notification)
-        presenter.submitRequestedFromUserNotification(postId: postId)
-    }
-    
-    func submitRequestedFromUserNotification(postId: UUID) {
-        presenter.submitRequestedFromUserNotification(postId: postId)
-    }
-    
     // MARK: - Navigation
     
     func segueToIntroduction() {
@@ -371,6 +362,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.imgurAccountChanged(newImgur)
     }
     
+    func submitRequestedFromUserNotification(postId: UUID) {
+        presenter.submitRequestedFromUserNotification(postId: postId)
+    }
+    
     // MARK: - Helper methods
     
     private static func getWindow() -> UIWindow? {
@@ -390,8 +385,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         notifications.append((#selector(zombieWokeUp), PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP))
         notifications.append((#selector(zombieSubmitted), PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED))
         notifications.append((#selector(zombieFailed), PostNotifier.NOTIFICATION_ZOMBIE_FAILED))
-        
-        notifications.append((#selector(submitRequestedFromUserNotification(notification:)), PostNotifier.NOTIFICATION_SUBMIT_REQUESTED))
         
         return notifications
     }
