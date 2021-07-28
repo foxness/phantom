@@ -148,6 +148,69 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		57540E7726B17E0100712B5F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
+				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
+				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		57540E7826B17E6600712B5F /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				71C031B724FA6B5600D6E19F /* Main.storyboard */,
+				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
+				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
+				71C031BF24FA6B5700D6E19F /* Info.plist */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		57540E7926B180C600712B5F /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				718181D924FBE01D00059658 /* PostViewController.swift */,
+				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
+				71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */,
+				71C031C824FA705B00D6E19F /* RedditSignInViewController.swift */,
+				5768C3362639C9D400459260 /* ImgurSignInViewController.swift */,
+				57F84DE8264074B200B10E75 /* BulkAddViewController.swift */,
+				57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		57540E7A26B180F100712B5F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				71684AD025024D83005BA857 /* PostCell.swift */,
+				57605EF626735E4900E4EE25 /* StaticSettingCell.swift */,
+				57605EF82673790700E4EE25 /* SwitchSettingCell.swift */,
+				57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */,
+				57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */,
+				572AA66C2687562B0016BE43 /* TextSettingCell.swift */,
+				575BEC38268F51BB00D804BA /* TimeSettingCell.swift */,
+				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		57540E7B26B1813900712B5F /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				576E515A2644708200B0047F /* SlideUpMenu.swift */,
+				571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */,
+				5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */,
+				57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */,
+				57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */,
+				5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		71C031A524FA6B5600D6E19F = {
 			isa = PBXGroup;
 			children = (
@@ -168,12 +231,12 @@
 		71C031B024FA6B5600D6E19F /* Phantom */ = {
 			isa = PBXGroup;
 			children = (
+				57540E7726B17E0100712B5F /* App */,
+				9693DCEB252773FE00A4A23E /* Helper */,
 				9693DCE92527736100A4A23E /* Model */,
 				9693DCEA252773E400A4A23E /* Presenter */,
 				9693DCE8252772D200A4A23E /* View */,
-				9693DCEB252773FE00A4A23E /* Other */,
-				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
-				71C031BF24FA6B5700D6E19F /* Info.plist */,
+				57540E7826B17E6600712B5F /* Resource */,
 			);
 			path = Phantom;
 			sourceTree = "<group>";
@@ -189,32 +252,9 @@
 		9693DCE8252772D200A4A23E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				71C031B724FA6B5600D6E19F /* Main.storyboard */,
-				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
-				7192A40924FFD76500CB54A8 /* Notifications.swift */,
-				71684AD025024D83005BA857 /* PostCell.swift */,
-				718181D924FBE01D00059658 /* PostViewController.swift */,
-				71C646A8250254A4005C28B1 /* PostTableViewController.swift */,
-				576E515A2644708200B0047F /* SlideUpMenu.swift */,
-				571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */,
-				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
-				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
-				71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */,
-				71C031C824FA705B00D6E19F /* RedditSignInViewController.swift */,
-				5768C3362639C9D400459260 /* ImgurSignInViewController.swift */,
-				57F84DE8264074B200B10E75 /* BulkAddViewController.swift */,
-				57605EEE26734DCE00E4EE25 /* SettingsViewController.swift */,
-				57605EF626735E4900E4EE25 /* StaticSettingCell.swift */,
-				57605EF82673790700E4EE25 /* SwitchSettingCell.swift */,
-				57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */,
-				57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */,
-				572AA66C2687562B0016BE43 /* TextSettingCell.swift */,
-				575BEC38268F51BB00D804BA /* TimeSettingCell.swift */,
-				57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */,
-				57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */,
-				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
-				5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */,
-				5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */,
+				57540E7926B180C600712B5F /* ViewController */,
+				57540E7A26B180F100712B5F /* Cell */,
+				57540E7B26B1813900712B5F /* Other */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -222,26 +262,10 @@
 		9693DCE92527736100A4A23E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				718181DB24FBEDF500059658 /* Post.swift */,
 				71C031CA24FA8B4E00D6E19F /* Reddit.swift */,
-				71614EF024FD195C00FA8B76 /* Database.swift */,
-				718181DD24FBFEE200059658 /* Requests.swift */,
-				7179EF392501037000BDA598 /* PostSubmitter.swift */,
-				573CE68E267E2F170083CE30 /* PostSubmission.swift */,
-				57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */,
-				572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */,
-				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
-				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
-				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
-				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
-				575D7876264C112000173E7A /* Wallhaven.swift */,
-				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
-				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
-				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
-				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
-				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
+				71614EF024FD195C00FA8B76 /* Database.swift */,
 				57605EF22673590D00E4EE25 /* SettingsSection.swift */,
 			);
 			path = Model;
@@ -262,14 +286,30 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
-		9693DCEB252773FE00A4A23E /* Other */ = {
+		9693DCEB252773FE00A4A23E /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				718181DD24FBFEE200059658 /* Requests.swift */,
 				578358E0263C7E0E00320607 /* Helper.swift */,
 				57C6352B26544FC90072D130 /* PhantomError.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
+				7179EF392501037000BDA598 /* PostSubmitter.swift */,
+				573CE68E267E2F170083CE30 /* PostSubmission.swift */,
+				57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */,
+				572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */,
+				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
+				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
+				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
+				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
+				575D7876264C112000173E7A /* Wallhaven.swift */,
+				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
+				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
+				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
+				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
+				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
+				7192A40924FFD76500CB54A8 /* Notifications.swift */,
 			);
-			path = Other;
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -553,7 +593,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
-				INFOPLIST_FILE = Phantom/Info.plist;
+				INFOPLIST_FILE = Phantom/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -574,7 +614,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
-				INFOPLIST_FILE = Phantom/Info.plist;
+				INFOPLIST_FILE = Phantom/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
