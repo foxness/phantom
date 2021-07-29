@@ -289,25 +289,25 @@
 		9693DCEB252773FE00A4A23E /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				718181DD24FBFEE200059658 /* Requests.swift */,
 				578358E0263C7E0E00320607 /* Helper.swift */,
-				57C6352B26544FC90072D130 /* PhantomError.swift */,
 				71C031CC24FA95CB00D6E19F /* Extensions.swift */,
+				718181DD24FBFEE200059658 /* Requests.swift */,
+				7192A40924FFD76500CB54A8 /* Notifications.swift */,
+				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
 				7179EF392501037000BDA598 /* PostSubmitter.swift */,
 				573CE68E267E2F170083CE30 /* PostSubmission.swift */,
 				57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */,
 				572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */,
+				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
+				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
+				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
+				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
 				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
-				96886AE2250BCFBE004FDE30 /* PostNotifier.swift */,
-				5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */,
 				575D7876264C112000173E7A /* Wallhaven.swift */,
-				5727A52226387CF400CE3FCD /* WallhavenMiddleware.swift */,
-				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
-				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
 				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
-				7192A40924FFD76500CB54A8 /* Notifications.swift */,
+				57C6352B26544FC90072D130 /* PhantomError.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";

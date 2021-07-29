@@ -13,7 +13,9 @@ class PostViewController: UIViewController, PostViewDelegate {
         case unwindPostSaved = "unwindPostSaved"
     }
     
-    static let TEXT_NEW_POST_TITLE = "New Post"
+    private static let TEXT_NEW_POST_TITLE = "New Post"
+    private static let TEXT_SELF_PLACEHOLDER = "Add text (optional)"
+    private static let TEXT_LINK_PLACEHOLDER = "Add URL"
     
     @IBOutlet weak var typeControl: UISegmentedControl!
     
@@ -100,9 +102,9 @@ class PostViewController: UIViewController, PostViewDelegate {
         
         switch typeControl.selectedSegmentIndex {
         case 1:
-            contentPlaceholder = "Text"
+            contentPlaceholder = PostViewController.TEXT_SELF_PLACEHOLDER
         case 0:
-            contentPlaceholder = "Link"
+            contentPlaceholder = PostViewController.TEXT_LINK_PLACEHOLDER
         default:
             fatalError()
         }
