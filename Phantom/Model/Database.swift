@@ -23,7 +23,7 @@ class Database {
         case useImgur = "useImgur"
     }
     
-    private static let DEFAULT_BULK_ADD_SUBREDDIT = "test" // todo: change to "pics" or something
+    private static let DEFAULT_BULK_ADD_SUBREDDIT = "pics"
     private static let DEFAULT_BULK_ADD_TIME = TimeInterval(12 * 60 * 60) // 12:00
     
     static let instance = Database()
@@ -89,6 +89,8 @@ class Database {
         set { internalBulkAddTime = newValue }
     }
     
+    var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
+    
     var posts: [Post] = []
     
     private init() {
@@ -122,11 +124,16 @@ class Database {
         useWallhaven = false
         useImgur = false
         thumbnailResolverCache = nil
-        internalBulkAddSubreddit = nil // intentionally 'internal'
         internalBulkAddTime = nil // intentionally 'internal'
+        
+        resetBulkAddSubreddit()
         
         posts = []
         savePosts()
+    }
+    
+    func resetBulkAddSubreddit() {
+        internalBulkAddSubreddit = nil // intentionally 'internal'
     }
     
     private func loadPosts() {

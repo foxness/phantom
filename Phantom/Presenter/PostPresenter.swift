@@ -11,6 +11,8 @@ import Foundation
 class PostPresenter {
     private weak var viewDelegate: PostViewDelegate?
     
+    private let database: Database = .instance
+    
     private var post: Post?
     private(set) var isNewPost = false
     
@@ -31,7 +33,7 @@ class PostPresenter {
     func viewDidLoad() {
         if post == nil {
             isNewPost = true
-            post = PostPresenter.getDefaultPost()
+            post = getDefaultNewPost()
             viewDelegate?.indicateNewPost()
         }
         
@@ -92,14 +94,14 @@ class PostPresenter {
         updateSaveButton()
     }
     
-    private static func getDefaultPost() -> Post {
+    private func getDefaultNewPost() -> Post {
         let title = ""
-        let subreddit = "test"
+        let url = ""
+        
+        let subreddit = database.newPostDefaultSubreddit ?? ""
         
         // TODO: set a realistic new post date
         let date = Date() + 60 * 60 // 1 hour from now
-        
-        let url = ""
         
         return Post.Link(title: title, subreddit: subreddit, date: date, url: url)
     }

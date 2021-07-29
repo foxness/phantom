@@ -129,17 +129,20 @@ class SettingsPresenter {
         guard let subreddit = subreddit else { return }
         
         let trimmed = subreddit.trim()
-        guard !trimmed.isEmpty && database.bulkAddSubreddit != trimmed else { return }
         
-        guard Post.isValidSubreddit(trimmed) else {
-            viewDelegate?.showInvalidSubredditAlert { [self] in
-                viewDelegate?.showBulkAddSubredditAlert(subreddit: database.bulkAddSubreddit)
+        if trimmed.isEmpty {
+            database.resetBulkAddSubreddit()
+        } else {
+            guard Post.isValidSubreddit(trimmed) else {
+                viewDelegate?.showInvalidSubredditAlert { [self] in
+                    viewDelegate?.showBulkAddSubredditAlert(subreddit: database.bulkAddSubreddit)
+                }
+                
+                return
             }
             
-            return
+            database.bulkAddSubreddit = trimmed
         }
-        
-        database.bulkAddSubreddit = trimmed
         
         updateSettings()
         updateBulkAddSubredditCell()
