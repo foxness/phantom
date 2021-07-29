@@ -1,5 +1,5 @@
 //
-//  PostViewController.swift
+//  PostDetailViewController.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/08/30.
@@ -8,11 +8,10 @@
 
 import UIKit
 
-// todo: rename all Post~~~ to PostDetail~~~ ?
 // todo: add paste button for url field
 // todo: todo add "/r/" in inside subreddit field
 
-class PostViewController: UIViewController, PostViewDelegate {
+class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     enum Segue: String {
         case unwindPostSaved = "unwindPostSaved"
     }
@@ -30,14 +29,14 @@ class PostViewController: UIViewController, PostViewDelegate {
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    private let presenter = PostPresenter()
+    private let presenter = PostDetailPresenter()
     
     var postTitle: String {
-        return PostViewController.emptyIfNull(titleField.text?.trim())
+        return PostDetailViewController.emptyIfNull(titleField.text?.trim())
     }
     
     var postSubreddit: String {
-        return PostViewController.emptyIfNull(subredditField.text?.trim())
+        return PostDetailViewController.emptyIfNull(subredditField.text?.trim())
     }
     
     var postDate: Date {
@@ -85,7 +84,7 @@ class PostViewController: UIViewController, PostViewDelegate {
 //    }
     
     func indicateNewPost() {
-        navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
+        navigationItem.title = PostDetailViewController.TEXT_NEW_POST_TITLE
     }
     
     func displayPost(_ post: Post) {
@@ -115,9 +114,9 @@ class PostViewController: UIViewController, PostViewDelegate {
         
         switch typeControl.selectedSegmentIndex {
         case 1:
-            contentPlaceholder = PostViewController.TEXT_SELF_PLACEHOLDER
+            contentPlaceholder = PostDetailViewController.TEXT_SELF_PLACEHOLDER
         case 0:
-            contentPlaceholder = PostViewController.TEXT_LINK_PLACEHOLDER
+            contentPlaceholder = PostDetailViewController.TEXT_LINK_PLACEHOLDER
         default:
             fatalError()
         }

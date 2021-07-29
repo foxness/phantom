@@ -330,7 +330,7 @@
         <!--Post-->
         <scene sceneID="U3y-Be-Sg9">
             <objects>
-                <viewController id="npb-aq-zMg" customClass="PostViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="npb-aq-zMg" customClass="PostDetailViewController" customModule="Phantom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ICN-dW-pNn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

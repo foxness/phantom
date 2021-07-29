@@ -1,5 +1,5 @@
 //
-//  PostPresenter.swift
+//  PostDetailPresenter.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/10/05.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-class PostPresenter {
-    private weak var viewDelegate: PostViewDelegate?
+class PostDetailPresenter {
+    private weak var viewDelegate: PostDetailViewDelegate?
     
     private let database: Database = .instance
     
@@ -18,7 +18,7 @@ class PostPresenter {
     
     var resultingPost: Post { post! }
     
-    func attachView(_ viewDelegate: PostViewDelegate) {
+    func attachView(_ viewDelegate: PostDetailViewDelegate) {
         self.viewDelegate = viewDelegate
     }
     
