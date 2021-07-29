@@ -336,10 +336,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="40" y="128" width="334" height="441"/>
+                                <rect key="frame" x="12" y="128" width="390" height="413.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-0i-hpg" userLabel="TypeControl">
-                                        <rect key="frame" x="71" y="0.0" width="192" height="32"/>
+                                        <rect key="frame" x="30" y="0.0" width="330" height="32"/>
                                         <segments>
                                             <segment title="" image="link" catalog="system"/>
                                             <segment title="" image="square.and.pencil" catalog="system"/>
@@ -349,27 +349,27 @@
                                         </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
-                                        <rect key="frame" x="30" y="59" width="274" height="138"/>
+                                        <rect key="frame" x="30" y="59" width="330" height="110.5"/>
                                         <subviews>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add a title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
-                                                <rect key="frame" x="0.0" y="0.0" width="274" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
+                                                <rect key="frame" x="0.0" y="0.0" width="330" height="30.5"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
                                                     <action selector="titleChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="UBN-8t-msx"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add text (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
-                                                <rect key="frame" x="0.0" y="52" width="274" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add text (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
+                                                <rect key="frame" x="0.0" y="48.5" width="330" height="22"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
                                                     <action selector="textChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="ZwJ-fl-JLy"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
-                                                <rect key="frame" x="0.0" y="104" width="274" height="34"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
+                                                <rect key="frame" x="0.0" y="88.5" width="330" height="22"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
                                                     <action selector="subredditChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="Pwj-Gp-nvb"/>
@@ -378,23 +378,22 @@
                                         </subviews>
                                     </stackView>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
-                                        <rect key="frame" x="7" y="225" width="320" height="216"/>
+                                        <rect key="frame" x="35" y="197.5" width="320" height="216"/>
                                     </datePicker>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" constant="30" id="0WH-zB-Rb2"/>
                                     <constraint firstAttribute="trailing" secondItem="6Td-yy-gaf" secondAttribute="trailing" constant="30" id="PSj-wR-5Ue"/>
-                                    <constraint firstItem="DX9-0i-hpg" firstAttribute="width" secondItem="6Td-yy-gaf" secondAttribute="width" multiplier="0.7" id="jlf-O5-VHm"/>
+                                    <constraint firstItem="DX9-0i-hpg" firstAttribute="width" secondItem="6Td-yy-gaf" secondAttribute="width" id="jlf-O5-VHm"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="92X-IH-g8H" firstAttribute="centerX" secondItem="ICN-dW-pNn" secondAttribute="centerX" id="7OJ-aN-sEt"/>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="top" secondItem="aDG-4v-KJD" secondAttribute="top" constant="40" id="CNF-tu-4OP"/>
-                            <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="40" id="DXB-pk-tPI"/>
-                            <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="40" id="FU3-VH-zDP"/>
+                            <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="12" id="DXB-pk-tPI"/>
+                            <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="12" id="FU3-VH-zDP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Post" id="jZk-7C-55N">

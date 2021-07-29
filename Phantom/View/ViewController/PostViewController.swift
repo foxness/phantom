@@ -8,6 +8,8 @@
 
 import UIKit
 
+// todo: rename all Post~~~ to PostDetail~~~ ?
+
 class PostViewController: UIViewController, PostViewDelegate {
     enum Segue: String {
         case unwindPostSaved = "unwindPostSaved"
@@ -67,9 +69,18 @@ class PostViewController: UIViewController, PostViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        setupTextFieldBottomLines()
+        
         presenter.attachView(self)
         presenter.viewDidLoad()
     }
+    
+//    private func setupTextFieldBottomLines() {
+//        let bottomLine = CALayer()
+//        bottomLine.frame = CGRect(x: 0, y: titleField.frame.height - 2, width: titleField.layer.frame.width - 50, height: 2)
+//        bottomLine.backgroundColor = view.tintColor.cgColor
+//        titleField.layer.addSublayer(bottomLine)
+//    }
     
     func indicateNewPost() {
         navigationItem.title = PostViewController.TEXT_NEW_POST_TITLE
