@@ -335,21 +335,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="12" y="128" width="390" height="413.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
+                                <rect key="frame" x="12" y="112" width="390" height="441.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-0i-hpg" userLabel="TypeControl">
-                                        <rect key="frame" x="30" y="0.0" width="330" height="32"/>
+                                        <rect key="frame" x="12" y="0.0" width="366" height="32"/>
                                         <segments>
-                                            <segment title="" image="link" catalog="system"/>
-                                            <segment title="" image="square.and.pencil" catalog="system"/>
+                                            <segment title="Link"/>
+                                            <segment title="Text"/>
                                         </segments>
                                         <connections>
                                             <action selector="typeChanged:" destination="npb-aq-zMg" eventType="valueChanged" id="Lz7-gZ-97K"/>
                                         </connections>
                                     </segmentedControl>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
-                                        <rect key="frame" x="30" y="59" width="330" height="110.5"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
+                                        <rect key="frame" x="30" y="67" width="330" height="122.5"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="30.5"/>
@@ -360,7 +360,7 @@
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add text (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
-                                                <rect key="frame" x="0.0" y="48.5" width="330" height="22"/>
+                                                <rect key="frame" x="0.0" y="54.5" width="330" height="22"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
@@ -368,7 +368,7 @@
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
-                                                <rect key="frame" x="0.0" y="88.5" width="330" height="22"/>
+                                                <rect key="frame" x="0.0" y="100.5" width="330" height="22"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
@@ -378,20 +378,20 @@
                                         </subviews>
                                     </stackView>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
-                                        <rect key="frame" x="35" y="197.5" width="320" height="216"/>
+                                        <rect key="frame" x="35" y="225.5" width="320" height="216"/>
                                     </datePicker>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="6Td-yy-gaf" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" constant="30" id="0WH-zB-Rb2"/>
                                     <constraint firstAttribute="trailing" secondItem="6Td-yy-gaf" secondAttribute="trailing" constant="30" id="PSj-wR-5Ue"/>
-                                    <constraint firstItem="DX9-0i-hpg" firstAttribute="width" secondItem="6Td-yy-gaf" secondAttribute="width" id="jlf-O5-VHm"/>
+                                    <constraint firstItem="DX9-0i-hpg" firstAttribute="leading" secondItem="92X-IH-g8H" secondAttribute="leading" constant="12" id="Svc-Cw-ewI"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aDG-4v-KJD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="92X-IH-g8H" firstAttribute="top" secondItem="aDG-4v-KJD" secondAttribute="top" constant="40" id="CNF-tu-4OP"/>
+                            <constraint firstItem="92X-IH-g8H" firstAttribute="top" secondItem="aDG-4v-KJD" secondAttribute="top" constant="24" id="CNF-tu-4OP"/>
                             <constraint firstItem="aDG-4v-KJD" firstAttribute="trailing" secondItem="92X-IH-g8H" secondAttribute="trailing" constant="12" id="DXB-pk-tPI"/>
                             <constraint firstItem="92X-IH-g8H" firstAttribute="leading" secondItem="aDG-4v-KJD" secondAttribute="leading" constant="12" id="FU3-VH-zDP"/>
                         </constraints>
@@ -701,8 +701,6 @@
     <color key="tintColor" name="AccentColor"/>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <image name="link" catalog="system" width="128" height="122"/>
-        <image name="square.and.pencil" catalog="system" width="128" height="115"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
