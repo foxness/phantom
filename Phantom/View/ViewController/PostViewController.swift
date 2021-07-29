@@ -9,6 +9,8 @@
 import UIKit
 
 // todo: rename all Post~~~ to PostDetail~~~ ?
+// todo: add paste button for url field
+// todo: todo add "/r/" in inside subreddit field
 
 class PostViewController: UIViewController, PostViewDelegate {
     enum Segue: String {
@@ -98,7 +100,7 @@ class PostViewController: UIViewController, PostViewDelegate {
             content = post.text
             segmentIndex = 1
         case .link:
-            content = post.url // todo: add paste button
+            content = post.url
             segmentIndex = 0
         }
         
