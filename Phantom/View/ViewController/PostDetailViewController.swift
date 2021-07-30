@@ -131,7 +131,7 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         contentField.text = content
         typeControl.selectedSegmentIndex = segmentIndex
         
-        updateContentPlaceholder()
+        updateContentField()
         updatePasteButton()
         updateSubredditPrefix()
     }
@@ -145,19 +145,27 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         pasteButton.isHidden = !linkPost || !clipboardHasSomething
     }
     
-    private func updateContentPlaceholder() {
-        let contentPlaceholder: String
+    private func updateContentField() {
+        let placeholder: String
+        let spellCheckingType: UITextSpellCheckingType
+        let keyboardType: UIKeyboardType
         
         switch typeControl.selectedSegmentIndex {
-        case 0:
-            contentPlaceholder = PostDetailViewController.TEXT_LINK_PLACEHOLDER
-        case 1:
-            contentPlaceholder = PostDetailViewController.TEXT_SELF_PLACEHOLDER
+        case 0: // link
+            placeholder = PostDetailViewController.TEXT_LINK_PLACEHOLDER
+            spellCheckingType = .no
+            keyboardType = .URL
+        case 1: // text
+            placeholder = PostDetailViewController.TEXT_SELF_PLACEHOLDER
+            spellCheckingType = .default
+            keyboardType = .default
         default:
             fatalError()
         }
         
-        contentField.placeholder = contentPlaceholder
+        contentField.placeholder = placeholder
+        contentField.spellCheckingType = spellCheckingType
+        contentField.keyboardType = keyboardType
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -193,7 +201,7 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     }
     
     @IBAction func typeChanged(_ sender: UISegmentedControl) {
-        updateContentPlaceholder()
+        updateContentField()
         updatePasteButton()
         presenter.postTypeChanged()
     }

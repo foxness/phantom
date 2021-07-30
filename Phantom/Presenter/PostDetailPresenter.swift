@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: improve/refactor PostDetailPresenter so that it has post's individual properties
+
 class PostDetailPresenter {
     private weak var viewDelegate: PostDetailViewDelegate?
     
