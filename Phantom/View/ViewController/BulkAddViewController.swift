@@ -96,10 +96,6 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         addButton.isEnabled = enabled
     }
     
-    func getClipboard() -> String? { // todo: maybe refactor it into Helper or something
-        return UIPasteboard.general.string
-    }
-    
     func segueBack() {
         segueTo(.unwindBulkAdded)
     }

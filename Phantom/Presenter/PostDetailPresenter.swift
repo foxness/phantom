@@ -1,5 +1,5 @@
 //
-//  PostPresenter.swift
+//  PostDetailPresenter.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/10/05.
@@ -8,15 +8,19 @@
 
 import Foundation
 
-class PostPresenter {
-    private weak var viewDelegate: PostViewDelegate?
+// todo: improve/refactor PostDetailPresenter so that it has post's individual properties
+
+class PostDetailPresenter {
+    private weak var viewDelegate: PostDetailViewDelegate?
+    
+    private let database: Database = .instance
     
     private var post: Post?
     private(set) var isNewPost = false
     
     var resultingPost: Post { post! }
     
-    func attachView(_ viewDelegate: PostViewDelegate) {
+    func attachView(_ viewDelegate: PostDetailViewDelegate) {
         self.viewDelegate = viewDelegate
     }
     
@@ -31,7 +35,7 @@ class PostPresenter {
     func viewDidLoad() {
         if post == nil {
             isNewPost = true
-            post = PostPresenter.getDefaultPost()
+            post = getDefaultNewPost()
             viewDelegate?.indicateNewPost()
         }
         
@@ -88,18 +92,18 @@ class PostPresenter {
         updateSaveButton()
     }
     
-    func textChanged() {
+    func contentChanged() {
         updateSaveButton()
     }
     
-    private static func getDefaultPost() -> Post {
+    private func getDefaultNewPost() -> Post {
         let title = ""
-        let subreddit = "test"
+        let url = ""
+        
+        let subreddit = database.newPostDefaultSubreddit ?? ""
         
         // TODO: set a realistic new post date
         let date = Date() + 60 * 60 // 1 hour from now
-        
-        let url = ""
         
         return Post.Link(title: title, subreddit: subreddit, date: date, url: url)
     }

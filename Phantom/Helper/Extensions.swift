@@ -19,7 +19,7 @@ final class Atomic<A> { // src: https://www.objc.io/blog/2018/12/18/atomic-varia
     }
 
     var value: A {
-        get { queue.sync { self._value } }
+        queue.sync { self._value }
     }
 
     func mutate(_ transform: (inout A) -> ()) {

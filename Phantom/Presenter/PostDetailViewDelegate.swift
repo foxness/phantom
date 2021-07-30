@@ -1,5 +1,5 @@
 //
-//  PostViewDelegate.swift
+//  PostDetailViewDelegate.swift
 //  Phantom
 //
 //  Created by Rivershy on 2020/10/05.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PostViewDelegate: AnyObject {
+protocol PostDetailViewDelegate: AnyObject {
     var postTitle: String { get }
     var postSubreddit: String { get }
     var postDate: Date { get }

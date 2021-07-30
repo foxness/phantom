@@ -126,7 +126,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         
         switch Segue(rawValue: segue.identifier ?? "") {
         case .showEditPost:
-            let dest = segue.destination as! PostViewController
+            let dest = segue.destination as! PostDetailViewController
             let selectedCell = sender as! PostCell
             let indexPath = tableView.indexPath(for: selectedCell)!
             let selectedPost = presenter.getPost(at: indexPath.row)
@@ -159,11 +159,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     @IBAction func unwindPostSaved(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == PostViewController.Segue.unwindPostSaved.rawValue else {
+        guard unwindSegue.identifier == PostDetailViewController.Segue.unwindPostSaved.rawValue else {
             fatalError("Got unexpected unwind segue")
         }
         
-        let pvc = unwindSegue.source as! PostViewController
+        let pvc = unwindSegue.source as! PostDetailViewController
         let (post, isNewPost) = pvc.getResultingPost()
         
         if isNewPost {

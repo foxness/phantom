@@ -9,6 +9,7 @@
 import Foundation
 
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
+// todo: always make the subreddit lowercase and trim it before sending to reddit?
 
 struct DebugVariable {
     private static let phoneDeploy = false
