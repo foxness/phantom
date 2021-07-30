@@ -8,9 +8,7 @@
 
 import UIKit
 
-// todo: add paste button for url field
-// todo: remove spellcheck in url and subreddit fields
-// todo: add the clear button to the text fields?
+// todo: make title and content text fields multiline
 
 class PostDetailViewController: UIViewController, PostDetailViewDelegate, UITextFieldDelegate {
     enum Segue: String {
