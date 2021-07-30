@@ -367,14 +367,25 @@
                                                     <action selector="textChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="ZwJ-fl-JLy"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L8d-ES-EtO">
                                                 <rect key="frame" x="0.0" y="106.5" width="330" height="25.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                                <connections>
-                                                    <action selector="subredditChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="Pwj-Gp-nvb"/>
-                                                </connections>
-                                            </textField>
+                                                <subviews>
+                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/r/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpJ-XO-kzn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="25.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="25.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                        <connections>
+                                                            <action selector="subredditChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="Pwj-Gp-nvb"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                     </stackView>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
@@ -412,6 +423,7 @@
                         <outlet property="datePicker" destination="ikv-Dr-6WC" id="MlJ-8H-MUT"/>
                         <outlet property="saveButton" destination="7uj-8O-RgY" id="pHE-Ac-rHZ"/>
                         <outlet property="subredditField" destination="WKp-cX-yYf" id="RUi-dQ-9aj"/>
+                        <outlet property="subredditPrefixLabel" destination="dpJ-XO-kzn" id="bL0-lA-0XJ"/>
                         <outlet property="titleField" destination="L7F-hX-VAI" id="DiR-fT-Qde"/>
                         <outlet property="typeControl" destination="DX9-0i-hpg" id="d1o-Sz-r3r"/>
                     </connections>

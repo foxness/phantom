@@ -26,6 +26,7 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     @IBOutlet weak var contentField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var subredditPrefixLabel: UILabel!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -89,8 +90,10 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     
     func displayPost(_ post: Post) {
         titleField.text = post.title
-        subredditField.text = post.subreddit
         datePicker.date = post.date
+        
+        subredditField.text = post.subreddit
+        updateSubredditPrefix()
         
         let content: String?
         let segmentIndex: Int
@@ -166,10 +169,15 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     }
     
     @IBAction func subredditChanged(_ sender: Any) {
+        updateSubredditPrefix()
         presenter.subredditChanged()
     }
     
-    private static func emptyIfNull(_ str: String?) -> String {
+    private func updateSubredditPrefix() {
+        subredditPrefixLabel.isHidden = PostDetailViewController.emptyIfNull(subredditField.text).trim().isEmpty
+    }
+    
+    private static func emptyIfNull(_ str: String?) -> String { // todo: extract into extensions
         return str ?? ""
     }
 }
