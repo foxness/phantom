@@ -336,7 +336,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="92X-IH-g8H">
-                                <rect key="frame" x="0.0" y="120" width="414" height="463"/>
+                                <rect key="frame" x="0.0" y="120" width="414" height="461.5"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DX9-0i-hpg" userLabel="TypeControl">
                                         <rect key="frame" x="32" y="0.0" width="350" height="32"/>
@@ -349,7 +349,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="6Td-yy-gaf">
-                                        <rect key="frame" x="42" y="73" width="330" height="132"/>
+                                        <rect key="frame" x="42" y="73" width="330" height="130.5"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a title" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="L7F-hX-VAI">
                                                 <rect key="frame" x="0.0" y="0.0" width="330" height="33"/>
@@ -359,7 +359,7 @@
                                                     <action selector="titleChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="UBN-8t-msx"/>
                                                 </connections>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add text (optional)" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add text (optional)" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="DXl-Eb-uh3">
                                                 <rect key="frame" x="0.0" y="57" width="330" height="25.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -367,17 +367,17 @@
                                                     <action selector="textChanged:" destination="npb-aq-zMg" eventType="editingChanged" id="ZwJ-fl-JLy"/>
                                                 </connections>
                                             </textField>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L8d-ES-EtO">
-                                                <rect key="frame" x="0.0" y="106.5" width="330" height="25.5"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="L8d-ES-EtO">
+                                                <rect key="frame" x="0.0" y="106.5" width="330" height="24"/>
                                                 <subviews>
-                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/r/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpJ-XO-kzn">
-                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="25.5"/>
+                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="/r/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpJ-XO-kzn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="24"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
-                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="25.5"/>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a subreddit" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-cX-yYf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="330" height="24"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                         <connections>
@@ -389,7 +389,7 @@
                                         </subviews>
                                     </stackView>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikv-Dr-6WC">
-                                        <rect key="frame" x="47" y="247" width="320" height="216"/>
+                                        <rect key="frame" x="47" y="245.5" width="320" height="216"/>
                                     </datePicker>
                                 </subviews>
                                 <constraints>

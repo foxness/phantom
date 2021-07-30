@@ -9,9 +9,9 @@
 import UIKit
 
 // todo: add paste button for url field
-// todo: todo add "/r/" in inside subreddit field
+// todo: remove spellcheck in url and subreddit fields
 
-class PostDetailViewController: UIViewController, PostDetailViewDelegate {
+class PostDetailViewController: UIViewController, PostDetailViewDelegate, UITextFieldDelegate {
     enum Segue: String {
         case unwindPostSaved = "unwindPostSaved"
     }
@@ -19,6 +19,9 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     private static let TEXT_NEW_POST_TITLE = "New Post"
     private static let TEXT_SELF_PLACEHOLDER = "Add text (optional)"
     private static let TEXT_LINK_PLACEHOLDER = "Add URL"
+    
+    private static let MAX_SUBREDDIT_LENGTH = Reddit.LIMIT_SUBREDDIT_LENGTH
+    private static let SUBREDDIT_ALLOWED_CHARACTERS = NSCharacterSet(charactersIn: "ABCDEFGHIJKLMONPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // do not use NSCharacterSet.alphanumerics because it contains non-latin alphanumerics which we don't want
     
     @IBOutlet weak var typeControl: UISegmentedControl!
     
@@ -72,6 +75,8 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
         super.viewDidLoad()
         
 //        setupTextFieldBottomLines()
+        
+        subredditField.delegate = self
         
         presenter.attachView(self)
         presenter.viewDidLoad()
@@ -179,5 +184,17 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate {
     
     private static func emptyIfNull(_ str: String?) -> String { // todo: extract into extensions
         return str ?? ""
+    }
+    
+    // subredditField
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let disallowed = PostDetailViewController.SUBREDDIT_ALLOWED_CHARACTERS.inverted
+        let onlyContainsAllowed = string.rangeOfCharacter(from: disallowed) == nil
+        
+        let currentString = (textField.text ?? "") as NSString
+        let newString = currentString.replacingCharacters(in: range, with: string)
+        let goodLength = newString.count <= PostDetailViewController.MAX_SUBREDDIT_LENGTH
+        
+        return onlyContainsAllowed && goodLength
     }
 }
