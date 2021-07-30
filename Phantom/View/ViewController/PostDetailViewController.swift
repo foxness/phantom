@@ -97,8 +97,17 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     }
     
     func pasteIntoUrl() {
-        if let string = Helper.getClipboard().string { // todo: change to url
-            contentField.text = string
+        let clipboard = Helper.getClipboard()
+        
+        var newContent: String?
+        if clipboard.hasURLs, let url = clipboard.url?.absoluteString {
+            newContent = url
+        } else if clipboard.hasStrings, let string = clipboard.string {
+            newContent = string
+        }
+        
+        if let newContent = newContent {
+            contentField.text = newContent
             contentField.sendActions(for: .editingChanged)
         }
     }
@@ -128,10 +137,12 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     }
     
     private func updatePasteButton() {
-        let linkPost = typeControl.selectedSegmentIndex == 0
-        let clipboardHasString = Helper.getClipboard().hasStrings // todo: add url detection (.hasURLs)
+        let clipboard = Helper.getClipboard()
         
-        pasteButton.isHidden = !linkPost || !clipboardHasString
+        let linkPost = typeControl.selectedSegmentIndex == 0
+        let clipboardHasSomething = clipboard.hasURLs || clipboard.hasStrings
+        
+        pasteButton.isHidden = !linkPost || !clipboardHasSomething
     }
     
     private func updateContentPlaceholder() {
