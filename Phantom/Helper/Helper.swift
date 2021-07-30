@@ -152,4 +152,8 @@ struct Helper {
     static func dateToTimeOfDay(_ date: Date) -> TimeInterval {
         return date.startOfDay.distance(to: date)
     }
+    
+    static func getClipboard() -> UIPasteboard {
+        return UIPasteboard.general
+    }
 }

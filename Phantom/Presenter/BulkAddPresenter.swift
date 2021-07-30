@@ -46,7 +46,7 @@ class BulkAddPresenter {
     }
     
     func pasteButtonPressed() {
-        if let clipboard = viewDelegate?.getClipboard() {
+        if let clipboard = Helper.getClipboard().string {
             viewDelegate?.bulkText = clipboard
             updateAddButton()
         }

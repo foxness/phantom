@@ -10,6 +10,7 @@ import UIKit
 
 // todo: add paste button for url field
 // todo: remove spellcheck in url and subreddit fields
+// todo: add the clear button to the text fields?
 
 class PostDetailViewController: UIViewController, PostDetailViewDelegate, UITextFieldDelegate {
     enum Segue: String {
@@ -24,11 +25,13 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     private static let SUBREDDIT_ALLOWED_CHARACTERS = NSCharacterSet(charactersIn: "ABCDEFGHIJKLMONPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") // do not use NSCharacterSet.alphanumerics because it contains non-latin alphanumerics which we don't want
     
     @IBOutlet weak var typeControl: UISegmentedControl!
+    @IBOutlet weak var pasteButton: UIButton!
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var contentField: UITextField!
     @IBOutlet weak var subredditField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
+    
     @IBOutlet weak var subredditPrefixLabel: UILabel!
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -36,27 +39,27 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     private let presenter = PostDetailPresenter()
     
     var postTitle: String {
-        return PostDetailViewController.emptyIfNull(titleField.text?.trim())
+        PostDetailViewController.emptyIfNull(titleField.text?.trim())
     }
     
     var postSubreddit: String {
-        return PostDetailViewController.emptyIfNull(subredditField.text?.trim())
+        PostDetailViewController.emptyIfNull(subredditField.text?.trim())
     }
     
     var postDate: Date {
-        return datePicker.date
+        datePicker.date
     }
     
     var postType: Post.PostType {
-        return typeControl.selectedSegmentIndex == 0 ? .link : .text
+        typeControl.selectedSegmentIndex == 0 ? .link : .text
     }
     
     var postUrl: String? {
-        return contentField.text?.trim()
+        contentField.text?.trim()
     }
     
     var postText: String? {
-        return contentField.text?.trim()
+        contentField.text?.trim()
     }
     
     func setSaveButton(enabled: Bool) {
@@ -93,12 +96,17 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         navigationItem.title = PostDetailViewController.TEXT_NEW_POST_TITLE
     }
     
+    func pasteIntoUrl() {
+        if let string = Helper.getClipboard().string { // todo: change to url
+            contentField.text = string
+            contentField.sendActions(for: .editingChanged)
+        }
+    }
+    
     func displayPost(_ post: Post) {
         titleField.text = post.title
         datePicker.date = post.date
-        
         subredditField.text = post.subreddit
-        updateSubredditPrefix()
         
         let content: String?
         let segmentIndex: Int
@@ -115,16 +123,25 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         typeControl.selectedSegmentIndex = segmentIndex
         
         updateContentPlaceholder()
+        updatePasteButton()
+        updateSubredditPrefix()
+    }
+    
+    private func updatePasteButton() {
+        let linkPost = typeControl.selectedSegmentIndex == 0
+        let clipboardHasString = Helper.getClipboard().hasStrings // todo: add url detection (.hasURLs)
+        
+        pasteButton.isHidden = !linkPost || !clipboardHasString
     }
     
     private func updateContentPlaceholder() {
         let contentPlaceholder: String
         
         switch typeControl.selectedSegmentIndex {
-        case 1:
-            contentPlaceholder = PostDetailViewController.TEXT_SELF_PLACEHOLDER
         case 0:
             contentPlaceholder = PostDetailViewController.TEXT_LINK_PLACEHOLDER
+        case 1:
+            contentPlaceholder = PostDetailViewController.TEXT_SELF_PLACEHOLDER
         default:
             fatalError()
         }
@@ -160,8 +177,13 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         presenter.cancelButtonPressed()
     }
     
+    @IBAction func pasteButtonPressed(_ sender: Any) {
+        pasteIntoUrl()
+    }
+    
     @IBAction func typeChanged(_ sender: UISegmentedControl) {
         updateContentPlaceholder()
+        updatePasteButton()
         presenter.postTypeChanged()
     }
     
@@ -169,8 +191,8 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
         presenter.titleChanged()
     }
     
-    @IBAction func textChanged(_ sender: Any) {
-        presenter.textChanged()
+    @IBAction func contentChanged(_ sender: Any) {
+        presenter.contentChanged()
     }
     
     @IBAction func subredditChanged(_ sender: Any) {

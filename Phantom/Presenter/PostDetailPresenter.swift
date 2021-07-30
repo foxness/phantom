@@ -90,7 +90,7 @@ class PostDetailPresenter {
         updateSaveButton()
     }
     
-    func textChanged() {
+    func contentChanged() {
         updateSaveButton()
     }
     
