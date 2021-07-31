@@ -328,7 +328,7 @@ class Reddit {
     private func getSubmitPostParams(post: Post, resubmit: Bool, sendReplies: Bool) -> Requests.PostParams {
         let resubmitString = resubmit.description
         let sendRepliesString = sendReplies.description
-        let subredditString = post.subreddit
+        let subredditString = post.subreddit.lowercased()
         let titleString = post.title
         
         var dataDict = [Symbols.API_TYPE: Symbols.JSON,

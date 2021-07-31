@@ -28,13 +28,13 @@ struct Post: Equatable, Codable {
     
     private init(id: UUID? = nil, title: String, subreddit: String, date: Date, type: PostType, text: String?, url: String?) {
         self.id = id ?? UUID()
-        self.title = title
-        self.subreddit = subreddit
+        self.title = title.trim()
+        self.subreddit = subreddit.trim()
         self.date = date
         
         self.type = type
-        self.text = text
-        self.url = url
+        self.text = text?.trim()
+        self.url = url?.trim()
     }
     
     static func Text(id: UUID? = nil, title: String, subreddit: String, date: Date, text: String) -> Post {
