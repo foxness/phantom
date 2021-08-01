@@ -17,26 +17,51 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HrA-3Z-WXO">
-                                <rect key="frame" x="186" y="433" width="42" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HrA-3Z-WXO" userLabel="Log In Button">
+                                <rect key="frame" x="186" y="782" width="42" height="30"/>
                                 <state key="normal" title="Log In"/>
                                 <connections>
                                     <segue destination="cuc-xd-yKa" kind="presentation" identifier="introductionShowRedditSignIn" id="Fmp-8g-UON"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumbnail_link_post" translatesAutoresizingMaskIntoConstraints="NO" id="mOq-bV-CNe" userLabel="App Icon">
+                                <rect key="frame" x="134.5" y="331" width="145" height="144.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="mOq-bV-CNe" secondAttribute="height" multiplier="1:1" id="2j9-d8-Uhg"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KdV-rm-7Dc" userLabel="App Name">
+                                <rect key="frame" x="134" y="495.5" width="146" height="45.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Schedule your Reddit posts." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfX-nw-Io7" userLabel="App Tagline">
+                                <rect key="frame" x="88.5" y="571" width="237" height="23"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="HrA-3Z-WXO" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="eQe-rk-2bN"/>
+                            <constraint firstItem="mOq-bV-CNe" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" multiplier="0.9" id="0Fk-7A-IQp"/>
+                            <constraint firstItem="KdV-rm-7Dc" firstAttribute="top" secondItem="mOq-bV-CNe" secondAttribute="bottom" constant="20" id="EMg-sW-StH"/>
+                            <constraint firstItem="KdV-rm-7Dc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="F00-U7-2sN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="HrA-3Z-WXO" secondAttribute="bottom" constant="50" id="KwE-dH-8d7"/>
+                            <constraint firstItem="mOq-bV-CNe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="b2u-6D-zEw"/>
                             <constraint firstItem="HrA-3Z-WXO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sZj-Lm-Jyr"/>
+                            <constraint firstItem="jfX-nw-Io7" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tR0-8L-3de"/>
+                            <constraint firstItem="jfX-nw-Io7" firstAttribute="top" secondItem="KdV-rm-7Dc" secondAttribute="bottom" constant="30" id="wAV-zq-01q"/>
+                            <constraint firstItem="mOq-bV-CNe" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.35" id="waE-Uk-S0a"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome" id="zFP-WB-yXr"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="187" y="863"/>
+            <point key="canvasLocation" x="186.95652173913044" y="862.5"/>
         </scene>
         <!--Settings-->
         <scene sceneID="xg1-N9-yAS">
@@ -720,11 +745,12 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="I6c-Og-Mxs"/>
-        <segue reference="bTN-eO-UuB"/>
+        <segue reference="Fmp-8g-UON"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" name="AccentColor"/>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="thumbnail_link_post" width="200" height="200"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
