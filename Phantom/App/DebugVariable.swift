@@ -9,7 +9,7 @@
 import Foundation
 
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
-// todo: give all Main.storyboard views to better names (like in welcome screen)
+// todo: give all Main.storyboard views better names (like in welcome screen) [ez]
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
 
 struct DebugVariable {
