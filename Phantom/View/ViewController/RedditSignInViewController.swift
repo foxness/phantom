@@ -9,6 +9,8 @@
 import UIKit
 import WebKit
 
+// todo: loading icon while page is loading
+
 class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     enum Segue: String {
         case unwindRedditSignedIn = "unwindRedditSignedIn"

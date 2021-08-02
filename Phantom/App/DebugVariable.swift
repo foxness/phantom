@@ -9,6 +9,9 @@
 import Foundation
 
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
+// todo: give all Main.storyboard views better names (like in welcome screen) [ez]
+// todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
+// todo: rename "continue with reddit" button to "sign in with reddit" [ez]
 
 struct DebugVariable {
     private static let phoneDeploy = false
