@@ -22,6 +22,7 @@ class IntroductionViewController: UIViewController {
     private static let BUTTON_CORNER_RADIUS: CGFloat = 9
     
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var appIconView: UIImageView!
     
     private let hideNavBar = true
 
@@ -29,6 +30,7 @@ class IntroductionViewController: UIViewController {
         super.viewDidLoad()
         
         roundButtonCorners()
+        tintAppIcon()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +52,11 @@ class IntroductionViewController: UIViewController {
     func roundButtonCorners() {
         signInButton.layer.cornerRadius = IntroductionViewController.BUTTON_CORNER_RADIUS
         signInButton.layer.masksToBounds = true
+    }
+    
+    func tintAppIcon() {
+        appIconView.image = appIconView.image?.withRenderingMode(.alwaysTemplate)
+        appIconView.tintColor = UIColor.label
     }
 }
 
