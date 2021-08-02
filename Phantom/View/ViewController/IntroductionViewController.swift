@@ -56,7 +56,9 @@ class IntroductionViewController: UIViewController {
     
     func tintAppIcon() {
         appIconView.image = appIconView.image?.withRenderingMode(.alwaysTemplate)
-        appIconView.tintColor = UIColor.label
+        
+        // uncomment for black&white icon
+//        appIconView.tintColor = UIColor.label
     }
 }
 
