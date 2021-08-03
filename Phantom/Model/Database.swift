@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: improve property order / structure of this class [ez]
+
 // entirely UserDefaults-backed
 class Database {
     private enum Key: String {
@@ -21,6 +23,7 @@ class Database {
         case wallpaperMode = "wallpaperMode"
         case useWallhaven = "useWallhaven"
         case useImgur = "useImgur"
+        case askedForNotificationPermissions = "askedForNotificationPermissions"
     }
     
     private static let DEFAULT_BULK_ADD_SUBREDDIT = "pics"
@@ -35,6 +38,7 @@ class Database {
     @UserDefaultsBacked(key: Key.imgurAuth.rawValue) private var internalImgurAuth: String?
     
     @UserDefaultsBacked(key: Key.introductionShown.rawValue, defaultValue: false) private var internalIntroductionShown: Bool
+    @UserDefaultsBacked(key: Key.askedForNotificationPermissions.rawValue, defaultValue: false) private var internalAskedForNotificationPermissions: Bool
     @UserDefaultsBacked(key: Key.wallpaperMode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
     @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     @UserDefaultsBacked(key: Key.useImgur.rawValue, defaultValue: false) private var internalUseImgur: Bool
@@ -89,6 +93,11 @@ class Database {
         set { internalBulkAddTime = newValue }
     }
     
+    var askedForNotificationPermissions: Bool {
+        get { internalAskedForNotificationPermissions }
+        set { internalAskedForNotificationPermissions = newValue }
+    }
+    
     var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
     
     var posts: [Post] = []
@@ -125,6 +134,7 @@ class Database {
         useImgur = false
         thumbnailResolverCache = nil
         internalBulkAddTime = nil // intentionally 'internal'
+        askedForNotificationPermissions = false
         
         resetBulkAddSubreddit()
         

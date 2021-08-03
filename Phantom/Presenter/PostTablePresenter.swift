@@ -153,9 +153,9 @@ class PostTablePresenter {
     }
     
     func postSavedUnwindCompleted() {
-        let askedForNotificationPermissions = false // todo: make persistent
-        
-        if !askedForNotificationPermissions {
+        if !database.askedForNotificationPermissions {
+            database.askedForNotificationPermissions = true
+            
             viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
                 Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
             }
@@ -218,7 +218,7 @@ class PostTablePresenter {
     func sceneDidEnterBackground() {
         sceneInForeground = false
         
-        updateAppBadge()
+        updateAppBadge() // todo: call this only after submit
     }
     
     // MARK: - Zombie lifecycle methods
@@ -272,15 +272,6 @@ class PostTablePresenter {
     }
     
     func newPostAdded(_ post: Post) {
-//        Log.p("user added new post")
-//        PostNotifier.notifyUser(about: post)
-//
-//        posts.append(post)
-//        sortPosts()
-//
-//        let index = posts.firstIndex(of: post)!
-//        viewDelegate?.insertPostRows(at: [index], with: .top)
-        
         Log.p("user added new post")
         
         posts.append(post)
@@ -289,19 +280,9 @@ class PostTablePresenter {
         let index = posts.firstIndex(of: post)!
         viewDelegate?.insertPostRows(at: [index], with: .top)
         
-        let askedForNotificationPermissions = false // todo: make persistent
-        
-        if askedForNotificationPermissions {
+        if database.askedForNotificationPermissions {
             PostNotifier.notifyUser(about: post)
         }
-        
-//        if askedForNotificationPermissions {
-//            PostNotifier.notifyUser(about: post)
-//        } else {
-//            viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
-//                Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
-//            }
-//        }
     }
     
     // todo: do not update table view when user is looking at another view controller (shows warnings in console)
