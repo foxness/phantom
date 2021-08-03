@@ -17,6 +17,7 @@ import Foundation
 // todo: add mini tutorial after adding first post ("swipe right to submit post, swipe left to delete")
 // todo: fix compiler warnings
 // todo: fix storyboard scene warnings
+// todo: renotify about posts if user grants notification permissions in settings
 
 struct DebugVariable {
     private static let phoneDeploy = false

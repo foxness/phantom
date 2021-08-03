@@ -350,9 +350,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func showNotificationPermissionAskAlert(_ callback: @escaping (Bool) -> Void) {
         let title = "Notification permissions"
-        let message = "We need your permission to remind you to submit your scheduled post"
+        let message = "Your permission is needed to remind you to submit your scheduled post at the date you picked"
         let agreeTitle = "OK"
-        let disagreeTitle = "NEVER!!11"
+        let disagreeTitle = "Nope"
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         

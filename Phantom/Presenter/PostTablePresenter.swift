@@ -45,6 +45,8 @@ class PostTablePresenter {
     
     private var postIdsToBeDeleted: [UUID] = []
     private var postIdToBeSubmitted: UUID?
+    private var postToBeNotifiedAbout: Post?
+    
     private var posts: [Post] = []
     
     // MARK: - Computed properties
@@ -158,6 +160,25 @@ class PostTablePresenter {
             
             viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
                 Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
+                
+                guard userAgreed else { return }
+                
+                Notifications.requestPermissions { granted, error in
+                    if !granted {
+                        Log.p("permissions not granted :0")
+                    }
+                    
+                    if let error = error {
+                        Log.p("permissions error", error)
+                    }
+                    
+                    let post = self.postToBeNotifiedAbout!
+                    self.postToBeNotifiedAbout = nil
+                    
+                    // it's perfectly safe to call this even if permissions were not granted
+                    // it just won't do anything in that case
+                    PostNotifier.notifyUser(about: post)
+                }
             }
         }
     }
@@ -282,6 +303,8 @@ class PostTablePresenter {
         
         if database.askedForNotificationPermissions {
             PostNotifier.notifyUser(about: post)
+        } else {
+            postToBeNotifiedAbout = post
         }
     }
     
@@ -470,18 +493,6 @@ class PostTablePresenter {
             
             if let imgurAuth = database.imgurAuth {
                 imgur = Imgur(auth: imgurAuth)
-            }
-        }
-    }
-    
-    private func requestNotificationPermissions() {
-        Notifications.requestPermissions { granted, error in
-            if !granted {
-                Log.p("permissions not granted :0")
-            }
-            
-            if let error = error {
-                Log.p("permissions error", error)
             }
         }
     }
