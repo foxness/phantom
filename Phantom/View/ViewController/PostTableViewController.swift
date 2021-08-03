@@ -146,12 +146,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
+    // this is here because welcome screen has reddit login
     @IBAction func unwindRedditSignIn(unwindSegue: UIStoryboardSegue) {
         guard unwindSegue.identifier == RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue else {
             fatalError("Got unexpected unwind segue")
         }
     }
     
+    // todo: delete this? why is this here? I'm pretty sure this is not user ever because imgur sign in happens only in settings vc
     @IBAction func unwindImgurSignIn(unwindSegue: UIStoryboardSegue) {
         guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
             fatalError("Got unexpected unwind segue")
@@ -159,8 +161,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     @IBAction func unwindPostSaved(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == PostDetailViewController.Segue.unwindPostSaved.rawValue else {
+        guard unwindSegue.identifier == PostDetailViewController.Segue.unwindPostSaved.rawValue,
+              let unwindSegue = unwindSegue as? UIStoryboardSegueWithCompletion
+        else {
             fatalError("Got unexpected unwind segue")
+        }
+        
+        unwindSegue.completion = {
+            self.presenter.postSavedUnwindCompleted()
         }
         
         let pvc = unwindSegue.source as! PostDetailViewController
@@ -338,6 +346,34 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func showAlert(title: String, message: String) { // todo: split into alerts for every situation intead of generic
         displayOkAlert(title: title, message: message)
+    }
+    
+    func showNotificationPermissionAskAlert(_ callback: @escaping (Bool) -> Void) {
+        let title = "Notification permissions"
+        let message = "Your permission is needed to remind you to submit your scheduled post at the date you picked"
+        let agreeTitle = "OK"
+        let disagreeTitle = "Nope"
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // UIColor(named: "AccentColor") is used here instead of view.tintColor because view.tintColor is grey during segues which affects this code
+        alertController.view.tintColor = UIColor(named: "AccentColor") // todo: refactor all named asset inits into new struct [ez]
+        
+        let agreeHandler = { (action: UIAlertAction) -> Void in
+            callback(true)
+        }
+        
+        let disagreeHandler = { (action: UIAlertAction) -> Void in
+            callback(false)
+        }
+        
+        let agreeAction = UIAlertAction(title: agreeTitle, style: .default, handler: agreeHandler)
+        let disagreeAction = UIAlertAction(title: disagreeTitle, style: .default, handler: disagreeHandler)
+        
+        alertController.addAction(disagreeAction)
+        alertController.addAction(agreeAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Emitter methods

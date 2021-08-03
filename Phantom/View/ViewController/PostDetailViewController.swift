@@ -169,7 +169,7 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+        guard let button = sender as? UIBarButtonItem, button === saveButton else { // todo: refactor this atrocity
             Log.p("this didnt work")
             return
         }
@@ -180,7 +180,10 @@ class PostDetailViewController: UIViewController, PostDetailViewDelegate, UIText
     func dismiss() {
         let animated = true
         
+        // true means the post is new and the VC is presented modally rather than taking up whole screen
+        // todo: rename to clear up confusion?
         let presentingInAddMode = presentingViewController is UINavigationController
+        
         if presentingInAddMode {
             dismiss(animated: animated, completion: nil)
         } else if let owningNavigationController = navigationController {

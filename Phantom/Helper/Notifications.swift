@@ -44,8 +44,11 @@ struct Notifications {
         }
     }
     
+    // callback: (granted: Bool, error: Error?) -> Void
     static func requestPermissions(callback: @escaping (Bool, Error?) -> Void) {
-        center.requestAuthorization(options: [.alert, .sound, .badge], completionHandler: callback)
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        center.requestAuthorization(options: options, completionHandler: callback)
     }
     
     private static func makeContent(params: ContentParams) -> UNNotificationContent {

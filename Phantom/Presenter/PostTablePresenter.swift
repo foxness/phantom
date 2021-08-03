@@ -45,6 +45,8 @@ class PostTablePresenter {
     
     private var postIdsToBeDeleted: [UUID] = []
     private var postIdToBeSubmitted: UUID?
+    private var postToBeNotifiedAbout: Post?
+    
     private var posts: [Post] = []
     
     // MARK: - Computed properties
@@ -152,6 +154,35 @@ class PostTablePresenter {
         viewDelegate?.reloadPostRows(with: .right)
     }
     
+    func postSavedUnwindCompleted() {
+        if !database.askedForNotificationPermissions {
+            database.askedForNotificationPermissions = true
+            
+            viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
+                Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
+                
+                guard userAgreed else { return }
+                
+                Notifications.requestPermissions { granted, error in
+                    if !granted {
+                        Log.p("permissions not granted :0")
+                    }
+                    
+                    if let error = error {
+                        Log.p("permissions error", error)
+                    }
+                    
+                    let post = self.postToBeNotifiedAbout!
+                    self.postToBeNotifiedAbout = nil
+                    
+                    // it's perfectly safe to call this even if permissions were not granted
+                    // it just won't do anything in that case
+                    PostNotifier.notifyUser(about: post)
+                }
+            }
+        }
+    }
+    
     // MARK: - View lifecycle methods
     
     func viewDidLoad() {
@@ -178,7 +209,6 @@ class PostTablePresenter {
     }
     
     func viewDidAppear() {
-        requestNotificationPermissions() // todo: remove, move or leave it be?
         showIntroductionIfNeeded()
         setupPostSubmitter()
         updateSubmitButton()
@@ -209,7 +239,7 @@ class PostTablePresenter {
     func sceneDidEnterBackground() {
         sceneInForeground = false
         
-        updateAppBadge()
+        updateAppBadge() // todo: call this only after submit
     }
     
     // MARK: - Zombie lifecycle methods
@@ -264,13 +294,18 @@ class PostTablePresenter {
     
     func newPostAdded(_ post: Post) {
         Log.p("user added new post")
-        PostNotifier.notifyUser(about: post)
         
         posts.append(post)
         sortPosts()
         
         let index = posts.firstIndex(of: post)!
         viewDelegate?.insertPostRows(at: [index], with: .top)
+        
+        if database.askedForNotificationPermissions {
+            PostNotifier.notifyUser(about: post)
+        } else {
+            postToBeNotifiedAbout = post
+        }
     }
     
     // todo: do not update table view when user is looking at another view controller (shows warnings in console)
@@ -458,18 +493,6 @@ class PostTablePresenter {
             
             if let imgurAuth = database.imgurAuth {
                 imgur = Imgur(auth: imgurAuth)
-            }
-        }
-    }
-    
-    private func requestNotificationPermissions() {
-        Notifications.requestPermissions { granted, error in
-            if !granted {
-                Log.p("permissions not granted :0")
-            }
-            
-            if let error = error {
-                Log.p("permissions error", error)
             }
         }
     }
