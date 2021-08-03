@@ -21,10 +21,11 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToBulkAdd()
     func segueToSettings()
     
-    func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)
     func showAlert(title: String, message: String)
+    func showNotificationPermissionAskAlert(_ callback: @escaping (Bool) -> Void) // (userAgreed: Bool) -> Void
     
     func showSlideUpMenu()
+    func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)

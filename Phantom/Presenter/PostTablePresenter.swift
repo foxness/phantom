@@ -152,6 +152,16 @@ class PostTablePresenter {
         viewDelegate?.reloadPostRows(with: .right)
     }
     
+    func postSavedUnwindCompleted() {
+        let askedForNotificationPermissions = false // todo: make persistent
+        
+        if !askedForNotificationPermissions {
+            viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
+                Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
+            }
+        }
+    }
+    
     // MARK: - View lifecycle methods
     
     func viewDidLoad() {
@@ -178,7 +188,6 @@ class PostTablePresenter {
     }
     
     func viewDidAppear() {
-        requestNotificationPermissions() // todo: remove, move or leave it be?
         showIntroductionIfNeeded()
         setupPostSubmitter()
         updateSubmitButton()
@@ -263,14 +272,36 @@ class PostTablePresenter {
     }
     
     func newPostAdded(_ post: Post) {
+//        Log.p("user added new post")
+//        PostNotifier.notifyUser(about: post)
+//
+//        posts.append(post)
+//        sortPosts()
+//
+//        let index = posts.firstIndex(of: post)!
+//        viewDelegate?.insertPostRows(at: [index], with: .top)
+        
         Log.p("user added new post")
-        PostNotifier.notifyUser(about: post)
         
         posts.append(post)
         sortPosts()
         
         let index = posts.firstIndex(of: post)!
         viewDelegate?.insertPostRows(at: [index], with: .top)
+        
+        let askedForNotificationPermissions = false // todo: make persistent
+        
+        if askedForNotificationPermissions {
+            PostNotifier.notifyUser(about: post)
+        }
+        
+//        if askedForNotificationPermissions {
+//            PostNotifier.notifyUser(about: post)
+//        } else {
+//            viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
+//                Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
+//            }
+//        }
     }
     
     // todo: do not update table view when user is looking at another view controller (shows warnings in console)

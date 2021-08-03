@@ -49,7 +49,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let saveTitle = "Save"
         let cancelTitle = "Cancel"
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.view.tintColor = view.tintColor
         
         var textField: UITextField? = nil
@@ -72,8 +72,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             self.presenter.bulkAddSubredditSet(subreddit)
         }
         
-        let saveAction = UIAlertAction(title: saveTitle, style: UIAlertAction.Style.default, handler: saveHandler)
-        let cancelAction = UIAlertAction(title: cancelTitle, style: UIAlertAction.Style.default, handler: nil)
+        let saveAction = UIAlertAction(title: saveTitle, style: .default, handler: saveHandler)
+        let cancelAction = UIAlertAction(title: cancelTitle, style: .default, handler: nil)
         
         alertController.addAction(cancelAction)
         alertController.addAction(saveAction)
