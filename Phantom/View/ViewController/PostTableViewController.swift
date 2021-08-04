@@ -386,7 +386,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         let deadline = DispatchTime.now() + PostTableViewController.DURATION_SWIPE_HINT_DELAY
         
         DispatchQueue.main.asyncAfter(deadline: deadline) {
-            self.tableView.showLeadingSwipeHint(width: PostTableViewController.WIDTH_SWIPE_HINT,
+            self.tableView.showLeadingSwipeHintCustom(width: PostTableViewController.WIDTH_SWIPE_HINT,
                                                 duration: PostTableViewController.DURATION_SWIPE_HINT,
                                                 cornerRadius: PostTableViewController.CORNER_RADIUS_SWIPE_HINT)
         }

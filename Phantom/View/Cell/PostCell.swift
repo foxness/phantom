@@ -20,6 +20,8 @@ class PostCell: UITableViewCell {
     private static let THUMBNAIL_GUARANTEED_PERIOD: TimeInterval = 3 * 24 * 60 * 60 // expires 3 days after posting
     private static let THUMBNAIL_MAX_PERIOD: TimeInterval = 90 * 24 * 60 * 60 // don't wanna cache for more than 90 days
     
+    
+    @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var thumbnailView: UIImageView!
@@ -137,7 +139,7 @@ class PostCell: UITableViewCell {
     private func setBackground(for post: Post) { // todo: use prepareForReuse() instead
         let overdue = post.date < Date()
         let bg: UIColor = overdue ? .secondarySystemBackground : .systemBackground
-        contentView.backgroundColor = bg
+        bgView.backgroundColor = bg
     }
     
     private func getThumbnailProcessor() -> ImageProcessor {
