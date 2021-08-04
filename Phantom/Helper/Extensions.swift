@@ -201,7 +201,7 @@ extension UITableView {
      
      This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
      */
-    func showLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8) {
+    func showLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
         var cellPath: IndexPath?
         var actionColor: UIColor?
         
@@ -220,29 +220,43 @@ extension UITableView {
         
         guard let path = cellPath, let cell = cellForRow(at: path) else { return }
         
-        cell.showLeadingSwipeHint(actionColor: actionColor!, hintWidth: width, hintDuration: duration)
+        cell.showLeadingSwipeHint(actionColor: actionColor!, width: width, duration: duration, cornerRadius: cornerRadius)
     }
 }
 
 fileprivate extension UITableViewCell {
-    func showLeadingSwipeHint(actionColor: UIColor, hintWidth: CGFloat = 20, hintDuration: TimeInterval = 0.8) {
+    func showLeadingSwipeHint(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+        // appealing curve sets:
+        // - [.easeIn, .easeOut]
+        // - [.easeOut, .easeIn]
+        // - [.easeInOut, .easeInOut]
+        
+        let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
+        
         let originalClipsToBounds = clipsToBounds
+        let originalCornerRadius = contentView.layer.cornerRadius
+        
+        let cornerRadiusBuffer = cornerRadius ?? 0
         
         let dummyView = UIView()
         dummyView.backgroundColor = actionColor
         dummyView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(dummyView)
+        insertSubview(dummyView, belowSubview: contentView)
         
         NSLayoutConstraint.activate([
             dummyView.topAnchor.constraint(equalTo: topAnchor),
-            dummyView.trailingAnchor.constraint(equalTo: leadingAnchor),
+            dummyView.trailingAnchor.constraint(equalTo: leadingAnchor, constant: cornerRadiusBuffer),
             dummyView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dummyView.widthAnchor.constraint(equalToConstant: hintWidth)
+            dummyView.widthAnchor.constraint(equalToConstant: width + cornerRadiusBuffer)
         ])
         
         // Animates restoration back to the original state
-        let secondAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeOut) {
+        let secondAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[1]) {
             self.transform = .identity
+            
+            if cornerRadius != nil {
+                self.contentView.layer.cornerRadius = originalCornerRadius
+            }
         }
         
         secondAnimator.addCompletion { position in
@@ -251,8 +265,13 @@ fileprivate extension UITableViewCell {
         }
         
         // Animates showing hint
-        let firstAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeIn) {
-            self.transform = CGAffineTransform(translationX: hintWidth, y: 0)
+        let firstAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[0]) {
+            self.transform = CGAffineTransform(translationX: width, y: 0)
+            
+            if let cornerRadius = cornerRadius {
+                self.contentView.layer.cornerRadius = cornerRadius
+            }
+            
             self.clipsToBounds = false // so that it doesn't clip the dummyView which is out of bounds
         }
         

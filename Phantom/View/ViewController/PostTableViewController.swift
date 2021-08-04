@@ -28,10 +28,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     private static let COLOR_INDICATOR_DONE = UIColor.systemGreen
     
     private static let DURATION_INDICATOR_DONE: TimeInterval = 1.5
-    private static let DURATION_HINT_DELAY: TimeInterval = 1
-    private static let DURATION_HINT: TimeInterval = 0.8
+    private static let DURATION_SWIPE_HINT_DELAY: TimeInterval = 1
+    private static let DURATION_SWIPE_HINT: TimeInterval = 0.9
     
-    private static let WIDTH_POST_SWIPE_HINT: CGFloat = 20
+    private static let WIDTH_SWIPE_HINT: CGFloat = 25
+    private static let CORNER_RADIUS_SWIPE_HINT: CGFloat? = 9
     
     // MARK: - Properties
     
@@ -382,11 +383,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func showPostSwipeHint() {
         // some buffer so it doesn't appear too fast after something else
-        let deadline = DispatchTime.now() + PostTableViewController.DURATION_HINT_DELAY
+        let deadline = DispatchTime.now() + PostTableViewController.DURATION_SWIPE_HINT_DELAY
         
         DispatchQueue.main.asyncAfter(deadline: deadline) {
-            self.tableView.showLeadingSwipeHint(width: PostTableViewController.WIDTH_POST_SWIPE_HINT,
-                                                duration: PostTableViewController.DURATION_HINT)
+            self.tableView.showLeadingSwipeHint(width: PostTableViewController.WIDTH_SWIPE_HINT,
+                                                duration: PostTableViewController.DURATION_SWIPE_HINT,
+                                                cornerRadius: PostTableViewController.CORNER_RADIUS_SWIPE_HINT)
         }
     }
     
