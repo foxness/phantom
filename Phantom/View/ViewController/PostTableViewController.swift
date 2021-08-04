@@ -288,6 +288,16 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         return indices.map { IndexPath(row: $0, section: 0) }
     }
     
+    private func showLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+        guard let (cell, actionColor) = tableView.getLeadingSwipeHintCell(),
+              let postCell = cell as? PostCell else { return }
+        
+        postCell.showLeadingSwipeHint(actionColor: actionColor,
+                                      width: width,
+                                      duration: duration,
+                                      cornerRadius: cornerRadius)
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -386,9 +396,9 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         let deadline = DispatchTime.now() + PostTableViewController.DURATION_SWIPE_HINT_DELAY
         
         DispatchQueue.main.asyncAfter(deadline: deadline) {
-            self.tableView.showLeadingSwipeHintCustom(width: PostTableViewController.WIDTH_SWIPE_HINT,
-                                                duration: PostTableViewController.DURATION_SWIPE_HINT,
-                                                cornerRadius: PostTableViewController.CORNER_RADIUS_SWIPE_HINT)
+            self.showLeadingSwipeHint(width: PostTableViewController.WIDTH_SWIPE_HINT,
+                                            duration: PostTableViewController.DURATION_SWIPE_HINT,
+                                            cornerRadius: PostTableViewController.CORNER_RADIUS_SWIPE_HINT)
         }
     }
     

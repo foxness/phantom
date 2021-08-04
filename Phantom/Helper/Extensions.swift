@@ -192,9 +192,11 @@ extension UIView {
     }
 }
 
-extension UITableView {
-    // The ~Custom() version of this method requires a cell whose contentView has a single UIView that contains everything
-    // The non-custom version is able to be glitched if you time your swipe just right at the start of the animation
+extension UITableView { // CURRENTLY UNUSED ---------------------------------------------------------------
+    // UITableView.showLeadingSwipeHintGlitched() and UITableViewCell.showLeadingSwipeHintGlitched() are currently
+    // unused because I'm using a glitchless version that only works with a custom view hierarchy
+    // but I'm leaving these here because they might prove useful later.
+    // This non-custom version is able to be glitched if you time your swipe just right at the start of the animation
     
     /**
      Shows a hint to the user indicating that the cell can be swiped right.
@@ -204,11 +206,17 @@ extension UITableView {
      
      This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
      */
-    func showLeadingSwipeHintCustom(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+    func showLeadingSwipeHintGlitched(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+        guard let (cell, actionColor) = getLeadingSwipeHintCell() else { return }
+        
+        cell.showLeadingSwipeHintGlitched(actionColor: actionColor, width: width, duration: duration, cornerRadius: cornerRadius)
+    }
+    
+    func getLeadingSwipeHintCell() -> (cell: UITableViewCell, actionColor: UIColor)? {
         var cellPath: IndexPath?
         var actionColor: UIColor?
         
-        guard let visibleIndexPaths = indexPathsForVisibleRows else { return }
+        guard let visibleIndexPaths = indexPathsForVisibleRows else { return nil }
         
         for path in visibleIndexPaths {
             if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path),
@@ -221,104 +229,14 @@ extension UITableView {
             }
         }
         
-        guard let path = cellPath, let cell = cellForRow(at: path) else { return }
+        guard let path = cellPath, let cell = cellForRow(at: path) else { return nil }
         
-        cell.showLeadingSwipeHintCustom(actionColor: actionColor!, width: width, duration: duration, cornerRadius: cornerRadius)
+        return (cell: cell, actionColor: actionColor!)
     }
 }
 
 fileprivate extension UITableViewCell {
-    func showLeadingSwipeHintCustom(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
-        // appealing curve sets:
-        // - [.easeIn, .easeOut]
-        // - [.easeOut, .easeIn]
-        // - [.easeInOut, .easeInOut]
-        
-        let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
-        
-        let originalCornerRadius = contentView.layer.cornerRadius
-        
-        let dummyView = UIView()
-        dummyView.backgroundColor = actionColor
-        dummyView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let customBgView = contentView.subviews[0]
-        contentView.insertSubview(dummyView, belowSubview: customBgView)
-        
-        NSLayoutConstraint.activate([
-            dummyView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            dummyView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            dummyView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            dummyView.widthAnchor.constraint(equalToConstant: width + (cornerRadius ?? 0))
-        ])
-        
-        // Animates restoration back to the original state
-        let secondAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[1]) {
-            customBgView.transform = .identity
-            
-            if cornerRadius != nil {
-                customBgView.layer.cornerRadius = originalCornerRadius
-//                customBgView.clipsToBounds = false
-            }
-        }
-        
-        secondAnimator.addCompletion { position in
-            dummyView.removeFromSuperview()
-        }
-        
-        // Animates showing hint
-        let firstAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[0]) {
-            customBgView.transform = CGAffineTransform(translationX: width, y: 0)
-            
-            if let cornerRadius = cornerRadius {
-                customBgView.layer.cornerRadius = cornerRadius
-//                customBgView.clipsToBounds = true
-            }
-            
-        }
-        
-        firstAnimator.addCompletion { position in
-            secondAnimator.startAnimation()
-        }
-        
-        firstAnimator.startAnimation()
-    }
-}
-
-extension UITableView {
-    /**
-     Shows a hint to the user indicating that the cell can be swiped right.
-     - Parameters:
-        - width: Width of hint.
-        - duration: Duration of animation (in seconds)
-     
-     This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
-     */
-    func showLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
-        var cellPath: IndexPath?
-        var actionColor: UIColor?
-        
-        guard let visibleIndexPaths = indexPathsForVisibleRows else { return }
-        
-        for path in visibleIndexPaths {
-            if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path),
-               let action = config.actions.first {
-                
-                cellPath = path
-                actionColor = action.backgroundColor
-                
-                break
-            }
-        }
-        
-        guard let path = cellPath, let cell = cellForRow(at: path) else { return }
-        
-        cell.showLeadingSwipeHint(actionColor: actionColor!, width: width, duration: duration, cornerRadius: cornerRadius)
-    }
-}
-
-fileprivate extension UITableViewCell {
-    func showLeadingSwipeHint(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+    func showLeadingSwipeHintGlitched(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
         // appealing curve sets:
         // - [.easeIn, .easeOut]
         // - [.easeOut, .easeIn]

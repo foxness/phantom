@@ -151,6 +151,58 @@ class PostCell: UITableViewCell {
         return processor
     }
     
+    func showLeadingSwipeHint(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+        // appealing curve sets:
+        // - [.easeIn, .easeOut]
+        // - [.easeOut, .easeIn]
+        // - [.easeInOut, .easeInOut]
+        
+        let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
+        
+        let originalCornerRadius = bgView.layer.cornerRadius
+        
+        let dummyView = UIView()
+        dummyView.backgroundColor = actionColor
+        dummyView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.insertSubview(dummyView, belowSubview: bgView)
+        
+        NSLayoutConstraint.activate([
+            dummyView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            dummyView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            dummyView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dummyView.widthAnchor.constraint(equalToConstant: width + (cornerRadius ?? 0))
+        ])
+        
+        // Animates restoration back to the original state
+        let secondAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[1]) { [self] in
+            bgView.transform = .identity
+            
+            if cornerRadius != nil {
+                bgView.layer.cornerRadius = originalCornerRadius
+            }
+        }
+        
+        secondAnimator.addCompletion { position in
+            dummyView.removeFromSuperview()
+        }
+        
+        // Animates showing hint
+        let firstAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[0]) { [self] in
+            bgView.transform = CGAffineTransform(translationX: width, y: 0)
+            
+            if let cornerRadius = cornerRadius {
+                bgView.layer.cornerRadius = cornerRadius
+            }
+        }
+        
+        firstAnimator.addCompletion { position in
+            secondAnimator.startAnimation()
+        }
+        
+        firstAnimator.startAnimation()
+    }
+    
     private static func getScaleFactorOption() -> KingfisherOptionsInfoItem {
         return KingfisherOptionsInfoItem.scaleFactor(UIScreen.main.scale)
     }
