@@ -153,9 +153,9 @@
 		57540E7726B17E0100712B5F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
 				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
-				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";

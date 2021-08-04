@@ -63,6 +63,10 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.viewDidAppear(animated)
         
         presenter.viewDidAppear()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            self.tableView.presentLeadingSwipeHint(width: 20, duration: 0.8)
+        }
     }
     
     // MARK: - Scene lifecycle
@@ -350,7 +354,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     func showNotificationPermissionAskAlert(_ callback: @escaping (Bool) -> Void) {
         let title = "Notification permissions"
-        let message = "Your permission is needed to remind you to submit your scheduled post at the date you picked"
+        let message = "Your permission is needed to remind you to submit your scheduled post at the time you picked"
         let agreeTitle = "OK"
         let disagreeTitle = "Nope"
         

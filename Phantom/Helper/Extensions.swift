@@ -192,6 +192,79 @@ extension UIView {
     }
 }
 
+extension UITableView {
+    /**
+     Shows a hint to the user indicating that cell can be swiped right.
+     - Parameters:
+        - width: Width of hint.
+        - duration: Duration of animation (in seconds)
+     
+     This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
+     */
+    func presentLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8) {
+        var actionPath: IndexPath?
+        var actionColor: UIColor?
+        
+        guard let visibleIndexPaths = indexPathsForVisibleRows else {
+            return
+        }
+        
+        for path in visibleIndexPaths {
+            if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path), let action = config.actions.first {
+                actionPath = path
+                actionColor = action.backgroundColor
+                break
+            }
+        }
+        
+        guard let path = actionPath, let cell = cellForRow(at: path) else { return }
+        cell.presentLeadingSwipeHint(actionColor: actionColor!, hintWidth: width, hintDuration: duration)
+    }
+}
+
+fileprivate extension UITableViewCell {
+    func presentLeadingSwipeHint(actionColor: UIColor, hintWidth: CGFloat = 20, hintDuration: TimeInterval = 0.8) {
+        // Create fake action view
+        
+        let clipsOriginal = clipsToBounds
+        clipsToBounds = false
+        
+        let dummyView = UIView()
+        dummyView.backgroundColor = actionColor
+        dummyView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(dummyView)
+        // Set constraints
+        NSLayoutConstraint.activate([
+            dummyView.topAnchor.constraint(equalTo: topAnchor),
+            dummyView.trailingAnchor.constraint(equalTo: leadingAnchor),
+            dummyView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            dummyView.widthAnchor.constraint(equalToConstant: hintWidth)
+        ])
+        // This animator reverses back the transform.
+        let secondAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeOut) {
+            self.transform = .identity
+        }
+        // Don't forget to remove the useless view.
+        secondAnimator.addCompletion { position in
+            dummyView.removeFromSuperview()
+            self.clipsToBounds = clipsOriginal
+        }
+
+        // We're moving the cell and since dummyView
+        // is pinned to cell's trailing anchor
+        // it will move as well.
+        let transform = CGAffineTransform(translationX: hintWidth, y: 0)
+        let firstAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeIn) {
+            self.transform = transform
+        }
+        firstAnimator.addCompletion { position in
+            secondAnimator.startAnimation()
+        }
+        // Do the magic.
+        firstAnimator.startAnimation()
+    }
+}
+
 //extension LocalizedError where Self: CustomStringConvertible {
 //   var errorDescription: String? { description }
 //}
