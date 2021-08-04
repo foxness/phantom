@@ -178,6 +178,8 @@ class PostTablePresenter {
                     // it's perfectly safe to call this even if permissions were not granted
                     // it just won't do anything in that case
                     PostNotifier.notifyUser(about: post)
+                    
+                    self.viewDelegate?.showPostSwipeHint()
                 }
             }
         }
@@ -213,6 +215,8 @@ class PostTablePresenter {
         setupPostSubmitter()
         updateSubmitButton()
         submitPostIfNeeded()
+        
+//        viewDelegate?.showPostSwipeHint()
     }
     
     // MARK: - Scene lifecycle methods

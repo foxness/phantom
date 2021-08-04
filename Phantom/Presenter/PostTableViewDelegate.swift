@@ -26,6 +26,7 @@ protocol PostTableViewDelegate: AnyObject {
     
     func showSlideUpMenu()
     func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)
+    func showPostSwipeHint()
     
     func insertPostRows(at indices: [Int], with animation: ListAnimation)
     func reloadPostRows(with animation: ListAnimation)

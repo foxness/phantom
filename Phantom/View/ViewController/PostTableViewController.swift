@@ -27,7 +27,11 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     private static let COLOR_INDICATOR_SUBMITTING = UIColor.systemBlue
     private static let COLOR_INDICATOR_DONE = UIColor.systemGreen
     
-    private static let DURATION_INDICATOR_DONE = 1.5
+    private static let DURATION_INDICATOR_DONE: TimeInterval = 1.5
+    private static let DURATION_HINT_DELAY: TimeInterval = 1
+    private static let DURATION_HINT: TimeInterval = 0.8
+    
+    private static let WIDTH_POST_SWIPE_HINT: CGFloat = 20
     
     // MARK: - Properties
     
@@ -63,10 +67,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         super.viewDidAppear(animated)
         
         presenter.viewDidAppear()
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.tableView.presentLeadingSwipeHint(width: 20, duration: 0.8)
-        }
     }
     
     // MARK: - Scene lifecycle
@@ -378,6 +378,16 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         alertController.addAction(agreeAction)
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    func showPostSwipeHint() {
+        // some buffer so it doesn't appear too fast after something else
+        let deadline = DispatchTime.now() + PostTableViewController.DURATION_HINT_DELAY
+        
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+            self.tableView.showLeadingSwipeHint(width: PostTableViewController.WIDTH_POST_SWIPE_HINT,
+                                                duration: PostTableViewController.DURATION_HINT)
+        }
     }
     
     // MARK: - Emitter methods

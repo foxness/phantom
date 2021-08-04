@@ -91,7 +91,7 @@ extension UIViewController {
         alert.view.layer.cornerRadius = 15
         
         present(alert, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             alert.dismiss(animated: true)
         }
     }
@@ -194,73 +194,72 @@ extension UIView {
 
 extension UITableView {
     /**
-     Shows a hint to the user indicating that cell can be swiped right.
+     Shows a hint to the user indicating that the cell can be swiped right.
      - Parameters:
         - width: Width of hint.
         - duration: Duration of animation (in seconds)
      
      This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
      */
-    func presentLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8) {
-        var actionPath: IndexPath?
+    func showLeadingSwipeHint(width: CGFloat = 20, duration: TimeInterval = 0.8) {
+        var cellPath: IndexPath?
         var actionColor: UIColor?
         
-        guard let visibleIndexPaths = indexPathsForVisibleRows else {
-            return
-        }
+        guard let visibleIndexPaths = indexPathsForVisibleRows else { return }
         
         for path in visibleIndexPaths {
-            if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path), let action = config.actions.first {
-                actionPath = path
+            if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path),
+               let action = config.actions.first {
+                
+                cellPath = path
                 actionColor = action.backgroundColor
+                
                 break
             }
         }
         
-        guard let path = actionPath, let cell = cellForRow(at: path) else { return }
-        cell.presentLeadingSwipeHint(actionColor: actionColor!, hintWidth: width, hintDuration: duration)
+        guard let path = cellPath, let cell = cellForRow(at: path) else { return }
+        
+        cell.showLeadingSwipeHint(actionColor: actionColor!, hintWidth: width, hintDuration: duration)
     }
 }
 
 fileprivate extension UITableViewCell {
-    func presentLeadingSwipeHint(actionColor: UIColor, hintWidth: CGFloat = 20, hintDuration: TimeInterval = 0.8) {
-        // Create fake action view
-        
-        let clipsOriginal = clipsToBounds
-        clipsToBounds = false
+    func showLeadingSwipeHint(actionColor: UIColor, hintWidth: CGFloat = 20, hintDuration: TimeInterval = 0.8) {
+        let originalClipsToBounds = clipsToBounds
         
         let dummyView = UIView()
         dummyView.backgroundColor = actionColor
         dummyView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(dummyView)
-        // Set constraints
+        
         NSLayoutConstraint.activate([
             dummyView.topAnchor.constraint(equalTo: topAnchor),
             dummyView.trailingAnchor.constraint(equalTo: leadingAnchor),
             dummyView.bottomAnchor.constraint(equalTo: bottomAnchor),
             dummyView.widthAnchor.constraint(equalToConstant: hintWidth)
         ])
-        // This animator reverses back the transform.
+        
+        // Animates restoration back to the original state
         let secondAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeOut) {
             self.transform = .identity
         }
-        // Don't forget to remove the useless view.
+        
         secondAnimator.addCompletion { position in
             dummyView.removeFromSuperview()
-            self.clipsToBounds = clipsOriginal
+            self.clipsToBounds = originalClipsToBounds
         }
-
-        // We're moving the cell and since dummyView
-        // is pinned to cell's trailing anchor
-        // it will move as well.
-        let transform = CGAffineTransform(translationX: hintWidth, y: 0)
+        
+        // Animates showing hint
         let firstAnimator = UIViewPropertyAnimator(duration: hintDuration / 2, curve: .easeIn) {
-            self.transform = transform
+            self.transform = CGAffineTransform(translationX: hintWidth, y: 0)
+            self.clipsToBounds = false // so that it doesn't clip the dummyView which is out of bounds
         }
+        
         firstAnimator.addCompletion { position in
             secondAnimator.startAnimation()
         }
-        // Do the magic.
+        
         firstAnimator.startAnimation()
     }
 }
