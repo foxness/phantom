@@ -152,12 +152,14 @@ class PostCell: UITableViewCell {
     }
     
     func showLeadingSwipeHint(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
-        // appealing curve sets:
+        // appealing curve sets: --------------------------------------------
         // - [.easeIn, .easeOut]
         // - [.easeOut, .easeIn]
         // - [.easeInOut, .easeInOut]
         
         let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
+        
+        // ------------------------------------------------------------------
         
         let originalCornerRadius = bgView.layer.cornerRadius
         

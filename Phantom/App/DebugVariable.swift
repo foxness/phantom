@@ -13,7 +13,6 @@ import Foundation
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
 // todo: disable landscape interface orientation [ez]
 // todo: adapt interface for landscape
-// todo: add graceful ask for notification permissions
 // todo: add mini tutorial after adding first post ("swipe right to submit post, swipe left to delete")
 // todo: fix compiler warnings
 // todo: fix storyboard scene warnings
