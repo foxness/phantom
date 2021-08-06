@@ -152,6 +152,7 @@ class PostTablePresenter {
         sortPosts()
         
         viewDelegate?.reloadPostRows(with: .right)
+        updateAppBadge()
     }
     
     func postSavedUnwindCompleted() {
@@ -243,7 +244,9 @@ class PostTablePresenter {
     func sceneDidEnterBackground() {
         sceneInForeground = false
         
-        updateAppBadge() // todo: call this only after submit
+        // this is here in case user disabled notifications (so they can't update badge)
+        // and the post became overdue while the user was using the app
+        updateAppBadge()
     }
     
     // MARK: - Zombie lifecycle methods
@@ -304,6 +307,7 @@ class PostTablePresenter {
         
         let index = posts.firstIndex(of: post)!
         viewDelegate?.insertPostRows(at: [index], with: .top)
+        updateAppBadge()
         
         if database.askedForNotificationPermissions {
             PostNotifier.notifyUser(about: post)
@@ -329,6 +333,7 @@ class PostTablePresenter {
             sortPosts()
             
             viewDelegate?.reloadPostRows(with: .automatic)
+            updateAppBadge()
         } else {
             // this situation can happen when user submits a post
             // from notification banner while editing the same post
@@ -450,6 +455,8 @@ class PostTablePresenter {
         
         posts.remove(at: indicesToDelete)
         viewDelegate?.deletePostRows(at: indicesToDelete, with: animation)
+        
+        updateAppBadge()
     }
     
     private func updateAppBadge() {
