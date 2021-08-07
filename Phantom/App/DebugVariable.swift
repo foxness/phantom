@@ -33,7 +33,7 @@ struct DebugVariable {
     private static let disableRetryDebug = true
     private static let directImgurUploadDebug = false
     private static let simulateErrorDebug = false
-    private static let instantNotificationsDebug = true
+    private static let instantNotificationsDebug = false
     
     // Phone ---------------------------------------------
     

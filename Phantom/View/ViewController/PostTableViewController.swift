@@ -187,8 +187,14 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
     
     @IBAction func unwindBulkAdded(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == BulkAddViewController.Segue.unwindBulkAdded.rawValue else {
+        guard unwindSegue.identifier == BulkAddViewController.Segue.unwindBulkAdded.rawValue,
+              let unwindSegue = unwindSegue as? UIStoryboardSegueWithCompletion
+        else {
             fatalError("Got unexpected unwind segue")
+        }
+        
+        unwindSegue.completion = {
+            self.presenter.bulkAddedUnwindCompleted()
         }
         
         let bavc = unwindSegue.source as! BulkAddViewController

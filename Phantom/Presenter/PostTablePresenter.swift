@@ -45,7 +45,7 @@ class PostTablePresenter {
     
     private var postIdsToBeDeleted: [UUID] = []
     private var postIdToBeSubmitted: UUID?
-    private var postToBeNotifiedAbout: Post?
+    private var postsToBeNotifiedAbout: [Post] = []
     
     private var posts: [Post] = []
     
@@ -136,6 +136,7 @@ class PostTablePresenter {
         
         var lastDate = posts.last?.date
         
+        var toBeNotifiedAbout = [Post]()
         for bulkPost in bulkPosts {
             let title = bulkPost.title
             let url = bulkPost.url
@@ -145,7 +146,7 @@ class PostTablePresenter {
             
             let newPost = Post.Link(title: title, subreddit: subreddit, date: date, url: url)
             
-            PostNotifier.notifyUser(about: newPost)
+            toBeNotifiedAbout.append(newPost)
             posts.append(newPost)
         }
         
@@ -153,37 +154,22 @@ class PostTablePresenter {
         
         viewDelegate?.reloadPostRows(with: .right)
         updateAppBadge()
+        
+        if database.askedForNotificationPermissions {
+            toBeNotifiedAbout.forEach {
+                PostNotifier.notifyUser(about: $0)
+            }
+        } else {
+            postsToBeNotifiedAbout.append(contentsOf: toBeNotifiedAbout)
+        }
     }
     
-    func postSavedUnwindCompleted() {
-        if !database.askedForNotificationPermissions {
-            database.askedForNotificationPermissions = true
-            
-            viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
-                Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
-                
-                guard userAgreed else { return }
-                
-                Notifications.requestPermissions { granted, error in
-                    if !granted {
-                        Log.p("permissions not granted :0")
-                    }
-                    
-                    if let error = error {
-                        Log.p("permissions error", error)
-                    }
-                    
-                    let post = self.postToBeNotifiedAbout!
-                    self.postToBeNotifiedAbout = nil
-                    
-                    // it's perfectly safe to call this even if permissions were not granted
-                    // it just won't do anything in that case
-                    PostNotifier.notifyUser(about: post)
-                    
-                    self.viewDelegate?.showPostSwipeHint()
-                }
-            }
-        }
+    func postSavedUnwindCompleted() { // this always happens after newPostAdded(_ post:)
+        askForNotificationPermissionsIfNeeded()
+    }
+    
+    func bulkAddedUnwindCompleted() { // this always happens after bulkPostsAdded(_ bulkPosts:)
+        askForNotificationPermissionsIfNeeded()
     }
     
     // MARK: - View lifecycle methods
@@ -312,7 +298,7 @@ class PostTablePresenter {
         if database.askedForNotificationPermissions {
             PostNotifier.notifyUser(about: post)
         } else {
-            postToBeNotifiedAbout = post
+            postsToBeNotifiedAbout.append(post)
         }
     }
     
@@ -504,6 +490,39 @@ class PostTablePresenter {
             
             if let imgurAuth = database.imgurAuth {
                 imgur = Imgur(auth: imgurAuth)
+            }
+        }
+    }
+    
+    private func askForNotificationPermissionsIfNeeded() {
+        guard !database.askedForNotificationPermissions else { return }
+        database.askedForNotificationPermissions = true
+        
+        viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
+            Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
+            
+            guard userAgreed else { return }
+            
+            Notifications.requestPermissions { [self] granted, error in
+                if !granted {
+                    Log.p("permissions not granted :0")
+                }
+                
+                if let error = error {
+                    Log.p("permissions error", error)
+                }
+                
+                assert(!postsToBeNotifiedAbout.isEmpty)
+                
+                postsToBeNotifiedAbout.forEach {
+                    // it's perfectly safe to call this even if permissions were not granted
+                    // it just won't do anything in that case
+                    PostNotifier.notifyUser(about: $0)
+                }
+                
+                postsToBeNotifiedAbout.removeAll()
+                
+                self.viewDelegate?.showPostSwipeHint()
             }
         }
     }
