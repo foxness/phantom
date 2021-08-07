@@ -22,7 +22,7 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToSettings()
     
     func showAlert(title: String, message: String)
-    func showNotificationPermissionAskAlert(_ callback: @escaping (Bool) -> Void) // (userAgreed: Bool) -> Void
+    func showNotificationPermissionAskAlert(multiplePosts: Bool, _ callback: @escaping (Bool) -> Void) // (userAgreed: Bool) -> Void
     
     func showSlideUpMenu()
     func setSubmissionIndicator(_ state: SubmissionIndicatorState, completion: (() -> Void)?)

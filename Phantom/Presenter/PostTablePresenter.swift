@@ -498,7 +498,10 @@ class PostTablePresenter {
         guard !database.askedForNotificationPermissions else { return }
         database.askedForNotificationPermissions = true
         
-        viewDelegate?.showNotificationPermissionAskAlert { userAgreed in
+        assert(!postsToBeNotifiedAbout.isEmpty)
+        
+        let multiplePosts = postsToBeNotifiedAbout.count != 1
+        viewDelegate?.showNotificationPermissionAskAlert(multiplePosts: multiplePosts) { userAgreed in
             Log.p("user \(userAgreed ? "agreed" : "didn't agree")")
             
             guard userAgreed else { return }
@@ -511,8 +514,6 @@ class PostTablePresenter {
                 if let error = error {
                     Log.p("permissions error", error)
                 }
-                
-                assert(!postsToBeNotifiedAbout.isEmpty)
                 
                 postsToBeNotifiedAbout.forEach {
                     // it's perfectly safe to call this even if permissions were not granted
