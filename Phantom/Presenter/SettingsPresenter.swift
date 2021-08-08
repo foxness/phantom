@@ -261,7 +261,7 @@ class SettingsPresenter {
     }
     
     private func getSendRepliesOption() -> SettingsOptionType {
-        let title = "Send replies"
+        let title = "Send replies to my inbox"
         
         let sendReplies = database.sendReplies
         

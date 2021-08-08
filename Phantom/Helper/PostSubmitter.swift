@@ -20,6 +20,7 @@ class PostSubmitter {
         let useImgur: Bool
         let wallpaperMode: Bool
         let useWallhaven: Bool
+        let sendReplies: Bool
     }
     
     static let instance = PostSubmitter()

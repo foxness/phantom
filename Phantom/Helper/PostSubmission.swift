@@ -119,11 +119,18 @@ class PostSubmission: Operation {
         
         let updatedStrategy = DelayRetryStrategy(maxRetryCount: triesLeft, retryInterval: strategy.retryInterval)
         
-        let submitResult = PostSubmission.submitPost(processedPost, using: reddit, strategy: updatedStrategy)
+        let sendReplies = params.sendReplies
+        let submitResult = PostSubmission.submitPost(processedPost,
+                                                     using: reddit,
+                                                     sendReplies: sendReplies,
+                                                     strategy: updatedStrategy)
         return submitResult
     }
     
-    private static func submitPost(_ post: Post, using reddit: Reddit, strategy: DelayRetryStrategy) -> PostSubmitter.SubmitResult {
+    private static func submitPost(_ post: Post,
+                                   using reddit: Reddit,
+                                   sendReplies: Bool,
+                                   strategy: DelayRetryStrategy) -> PostSubmitter.SubmitResult {
         var retryCount = 0
         var lastError: Error?
         
@@ -132,7 +139,7 @@ class PostSubmission: Operation {
                 Log.p("Attempt #\(retryCount + 1)")
             }
             
-            let submitResult = submitPost(post, using: reddit)
+            let submitResult = submitPost(post, using: reddit, sendReplies: sendReplies)
             switch submitResult {
             case .success(let url):
                 return .success(url)
@@ -151,7 +158,7 @@ class PostSubmission: Operation {
         return .failure(lastError!)
     }
     
-    private static func submitPost(_ post: Post, using reddit: Reddit) -> PostSubmitter.SubmitResult {
+    private static func submitPost(_ post: Post, using reddit: Reddit, sendReplies: Bool) -> PostSubmitter.SubmitResult {
         guard !DebugVariable.simulateReddit else {
             sleep(1)
             
@@ -161,7 +168,7 @@ class PostSubmission: Operation {
         let url: PostSubmitter.RedditPostUrl
         do {
             // todo: send isCancelled closure into reddit.submit() so that it can check that at every step
-            url = try reddit.submit(post: post)
+            url = try reddit.submit(post: post, sendReplies: sendReplies)
         } catch {
             Log.p("Unexpected error while submitting", error)
             return .failure(error)
@@ -203,7 +210,9 @@ class PostSubmission: Operation {
         return .success(postWithTries)
     }
     
-    private static func oneProcessPost(_ post: MiddlewarePost, using middleware: RequiredMiddleware, strategy: DelayRetryStrategy) -> InternalProcessResultWithTries {
+    private static func oneProcessPost(_ post: MiddlewarePost,
+                                       using middleware: RequiredMiddleware,
+                                       strategy: DelayRetryStrategy) -> InternalProcessResultWithTries {
         var retryCount = 0
         var lastError: Error?
         

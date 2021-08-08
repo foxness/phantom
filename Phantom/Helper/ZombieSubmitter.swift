@@ -63,6 +63,7 @@ struct ZombieSubmitter {
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
         let useImgur = database.useImgur
+        let sendReplies = database.sendReplies
         
         var reddit: Reddit!
         var shouldGrabRedditFromSubmitter = true
@@ -81,7 +82,10 @@ struct ZombieSubmitter {
             Log.p("zombie: used existing reddit")
         }
         
-        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let params = PostSubmitter.SubmitParams(useImgur: useImgur,
+                                                wallpaperMode: wallpaperMode,
+                                                useWallhaven: useWallhaven,
+                                                sendReplies: sendReplies)
         
         submitter.submitPost(post, with: params) { result in
             switch result {
