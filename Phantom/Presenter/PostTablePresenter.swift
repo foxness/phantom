@@ -388,8 +388,12 @@ class PostTablePresenter {
         let wallpaperMode = database.wallpaperMode
         let useWallhaven = database.useWallhaven
         let useImgur = database.useImgur
+        let sendReplies = database.sendReplies
         
-        let params = PostSubmitter.SubmitParams(useImgur: useImgur, wallpaperMode: wallpaperMode, useWallhaven: useWallhaven)
+        let params = PostSubmitter.SubmitParams(useImgur: useImgur,
+                                                wallpaperMode: wallpaperMode,
+                                                useWallhaven: useWallhaven,
+                                                sendReplies: sendReplies)
         
         submitter.submitPost(post, with: params) { [weak self] result in
             DispatchQueue.main.async { [weak self] in

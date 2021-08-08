@@ -19,7 +19,6 @@ import Foundation
 // todo: renotify about posts if user grants notification permissions in settings
 // todo: different highlight color for button press in welcome screen [ez]
 // todo: indicator that there are no posts that prompts you to make one
-// todo: "send replies" setting
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
 

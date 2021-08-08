@@ -190,7 +190,8 @@ class SettingsPresenter {
         // General section ------------------------------------------------
         
         let generalOptions = [
-            getRedditAccountOption()
+            getRedditAccountOption(),
+            getSendRepliesOption()
         ]
         
         let generalSection = SettingsSection(title: generalSectionTitle, options: generalOptions)
@@ -256,6 +257,22 @@ class SettingsPresenter {
         )
         
         let optionType = SettingsOptionType.accountOption(option: option)
+        return optionType
+    }
+    
+    private func getSendRepliesOption() -> SettingsOptionType {
+        let title = "Send replies to my inbox"
+        
+        let sendReplies = database.sendReplies
+        
+        let handler = { [self] (isOn: Bool) in
+            database.sendReplies = isOn
+            updateSettings()
+        }
+        
+        let option = SwitchSettingsOption(title: title, isOn: sendReplies, handler: handler)
+        let optionType = SettingsOptionType.switchOption(option: option)
+        
         return optionType
     }
     

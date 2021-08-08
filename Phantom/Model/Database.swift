@@ -24,6 +24,7 @@ class Database {
         case useWallhaven = "useWallhaven"
         case useImgur = "useImgur"
         case askedForNotificationPermissions = "askedForNotificationPermissions"
+        case sendReplies = "sendReplies"
     }
     
     private static let DEFAULT_BULK_ADD_SUBREDDIT = "pics"
@@ -42,6 +43,7 @@ class Database {
     @UserDefaultsBacked(key: Key.wallpaperMode.rawValue, defaultValue: false) private var internalWallpaperMode: Bool
     @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     @UserDefaultsBacked(key: Key.useImgur.rawValue, defaultValue: false) private var internalUseImgur: Bool
+    @UserDefaultsBacked(key: Key.sendReplies.rawValue, defaultValue: true) private var internalSendReplies: Bool
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
@@ -98,6 +100,11 @@ class Database {
         set { internalAskedForNotificationPermissions = newValue }
     }
     
+    var sendReplies: Bool {
+        get { internalSendReplies }
+        set { internalSendReplies = newValue }
+    }
+    
     var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
     
     var posts: [Post] = []
@@ -135,6 +142,7 @@ class Database {
         thumbnailResolverCache = nil
         internalBulkAddTime = nil // intentionally 'internal'
         askedForNotificationPermissions = false
+        sendReplies = true
         
         resetBulkAddSubreddit()
         
