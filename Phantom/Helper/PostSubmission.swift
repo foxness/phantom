@@ -189,6 +189,10 @@ class PostSubmission: Operation {
             return .success((post: post, triesLeft: strategy.maxRetryCount))
         }
         
+        guard !middlewares.isEmpty else {
+            return .success((post: post, triesLeft: strategy.maxRetryCount))
+        }
+        
         var currentStrategy = strategy
         var processedPost = MiddlewarePost(post: post)
         var triesLeft: Int?
