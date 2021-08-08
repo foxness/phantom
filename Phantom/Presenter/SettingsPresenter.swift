@@ -263,10 +263,10 @@ class SettingsPresenter {
     private func getSendRepliesOption() -> SettingsOptionType {
         let title = "Send replies"
         
-        let sendReplies = true // database.wallpaperMode
+        let sendReplies = database.sendReplies
         
         let handler = { [self] (isOn: Bool) in
-            //database.wallpaperMode = isOn
+            database.sendReplies = isOn
             updateSettings()
         }
         
