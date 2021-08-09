@@ -192,6 +192,27 @@ extension UIView {
     }
 }
 
+extension UIButton {
+    // source: https://stackoverflow.com/a/27095410
+    private func imageWithColor(_ color: UIColor) -> UIImage? {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return image
+    }
+
+    func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
+        setBackgroundImage(imageWithColor(color), for: state)
+    }
+}
+
 extension UITableView { // CURRENTLY UNUSED ---------------------------------------------------------------
     // UITableView.showLeadingSwipeHintGlitched() and UITableViewCell.showLeadingSwipeHintGlitched() are currently
     // unused because I'm using a glitchless version that only works with a custom view hierarchy
@@ -293,6 +314,43 @@ fileprivate extension UITableViewCell {
         }
         
         firstAnimator.startAnimation()
+    }
+}
+
+extension UIColor {
+    // source: https://stackoverflow.com/a/42381754
+    
+    /**
+     Create a lighter color
+     */
+    func lighter(by percentage: CGFloat = 30) -> UIColor {
+        return adjustBrightness(by: abs(percentage))
+    }
+    
+    /**
+     Create a darker color
+     */
+    func darker(by percentage: CGFloat = 30) -> UIColor {
+        return adjustBrightness(by: -abs(percentage))
+    }
+    
+    /**
+     Try to increase brightness or decrease saturation
+     */
+    func adjustBrightness(by percentage: CGFloat = 30) -> UIColor {
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        
+        if getHue(&h, saturation: &s, brightness: &b, alpha: &a) {
+            if b < 1.0 {
+                let newB: CGFloat = max(min(b + (percentage / 100.0) * b, 1.0), 0.0)
+                return UIColor(hue: h, saturation: s, brightness: newB, alpha: a)
+            } else {
+                let newS: CGFloat = min(max(s - (percentage / 100.0) * s, 0.0), 1.0)
+                return UIColor(hue: h, saturation: newS, brightness: b, alpha: a)
+            }
+        }
+        
+        return self
     }
 }
 

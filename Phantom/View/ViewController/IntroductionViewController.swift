@@ -29,7 +29,7 @@ class IntroductionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        roundButtonCorners()
+        styleButton()
         tintAppIcon()
     }
     
@@ -49,9 +49,18 @@ class IntroductionViewController: UIViewController {
         }
     }
     
-    func roundButtonCorners() {
+    func styleButton() {
+        let highlightTintPercent: CGFloat = 20
+        
         signInButton.layer.cornerRadius = IntroductionViewController.BUTTON_CORNER_RADIUS
         signInButton.layer.masksToBounds = true
+        
+        let accentColor = UIColor(named: "AccentColor")!
+        let highlightColor = traitCollection.userInterfaceStyle == .dark ?
+            accentColor.lighter(by: highlightTintPercent) :
+            accentColor.darker(by: highlightTintPercent)
+        
+        signInButton.setBackgroundColor(highlightColor, for: .highlighted)
     }
     
     func tintAppIcon() {
@@ -59,6 +68,10 @@ class IntroductionViewController: UIViewController {
         
         // uncomment for black&white icon
 //        appIconView.tintColor = UIColor.label
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        styleButton()
     }
 }
 
