@@ -11,13 +11,12 @@ import Foundation
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // todo: give all Main.storyboard views better names (like in welcome screen) [ez]
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
-// todo: disable landscape interface orientation [ez]
 // todo: adapt interface for landscape
 // todo: add mini tutorial after adding first post ("swipe right to submit post, swipe left to delete")
 // todo: fix compiler warnings
 // todo: fix storyboard scene warnings
 // todo: renotify about posts if user grants notification permissions in settings
-// todo: indicator that there are no posts that prompts you to make one
+// todo: indicator that there are no posts that prompts you to make one [next]
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
 
