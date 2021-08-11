@@ -158,13 +158,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         }
     }
     
-    // todo: delete this? why is this here? I'm pretty sure this is not user ever because imgur sign in happens only in settings vc
-    @IBAction func unwindImgurSignIn(unwindSegue: UIStoryboardSegue) {
-        guard unwindSegue.identifier == ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue else {
-            fatalError("Got unexpected unwind segue")
-        }
-    }
-    
     @IBAction func unwindPostSaved(unwindSegue: UIStoryboardSegue) {
         guard unwindSegue.identifier == PostDetailViewController.Segue.unwindPostSaved.rawValue,
               let unwindSegue = unwindSegue as? UIStoryboardSegueWithCompletion
