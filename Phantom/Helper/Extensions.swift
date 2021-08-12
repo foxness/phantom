@@ -213,6 +213,31 @@ extension UIButton {
     }
 }
 
+extension UITableView {
+    // source: https://stackoverflow.com/a/45157417
+    
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .secondaryLabel
+//        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        
+        // if you don't set the font, the default font is System (San Francisco UI) 17pt
+//        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        
+//        messageLabel.sizeToFit()
+
+        backgroundView = messageLabel
+//        separatorStyle = .none
+    }
+
+    func removeEmptyMessage() {
+        backgroundView = nil
+//        separatorStyle = .singleLine
+    }
+}
+
 extension UITableView { // CURRENTLY UNUSED ---------------------------------------------------------------
     // UITableView.showLeadingSwipeHintGlitched() and UITableViewCell.showLeadingSwipeHintGlitched() are currently
     // unused because I'm using a glitchless version that only works with a custom view hierarchy

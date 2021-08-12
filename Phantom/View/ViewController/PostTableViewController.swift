@@ -23,6 +23,7 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     
     private static let TEXT_INDICATOR_SUBMITTING = "Submitting..."
     private static let TEXT_INDICATOR_DONE = "Done!"
+    private static let TEXT_TABLE_EMPTY = "No posts yet." // todo: change to "no scheduled posts yet"?
     
     private static let COLOR_INDICATOR_SUBMITTING = UIColor.systemBlue
     private static let COLOR_INDICATOR_DONE = UIColor.systemGreen
@@ -304,7 +305,15 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.getPostCount()
+        let count = presenter.getPostCount()
+        
+        if count == 0 {
+            tableView.setEmptyMessage(PostTableViewController.TEXT_TABLE_EMPTY)
+        } else {
+            tableView.removeEmptyMessage()
+        }
+        
+        return count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
