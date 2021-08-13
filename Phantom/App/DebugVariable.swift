@@ -16,7 +16,6 @@ import Foundation
 // todo: fix compiler warnings
 // todo: fix storyboard scene warnings
 // todo: renotify about posts if user grants notification permissions in settings
-// todo: indicator that there are no posts that prompts you to make one [next]
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
 

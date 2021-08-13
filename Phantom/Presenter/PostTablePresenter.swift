@@ -28,12 +28,11 @@ class PostTablePresenter {
     private let submitter: PostSubmitter = .instance
     private let zombie: ZombieSubmitter = .instance
     
+    private var currentlySubmitting = false
+    private var currentlySubmittingPostId: UUID?
+    
     // todo: let user know the zombie is submitting?
     // todo: disable zombie submission during controller submission?
-    // main means the main portion of the app aka what you see when you open the app
-    private var disableSubmissionBecauseMain = false // needed to prevent multiple post submission
-    private var disabledPostIdBecauseMain: UUID? // needed to disable editing segues for submitting post
-    
     // zombie means the invisible/background daemon that submits when you press submit from a notification
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
@@ -52,13 +51,13 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return disableSubmissionBecauseMain || disableSubmissionBecauseZombie || disableSubmissionBecauseNoReddit
+        return currentlySubmitting || disableSubmissionBecauseZombie || disableSubmissionBecauseNoReddit
     }
     
     private var disabledPostIds: [UUID] {
         var ids = [UUID]()
         
-        if let becauseControllerId = disabledPostIdBecauseMain {
+        if let becauseControllerId = currentlySubmittingPostId {
             ids.append(becauseControllerId)
         }
         
@@ -378,8 +377,8 @@ class PostTablePresenter {
     // MARK: - Other methods
     
     func submitPost(_ post: Post) {
-        disableSubmissionBecauseMain = true
-        disabledPostIdBecauseMain = post.id // make the post uneditable
+        currentlySubmitting = true
+        currentlySubmittingPostId = post.id // make the post uneditable
         
         PostNotifier.cancel(for: post)
         
@@ -399,7 +398,7 @@ class PostTablePresenter {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
-                self.disabledPostIdBecauseMain = nil // make editable
+                self.currentlySubmittingPostId = nil // make editable
                 
                 switch result {
                 case .success(let url):
@@ -409,7 +408,7 @@ class PostTablePresenter {
                     
                     self.viewDelegate?.setSubmissionIndicator(.done) {
                         // when the indicator disappears:
-                        self.disableSubmissionBecauseMain = false
+                        self.currentlySubmitting = false
                     }
                 case .failure(let error):
                     Log.p("got error", error)
@@ -417,7 +416,7 @@ class PostTablePresenter {
                     PostNotifier.notifyUser(about: post) // reschedule the canceled notification
                     
                     self.viewDelegate?.setSubmissionIndicator(.hidden, completion: nil)
-                    self.disableSubmissionBecauseMain = false
+                    self.currentlySubmitting = false
                     
                     let title = "An error has occurred"
                     let message = "\(error.localizedDescription)"
