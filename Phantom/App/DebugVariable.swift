@@ -24,12 +24,12 @@ struct DebugVariable {
     
     // Debug ---------------------------------------------
     
-    private static let simulateMiddlewareDebug = true
-    private static let simulateRedditDebug = true
+    private static let simulateMiddlewareDebug = false
+    private static let simulateRedditDebug = false
     private static let disableRetryDebug = true
     private static let directImgurUploadDebug = false
     private static let simulateErrorDebug = false
-    private static let instantNotificationsDebug = false
+    private static let instantNotificationsDebug = true
     
     // Phone ---------------------------------------------
     

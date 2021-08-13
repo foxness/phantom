@@ -37,8 +37,6 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var redditSignedOut = false
-    
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true // todo: remove?
     
@@ -85,7 +83,6 @@ class PostTablePresenter {
         
         database.introductionShown = true // todo: move this somewhere else?
         
-        updateSubmitButton()
         saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
@@ -120,7 +117,6 @@ class PostTablePresenter {
     
     func redditAccountChanged(_ newReddit: Reddit?) { // means account changed in settings
         submitter.reddit.mutate { $0 = newReddit }
-        updateSubmitButton()
     }
     
     func imgurAccountChanged(_ newImgur: Imgur?) { // means account changed in settings
@@ -199,7 +195,6 @@ class PostTablePresenter {
     func viewDidAppear() {
         showIntroductionIfNeeded()
         setupPostSubmitter()
-        updateSubmitButton()
         submitPostIfNeeded()
         
 //        viewDelegate?.showPostSwipeHint()
@@ -377,7 +372,7 @@ class PostTablePresenter {
     // MARK: - Other methods
     
     func tryToSubmitPost(_ post: Post) {
-        guard !redditSignedOut else {
+        guard submitter.reddit.value?.isSignedIn == true else {
             let title = "Add Reddit account"
             let message = "You need to sign into your Reddit account in Settings to submit"
             viewDelegate?.showAlert(title: title, message: message)
@@ -484,11 +479,6 @@ class PostTablePresenter {
         }
         
         tryToSubmitPost(post)
-    }
-    
-    private func updateSubmitButton() {
-        let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
-        redditSignedOut = !redditSignedIn
     }
     
     private func setupPostSubmitter() {
