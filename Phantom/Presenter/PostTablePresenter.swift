@@ -37,7 +37,7 @@ class PostTablePresenter {
     private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
     private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
-    private var disableSubmissionBecauseNoReddit = false // no reddit = signed out
+    private var redditSignedOut = false
     
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true // todo: remove?
@@ -51,7 +51,7 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return currentlySubmitting || disableSubmissionBecauseZombie || disableSubmissionBecauseNoReddit
+        return currentlySubmitting || disableSubmissionBecauseZombie
     }
     
     private var disabledPostIds: [UUID] {
@@ -103,7 +103,7 @@ class PostTablePresenter {
     
     func submitPressed(postIndex: Int) {
         let post = posts[postIndex]
-        submitPost(post)
+        tryToSubmitPost(post)
     }
     
     func bulkAddButtonPressed() {
@@ -376,6 +376,18 @@ class PostTablePresenter {
     
     // MARK: - Other methods
     
+    func tryToSubmitPost(_ post: Post) {
+        guard !redditSignedOut else {
+            let title = "Add Reddit account"
+            let message = "You need to sign into your Reddit account in Settings to submit"
+            viewDelegate?.showAlert(title: title, message: message)
+            
+            return
+        }
+        
+        submitPost(post)
+    }
+    
     func submitPost(_ post: Post) {
         currentlySubmitting = true
         currentlySubmittingPostId = post.id // make the post uneditable
@@ -466,17 +478,17 @@ class PostTablePresenter {
     }
     
     private func submitFromUserNotification(postId: UUID) {
-        guard let post = posts.first(where: { $0.id == postId }) else {
+        guard let post = posts.first(where: { $0.id == postId }) else { // theoretically we can never get into this guard
             Log.p("post not found")
             return
         }
         
-        submitPost(post)
+        tryToSubmitPost(post)
     }
     
     private func updateSubmitButton() {
         let redditSignedIn = submitter.reddit.value?.isSignedIn ?? false
-        disableSubmissionBecauseNoReddit = !redditSignedIn
+        redditSignedOut = !redditSignedIn
     }
     
     private func setupPostSubmitter() {
