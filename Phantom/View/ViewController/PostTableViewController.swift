@@ -367,7 +367,15 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         slideUpMenu.show()
     }
     
-    func showAlert(title: String, message: String) { // todo: split into alerts for every situation intead of generic
+    func showSignedOutRedditAlert() {
+        let title = "Add Reddit account"
+        let message = "You need to sign into your Reddit account in Settings to submit"
+        displayOkAlert(title: title, message: message)
+    }
+    
+    func showGenericErrorAlert(errorMessage: String) { // todo: split into alerts for every situation intead of generic
+        let title = "An error has occurred"
+        let message = errorMessage
         displayOkAlert(title: title, message: message)
     }
     

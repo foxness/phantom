@@ -373,10 +373,7 @@ class PostTablePresenter {
     
     func tryToSubmitPost(_ post: Post) {
         guard submitter.reddit.value?.isSignedIn == true else {
-            let title = "Add Reddit account"
-            let message = "You need to sign into your Reddit account in Settings to submit"
-            viewDelegate?.showAlert(title: title, message: message)
-            
+            viewDelegate?.showSignedOutRedditAlert()
             return
         }
         
@@ -425,9 +422,7 @@ class PostTablePresenter {
                     self.viewDelegate?.setSubmissionIndicator(.hidden, completion: nil)
                     self.currentlySubmitting = false
                     
-                    let title = "An error has occurred"
-                    let message = "\(error.localizedDescription)"
-                    self.viewDelegate?.showAlert(title: title, message: message) // todo: replace with showErrorAlert(error:) ?
+                    self.viewDelegate?.showGenericErrorAlert(errorMessage: error.localizedDescription)
                 }
             }
         }
