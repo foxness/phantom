@@ -8,9 +8,6 @@
 
 import Foundation
 
-// todo: save reddit and imgur only when they change (after submit & on receive new)
-// todo: add nice introduction?
-
 class PostTablePresenter {
     // MARK: - Properties
     
@@ -74,10 +71,9 @@ class PostTablePresenter {
     
     func redditSignedInFromIntroduction(_ reddit: Reddit) {
         submitter.reddit.mutate { $0 = reddit }
+        saveRedditAuth()
         
         database.introductionShown = true // todo: move this somewhere else?
-        
-        saveRedditAuth() // todo: save specific data (imgur, posts etc) only when it changes
     }
     
     func submitRequestedFromUserNotification(postId: UUID) {
@@ -109,12 +105,14 @@ class PostTablePresenter {
         viewDelegate?.showSlideUpMenu()
     }
     
-    func redditAccountChanged(_ newReddit: Reddit?) { // means account changed in settings
+    func redditAccountChanged(_ newReddit: Reddit?) { // is called when the account is changed settings
         submitter.reddit.mutate { $0 = newReddit }
+        saveRedditAuth()
     }
     
-    func imgurAccountChanged(_ newImgur: Imgur?) { // means account changed in settings
+    func imgurAccountChanged(_ newImgur: Imgur?) { // is called when the account is changed settings
         submitter.imgur.mutate { $0 = newImgur }
+        saveImgurAuth()
     }
     
     func bulkPostsAdded(_ bulkPosts: [BulkPost]) {
@@ -211,7 +209,7 @@ class PostTablePresenter {
     func sceneWillDeactivate() {
         sceneActivated = false
         
-        saveData() // move to viewWillDisappear() instead?
+        saveThumbnailResolverCache() // move to viewWillDisappear() instead?
     }
     
     func sceneDidEnterBackground() {
@@ -330,14 +328,8 @@ class PostTablePresenter {
         sortPosts()
     }
     
-    func loadThumbnailResolverCache() {
+    func loadThumbnailResolverCache() { // todo: this should probably be private
         thumbnailResolver.cache = database.thumbnailResolverCache ?? [String: ThumbnailResolver.ThumbnailUrl]()
-    }
-    
-    private func saveData() {
-        saveRedditAuth()
-        saveImgurAuth()
-        saveThumbnailResolverCache()
     }
     
     private func saveRedditAuth() {
@@ -353,8 +345,6 @@ class PostTablePresenter {
     private func savePosts() {
         database.posts = posts
         database.savePosts()
-        
-        Log.p("saved posts")
     }
     
     private func saveThumbnailResolverCache() {
@@ -399,6 +389,8 @@ class PostTablePresenter {
                 guard let self = self else { return }
                 
                 self.currentlySubmittingPostId = nil // make editable
+                self.saveRedditAuth()
+                self.saveImgurAuth()
                 
                 switch result {
                 case .success(let url):

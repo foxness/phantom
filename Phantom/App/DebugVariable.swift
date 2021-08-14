@@ -18,11 +18,10 @@ import Foundation
 // todo: renotify about posts if user grants notification permissions in settings
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
-// todo: save reddit/imgur only after they change
 // todo: add about page
 // todo: refactor zombie submitter out of existence
 // todo: refactor post detail
-// todo: fix no reddit submit bug
+// todo: add nice introduction?
 
 struct DebugVariable {
     private static let phoneDeploy = false
