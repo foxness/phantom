@@ -32,7 +32,7 @@ class PostSubmitter {
     
     private init() { }
     
-    private func addToQueue(submission: PostSubmission) {
+    private func addSubmissionToQueue(_ submission: PostSubmission) {
         submission.completionBlock = {
             guard !submission.isCancelled else { return }
             
@@ -42,41 +42,21 @@ class PostSubmitter {
         submitQueue.addOperation(submission)
     }
     
-    func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: disable submission while signed out
-        submitPostInternal(post: post, database: nil, params: params, callback: callback)
-    }
-    
-    func submitPostInDatabase(_ database: Database, with params: SubmitParams, callback: @escaping SubmitCallback) { // todo: get rid of zombiesubmitter and this method?
-        submitPostInternal(post: nil, database: database, params: params, callback: callback)
-    }
-    
-    func cancelEverything() {
-        submitQueue.cancelAllOperations()
-    }
-    
-    private func submitPostInternal(post: Post?, database: Database?, params: SubmitParams, callback: @escaping SubmitCallback) {
+    func submitPost(_ post: Post, with params: SubmitParams, callback: @escaping SubmitCallback) {
         guard let reddit = reddit.value else { fatalError("Reddit account not found") }
         
         let imgur = imgur.value
-        
-        let submission: PostSubmission
-        if let post = post {
-            submission = PostSubmission(reddit: reddit,
+        let submission = PostSubmission(reddit: reddit,
                                         post: post,
                                         params: params,
                                         imgur: imgur,
                                         callback: callback)
-        } else if let database = database {
-            submission = PostSubmission(reddit: reddit,
-                                        database: database,
-                                        params: params,
-                                        imgur: imgur,
-                                        callback: callback)
-        } else {
-            fatalError("Either post or database must be passed to this method")
-        }
         
-        addToQueue(submission: submission)
+        addSubmissionToQueue(submission)
+    }
+    
+    func cancelEverything() {
+        submitQueue.cancelAllOperations()
     }
     
     private static func getSubmitQueue() -> OperationQueue {
