@@ -24,7 +24,6 @@ class PostTablePresenter {
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true // todo: remove?
     
-    private var postIdsToBeDeleted: [UUID] = []
     private var postIdToBeSubmitted: UUID?
     private var postsToBeNotifiedAbout: [Post] = []
     
@@ -144,11 +143,11 @@ class PostTablePresenter {
     func viewDidLoad() {
         loadPostsFromDatabase()
         loadThumbnailResolverCache()
+        setupPostSubmitter()
     }
     
     func viewDidAppear() {
         showIntroductionIfNeeded()
-        setupPostSubmitter() // todo: should this be in viewDidLoad() instead?
         submitPostIfNeeded()
     }
     
@@ -160,17 +159,14 @@ class PostTablePresenter {
     
     func sceneDidActivate() {
         sceneActivated = true
-        
-        if !postIdsToBeDeleted.isEmpty { // todo: move this to sceneWillEnterForeground!?
-            deletePosts(ids: postIdsToBeDeleted, withAnimation: .right, cancelNotify: false)
-            postIdsToBeDeleted.removeAll()
-        }
     }
     
     func sceneWillDeactivate() {
         sceneActivated = false
         
-        saveThumbnailResolverCache() // move to viewWillDisappear() instead?
+        // todo: move to viewWillDisappear() instead?
+        // todo: save thumbnail cache only when it changes?
+        saveThumbnailResolverCache()
     }
     
     func sceneDidEnterBackground() {

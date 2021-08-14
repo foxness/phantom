@@ -8,8 +8,8 @@
 
 import Foundation
 
-// todo: show attempt count to user
-// todo: let user change retry strategy
+// todo: make post submitter non-singleton now that there's no zombiesubmitter?
+// todo: make reddit & imgur properties non-atomic (only after making it non-singleton)
 
 class PostSubmitter {
     typealias RedditPostUrl = String

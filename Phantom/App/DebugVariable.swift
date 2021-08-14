@@ -8,8 +8,6 @@
 
 import Foundation
 
-// todo: make post submitter non-singleton now that there's no zombiesubmitter?
-
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // todo: give all Main.storyboard views better names (like in welcome screen) [ez]
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
@@ -23,6 +21,8 @@ import Foundation
 // todo: add about page
 // todo: refactor post detail
 // todo: add nice introduction?
+// todo: show attempt count to user
+// todo: let user change retry strategy
 
 struct DebugVariable {
     private static let phoneDeploy = false
