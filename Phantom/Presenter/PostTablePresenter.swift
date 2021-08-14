@@ -8,14 +8,8 @@
 
 import Foundation
 
-// todo: update app icon badge when it actually should change instead of on going in bg
-// todo: save posts only when they change
 // todo: save reddit and imgur only when they change (after submit & on receive new)
-// todo: add graceful asking for notification permissions
-// todo: add nice introduction
-
-// todo: !!! add submitting from user notification even if app was dead while notification action pressed
-// todo: handle cases where there's no reddit and submit is still requested
+// todo: add nice introduction?
 
 class PostTablePresenter {
     // MARK: - Properties
@@ -149,6 +143,7 @@ class PostTablePresenter {
         
         viewDelegate?.reloadPostRows(with: .right)
         updateAppBadge()
+        savePosts()
         
         if database.askedForNotificationPermissions {
             toBeNotifiedAbout.forEach {
@@ -194,10 +189,8 @@ class PostTablePresenter {
     
     func viewDidAppear() {
         showIntroductionIfNeeded()
-        setupPostSubmitter()
+        setupPostSubmitter() // todo: should this be in viewDidLoad() instead?
         submitPostIfNeeded()
-        
-//        viewDelegate?.showPostSwipeHint()
     }
     
     // MARK: - Scene lifecycle methods
@@ -218,7 +211,7 @@ class PostTablePresenter {
     func sceneWillDeactivate() {
         sceneActivated = false
         
-        saveData()
+        saveData() // move to viewWillDisappear() instead?
     }
     
     func sceneDidEnterBackground() {
@@ -226,7 +219,7 @@ class PostTablePresenter {
         
         // this is here in case user disabled notifications (so they can't update badge)
         // and the post became overdue while the user was using the app
-        updateAppBadge()
+        updateAppBadge() // todo: move this to sceneWillDeactivate() instead?
     }
     
     // MARK: - Zombie lifecycle methods
@@ -288,6 +281,7 @@ class PostTablePresenter {
         let index = posts.firstIndex(of: post)!
         viewDelegate?.insertPostRows(at: [index], with: .top)
         updateAppBadge()
+        savePosts()
         
         if database.askedForNotificationPermissions {
             PostNotifier.notifyUser(about: post)
@@ -314,12 +308,13 @@ class PostTablePresenter {
             
             viewDelegate?.reloadPostRows(with: .automatic)
             updateAppBadge()
+            savePosts()
         } else {
             // this situation can happen when user submits a post
             // from notification banner while editing the same post
             // in that case we just discard it since it has already been posted
             
-            Log.p("edited post discarded because already posted")
+            Log.p("edited post discarded because already posted") // todo: revisit this situation and check if this happens
         }
     }
     
@@ -340,7 +335,6 @@ class PostTablePresenter {
     }
     
     private func saveData() {
-        savePosts()
         saveRedditAuth()
         saveImgurAuth()
         saveThumbnailResolverCache()
@@ -359,6 +353,8 @@ class PostTablePresenter {
     private func savePosts() {
         database.posts = posts
         database.savePosts()
+        
+        Log.p("saved posts")
     }
     
     private func saveThumbnailResolverCache() {
@@ -448,6 +444,7 @@ class PostTablePresenter {
         viewDelegate?.deletePostRows(at: indicesToDelete, with: animation)
         
         updateAppBadge()
+        savePosts()
     }
     
     private func updateAppBadge() {
