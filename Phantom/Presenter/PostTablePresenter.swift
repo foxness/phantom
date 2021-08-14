@@ -17,16 +17,9 @@ class PostTablePresenter {
     private let thumbnailResolver: ThumbnailResolver = .instance
     
     private let submitter: PostSubmitter = .instance
-    private let zombie: ZombieSubmitter = .instance
     
     private var currentlySubmitting = false
     private var currentlySubmittingPostId: UUID?
-    
-    // todo: let user know the zombie is submitting?
-    // todo: disable zombie submission during controller submission?
-    // zombie means the invisible/background daemon that submits when you press submit from a notification
-    private var disableSubmissionBecauseZombie = false // needed to prevent submission when zombie is awake/submitting
-    private var disabledPostIdBecauseZombie: UUID? // needed to disable editing for the post that zombie is submitting
     
     private var sceneActivated = true // todo: move back to view controller?
     private var sceneInForeground = true // todo: remove?
@@ -40,21 +33,7 @@ class PostTablePresenter {
     // MARK: - Computed properties
     
     var submissionDisabled: Bool {
-        return currentlySubmitting || disableSubmissionBecauseZombie
-    }
-    
-    private var disabledPostIds: [UUID] {
-        var ids = [UUID]()
-        
-        if let becauseControllerId = currentlySubmittingPostId {
-            ids.append(becauseControllerId)
-        }
-        
-        if let becauseZombieId = disabledPostIdBecauseZombie {
-            ids.append(becauseZombieId)
-        }
-        
-        return ids
+        return currentlySubmitting
     }
     
     // MARK: - Delegate methods
@@ -165,24 +144,6 @@ class PostTablePresenter {
     func viewDidLoad() {
         loadPostsFromDatabase()
         loadThumbnailResolverCache()
-        
-        if zombie.awake.value {
-            // we are doing this only because of the following scenario:
-            // - the app is not open (it's dead)
-            // - user gets a post notification
-            // - user submits via the notification
-            // - user opens the app while the zombie is still submitting
-            // but the app couldn't have gotten the notification that
-            // the zombie has awoken because the app was dead
-            // so we check if the zombie is awake here
-            // and disable submission/postId according to zombie
-            
-            disableSubmissionBecauseZombie = true
-            
-            let zombieId = zombie.submissionId.value
-            assert(zombieId != nil)
-            disabledPostIdBecauseZombie = zombieId
-        }
     }
     
     func viewDidAppear() {
@@ -220,54 +181,18 @@ class PostTablePresenter {
         updateAppBadge() // todo: move this to sceneWillDeactivate() instead?
     }
     
-    // MARK: - Zombie lifecycle methods
-    
-    func zombieWokeUp(notification: Notification) {
-        Log.p("zombie woke up")
-        
-        // todo: decide if I use post id from notification or from zombie.submissionId
-        let submissionId = PostNotifier.getPostId(notification: notification)
-        
-        disableSubmissionBecauseZombie = true
-        disabledPostIdBecauseZombie = submissionId
-    }
-    
-    func zombieSubmitted(notification: Notification) {
-        Log.p("zombie submitted")
-        
-        let submittedPostId = PostNotifier.getPostId(notification: notification)
-        
-        if sceneActivated { // we're reloading only when app is currently visible
-            DispatchQueue.main.async { [unowned self] in // todo: use "unowned self" capture list wherever needed
-                self.deletePosts(ids: [submittedPostId], withAnimation: .right, cancelNotify: false)
-            }
-        } else { // defer deletion for when app is activated
-            postIdsToBeDeleted.append(submittedPostId)
-        }
-        
-        disableSubmissionBecauseZombie = false
-        disabledPostIdBecauseZombie = nil
-    }
-    
-    func zombieFailed(notification: Notification) {
-        Log.p("zombie failed")
-        
-        disableSubmissionBecauseZombie = false
-        disabledPostIdBecauseZombie = nil
-    }
-    
     // MARK: - Post list methods
     
-    func getPost(at index: Int) -> Post { posts[index] }
+    func getPost(at index: Int) -> Post {
+        return posts[index]
+    }
     
-    func getPostCount() -> Int { posts.count }
+    func getPostCount() -> Int {
+        return posts.count
+    }
     
     func canEditPost(at index: Int) -> Bool {
-        let disabled = disabledPostIds
-        guard !disabled.isEmpty else { return true }
-        
-        let postId = posts[index].id
-        return !disabled.contains(postId)
+        return posts[index].id != currentlySubmittingPostId
     }
     
     func newPostAdded(_ post: Post) {
@@ -328,7 +253,7 @@ class PostTablePresenter {
         sortPosts()
     }
     
-    func loadThumbnailResolverCache() { // todo: this should probably be private
+    private func loadThumbnailResolverCache() {
         thumbnailResolver.cache = database.thumbnailResolverCache ?? [String: ThumbnailResolver.ThumbnailUrl]()
     }
     
@@ -357,7 +282,7 @@ class PostTablePresenter {
     
     // MARK: - Other methods
     
-    func tryToSubmitPost(_ post: Post) {
+    private func tryToSubmitPost(_ post: Post) {
         guard submitter.reddit.value?.isSignedIn == true else {
             viewDelegate?.showSignedOutRedditAlert()
             return
@@ -366,7 +291,7 @@ class PostTablePresenter {
         submitPost(post)
     }
     
-    func submitPost(_ post: Post) {
+    private func submitPost(_ post: Post) {
         currentlySubmitting = true
         currentlySubmittingPostId = post.id // make the post uneditable
         

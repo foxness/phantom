@@ -89,20 +89,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         presenter.sceneDidEnterBackground()
     }
     
-    // MARK: - Zombie lifecycle
-    
-    @objc private func zombieWokeUp(notification: Notification) {
-        presenter.zombieWokeUp(notification: notification)
-    }
-    
-    @objc private func zombieSubmitted(notification: Notification) {
-        presenter.zombieSubmitted(notification: notification)
-    }
-    
-    @objc private func zombieFailed(notification: Notification) {
-        presenter.zombieFailed(notification: notification)
-    }
-    
     // MARK: - Navigation
     
     func segueToIntroduction() {
@@ -462,10 +448,6 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         notifications.append((#selector(sceneDidActivate), UIScene.didActivateNotification))
         notifications.append((#selector(sceneWillDeactivate), UIScene.willDeactivateNotification))
         notifications.append((#selector(sceneDidEnterBackground), UIScene.didEnterBackgroundNotification))
-        
-        notifications.append((#selector(zombieWokeUp), PostNotifier.NOTIFICATION_ZOMBIE_WOKE_UP))
-        notifications.append((#selector(zombieSubmitted), PostNotifier.NOTIFICATION_ZOMBIE_SUBMITTED))
-        notifications.append((#selector(zombieFailed), PostNotifier.NOTIFICATION_ZOMBIE_FAILED))
         
         return notifications
     }

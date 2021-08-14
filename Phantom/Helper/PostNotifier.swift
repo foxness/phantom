@@ -10,10 +10,6 @@ import Foundation
 import UIKit
 
 struct PostNotifier {
-    static let NOTIFICATION_ZOMBIE_WOKE_UP = ZombieSubmitter.NOTIFICATION_WOKE_UP
-    static let NOTIFICATION_ZOMBIE_SUBMITTED = ZombieSubmitter.NOTIFICATION_SUBMITTED
-    static let NOTIFICATION_ZOMBIE_FAILED = ZombieSubmitter.NOTIFICATION_FAILED
-    
     private static let ACTION_SUBMIT = "submit"
     private static let TITLE_SUBMIT_ACTION = "Submit Post"
     private static let CATEGORY_DUE_POST = "duePost"
@@ -121,10 +117,6 @@ struct PostNotifier {
                                                      options: categoryOptions)
         
         return duePostCategory
-    }
-    
-    static func getPostId(notification: Notification) -> UUID {
-        return ZombieSubmitter.getPostId(notification: notification)
     }
     
     private static func dateToComponents(_ date: Date) -> DateComponents {
