@@ -66,7 +66,6 @@
 		960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D066125277F7700FFB4AC /* PostTablePresenter.swift */; };
 		960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */; };
 		96886AE3250BCFBE004FDE30 /* PostNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96886AE2250BCFBE004FDE30 /* PostNotifier.swift */; };
-		969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */; };
 		96AA4D68252B56CB009488F6 /* PostDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AA4D67252B56CB009488F6 /* PostDetailPresenter.swift */; };
 		96AA4D6B252B574B009488F6 /* PostDetailViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AA4D6A252B574B009488F6 /* PostDetailViewDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -132,7 +131,6 @@
 		960D066125277F7700FFB4AC /* PostTablePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTablePresenter.swift; sourceTree = "<group>"; };
 		960D066425277FC100FFB4AC /* PostTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewDelegate.swift; sourceTree = "<group>"; };
 		96886AE2250BCFBE004FDE30 /* PostNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNotifier.swift; sourceTree = "<group>"; };
-		969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieSubmitter.swift; sourceTree = "<group>"; };
 		96AA4D67252B56CB009488F6 /* PostDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailPresenter.swift; sourceTree = "<group>"; };
 		96AA4D6A252B574B009488F6 /* PostDetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -305,7 +303,6 @@
 				573CE690267E3C5E0083CE30 /* WallpaperModeMiddleware.swift */,
 				5768C3342639BE2A00459260 /* ImgurMiddleware.swift */,
 				572D9518265ACB1A00F0D454 /* RetryStrategy.swift */,
-				969B7390250E76DA008C87C8 /* ZombieSubmitter.swift */,
 				575D7876264C112000173E7A /* Wallhaven.swift */,
 				57AE9FA92641B70600DC1970 /* PostScheduler.swift */,
 				57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */,
@@ -443,7 +440,6 @@
 				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
 				573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
-				969B7391250E76DA008C87C8 /* ZombieSubmitter.swift in Sources */,
 				57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
 				572AA66D2687562B0016BE43 /* TextSettingCell.swift in Sources */,

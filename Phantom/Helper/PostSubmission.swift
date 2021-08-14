@@ -37,17 +37,6 @@ class PostSubmission: Operation {
         self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
     }
     
-    convenience init(reddit: Reddit,
-                     database: Database,
-                     params: PostSubmitter.SubmitParams,
-                     imgur: Imgur? = nil,
-                     callback: @escaping PostSubmitter.SubmitCallback) {
-        
-        let post = PostSubmission.getPost(from: database)
-        
-        self.init(reddit: reddit, post: post, params: params, callback: callback)
-    }
-    
     private static func getMiddlewares(params: PostSubmitter.SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
         var mw = [RequiredMiddleware]()
         
@@ -80,10 +69,6 @@ class PostSubmission: Operation {
         }
         
         return mw
-    }
-    
-    private static func getPost(from database: Database) -> Post {
-        return database.posts.last!
     }
     
     override func main() {

@@ -19,9 +19,10 @@ import Foundation
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
 // todo: add about page
-// todo: refactor zombie submitter out of existence
 // todo: refactor post detail
 // todo: add nice introduction?
+// todo: show attempt count to user
+// todo: let user change retry strategy
 
 struct DebugVariable {
     private static let phoneDeploy = false
