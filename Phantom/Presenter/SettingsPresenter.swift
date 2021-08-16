@@ -219,7 +219,7 @@ class SettingsPresenter {
         let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle, options: wallpaperModeOptions)
         sections.append(wallpaperModeSection)
         
-        // Bulk Add section --------------------------------------------------
+        // Bulk Add section -----------------------------------------------
         
         let bulkAddOptions = [
             getBulkAddSubredditOption(),
@@ -229,7 +229,7 @@ class SettingsPresenter {
         let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
         sections.append(bulkAddSection)
         
-        // About section -----------------------------------------------------
+        // About section --------------------------------------------------
         
         let aboutOptions = [
             getAboutOption()
@@ -238,7 +238,7 @@ class SettingsPresenter {
         let aboutSection = SettingsSection(title: aboutSectionTitle, options: aboutOptions)
         sections.append(aboutSection)
         
-        // -------------------------------------------------------------------
+        // ----------------------------------------------------------------
         
         return sections
     }
