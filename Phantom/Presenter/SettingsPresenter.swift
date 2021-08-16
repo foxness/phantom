@@ -8,7 +8,8 @@
 
 import Foundation
 
-// todo: add bulk add section (set subreddit, date schedule type etc)
+// todo: make nav bar transparent like in posts table
+// todo: make table view fill to the bottom of the screen
 
 class SettingsPresenter {
     // MARK: - Properties
@@ -180,10 +181,11 @@ class SettingsPresenter {
     // MARK: - Settings sections
     
     private func getSettingsSections() -> [SettingsSection] {
-        let generalSectionTitle = "General"
-        let imgurSectionTitle = "Imgur"
-        let wallpaperModeSectionTitle = "Wallpaper Mode"
+        let generalSectionTitle = "" // was "General"
+        let imgurSectionTitle = "" // was "Imgur"
+        let wallpaperModeSectionTitle = "" // was "Wallpaper Mode"
         let bulkAddSectionTitle = "Bulk Add"
+        let aboutSectionTitle = ""
         
         var sections: [SettingsSection] = []
         
@@ -227,10 +229,21 @@ class SettingsPresenter {
         let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
         sections.append(bulkAddSection)
         
-        // ----------------------------------------------------------------
+        // About section -----------------------------------------------------
+        
+        let aboutOptions = [
+            getAboutOption()
+        ]
+        
+        let aboutSection = SettingsSection(title: aboutSectionTitle, options: aboutOptions)
+        sections.append(aboutSection)
+        
+        // -------------------------------------------------------------------
         
         return sections
     }
+    
+    // MARK: - General section
     
     private func getRedditAccountOption() -> SettingsOptionType {
         let accountType = "Reddit Account"
@@ -276,6 +289,8 @@ class SettingsPresenter {
         return optionType
     }
     
+    // MARK: - Imgur section
+    
     private func getImgurAccountOption() -> SettingsOptionType {
         let accountType = "Imgur Account"
         let signInPrompt = "Add Imgur Account"
@@ -303,6 +318,25 @@ class SettingsPresenter {
         let optionType = SettingsOptionType.accountOption(option: option)
         return optionType
     }
+    
+    private func getUseImgurOption() -> SettingsOptionType {
+        let title = "Upload images to Imgur"
+        
+        let useImgur = database.useImgur
+        let isEnabled = database.imgurAuth != nil
+        
+        let handler = { [self] (isOn: Bool) in
+            database.useImgur = isOn
+            updateSettings()
+        }
+        
+        let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
+        let optionType = SettingsOptionType.switchOption(option: option)
+        
+        return optionType
+    }
+    
+    // MARK: - Wallpaper Mode section
     
     private func getWallpaperModeOption() -> SettingsOptionType {
         let title = "Wallpaper Mode"
@@ -336,22 +370,7 @@ class SettingsPresenter {
         return optionType
     }
     
-    private func getUseImgurOption() -> SettingsOptionType {
-        let title = "Upload images to Imgur"
-        
-        let useImgur = database.useImgur
-        let isEnabled = database.imgurAuth != nil
-        
-        let handler = { [self] (isOn: Bool) in
-            database.useImgur = isOn
-            updateSettings()
-        }
-        
-        let option = SwitchSettingsOption(title: title, isOn: useImgur, handler: handler, isEnabled: isEnabled)
-        let optionType = SettingsOptionType.switchOption(option: option)
-        
-        return optionType
-    }
+    // MARK: - Bulk Add section
     
     private func getBulkAddSubredditOption() -> SettingsOptionType {
         let subreddit = database.bulkAddSubreddit
@@ -381,6 +400,21 @@ class SettingsPresenter {
         
         let option = TimeSettingsOption(title: title, timeOfDay: timeOfDay, handler: handler)
         let optionType = SettingsOptionType.timeOption(option: option)
+        
+        return optionType
+    }
+    
+    // MARK: - About section
+    
+    private func getAboutOption() -> SettingsOptionType {
+        let title = "About"
+        
+        let handler = { [self] () -> Void in
+            viewDelegate?.segueToAbout()
+        }
+        
+        let option = StaticSettingsOption(title: title, handler: handler)
+        let optionType = SettingsOptionType.staticOption(option: option)
         
         return optionType
     }

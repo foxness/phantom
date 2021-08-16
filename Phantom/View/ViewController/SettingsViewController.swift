@@ -95,6 +95,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         segueTo(.showImgurSignIn)
     }
     
+    func segueToAbout() {
+        // todo [next]
+    }
+    
     private func segueTo(_ segue: Segue) { // todo: extract this from VCs?
         performSegue(withIdentifier: segue.rawValue, sender: nil)
     }

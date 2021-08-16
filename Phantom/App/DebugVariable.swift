@@ -8,6 +8,8 @@
 
 import Foundation
 
+// todo: add about page [next]
+
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // todo: give all Main.storyboard views better names (like in welcome screen) [ez]
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
@@ -18,7 +20,6 @@ import Foundation
 // todo: renotify about posts if user grants notification permissions in settings
 // todo: "resubmit" setting?
 // todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
-// todo: add about page
 // todo: refactor post detail
 // todo: add nice introduction?
 // todo: show attempt count to user
