@@ -213,6 +213,12 @@ extension UIButton {
     }
 }
 
+extension UIImageView {
+    func makeTintable() {
+        image = image?.withRenderingMode(.alwaysTemplate)
+    }
+}
+
 extension UITableView {
     // source: https://stackoverflow.com/a/45157417
     
@@ -243,104 +249,104 @@ extension UITableView { // CURRENTLY UNUSED ------------------------------------
     // unused because I'm using a glitchless version that only works with a custom view hierarchy
     // but I'm leaving these here because they might prove useful later.
     // This non-custom version is able to be glitched if you time your swipe just right at the start of the animation
-    
+
     /**
      Shows a hint to the user indicating that the cell can be swiped right.
      - Parameters:
         - width: Width of hint.
         - duration: Duration of animation (in seconds)
-     
+
      This is a modified version of [this guy's answer](https://stackoverflow.com/a/63000276)
      */
-    func showLeadingSwipeHintGlitched(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
-        guard let (cell, actionColor) = getLeadingSwipeHintCell() else { return }
-        
-        cell.showLeadingSwipeHintGlitched(actionColor: actionColor, width: width, duration: duration, cornerRadius: cornerRadius)
-    }
-    
+//    func showLeadingSwipeHintGlitched(width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+//        guard let (cell, actionColor) = getLeadingSwipeHintCell() else { return }
+//
+//        cell.showLeadingSwipeHintGlitched(actionColor: actionColor, width: width, duration: duration, cornerRadius: cornerRadius)
+//    }
+
     func getLeadingSwipeHintCell() -> (cell: UITableViewCell, actionColor: UIColor)? {
         var cellPath: IndexPath?
         var actionColor: UIColor?
-        
+
         guard let visibleIndexPaths = indexPathsForVisibleRows else { return nil }
-        
+
         for path in visibleIndexPaths {
             if let config = delegate?.tableView?(self, leadingSwipeActionsConfigurationForRowAt: path),
                let action = config.actions.first {
-                
+
                 cellPath = path
                 actionColor = action.backgroundColor
-                
+
                 break
             }
         }
-        
+
         guard let path = cellPath, let cell = cellForRow(at: path) else { return nil }
-        
+
         return (cell: cell, actionColor: actionColor!)
     }
 }
 
-fileprivate extension UITableViewCell {
-    func showLeadingSwipeHintGlitched(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
-        // appealing curve sets: --------------------------------------------
-        // - [.easeIn, .easeOut]
-        // - [.easeOut, .easeIn]
-        // - [.easeInOut, .easeInOut]
-        
-        let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
-        
-        // ------------------------------------------------------------------
-        
-        let originalClipsToBounds = clipsToBounds
-        let originalCornerRadius = contentView.layer.cornerRadius
-        
-        let cornerRadiusBuffer = cornerRadius ?? 0
-        
-        let dummyView = UIView()
-        dummyView.backgroundColor = actionColor
-        dummyView.translatesAutoresizingMaskIntoConstraints = false
-        insertSubview(dummyView, belowSubview: contentView)
-        
-        NSLayoutConstraint.activate([
-            dummyView.topAnchor.constraint(equalTo: topAnchor),
-            dummyView.trailingAnchor.constraint(equalTo: leadingAnchor, constant: cornerRadiusBuffer),
-            dummyView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dummyView.widthAnchor.constraint(equalToConstant: width + cornerRadiusBuffer)
-        ])
-        
-        // Animates restoration back to the original state
-        let secondAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[1]) {
-            self.transform = .identity
-            
-            if cornerRadius != nil {
-                self.contentView.layer.cornerRadius = originalCornerRadius
-            }
-        }
-        
-        secondAnimator.addCompletion { position in
-            dummyView.removeFromSuperview()
-            self.clipsToBounds = originalClipsToBounds
-        }
-        
-        // Animates showing hint
-        let firstAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[0]) {
-            self.transform = CGAffineTransform(translationX: width, y: 0)
-            
-            if let cornerRadius = cornerRadius {
-                self.contentView.layer.cornerRadius = cornerRadius
-            }
-            
-            self.clipsToBounds = false // so that it doesn't clip the dummyView which is out of bounds
-        }
-        
-        firstAnimator.addCompletion { position in
-            secondAnimator.startAnimation()
-        }
-        
-        firstAnimator.startAnimation()
-    }
-}
+//fileprivate extension UITableViewCell {
+//    func showLeadingSwipeHintGlitched(actionColor: UIColor, width: CGFloat = 20, duration: TimeInterval = 0.8, cornerRadius: CGFloat? = nil) {
+//        // appealing curve sets: --------------------------------------------
+//        // - [.easeIn, .easeOut]
+//        // - [.easeOut, .easeIn]
+//        // - [.easeInOut, .easeInOut]
+//
+//        let curves: [UIView.AnimationCurve] = [.easeInOut, .easeInOut]
+//
+//        // ------------------------------------------------------------------
+//
+//        let originalClipsToBounds = clipsToBounds
+//        let originalCornerRadius = contentView.layer.cornerRadius
+//
+//        let cornerRadiusBuffer = cornerRadius ?? 0
+//
+//        let dummyView = UIView()
+//        dummyView.backgroundColor = actionColor
+//        dummyView.translatesAutoresizingMaskIntoConstraints = false
+//        insertSubview(dummyView, belowSubview: contentView)
+//
+//        NSLayoutConstraint.activate([
+//            dummyView.topAnchor.constraint(equalTo: topAnchor),
+//            dummyView.trailingAnchor.constraint(equalTo: leadingAnchor, constant: cornerRadiusBuffer),
+//            dummyView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            dummyView.widthAnchor.constraint(equalToConstant: width + cornerRadiusBuffer)
+//        ])
+//
+//        // Animates restoration back to the original state
+//        let secondAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[1]) {
+//            self.transform = .identity
+//
+//            if cornerRadius != nil {
+//                self.contentView.layer.cornerRadius = originalCornerRadius
+//            }
+//        }
+//
+//        secondAnimator.addCompletion { position in
+//            dummyView.removeFromSuperview()
+//            self.clipsToBounds = originalClipsToBounds
+//        }
+//
+//        // Animates showing hint
+//        let firstAnimator = UIViewPropertyAnimator(duration: duration / 2, curve: curves[0]) {
+//            self.transform = CGAffineTransform(translationX: width, y: 0)
+//
+//            if let cornerRadius = cornerRadius {
+//                self.contentView.layer.cornerRadius = cornerRadius
+//            }
+//
+//            self.clipsToBounds = false // so that it doesn't clip the dummyView which is out of bounds
+//        }
+//
+//        firstAnimator.addCompletion { position in
+//            secondAnimator.startAnimation()
+//        }
+//
+//        firstAnimator.startAnimation()
+//    }
+//}
 
 extension UIColor {
     // source: https://stackoverflow.com/a/42381754
