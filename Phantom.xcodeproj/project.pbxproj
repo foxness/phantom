@@ -30,6 +30,11 @@
 		57605EF726735E4900E4EE25 /* StaticSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF626735E4900E4EE25 /* StaticSettingCell.swift */; };
 		57605EF92673790700E4EE25 /* SwitchSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57605EF82673790700E4EE25 /* SwitchSettingCell.swift */; };
 		57626FC4267F586D00850E31 /* ImageDimensionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */; };
+		5765CE7226CEDAC300790028 /* AboutPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5765CE7126CEDAC300790028 /* AboutPresenter.swift */; };
+		5765CE7426CEDB3900790028 /* AboutViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5765CE7326CEDB3900790028 /* AboutViewDelegate.swift */; };
+		5765CE7626CEDC3800790028 /* AboutItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5765CE7526CEDC3800790028 /* AboutItemType.swift */; };
+		5765CE7826CEE1FA00790028 /* LinkAboutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5765CE7726CEE1FA00790028 /* LinkAboutCell.swift */; };
+		5765CE7A26CEE24900790028 /* TextAboutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5765CE7926CEE24900790028 /* TextAboutCell.swift */; };
 		5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3342639BE2A00459260 /* ImgurMiddleware.swift */; };
 		5768C3372639C9D400459260 /* ImgurSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C3362639C9D400459260 /* ImgurSignInViewController.swift */; };
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
@@ -94,6 +99,11 @@
 		57605EF626735E4900E4EE25 /* StaticSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticSettingCell.swift; sourceTree = "<group>"; };
 		57605EF82673790700E4EE25 /* SwitchSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchSettingCell.swift; sourceTree = "<group>"; };
 		57626FC3267F586D00850E31 /* ImageDimensionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDimensionMiddleware.swift; sourceTree = "<group>"; };
+		5765CE7126CEDAC300790028 /* AboutPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPresenter.swift; sourceTree = "<group>"; };
+		5765CE7326CEDB3900790028 /* AboutViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewDelegate.swift; sourceTree = "<group>"; };
+		5765CE7526CEDC3800790028 /* AboutItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutItemType.swift; sourceTree = "<group>"; };
+		5765CE7726CEE1FA00790028 /* LinkAboutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkAboutCell.swift; sourceTree = "<group>"; };
+		5765CE7926CEE24900790028 /* TextAboutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAboutCell.swift; sourceTree = "<group>"; };
 		5768C3342639BE2A00459260 /* ImgurMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurMiddleware.swift; sourceTree = "<group>"; };
 		5768C3362639C9D400459260 /* ImgurSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurSignInViewController.swift; sourceTree = "<group>"; };
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
@@ -197,6 +207,8 @@
 				572AA66C2687562B0016BE43 /* TextSettingCell.swift */,
 				575BEC38268F51BB00D804BA /* TimeSettingCell.swift */,
 				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
+				5765CE7726CEE1FA00790028 /* LinkAboutCell.swift */,
+				5765CE7926CEE24900790028 /* TextAboutCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -270,6 +282,7 @@
 				5768C33A2639CE9C00459260 /* Imgur.swift */,
 				71614EF024FD195C00FA8B76 /* Database.swift */,
 				57605EF22673590D00E4EE25 /* SettingsSection.swift */,
+				5765CE7526CEDC3800790028 /* AboutItemType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -285,6 +298,8 @@
 				57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */,
 				57605EF02673586D00E4EE25 /* SettingsPresenter.swift */,
 				57605EF4267359DF00E4EE25 /* SettingsViewDelegate.swift */,
+				5765CE7126CEDAC300790028 /* AboutPresenter.swift */,
+				5765CE7326CEDB3900790028 /* AboutViewDelegate.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -398,6 +413,7 @@
 				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
 				57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */,
 				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,
+				5765CE7626CEDC3800790028 /* AboutItemType.swift in Sources */,
 				718181DA24FBE01D00059658 /* PostDetailViewController.swift in Sources */,
 				57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */,
 				5768C33B2639CE9C00459260 /* Imgur.swift in Sources */,
@@ -422,6 +438,7 @@
 				57605EF92673790700E4EE25 /* SwitchSettingCell.swift in Sources */,
 				5727A52326387CF400CE3FCD /* WallhavenMiddleware.swift in Sources */,
 				71684AD125024D83005BA857 /* PostCell.swift in Sources */,
+				5765CE7226CEDAC300790028 /* AboutPresenter.swift in Sources */,
 				5768C3352639BE2A00459260 /* ImgurMiddleware.swift in Sources */,
 				5732365F2678CDB3004CEB72 /* SettingsDelegate.swift in Sources */,
 				57605EEF26734DCE00E4EE25 /* SettingsViewController.swift in Sources */,
@@ -433,6 +450,7 @@
 				5732365B2678A611004CEB72 /* SlideUpMenuCell.swift in Sources */,
 				57145E0A264F007D00EFDF03 /* ThumbnailResolver.swift in Sources */,
 				575D7877264C112000173E7A /* Wallhaven.swift in Sources */,
+				5765CE7826CEE1FA00790028 /* LinkAboutCell.swift in Sources */,
 				5732365D2678ADA3004CEB72 /* SlideUpMenuItem.swift in Sources */,
 				71C031B224FA6B5600D6E19F /* AppDelegate.swift in Sources */,
 				572D9519265ACB1A00F0D454 /* RetryStrategy.swift in Sources */,
@@ -441,12 +459,14 @@
 				96AA4D68252B56CB009488F6 /* PostDetailPresenter.swift in Sources */,
 				575C4A9226B9881A006A0C31 /* UIStoryboardSegueWithCompletion.swift in Sources */,
 				71C646A9250254A4005C28B1 /* PostTableViewController.swift in Sources */,
+				5765CE7A26CEE24900790028 /* TextAboutCell.swift in Sources */,
 				571BFAD02649289000536009 /* SlideUpMenuDelegate.swift in Sources */,
 				573CE68F267E2F170083CE30 /* PostSubmission.swift in Sources */,
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
 				57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
 				572AA66D2687562B0016BE43 /* TextSettingCell.swift in Sources */,
+				5765CE7426CEDB3900790028 /* AboutViewDelegate.swift in Sources */,
 				71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */,
 				57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */,
 			);
