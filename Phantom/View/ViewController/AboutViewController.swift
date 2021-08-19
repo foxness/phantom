@@ -8,12 +8,6 @@
 
 import UIKit
 
-// todo:
-// - version
-// - contact author
-// - rate on app store
-// - privacy policy
-
 class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AboutViewDelegate {    
     @IBOutlet weak var appIconView: UIImageView!
     

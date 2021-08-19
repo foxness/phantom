@@ -8,6 +8,14 @@
 
 import Foundation
 
+// todo:
+// - version DONE
+// - contact author
+// - rate on app store
+// - privacy policy
+
+// todo: easter egg on pressing app version N times?
+
 class AboutPresenter {
     // MARK: - Properties
     
@@ -52,8 +60,6 @@ class AboutPresenter {
             linkItem.handler?()
         case .textItem(let textItem):
             textItem.handler?()
-        default:
-            fatalError("Unknown item")
         }
     }
     
@@ -67,11 +73,9 @@ class AboutPresenter {
         return items
     }
     
-    // MARK: - General section
-    
     private func getVersionItem() -> AboutItemType {
         let title = "Version"
-        let text = "v1" // proper version
+        let text = Bundle.main.prettyAppVersion
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
         
