@@ -20,6 +20,9 @@ import Foundation
 class AboutPresenter {
     // MARK: - Properties
     
+    private static let TEXT_AUTHOR_NAME = "River Deem" // todo: get rid of "TEXT_"-like prefixes in all static variables? [ez]
+    private static let TEXT_AUTHOR_EMAIL = "nymphadriel@gmail.com"
+    
     private weak var viewDelegate: AboutViewDelegate?
     
     private var items: [AboutItemType] = []
@@ -40,8 +43,14 @@ class AboutPresenter {
         setupItems()
     }
     
+    // MARK: - Private methods
+    
     private func setupItems() {
         items = getAboutItems()
+    }
+    
+    private func contactAuthorPressed() {
+        viewDelegate?.sendEmail(to: AboutPresenter.TEXT_AUTHOR_EMAIL)
     }
     
     // MARK: - About data source
@@ -69,7 +78,8 @@ class AboutPresenter {
     private func getAboutItems() -> [AboutItemType] {
         [
             getVersionItem(),
-            getAuthorItem()
+            getAuthorItem(),
+            getContactItem()
         ]
     }
     
@@ -78,18 +88,32 @@ class AboutPresenter {
         let text = Bundle.main.prettyAppVersion
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
-        
         let itemType = AboutItemType.textItem(item: item)
+        
         return itemType
     }
     
     private func getAuthorItem() -> AboutItemType {
         let title = "Designed & developed by"
-        let text = "River Deem"
+        let text = AboutPresenter.TEXT_AUTHOR_NAME
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
-        
         let itemType = AboutItemType.textItem(item: item)
+        
+        return itemType
+    }
+    
+    private func getContactItem() -> AboutItemType {
+        let title = "Contact"
+        let text = AboutPresenter.TEXT_AUTHOR_EMAIL
+        
+        let handler = { [self] in
+            contactAuthorPressed()
+        }
+        
+        let item = TextAboutItem(title: title, text: text, handler: handler)
+        let itemType = AboutItemType.textItem(item: item)
+        
         return itemType
     }
 }

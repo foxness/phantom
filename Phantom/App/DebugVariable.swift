@@ -24,9 +24,10 @@ import Foundation
 // todo: add nice introduction?
 // todo: show attempt count to user
 // todo: let user change retry strategy
+// todo: MARK code dividers in every source file [ez]
 
 struct DebugVariable {
-    private static let phoneDeploy = false
+    private static let phoneDeploy = true
     
     // Debug ---------------------------------------------
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AboutViewDelegate {    
+class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AboutViewDelegate {
     @IBOutlet weak var appIconView: UIImageView!
     
     @IBOutlet private var tableView: UITableView!
@@ -36,6 +36,14 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // uncomment for black&white icon
 //        appIconView.tintColor = UIColor.label
     }
+    
+    func sendEmail(to email: String) {
+        guard let url = URL(string: "mailto:\(email)") else { return }
+        
+        UIApplication.shared.open(url)
+    }
+    
+    // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
