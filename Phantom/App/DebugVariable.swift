@@ -27,7 +27,7 @@ import Foundation
 // todo: MARK code dividers in every source file [ez]
 
 struct DebugVariable {
-    private static let phoneDeploy = true
+    private static let phoneDeploy = false
     
     // Debug ---------------------------------------------
     

@@ -22,6 +22,36 @@ struct Helper {
         return params
     }
     
+    static func generateEmailUrl(to email: String, subject: String? = nil, body: String? = nil) -> URL? {
+        guard let simpleUrl = URL(string: "mailto:\(email)") else { return nil }
+        
+        var query: [String: String] = [:]
+        
+        if let subject = subject {
+            query["subject"] = subject
+        }
+        
+        if let body = body {
+            query["body"] = body
+        }
+        
+        guard !query.isEmpty else { return simpleUrl }
+        
+        guard var urlc = URLComponents(url: simpleUrl, resolvingAgainstBaseURL: false) else { return simpleUrl }
+        urlc.queryItems = toUrlQueryItems(query: query)
+
+        guard let url = urlc.url else { return simpleUrl }
+        return url
+    }
+    
+    // source: https://stackoverflow.com/a/55765362
+//    static func generateEmailUrl2(to email: String, subject: String, body: String) -> URL? {
+//        let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//        let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//
+//        return URL(string: "mailto:\(email)?subject=\(subjectEncoded)&body=\(bodyEncoded)")
+//    }
+    
     static func convertExpiresIn(_ expiresIn: Int) -> Date {
         return Date(timeIntervalSinceNow: TimeInterval(expiresIn))
     }

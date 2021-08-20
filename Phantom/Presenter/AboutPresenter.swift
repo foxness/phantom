@@ -9,13 +9,12 @@
 import Foundation
 
 // todo:
-// - version DONE
-// - contact author
-// - rate on app store
-// - privacy policy
+// - rate on app store item
+// - privacy policy item
 
 // todo: easter egg on pressing app version N times?
 // todo: move app logo & name to table itself?
+// todo: extract all app name ("Phantom") strings
 
 class AboutPresenter {
     // MARK: - Properties
@@ -50,7 +49,11 @@ class AboutPresenter {
     }
     
     private func contactAuthorPressed() {
-        viewDelegate?.sendEmail(to: AboutPresenter.TEXT_AUTHOR_EMAIL)
+        let email = AboutPresenter.TEXT_AUTHOR_EMAIL
+        let subject = "Phantom app"
+        let body = "Phantom version: \(Bundle.main.prettyAppVersion)"
+        
+        viewDelegate?.showEmailComposer(to: email, subject: subject, body: body)
     }
     
     // MARK: - About data source

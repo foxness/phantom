@@ -9,5 +9,5 @@
 import Foundation
 
 protocol AboutViewDelegate: AnyObject {
-    func sendEmail(to email: String)
+    func showEmailComposer(to email: String, subject: String?, body: String?)
 }

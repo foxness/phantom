@@ -37,8 +37,9 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        appIconView.tintColor = UIColor.label
     }
     
-    func sendEmail(to email: String) {
-        guard let url = URL(string: "mailto:\(email)") else { return }
+    func showEmailComposer(to email: String, subject: String? = nil, body: String? = nil) {
+        guard let url = Helper.generateEmailUrl(to: email, subject: subject, body: body) else { return }
+//        guard UIApplication.shared.canOpenURL(url) else { return } // I don't think this is needed since open(url) seems to be failing gracefully
         
         UIApplication.shared.open(url)
     }
