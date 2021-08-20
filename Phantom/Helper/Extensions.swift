@@ -130,7 +130,7 @@ extension Bundle {
     }
     
     var prettyAppVersion: String {        
-        return "v\(releaseVersionNumber) (\(buildVersionNumber))"
+        return "\(releaseVersionNumber) (\(buildVersionNumber))"
     }
     
     private func getString(_ key: String) -> String? {

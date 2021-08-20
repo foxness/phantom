@@ -15,6 +15,7 @@ import Foundation
 // - privacy policy
 
 // todo: easter egg on pressing app version N times?
+// todo: move app logo & name to table itself?
 
 class AboutPresenter {
     // MARK: - Properties
@@ -66,16 +67,25 @@ class AboutPresenter {
     // MARK: - About items
     
     private func getAboutItems() -> [AboutItemType] {
-        var items: [AboutItemType] = []
-        
-        items.append(getVersionItem())
-        
-        return items
+        [
+            getVersionItem(),
+            getAuthorItem()
+        ]
     }
     
     private func getVersionItem() -> AboutItemType {
         let title = "Version"
         let text = Bundle.main.prettyAppVersion
+        
+        let item = TextAboutItem(title: title, text: text, handler: nil)
+        
+        let itemType = AboutItemType.textItem(item: item)
+        return itemType
+    }
+    
+    private func getAuthorItem() -> AboutItemType {
+        let title = "Designed & developed by"
+        let text = "River Deem"
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
         
