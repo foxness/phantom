@@ -19,22 +19,38 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter.attachView(self)
         setupViews()
+        
+        presenter.attachView(self)
         presenter.viewDidLoad()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // viewDidLayoutSubviews is the first method in the lifecycle to have safeAreaLayoutGuide properly set
+        // that's why we use it here
+        centerTable()
     }
     
     func setupViews() {
         tintAppIcon()
-        
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 300
+        setupTableView()
+    }
+    
+    func setupTableView() {
         tableView.register(AboutHeader.self, forHeaderFooterViewReuseIdentifier: AboutHeader.IDENTIFIER)
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    func centerTable() {
+        // this line is needed for the next line to work
+        tableView.estimatedSectionHeaderHeight = 300
         
-//        tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0) // todo: programmaticaly get this number
+        // this makes the aboutHeader height half the safe area height so that about items start at the center
+        tableView.sectionHeaderHeight = view.safeAreaLayoutGuide.layoutFrame.height / 2
     }
     
     func tintAppIcon() {
