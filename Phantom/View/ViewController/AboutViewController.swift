@@ -28,6 +28,8 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.contentInset = UIEdgeInsets(top: 350, left: 0, bottom: 0, right: 0) // todo: programmaticaly get this number
     }
     
     func tintAppIcon() {

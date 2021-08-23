@@ -336,20 +336,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F">
-                                <rect key="frame" x="97.666666666666686" y="198" width="195" height="195"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
-                                <rect key="frame" x="132.66666666666666" y="383" width="124.99999999999997" height="50"/>
-                                <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="XRb-Hb-DV5">
-                                <rect key="frame" x="0.0" y="443" width="390" height="401"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="LinkAboutCell" id="sJU-AF-wYt" customClass="LinkAboutCell" customModule="Phantom" customModuleProvider="target">
@@ -413,6 +401,18 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F">
+                                <rect key="frame" x="97.666666666666686" y="198" width="195" height="195"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
+                                <rect key="frame" x="132.66666666666666" y="383" width="124.99999999999997" height="50"/>
+                                <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LbP-WD-eYx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -425,7 +425,7 @@
                             <constraint firstItem="ROg-kr-U4F" firstAttribute="width" secondItem="Ud3-6b-9XY" secondAttribute="width" multiplier="0.5" id="g4C-Mj-7QI"/>
                             <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="Ud3-6b-9XY" secondAttribute="centerX" id="nwV-BV-fqY"/>
                             <constraint firstItem="WJP-pL-Mvm" firstAttribute="centerX" secondItem="Ud3-6b-9XY" secondAttribute="centerX" id="q2U-ia-yw9"/>
-                            <constraint firstItem="XRb-Hb-DV5" firstAttribute="top" secondItem="WJP-pL-Mvm" secondAttribute="bottom" constant="10" id="qEV-3b-NMr"/>
+                            <constraint firstItem="XRb-Hb-DV5" firstAttribute="top" secondItem="Ud3-6b-9XY" secondAttribute="top" id="qEV-3b-NMr"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="lRx-df-HFK"/>
