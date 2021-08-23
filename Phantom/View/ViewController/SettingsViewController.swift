@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     enum Segue: String {
         case showRedditSignIn = "settingsShowRedditSignIn"
         case showImgurSignIn = "settingsShowImgurSignIn"
+        case showAbout = "settingsShowAbout"
     }
     
     @IBOutlet private var tableView: UITableView!
@@ -95,6 +96,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         segueTo(.showImgurSignIn)
     }
     
+    func segueToAbout() {
+        segueTo(.showAbout)
+    }
+    
     private func segueTo(_ segue: Segue) { // todo: extract this from VCs?
         performSegue(withIdentifier: segue.rawValue, sender: nil)
     }
@@ -104,7 +109,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         switch Segue(rawValue: segue.identifier ?? "") {
         case .showRedditSignIn,
-             .showImgurSignIn:
+             .showImgurSignIn,
+             .showAbout:
             break
             
         default:

@@ -28,7 +28,7 @@ struct Requests {
         let identifier = Bundle.main.bundleIdentifier!
         let version = Bundle.main.releaseVersionNumber
         
-        let userAgent = "iOS:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
+        let userAgent = "iOS:\(identifier):v\(version) (by /u/DeepSpaceSignal)" // todo: extract username [ez]
         return userAgent
     }
     

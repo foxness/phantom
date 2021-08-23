@@ -11,6 +11,7 @@ import Foundation
 protocol SettingsViewDelegate: AnyObject {
     func segueToRedditSignIn()
     func segueToImgurSignIn()
+    func segueToAbout()
     
     func showBulkAddSubredditAlert(subreddit: String)
     func showInvalidSubredditAlert(tryAgainHandler: (() -> Void)?)
