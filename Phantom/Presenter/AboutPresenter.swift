@@ -21,6 +21,7 @@ class AboutPresenter {
     
     private static let TEXT_AUTHOR_NAME = "River Deem" // todo: get rid of "TEXT_"-like prefixes in all static variables? [ez]
     private static let TEXT_AUTHOR_EMAIL = "nymphadriel@gmail.com"
+    private static let URL_PRIVACY_POLICY = "https://foxness.github.io/phantom-privacy-policy/"
     
     private weak var viewDelegate: AboutViewDelegate?
     
@@ -56,6 +57,12 @@ class AboutPresenter {
         viewDelegate?.showEmailComposer(to: email, subject: subject, body: body)
     }
     
+    private func privacyPolicyPressed() {
+        let privacyPolicyUrl = URL(string: AboutPresenter.URL_PRIVACY_POLICY)!
+        
+        viewDelegate?.open(url: privacyPolicyUrl)
+    }
+    
     // MARK: - About data source
     
     func getItem(at index: Int) -> AboutItemType {
@@ -82,7 +89,8 @@ class AboutPresenter {
         [
             getVersionItem(),
             getAuthorItem(),
-            getContactItem()
+            getContactItem(),
+            getPrivacyPolicyItem()
         ]
     }
     
@@ -116,6 +124,19 @@ class AboutPresenter {
         
         let item = TextAboutItem(title: title, text: text, handler: handler)
         let itemType = AboutItemType.textItem(item: item)
+        
+        return itemType
+    }
+    
+    private func getPrivacyPolicyItem() -> AboutItemType {
+        let title = "Privacy Policy"
+        
+        let handler = { [self] in
+            privacyPolicyPressed()
+        }
+        
+        let item = LinkAboutItem(title: title, handler: handler)
+        let itemType = AboutItemType.linkItem(item: item)
         
         return itemType
     }

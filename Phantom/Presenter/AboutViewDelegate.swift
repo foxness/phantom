@@ -10,4 +10,5 @@ import Foundation
 
 protocol AboutViewDelegate: AnyObject {
     func showEmailComposer(to email: String, subject: String?, body: String?)
+    func open(url: URL)
 }

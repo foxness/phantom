@@ -44,6 +44,10 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         UIApplication.shared.open(url)
     }
     
+    func open(url: URL) {
+        UIApplication.shared.open(url)
+    }
+    
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
