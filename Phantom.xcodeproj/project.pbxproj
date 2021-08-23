@@ -41,6 +41,7 @@
 		576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E515A2644708200B0047F /* SlideUpMenu.swift */; };
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
+		57B12CAD26D3EDAC004B50DB /* AboutHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B12CAC26D3EDAC004B50DB /* AboutHeader.swift */; };
 		57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */; };
 		57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */; };
 		57B3F5B92675F3CA007F5821 /* RedditSignInReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */; };
@@ -110,6 +111,7 @@
 		576E515A2644708200B0047F /* SlideUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenu.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
+		57B12CAC26D3EDAC004B50DB /* AboutHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutHeader.swift; sourceTree = "<group>"; };
 		57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedOutAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditSignInReceiver.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */,
 				5765CE7726CEE1FA00790028 /* LinkAboutCell.swift */,
 				5765CE7926CEE24900790028 /* TextAboutCell.swift */,
+				57B12CAC26D3EDAC004B50DB /* AboutHeader.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				7179EF3A2501037000BDA598 /* PostSubmitter.swift in Sources */,
 				57605EF5267359DF00E4EE25 /* SettingsViewDelegate.swift in Sources */,
 				71614EF124FD195C00FA8B76 /* Database.swift in Sources */,
+				57B12CAD26D3EDAC004B50DB /* AboutHeader.swift in Sources */,
 				572AA66D2687562B0016BE43 /* TextSettingCell.swift in Sources */,
 				5765CE7426CEDB3900790028 /* AboutViewDelegate.swift in Sources */,
 				71C031B424FA6B5600D6E19F /* SceneDelegate.swift in Sources */,

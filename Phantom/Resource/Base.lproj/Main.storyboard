@@ -401,42 +401,54 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F">
-                                <rect key="frame" x="97.666666666666686" y="198" width="195" height="195"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
-                                <rect key="frame" x="132.66666666666666" y="383" width="124.99999999999997" height="50"/>
-                                <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LbP-WD-eYx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="WJP-pL-Mvm" firstAttribute="top" secondItem="ROg-kr-U4F" secondAttribute="bottom" constant="-10" id="3fs-UC-2Nz"/>
-                            <constraint firstItem="ROg-kr-U4F" firstAttribute="centerY" secondItem="Ud3-6b-9XY" secondAttribute="centerY" multiplier="0.7" id="AXs-3y-3xA"/>
                             <constraint firstItem="LbP-WD-eYx" firstAttribute="trailing" secondItem="XRb-Hb-DV5" secondAttribute="trailing" id="E7V-dy-SrL"/>
                             <constraint firstItem="XRb-Hb-DV5" firstAttribute="leading" secondItem="LbP-WD-eYx" secondAttribute="leading" id="Thw-ak-ePx"/>
                             <constraint firstAttribute="bottom" secondItem="XRb-Hb-DV5" secondAttribute="bottom" id="c4D-XJ-nuf"/>
-                            <constraint firstItem="ROg-kr-U4F" firstAttribute="width" secondItem="Ud3-6b-9XY" secondAttribute="width" multiplier="0.5" id="g4C-Mj-7QI"/>
-                            <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="Ud3-6b-9XY" secondAttribute="centerX" id="nwV-BV-fqY"/>
-                            <constraint firstItem="WJP-pL-Mvm" firstAttribute="centerX" secondItem="Ud3-6b-9XY" secondAttribute="centerX" id="q2U-ia-yw9"/>
                             <constraint firstItem="XRb-Hb-DV5" firstAttribute="top" secondItem="Ud3-6b-9XY" secondAttribute="top" id="qEV-3b-NMr"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="lRx-df-HFK"/>
                     <connections>
+                        <outlet property="aboutHeaderView" destination="CzY-Ma-nDJ" id="P9h-WU-bmW"/>
                         <outlet property="appIconView" destination="ROg-kr-U4F" id="IqK-su-5hj"/>
                         <outlet property="tableView" destination="XRb-Hb-DV5" id="RND-rJ-GYW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LY3-eU-jvI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="CzY-Ma-nDJ">
+                    <rect key="frame" x="0.0" y="0.0" width="390" height="294"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F">
+                            <rect key="frame" x="97.666666666666686" y="0.0" width="195" height="195"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
+                            <rect key="frame" x="132.66666666666666" y="185" width="124.99999999999997" height="109"/>
+                            <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="Ids-XB-hao"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="ROg-kr-U4F" firstAttribute="top" secondItem="CzY-Ma-nDJ" secondAttribute="top" id="6VS-Lt-7eN"/>
+                        <constraint firstAttribute="bottom" secondItem="WJP-pL-Mvm" secondAttribute="bottom" id="8mw-Ey-tkH"/>
+                        <constraint firstItem="ROg-kr-U4F" firstAttribute="width" secondItem="CzY-Ma-nDJ" secondAttribute="width" multiplier="0.5" id="a7b-uw-oPA"/>
+                        <constraint firstItem="WJP-pL-Mvm" firstAttribute="top" secondItem="ROg-kr-U4F" secondAttribute="bottom" constant="-10" id="o8x-Pa-1uJ"/>
+                        <constraint firstItem="WJP-pL-Mvm" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="rR2-7f-3BE"/>
+                        <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="whY-51-VL6"/>
+                    </constraints>
+                </view>
             </objects>
-            <point key="canvasLocation" x="1980" y="862"/>
+            <point key="canvasLocation" x="1980" y="1614"/>
         </scene>
         <!--Reddit Sign In View Controller-->
         <scene sceneID="dns-d2-J9D">

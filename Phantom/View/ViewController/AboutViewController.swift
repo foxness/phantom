@@ -10,6 +10,7 @@ import UIKit
 
 class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AboutViewDelegate {
     @IBOutlet weak var appIconView: UIImageView!
+    @IBOutlet weak var aboutHeaderView: UIView!
     
     @IBOutlet private var tableView: UITableView!
     
@@ -26,10 +27,14 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func setupViews() {
         tintAppIcon()
         
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = 300
+        tableView.register(AboutHeader.self, forHeaderFooterViewReuseIdentifier: AboutHeader.IDENTIFIER)
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.contentInset = UIEdgeInsets(top: 350, left: 0, bottom: 0, right: 0) // todo: programmaticaly get this number
+//        tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0) // todo: programmaticaly get this number
     }
     
     func tintAppIcon() {
@@ -64,6 +69,13 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.deselectRow(at: indexPath, animated: true)
         
         presenter.didSelectItem(at: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let aboutHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AboutHeader.IDENTIFIER) as! AboutHeader
+        aboutHeader.addAboutHeaderView(aboutHeaderView)
+
+        return aboutHeader
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
