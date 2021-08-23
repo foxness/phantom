@@ -30,7 +30,7 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // viewDidLayoutSubviews is the first method in the lifecycle to have safeAreaLayoutGuide properly set
         // that's why we use it here
-        centerTable()
+        styleTable()
     }
     
     func setupViews() {
@@ -45,12 +45,15 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
     }
     
-    func centerTable() {
+    func styleTable() {
         // this line is needed for the next line to work
         tableView.estimatedSectionHeaderHeight = 300
         
         // this makes the aboutHeader height half the safe area height so that about items start at the center
         tableView.sectionHeaderHeight = view.safeAreaLayoutGuide.layoutFrame.height / 2
+        
+        // replace with this if you want a normal table
+//        tableView.sectionHeaderHeight = UITableView.automaticDimension
     }
     
     func tintAppIcon() {
@@ -89,7 +92,7 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let aboutHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AboutHeader.IDENTIFIER) as! AboutHeader
-        aboutHeader.addAboutHeaderView(aboutHeaderView)
+        aboutHeader.addAboutHeaderView(aboutHeaderView) // this should only ever happen once
 
         return aboutHeader
     }
