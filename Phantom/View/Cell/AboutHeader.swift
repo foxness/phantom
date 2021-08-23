@@ -11,18 +11,20 @@ import UIKit
 class AboutHeader: UITableViewHeaderFooterView {
     static let IDENTIFIER = "AboutHeader"
     
+    // todo: implement this cell init style in other cells?
+    
 //    let title = UILabel()
 //    let image = UIImageView()
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        
+//
+//    override init(reuseIdentifier: String?) {
+//        super.init(reuseIdentifier: reuseIdentifier)
+//
 //        configureContents()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     func addAboutHeaderView(_ ahv: UIView) {
         ahv.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +39,7 @@ class AboutHeader: UITableViewHeaderFooterView {
         ])
     }
     
-    private func configureContents() {
+//    private func configureContents() {
 //        image.translatesAutoresizingMaskIntoConstraints = false
 //        title.translatesAutoresizingMaskIntoConstraints = false
 //
@@ -61,5 +63,5 @@ class AboutHeader: UITableViewHeaderFooterView {
 //                                                contentView.layoutMarginsGuide.trailingAnchor),
 //            title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
 //        ])
-    }
+//    }
 }

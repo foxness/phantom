@@ -419,32 +419,44 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LY3-eU-jvI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="CzY-Ma-nDJ">
-                    <rect key="frame" x="0.0" y="0.0" width="390" height="294"/>
+                <view contentMode="scaleToFill" id="CzY-Ma-nDJ" userLabel="About Header">
+                    <rect key="frame" x="0.0" y="0.0" width="390" height="360"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F">
-                            <rect key="frame" x="97.666666666666686" y="0.0" width="195" height="195"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCf-oI-UNa" userLabel="Logo Container">
+                            <rect key="frame" x="0.0" y="115.66666666666667" width="390" height="244.33333333333331"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F" userLabel="App Logo">
+                                    <rect key="frame" x="97.666666666666686" y="-10" width="195" height="195"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
+                                    <rect key="frame" x="132.66666666666666" y="175" width="124.99999999999997" height="49.333333333333343"/>
+                                    <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
+                                <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="ZCf-oI-UNa" secondAttribute="centerX" id="6XJ-z1-9KU"/>
+                                <constraint firstAttribute="bottom" secondItem="WJP-pL-Mvm" secondAttribute="bottom" constant="20" id="Gyz-id-6Hw"/>
+                                <constraint firstItem="ROg-kr-U4F" firstAttribute="width" secondItem="ZCf-oI-UNa" secondAttribute="width" multiplier="0.5" id="Mr1-2S-HME"/>
+                                <constraint firstItem="ROg-kr-U4F" firstAttribute="top" secondItem="ZCf-oI-UNa" secondAttribute="top" constant="-10" id="anv-0d-VZQ"/>
+                                <constraint firstItem="WJP-pL-Mvm" firstAttribute="centerX" secondItem="ZCf-oI-UNa" secondAttribute="centerX" id="blR-FR-jWe"/>
+                                <constraint firstItem="WJP-pL-Mvm" firstAttribute="top" secondItem="ROg-kr-U4F" secondAttribute="bottom" constant="-10" id="lNW-Ve-RyJ"/>
                             </constraints>
-                        </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phantom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WJP-pL-Mvm">
-                            <rect key="frame" x="132.66666666666666" y="185" width="124.99999999999997" height="109"/>
-                            <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="36"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="Ids-XB-hao"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstItem="ROg-kr-U4F" firstAttribute="top" secondItem="CzY-Ma-nDJ" secondAttribute="top" id="6VS-Lt-7eN"/>
-                        <constraint firstAttribute="bottom" secondItem="WJP-pL-Mvm" secondAttribute="bottom" id="8mw-Ey-tkH"/>
-                        <constraint firstItem="ROg-kr-U4F" firstAttribute="width" secondItem="CzY-Ma-nDJ" secondAttribute="width" multiplier="0.5" id="a7b-uw-oPA"/>
-                        <constraint firstItem="WJP-pL-Mvm" firstAttribute="top" secondItem="ROg-kr-U4F" secondAttribute="bottom" constant="-10" id="o8x-Pa-1uJ"/>
-                        <constraint firstItem="WJP-pL-Mvm" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="rR2-7f-3BE"/>
-                        <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="whY-51-VL6"/>
+                        <constraint firstItem="ZCf-oI-UNa" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="1kb-OS-Gwr"/>
+                        <constraint firstItem="ZCf-oI-UNa" firstAttribute="width" secondItem="CzY-Ma-nDJ" secondAttribute="width" id="FMg-0S-ukz"/>
+                        <constraint firstItem="ZCf-oI-UNa" firstAttribute="bottom" secondItem="CzY-Ma-nDJ" secondAttribute="bottom" id="Prd-xP-dKi"/>
+                        <constraint firstItem="ZCf-oI-UNa" firstAttribute="height" relation="lessThanOrEqual" secondItem="CzY-Ma-nDJ" secondAttribute="height" id="ngJ-BP-rSo"/>
                     </constraints>
                 </view>
             </objects>
