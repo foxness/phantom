@@ -26,6 +26,7 @@ class AboutHeader: UITableViewHeaderFooterView {
 //        fatalError("init(coder:) has not been implemented")
 //    }
     
+    // should only be called once. todo: add only once check?
     func addAboutHeaderView(_ ahv: UIView) {
         ahv.translatesAutoresizingMaskIntoConstraints = false
         

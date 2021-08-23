@@ -8,9 +8,6 @@
 
 import Foundation
 
-// todo: make nav bar transparent like in posts table
-// todo: make table view fill to the bottom of the screen
-
 class SettingsPresenter {
     // MARK: - Properties
     
