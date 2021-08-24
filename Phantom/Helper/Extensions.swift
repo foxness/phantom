@@ -101,7 +101,9 @@ extension UIViewController {
             self.showToastUnwrapped(message, seconds: seconds)
         }
     }
-    
+}
+
+extension UIViewController {
     func displayOkAlert(title: String, message: String?, dismissHandler: (() -> Void)? = nil) {
         let handler = { (action: UIAlertAction) -> Void in
             dismissHandler?()
@@ -114,6 +116,40 @@ extension UIViewController {
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension UITableView {
+    // source: https://gist.github.com/marcoarment/1105553afba6b4900c10#gistcomment-1933639
+    // related:
+    // - https://gist.github.com/marcoarment/1105553afba6b4900c10#gistcomment-3870985
+    // - https://stackoverflow.com/a/21099430
+    // - https://stackoverflow.com/a/30054528
+    // - https://stackoverflow.com/a/28102157
+    // - https://stackoverflow.com/a/28102175
+    // - https://stackoverflow.com/a/18746930
+    // - https://stackoverflow.com/a/20985228
+    
+    // sets header height dynamically according to autolayout
+    // call it in viewDidLayoutSubviews()
+    func layoutTableHeaderView() {
+        guard let headerView = tableHeaderView else { return }
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let headerWidth = headerView.bounds.size.width
+        let temporaryWidthConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "H:[headerView(width)]",
+            options: [],
+            metrics: ["width": headerWidth],
+            views: ["headerView": headerView])
+        
+        headerView.addConstraints(temporaryWidthConstraints)
+        
+        headerView.layoutSubviews()
+        headerView.frame.size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        
+        headerView.removeConstraints(temporaryWidthConstraints)
+        headerView.translatesAutoresizingMaskIntoConstraints = true
     }
 }
 
