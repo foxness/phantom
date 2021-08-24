@@ -30,7 +30,7 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // viewDidLayoutSubviews is the first method in the lifecycle to have safeAreaLayoutGuide properly set
         // that's why we use it here
-        styleTable()
+        centerTable()
     }
     
     func setupViews() {
@@ -39,21 +39,15 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func setupTableView() {
-        tableView.register(AboutHeader.self, forHeaderFooterViewReuseIdentifier: AboutHeader.IDENTIFIER)
+        tableView.tableHeaderView = aboutHeaderView
         
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    func styleTable() {
-        // this line is needed for the next line to work
-        tableView.estimatedSectionHeaderHeight = 300
-        
+    func centerTable() {
         // this makes the aboutHeader height half the safe area height so that about items start at the center
-        tableView.sectionHeaderHeight = view.safeAreaLayoutGuide.layoutFrame.height / 2
-        
-        // replace with this if you want a normal table
-//        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        aboutHeaderView.frame.size.height = view.safeAreaLayoutGuide.layoutFrame.height / 2
     }
     
     func tintAppIcon() {
@@ -88,13 +82,6 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.deselectRow(at: indexPath, animated: true)
         
         presenter.didSelectItem(at: indexPath.row)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let aboutHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: AboutHeader.IDENTIFIER) as! AboutHeader
-        aboutHeader.addAboutHeaderView(aboutHeaderView) // this should only ever happen once
-
-        return aboutHeader
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

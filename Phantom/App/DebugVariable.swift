@@ -8,8 +8,6 @@
 
 import Foundation
 
-// todo: add about page [next]
-
 // todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // todo: give all Main.storyboard views better names (like in welcome screen) [ez]
 // todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)

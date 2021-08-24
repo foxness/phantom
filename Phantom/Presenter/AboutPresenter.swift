@@ -11,7 +11,6 @@ import Foundation
 // todo: rate on app store item
 
 // todo: easter egg on pressing app version N times?
-// todo: move app logo & name to table itself?
 // todo: extract all app name ("Phantom") strings
 
 class AboutPresenter {
