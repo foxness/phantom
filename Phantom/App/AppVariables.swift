@@ -11,9 +11,15 @@ import Foundation
 struct AppVariables {
     // MARK: - Build identifiers
     
-    static var bundleIdentifier: String { Bundle.main.bundleIdentifier! }
     static var version: String { Bundle.main.prettyAppVersion }
     static var config: String { Bundle.main.config }
+    
+    static var userAgent: String {
+        let identifier = Bundle.main.bundleIdentifier!
+        let version = Bundle.main.releaseVersionNumber
+        
+        return "ios:\(identifier):v\(version) (by /u/DeepSpaceSignal)" // todo: extract username [ez]
+    }
 }
 
 extension Bundle {

@@ -23,7 +23,7 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.customUserAgent = Requests.getUserAgent()
+        webView.customUserAgent = AppVariables.userAgent
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()
