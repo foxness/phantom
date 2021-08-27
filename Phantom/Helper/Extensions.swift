@@ -153,27 +153,6 @@ extension UITableView {
     }
 }
 
-extension Bundle {
-    private static let KEY_RELEASE_VERSION_NUMBER = "CFBundleShortVersionString"
-    private static let KEY_BUILD_VERSION_NUMBER = "CFBundleVersion"
-    
-    var releaseVersionNumber: String {
-        return getString(Bundle.KEY_RELEASE_VERSION_NUMBER)!
-    }
-    
-    var buildVersionNumber: String {
-        return getString(Bundle.KEY_BUILD_VERSION_NUMBER)!
-    }
-    
-    var prettyAppVersion: String {        
-        return "\(releaseVersionNumber) (\(buildVersionNumber))"
-    }
-    
-    private func getString(_ key: String) -> String? {
-        return infoDictionary?[key] as? String
-    }
-}
-
 // src: https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
 extension NSRegularExpression {
     convenience init(_ pattern: String) {

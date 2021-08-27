@@ -40,6 +40,7 @@
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
 		576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E515A2644708200B0047F /* SlideUpMenu.swift */; };
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
+		5785D99726D934FF00F4B2C9 /* AppVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5785D99626D934FF00F4B2C9 /* AppVariables.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
 		57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */; };
 		57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */; };
@@ -109,6 +110,7 @@
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
 		576E515A2644708200B0047F /* SlideUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenu.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		5785D99626D934FF00F4B2C9 /* AppVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVariables.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
 		57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedOutAccountSettingCell.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 		57540E7726B17E0100712B5F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				5785D99626D934FF00F4B2C9 /* AppVariables.swift */,
 				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
 				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
 				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
@@ -421,6 +424,7 @@
 				57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */,
 				57626FC4267F586D00850E31 /* ImageDimensionMiddleware.swift in Sources */,
 				5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */,
+				5785D99726D934FF00F4B2C9 /* AppVariables.swift in Sources */,
 				57B3F5B92675F3CA007F5821 /* RedditSignInReceiver.swift in Sources */,
 				57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */,
 				57605EF32673590D00E4EE25 /* SettingsSection.swift in Sources */,
@@ -569,6 +573,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
+				PHANTOM_CONFIG = dev;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
 				PRODUCT_NAME = "$(TARGET_NAME) Dev";
 				SWIFT_VERSION = 5.0;
@@ -651,6 +656,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
+				PHANTOM_CONFIG = stable;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -727,6 +733,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
+				PHANTOM_CONFIG = stable;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -864,6 +871,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
+				PHANTOM_CONFIG = debug;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.debug;
 				PRODUCT_NAME = "$(TARGET_NAME) Dbg";
 				SWIFT_VERSION = 5.0;
@@ -885,6 +893,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
+				PHANTOM_CONFIG = dev;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
 				PRODUCT_NAME = "$(TARGET_NAME) Dev";
 				SWIFT_VERSION = 5.0;
