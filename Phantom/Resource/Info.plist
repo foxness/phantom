@@ -2,20 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>PhantomConfig</key>
-	<string>$(PHANTOM_CONFIG)</string>
-	<key>PhantomDebugSimulateMiddleware</key>
-	<string>$(PHANTOM_DEBUG_SIMULATE_MIDDLEWARE)</string>
-	<key>PhantomDebugSimulateReddit</key>
-	<string>$(PHANTOM_DEBUG_SIMULATE_REDDIT)</string>
-	<key>PhantomDebugDisableRetry</key>
-	<string>$(PHANTOM_DEBUG_DISABLE_RETRY)</string>
-	<key>PhantomDebugDisableDirectImgurUpload</key>
-	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
-	<key>PhantomDebugSimulateError</key>
-	<string>$(PHANTOM_DEBUG_SIMULATE_ERROR)</string>
-	<key>PhantomDebugInstantNotifications</key>
-	<string>$(PHANTOM_DEBUG_INSTANT_NOTIFICATIONS)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -31,9 +17,23 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>PhantomConfig</key>
+	<string>$(PHANTOM_CONFIG)</string>
+	<key>PhantomDebugDisableDirectImgurUpload</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
+	<key>PhantomDebugDisableRetry</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_RETRY)</string>
+	<key>PhantomDebugInstantNotifications</key>
+	<string>$(PHANTOM_DEBUG_INSTANT_NOTIFICATIONS)</string>
+	<key>PhantomDebugSimulateError</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_ERROR)</string>
+	<key>PhantomDebugSimulateMiddleware</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_MIDDLEWARE)</string>
+	<key>PhantomDebugSimulateReddit</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_REDDIT)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
