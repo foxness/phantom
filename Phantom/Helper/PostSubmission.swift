@@ -32,7 +32,7 @@ class PostSubmission: Operation {
         self.post = post
         self.callback = callback
         self.params = params
-        self.retryStrategy = DebugVariable.disableRetry ? .noRetry : .delay(delayRetryStrategy: DelayRetryStrategy(maxRetryCount: 5, retryInterval: 3))
+        self.retryStrategy = AppVariables.Debug.disableRetry ? .noRetry : .delay(delayRetryStrategy: DelayRetryStrategy(maxRetryCount: 5, retryInterval: 3))
         
         self.middlewares = PostSubmission.getMiddlewares(params: params, imgur: imgur)
     }
@@ -47,8 +47,9 @@ class PostSubmission: Operation {
         
         if params.useImgur {
             if let imgur = imgur {
+                let directUpload = !AppVariables.Debug.disableDirectImgurUpload
                 let imgurMw = ImgurMiddleware(imgur,
-                                              directUpload: DebugVariable.directImgurUpload,
+                                              directUpload: directUpload,
                                               extractImageDimensions: params.wallpaperMode)
                 
                 let imgurRmw = RequiredMiddleware(middleware: imgurMw, isRequired: params.wallpaperMode)
@@ -144,7 +145,7 @@ class PostSubmission: Operation {
     }
     
     private static func submitPost(_ post: Post, using reddit: Reddit, sendReplies: Bool) -> PostSubmitter.SubmitResult {
-        guard !DebugVariable.simulateReddit else {
+        guard !AppVariables.Debug.simulateReddit else {
             sleep(1)
             
             return .success("https://simulated-url-lolz.com/")
@@ -164,12 +165,12 @@ class PostSubmission: Operation {
     
     private static func fullProcessPost(_ post: Post, using middlewares: [RequiredMiddleware], strategy: DelayRetryStrategy) -> ProcessResultWithTries {
         
-        guard !DebugVariable.simulateError else {
+        guard !AppVariables.Debug.simulateError else {
             sleep(1)
             return .failure(PhantomError.requiredMiddlewareNoEffect(middleware: "SimulatedError"))
         }
 
-        guard !DebugVariable.simulateMiddleware else {
+        guard !AppVariables.Debug.simulateMiddleware else {
             sleep(1)
             return .success((post: post, triesLeft: strategy.maxRetryCount))
         }

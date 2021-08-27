@@ -4,6 +4,18 @@
 <dict>
 	<key>PhantomConfig</key>
 	<string>$(PHANTOM_CONFIG)</string>
+	<key>PhantomDebugSimulateMiddleware</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_MIDDLEWARE)</string>
+	<key>PhantomDebugSimulateReddit</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_REDDIT)</string>
+	<key>PhantomDebugDisableRetry</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_RETRY)</string>
+	<key>PhantomDebugDisableDirectImgurUpload</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
+	<key>PhantomDebugSimulateError</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_ERROR)</string>
+	<key>PhantomDebugInstantNotifications</key>
+	<string>$(PHANTOM_DEBUG_INSTANT_NOTIFICATIONS)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>redditPostSubmissionTask</string>

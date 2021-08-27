@@ -187,7 +187,9 @@ extension String {
         let matches = regex.matches(lhs)
         return matches
     }
-    
+}
+
+extension String {
     func findMiddleKey(startKey: String, endKey: String) -> String? {
         guard let start = self.range(of: startKey)?.upperBound,
               let end = self.range(of: endKey, options: [], range: start..<self.endIndex , locale: nil)?.lowerBound
@@ -201,6 +203,17 @@ extension String {
     
     func trim() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+extension String {
+    // src: https://stackoverflow.com/a/28107487
+    var boolValue: Bool? {
+        switch self {
+        case "true": return true
+        case "false": return false
+        default: return nil
+        }
     }
 }
 

@@ -8,6 +8,22 @@
 
 import Foundation
 
+// todo: retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
+// todo: give all Main.storyboard views better names (like in welcome screen) [ez]
+// todo: viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)
+// todo: adapt interface for landscape
+// todo: add mini tutorial after adding first post ("swipe right to submit post, swipe left to delete")
+// todo: fix compiler warnings
+// todo: fix storyboard scene warnings
+// todo: renotify about posts if user grants notification permissions in settings
+// todo: "resubmit" setting?
+// todo: app badge that counts overdue posts is possible (not just "1"). but should that be even implemented?
+// todo: refactor post detail
+// todo: add nice introduction?
+// todo: show attempt count to user
+// todo: let user change retry strategy
+// todo: MARK code dividers in every source file [ez]
+
 struct AppVariables {
     // MARK: - Build identifiers
     
@@ -18,7 +34,7 @@ struct AppVariables {
         let build = Bundle.main.buildVersionNumber
         let config = config
         
-        let configString = config == "stable" ? "" : " (\(config))"
+        let configString = config == "stable" ? "" : " [\(config)]"
         
         return "\(version) (\(build))\(configString)"
     }
@@ -29,15 +45,35 @@ struct AppVariables {
         
         return "ios:\(identifier):v\(version) (by /u/DeepSpaceSignal)" // todo: extract username [ez]
     }
+    
+    // MARK: - Debug variables
+    
+    struct Debug {
+        static var simulateMiddleware: Bool { Bundle.main.debugSimulateMiddleware }
+        static var simulateReddit: Bool { Bundle.main.debugSimulateReddit }
+        static var disableRetry: Bool { Bundle.main.debugDisableRetry }
+        static var disableDirectImgurUpload: Bool { Bundle.main.debugDisableDirectImgurUpload }
+        static var simulateError: Bool { Bundle.main.debugSimulateError }
+        static var instantNotifications: Bool { Bundle.main.debugInstantNotifications }
+    }
 }
 
 extension Bundle {
     // MARK: - Default keys
+    
     private static let KEY_RELEASE_VERSION_NUMBER = "CFBundleShortVersionString"
     private static let KEY_BUILD_VERSION_NUMBER = "CFBundleVersion"
     
     // MARK: - Custom keys
-    private static let KEY_PHANTOM_CONFIG = "PhantomConfig"
+    
+    private static let KEY_CONFIG = "PhantomConfig"
+    
+    private static let KEY_DEBUG_SIMULATE_MIDDLEWARE = "PhantomDebugSimulateMiddleware"
+    private static let KEY_DEBUG_SIMULATE_REDDIT = "PhantomDebugSimulateReddit"
+    private static let KEY_DEBUG_DISABLE_RETRY = "PhantomDebugDisableRetry"
+    private static let KEY_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = "PhantomDebugDisableDirectImgurUpload"
+    private static let KEY_DEBUG_SIMULATE_ERROR = "PhantomDebugSimulateError"
+    private static let KEY_DEBUG_INSTANT_NOTIFICATIONS = "PhantomDebugInstantNotifications"
     
     // MARK: - Default variables
     
@@ -46,11 +82,22 @@ extension Bundle {
     
     // MARK: - Custom variables
     
-    fileprivate var config: String { getString(Bundle.KEY_PHANTOM_CONFIG)! }
+    fileprivate var config: String { getString(Bundle.KEY_CONFIG)! }
+    
+    fileprivate var debugSimulateMiddleware: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_MIDDLEWARE)! }
+    fileprivate var debugSimulateReddit: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_REDDIT)! }
+    fileprivate var debugDisableRetry: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_RETRY)! }
+    fileprivate var debugDisableDirectImgurUpload: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)! }
+    fileprivate var debugSimulateError: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_ERROR)! }
+    fileprivate var debugInstantNotifications: Bool { getBool(Bundle.KEY_DEBUG_INSTANT_NOTIFICATIONS)! }
     
     // MARK: - Helper
     
     private func getString(_ key: String) -> String? {
         return infoDictionary?[key] as? String
+    }
+    
+    private func getBool(_ key: String) -> Bool? {
+        return getString(key)?.boolValue
     }
 }

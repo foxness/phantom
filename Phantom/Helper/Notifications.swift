@@ -92,7 +92,7 @@ struct Notifications {
     private static func makeRequest(params: RequestParams) -> UNNotificationRequest {
         let id = params.id
         let content = makeContent(params: params.content)
-        let trigger = DebugVariable.instantNotifications ? makeNowTrigger() : makeTrigger(for: params.dc)
+        let trigger = AppVariables.Debug.instantNotifications ? makeNowTrigger() : makeTrigger(for: params.dc)
         
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         return request
