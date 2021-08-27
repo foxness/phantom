@@ -16,10 +16,6 @@
 	<string>$(PHANTOM_DEBUG_SIMULATE_ERROR)</string>
 	<key>PhantomDebugInstantNotifications</key>
 	<string>$(PHANTOM_DEBUG_INSTANT_NOTIFICATIONS)</string>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>redditPostSubmissionTask</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -57,8 +53,6 @@
 			</array>
 		</dict>
 	</dict>
-	<key>UIBackgroundModes</key>
-	<array/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
