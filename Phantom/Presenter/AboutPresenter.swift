@@ -49,7 +49,7 @@ class AboutPresenter {
     private func contactAuthorPressed() {
         let email = AboutPresenter.TEXT_AUTHOR_EMAIL
         let subject = "Phantom app"
-        let body = "Phantom version: \(Bundle.main.prettyAppVersion)"
+        let body = "Phantom version: \(AppVariables.version)"
         
         viewDelegate?.showEmailComposer(to: email, subject: subject, body: body)
     }
@@ -93,7 +93,7 @@ class AboutPresenter {
     
     private func getVersionItem() -> AboutItemType {
         let title = "Version"
-        let text = Bundle.main.prettyAppVersion
+        let text = AppVariables.version
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
         let itemType = AboutItemType.textItem(item: item)

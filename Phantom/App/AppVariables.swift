@@ -11,8 +11,17 @@ import Foundation
 struct AppVariables {
     // MARK: - Build identifiers
     
-    static var version: String { Bundle.main.prettyAppVersion }
     static var config: String { Bundle.main.config }
+    
+    static var version: String {
+        let version = Bundle.main.releaseVersionNumber
+        let build = Bundle.main.buildVersionNumber
+        let config = config
+        
+        let configString = config == "stable" ? "" : " (\(config))"
+        
+        return "\(version) (\(build))\(configString)"
+    }
     
     static var userAgent: String {
         let identifier = Bundle.main.bundleIdentifier!
@@ -32,22 +41,16 @@ extension Bundle {
     
     // MARK: - Default variables
     
-    var releaseVersionNumber: String { getString(Bundle.KEY_RELEASE_VERSION_NUMBER)! }
-    var buildVersionNumber: String { getString(Bundle.KEY_BUILD_VERSION_NUMBER)! }
+    fileprivate var releaseVersionNumber: String { getString(Bundle.KEY_RELEASE_VERSION_NUMBER)! }
+    fileprivate var buildVersionNumber: String { getString(Bundle.KEY_BUILD_VERSION_NUMBER)! }
     
     // MARK: - Custom variables
     
-    var config: String { getString(Bundle.KEY_PHANTOM_CONFIG)! }
-    
-    // MARK: - Custom computed variables
-    
-    var prettyAppVersion: String {
-        return "\(releaseVersionNumber) (\(buildVersionNumber))"
-    }
+    fileprivate var config: String { getString(Bundle.KEY_PHANTOM_CONFIG)! }
     
     // MARK: - Helper
     
-    func getString(_ key: String) -> String? {
+    private func getString(_ key: String) -> String? {
         return infoDictionary?[key] as? String
     }
 }
