@@ -16,7 +16,15 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     
     @IBOutlet weak var webView: WKWebView!
     
-    var imgur = Imgur()
+    var imgur: Imgur = {
+        let imgurClientId = AppVariables.Api.imgurClientId
+        let imgurClientSecret = AppVariables.Api.imgurClientSecret
+        let imgurRedirectUri = AppVariables.Api.imgurRedirectUri
+        
+        return Imgur(clientId: imgurClientId,
+                     clientSecret: imgurClientSecret,
+                     redirectUri: imgurRedirectUri)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()

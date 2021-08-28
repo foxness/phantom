@@ -144,9 +144,6 @@ class PostTablePresenter {
         loadPostsFromDatabase()
         loadThumbnailResolverCache()
         setupPostSubmitter()
-        
-//        Log.p("reddit client id", AppVariables.Api.redditClientId)
-//        Log.p("redditRedirectUri", AppVariables.Api.redditRedirectUri)
     }
     
     func viewDidAppear() {
@@ -397,7 +394,9 @@ class PostTablePresenter {
                 let redditClientId = AppVariables.Api.redditClientId
                 let redditRedirectUri = AppVariables.Api.redditRedirectUri
                 
-                reddit = Reddit(clientId: redditClientId, redirectUri: redditRedirectUri, auth: redditAuth)
+                reddit = Reddit(clientId: redditClientId,
+                                redirectUri: redditRedirectUri,
+                                auth: redditAuth)
             }
         }
         
@@ -405,7 +404,14 @@ class PostTablePresenter {
             guard imgur == nil else { return }
             
             if let imgurAuth = database.imgurAuth {
-                imgur = Imgur(auth: imgurAuth)
+                let imgurClientId = AppVariables.Api.imgurClientId
+                let imgurClientSecret = AppVariables.Api.imgurClientSecret
+                let imgurRedirectUri = AppVariables.Api.imgurRedirectUri
+                
+                imgur = Imgur(clientId: imgurClientId,
+                              clientSecret: imgurClientSecret,
+                              redirectUri: imgurRedirectUri,
+                              auth: imgurAuth)
             }
         }
     }

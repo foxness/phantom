@@ -26,6 +26,12 @@
 	<string>$(PHANTOM_REDDIT_CLIENT_ID)</string>
 	<key>PhantomRedditRedirectUri</key>
 	<string>$(PHANTOM_REDDIT_REDIRECT_URI)</string>
+	<key>PhantomImgurClientId</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_ID)</string>
+	<key>PhantomImgurClientSecret</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_SECRET)</string>
+	<key>PhantomImgurRedirectUri</key>
+	<string>$(PHANTOM_IMGUR_REDIRECT_URI)</string>
 	<key>PhantomDebugDisableDirectImgurUpload</key>
 	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
 	<key>PhantomDebugDisableRetry</key>

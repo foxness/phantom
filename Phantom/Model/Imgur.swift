@@ -76,15 +76,15 @@ class Imgur {
     
     // MARK: - Constants
     
-    private static let PARAM_CLIENT_ID = "e5a0810d22af4d7"
-    private static let PARAM_CLIENT_SECRET = "77f8f3f68d03c4a32f1080e36b658aaf23528159"
-    private static let PARAM_REDIRECT_URI = "https://localhost/phantom"
-    
     private static let ENDPOINT_AUTH = "https://api.imgur.com/oauth2/authorize"
     private static let ENDPOINT_UPLOAD = "https://api.imgur.com/3/upload"
     private static let ENDPOINT_REFRESH = "https://api.imgur.com/oauth2/token"
     
     // MARK: - Properties
+    
+    private let clientId: String
+    private let clientSecret: String
+    private let redirectUri: String
     
     private var authState: String?
     
@@ -109,9 +109,15 @@ class Imgur {
     
     // MARK: - Constructors
     
-    init() { }
+    init(clientId: String, clientSecret: String, redirectUri: String) {
+        self.clientId = clientId
+        self.clientSecret = clientSecret
+        self.redirectUri = redirectUri
+    }
     
-    init(auth: AuthParams) {
+    convenience init(clientId: String, clientSecret: String, redirectUri: String, auth: AuthParams) {
+        self.init(clientId: clientId, clientSecret: clientSecret, redirectUri: redirectUri)
+        
         self.refreshToken = auth.refreshToken
         self.accessToken = auth.accessToken
         self.accessTokenExpirationDate = auth.accessTokenExpirationDate
@@ -161,7 +167,7 @@ class Imgur {
          
         authState = Helper.getRandomState()
         
-        let params = [Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
+        let params = [Symbols.CLIENT_ID: clientId,
                       Symbols.RESPONSE_TYPE: Symbols.TOKEN,
                       Symbols.STATE: authState!]
         
@@ -173,7 +179,7 @@ class Imgur {
         // https://localhost/phantom?state=asd#access_token=asd&expires_in=123&token_type=bearer&refresh_token=asd&account_username=asd&account_id=123
         
         let fixedUrl = Imgur.getFixedImgurResponse(url: url)
-        guard fixedUrl.absoluteString.hasPrefix(Imgur.PARAM_REDIRECT_URI) && authState != nil else { return .none }
+        guard fixedUrl.absoluteString.hasPrefix(redirectUri) && authState != nil else { return .none }
         
         let response = try! Imgur.deserializeAuthResponse(url: fixedUrl)
         
@@ -328,8 +334,8 @@ class Imgur {
     
     private func getAccessTokenRefreshParams() -> Requests.PostParams {
         let dataDict = [Symbols.REFRESH_TOKEN: refreshToken!,
-                        Symbols.CLIENT_ID: Imgur.PARAM_CLIENT_ID,
-                        Symbols.CLIENT_SECRET: Imgur.PARAM_CLIENT_SECRET,
+                        Symbols.CLIENT_ID: clientId,
+                        Symbols.CLIENT_SECRET: clientSecret,
                         Symbols.GRANT_TYPE: Symbols.REFRESH_TOKEN]
         
         let data = Requests.getDataParams(dataDict: dataDict)

@@ -82,8 +82,8 @@ class Reddit {
     
     // MARK: - Properties
     
-    private var clientId: String
-    private var redirectUri: String
+    private let clientId: String
+    private let redirectUri: String
     
     private var authState: String?
     private var authCode: String?

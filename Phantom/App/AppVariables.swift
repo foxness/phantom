@@ -10,7 +10,6 @@ import Foundation
 
 // todo:
 
-// - add imgur tokens to app variables
 // - extract reddit username in useragent [ez]
 
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
@@ -57,6 +56,10 @@ struct AppVariables {
     struct Api {
         static var redditClientId: String { Bundle.main.redditClientId }
         static var redditRedirectUri: String { Bundle.main.redditRedirectUri }
+        
+        static var imgurClientId: String { Bundle.main.imgurClientId }
+        static var imgurClientSecret: String { Bundle.main.imgurClientSecret }
+        static var imgurRedirectUri: String { Bundle.main.imgurRedirectUri }
     }
     
     // MARK: - Debug variables
@@ -84,6 +87,10 @@ extension Bundle {
     private static let KEY_REDDIT_CLIENT_ID = "PhantomRedditClientId"
     private static let KEY_REDDIT_REDIRECT_URI = "PhantomRedditRedirectUri"
     
+    private static let KEY_IMGUR_CLIENT_ID = "PhantomImgurClientId"
+    private static let KEY_IMGUR_CLIENT_SECRET = "PhantomImgurClientSecret"
+    private static let KEY_IMGUR_REDIRECT_URI = "PhantomImgurRedirectUri"
+    
     private static let KEY_DEBUG_SIMULATE_MIDDLEWARE = "PhantomDebugSimulateMiddleware"
     private static let KEY_DEBUG_SIMULATE_REDDIT = "PhantomDebugSimulateReddit"
     private static let KEY_DEBUG_DISABLE_RETRY = "PhantomDebugDisableRetry"
@@ -102,6 +109,10 @@ extension Bundle {
     
     fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID)! }
     fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI)! }
+    
+    fileprivate var imgurClientId: String { getString(Bundle.KEY_IMGUR_CLIENT_ID)! }
+    fileprivate var imgurClientSecret: String { getString(Bundle.KEY_IMGUR_CLIENT_SECRET)! }
+    fileprivate var imgurRedirectUri: String { getString(Bundle.KEY_IMGUR_REDIRECT_URI)! }
     
     fileprivate var debugSimulateMiddleware: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_MIDDLEWARE)! }
     fileprivate var debugSimulateReddit: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_REDDIT)! }
