@@ -112,8 +112,6 @@ class Database {
         set { internalPerformedOneTimeSetup = newValue }
     }
     
-    var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
-    
     var posts: [Post] = []
     
     private init() {
