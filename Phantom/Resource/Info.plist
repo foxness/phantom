@@ -22,6 +22,10 @@
 	<true/>
 	<key>PhantomConfig</key>
 	<string>$(PHANTOM_CONFIG)</string>
+	<key>PhantomRedditClientId</key>
+	<string>$(PHANTOM_REDDIT_CLIENT_ID)</string>
+	<key>PhantomRedditRedirectUri</key>
+	<string>$(PHANTOM_REDDIT_REDIRECT_URI)</string>
 	<key>PhantomDebugDisableDirectImgurUpload</key>
 	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
 	<key>PhantomDebugDisableRetry</key>

@@ -53,6 +53,13 @@ struct AppVariables {
         return "ios:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
     }
     
+    // MARK: - API variables
+    
+    struct Api {
+        static var redditClientId: String { Bundle.main.redditClientId }
+        static var redditRedirectUri: String { Bundle.main.redditRedirectUri }
+    }
+    
     // MARK: - Debug variables
     
     struct Debug {
@@ -75,6 +82,9 @@ extension Bundle {
     
     private static let KEY_CONFIG = "PhantomConfig"
     
+    private static let KEY_REDDIT_CLIENT_ID = "PhantomRedditClientId"
+    private static let KEY_REDDIT_REDIRECT_URI = "PhantomRedditRedirectUri"
+    
     private static let KEY_DEBUG_SIMULATE_MIDDLEWARE = "PhantomDebugSimulateMiddleware"
     private static let KEY_DEBUG_SIMULATE_REDDIT = "PhantomDebugSimulateReddit"
     private static let KEY_DEBUG_DISABLE_RETRY = "PhantomDebugDisableRetry"
@@ -90,6 +100,9 @@ extension Bundle {
     // MARK: - Custom variables
     
     fileprivate var config: String { getString(Bundle.KEY_CONFIG)! }
+    
+    fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID)! }
+    fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI)! }
     
     fileprivate var debugSimulateMiddleware: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_MIDDLEWARE)! }
     fileprivate var debugSimulateReddit: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_REDDIT)! }

@@ -144,6 +144,9 @@ class PostTablePresenter {
         loadPostsFromDatabase()
         loadThumbnailResolverCache()
         setupPostSubmitter()
+        
+//        Log.p("reddit client id", AppVariables.Api.redditClientId)
+//        Log.p("redditRedirectUri", AppVariables.Api.redditRedirectUri)
     }
     
     func viewDidAppear() {
