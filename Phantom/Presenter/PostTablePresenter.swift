@@ -394,7 +394,10 @@ class PostTablePresenter {
             guard reddit == nil else { return }
             
             if let redditAuth = database.redditAuth {
-                reddit = Reddit(auth: redditAuth)
+                let redditClientId = AppVariables.Api.redditClientId
+                let redditRedirectUri = AppVariables.Api.redditRedirectUri
+                
+                reddit = Reddit(clientId: redditClientId, redirectUri: redditRedirectUri, auth: redditAuth)
             }
         }
         
