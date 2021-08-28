@@ -25,6 +25,7 @@ class Database {
         case useImgur = "useImgur"
         case askedForNotificationPermissions = "askedForNotificationPermissions"
         case sendReplies = "sendReplies"
+        case performedOneTimeSetup = "performedOneTimeSetup"
     }
     
     private static let DEFAULT_BULK_ADD_SUBREDDIT = "pics"
@@ -44,6 +45,7 @@ class Database {
     @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     @UserDefaultsBacked(key: Key.useImgur.rawValue, defaultValue: false) private var internalUseImgur: Bool
     @UserDefaultsBacked(key: Key.sendReplies.rawValue, defaultValue: true) private var internalSendReplies: Bool
+    @UserDefaultsBacked(key: Key.performedOneTimeSetup.rawValue, defaultValue: false) private var internalPerformedOneTimeSetup: Bool // very important for default value to be false here
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
@@ -105,11 +107,21 @@ class Database {
         set { internalSendReplies = newValue }
     }
     
+    var performedOneTimeSetup: Bool {
+        get { internalPerformedOneTimeSetup }
+        set { internalPerformedOneTimeSetup = newValue }
+    }
+    
     var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
     
     var posts: [Post] = []
     
-    private init() { // todo: setDefaults() on first app launch aka one-time setup [next]
+    private init() {
+        guard performedOneTimeSetup else {
+            performOneTimeSetup()
+            return
+        }
+        
         loadPosts()
     }
     
@@ -117,7 +129,12 @@ class Database {
         internalPosts = serializePosts(posts)
     }
     
-    func setDefaults() {
+    func performOneTimeSetup() {
+        setDefaults()
+        performedOneTimeSetup = true
+    }
+    
+    func setDefaults() { // todo: move "default" values like DEFAULT_BULK_ADD_SUBREDDIT here?
         redditAuth = nil
         imgurAuth = nil
         introductionShown = false
