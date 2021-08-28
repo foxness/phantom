@@ -49,8 +49,8 @@ class Database {
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
-    @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue) private var internalBulkAddSubreddit: String?
-    @UserDefaultsBacked(key: Key.bulkAddTime.rawValue) private var internalBulkAddTime: TimeInterval?
+    @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue, defaultValue: DEFAULT_BULK_ADD_SUBREDDIT) private var internalBulkAddSubreddit: String
+    @UserDefaultsBacked(key: Key.bulkAddTime.rawValue, defaultValue: DEFAULT_BULK_ADD_TIME) private var internalBulkAddTime: TimeInterval
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -88,12 +88,12 @@ class Database {
     }
     
     var bulkAddSubreddit: String {
-        get { internalBulkAddSubreddit ?? Database.DEFAULT_BULK_ADD_SUBREDDIT }
+        get { internalBulkAddSubreddit }
         set { internalBulkAddSubreddit = newValue }
     }
     
     var bulkAddTime: TimeInterval {
-        get { internalBulkAddTime ?? Database.DEFAULT_BULK_ADD_TIME }
+        get { internalBulkAddTime }
         set { internalBulkAddTime = newValue }
     }
     
@@ -134,7 +134,8 @@ class Database {
         performedOneTimeSetup = true
     }
     
-    func setDefaults() { // todo: move "default" values like DEFAULT_BULK_ADD_SUBREDDIT here?
+    // defaults are set twice really, once in @UserDefaultsBacked and once here
+    func setDefaults() {
         redditAuth = nil
         imgurAuth = nil
         introductionShown = false
@@ -142,7 +143,7 @@ class Database {
         useWallhaven = false
         useImgur = false
         thumbnailResolverCache = nil
-        internalBulkAddTime = nil // intentionally 'internal'
+        bulkAddTime = Database.DEFAULT_BULK_ADD_TIME
         askedForNotificationPermissions = false
         sendReplies = true
         
@@ -153,7 +154,7 @@ class Database {
     }
     
     func resetBulkAddSubreddit() {
-        internalBulkAddSubreddit = nil // intentionally 'internal'
+        bulkAddSubreddit = Database.DEFAULT_BULK_ADD_SUBREDDIT
     }
     
     private func loadPosts() {
