@@ -109,23 +109,8 @@ class Database {
     
     var posts: [Post] = []
     
-    private init() {
-        if DebugVariable.wipeDatabase {
-            setDefaults()
-        } else {
-            if DebugVariable.wipeAuth {
-                wipeReddit()
-                wipeImgur()
-            }
-            
-            if DebugVariable.wipePosts {
-                posts = []
-            } else {
-                loadPosts()
-            }
-            
-            savePosts()
-        }
+    private init() { // todo: setDefaults() on first app launch aka one-time setup [next]
+        loadPosts()
     }
     
     func savePosts() {
@@ -158,14 +143,6 @@ class Database {
         if let internalPosts = internalPosts {
             posts = deserializePosts(serialized: internalPosts)
         }
-    }
-    
-    private func wipeReddit() {
-        redditAuth = nil
-    }
-    
-    private func wipeImgur() {
-        imgurAuth = nil
     }
     
     private func serializePosts(_ posts: [Post]) -> String {

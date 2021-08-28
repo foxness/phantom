@@ -10,7 +10,6 @@ import Foundation
 
 // todo:
 
-// - refactor out DebugVariable.swift? [next]
 // - add reddit tokens to app variables
 // - add imgur tokens to app variables
 // - extract reddit username in useragent [ez]
