@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Phantom</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,16 +24,6 @@
 	<true/>
 	<key>PhantomConfig</key>
 	<string>$(PHANTOM_CONFIG)</string>
-	<key>PhantomRedditClientId</key>
-	<string>$(PHANTOM_REDDIT_CLIENT_ID)</string>
-	<key>PhantomRedditRedirectUri</key>
-	<string>$(PHANTOM_REDDIT_REDIRECT_URI)</string>
-	<key>PhantomImgurClientId</key>
-	<string>$(PHANTOM_IMGUR_CLIENT_ID)</string>
-	<key>PhantomImgurClientSecret</key>
-	<string>$(PHANTOM_IMGUR_CLIENT_SECRET)</string>
-	<key>PhantomImgurRedirectUri</key>
-	<string>$(PHANTOM_IMGUR_REDIRECT_URI)</string>
 	<key>PhantomDebugDisableDirectImgurUpload</key>
 	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
 	<key>PhantomDebugDisableRetry</key>
@@ -44,6 +36,16 @@
 	<string>$(PHANTOM_DEBUG_SIMULATE_MIDDLEWARE)</string>
 	<key>PhantomDebugSimulateReddit</key>
 	<string>$(PHANTOM_DEBUG_SIMULATE_REDDIT)</string>
+	<key>PhantomImgurClientId</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_ID)</string>
+	<key>PhantomImgurClientSecret</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_SECRET)</string>
+	<key>PhantomImgurRedirectUri</key>
+	<string>$(PHANTOM_IMGUR_REDIRECT_URI)</string>
+	<key>PhantomRedditClientId</key>
+	<string>$(PHANTOM_REDDIT_CLIENT_ID)</string>
+	<key>PhantomRedditRedirectUri</key>
+	<string>$(PHANTOM_REDDIT_REDIRECT_URI)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

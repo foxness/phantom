@@ -130,7 +130,7 @@
 		718181DB24FBEDF500059658 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		718181DD24FBFEE200059658 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
 		7192A40924FFD76500CB54A8 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
-		71C031AE24FA6B5600D6E19F /* Phantom Dbg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Phantom Dbg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		71C031AE24FA6B5600D6E19F /* Phantom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phantom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71C031B124FA6B5600D6E19F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71C031B324FA6B5600D6E19F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		71C031B524FA6B5600D6E19F /* IntroductionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionViewController.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		71C031AF24FA6B5600D6E19F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				71C031AE24FA6B5600D6E19F /* Phantom Dbg.app */,
+				71C031AE24FA6B5600D6E19F /* Phantom.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -364,7 +364,7 @@
 				575D7879264C264800173E7A /* Kingfisher */,
 			);
 			productName = Phantom;
-			productReference = 71C031AE24FA6B5600D6E19F /* Phantom Dbg.app */;
+			productReference = 71C031AE24FA6B5600D6E19F /* Phantom.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -586,7 +586,7 @@
 				);
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
-				PRODUCT_NAME = "$(TARGET_NAME) Dev";
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -670,7 +670,7 @@
 				);
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -748,7 +748,7 @@
 				);
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -887,7 +887,7 @@
 				);
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.debug;
-				PRODUCT_NAME = "$(TARGET_NAME) Dbg";
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -910,7 +910,7 @@
 				);
 				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
-				PRODUCT_NAME = "$(TARGET_NAME) Dev";
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
