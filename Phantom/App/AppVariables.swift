@@ -33,16 +33,16 @@ import Foundation
 struct AppVariables {
     // MARK: - Build identifiers
     
-    static var config: String { Bundle.main.config }
+    static var configName: String { Bundle.main.configName }
     
     static var version: String {
         let version = Bundle.main.releaseVersionNumber
         let build = Bundle.main.buildVersionNumber
-        let config = config
+        let config = configName
         
-        let configString = config == "stable" ? "" : " [\(config)]"
+        let configString = config == "stable" ? "" : "[\(config)]"
         
-        return "\(version) (\(build))\(configString)"
+        return "\(version) (\(build)) \(configString)".trim()
     }
     
     static var userAgent: String {
@@ -83,7 +83,7 @@ extension Bundle {
     
     // MARK: - Custom keys
     
-    private static let KEY_CONFIG = "PhantomConfig"
+    private static let KEY_CONFIG_NAME = "PhantomConfigName"
     
     private static let KEY_REDDIT_CLIENT_ID = "PhantomRedditClientId"
     private static let KEY_REDDIT_REDIRECT_URI = "PhantomRedditRedirectUri"
@@ -106,7 +106,7 @@ extension Bundle {
     
     // MARK: - Custom variables
     
-    fileprivate var config: String { getString(Bundle.KEY_CONFIG)! }
+    fileprivate var configName: String { getString(Bundle.KEY_CONFIG_NAME)! }
     
     fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID)! }
     fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI)! }

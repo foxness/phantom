@@ -13,7 +13,7 @@
 // - https://stackoverflow.com/a/50222853
 // - https://stackoverflow.com/a/13631525
 
-PHANTOM_CONFIG = dev
+PHANTOM_CONFIG_NAME = dev
 PHANTOM_APP_NAME = $(PRODUCT_NAME) Dev
 
 PHANTOM_REDDIT_CLIENT_ID = aaa

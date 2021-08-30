@@ -22,8 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>PhantomConfig</key>
-	<string>$(PHANTOM_CONFIG)</string>
+	<key>PhantomConfigName</key>
+	<string>$(PHANTOM_CONFIG_NAME)</string>
 	<key>PhantomDebugDisableDirectImgurUpload</key>
 	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
 	<key>PhantomDebugDisableRetry</key>

@@ -13,7 +13,7 @@
 // - https://stackoverflow.com/a/50222853
 // - https://stackoverflow.com/a/13631525
 
-PHANTOM_CONFIG = stable
+PHANTOM_CONFIG_NAME = stable
 PHANTOM_APP_NAME = $(PRODUCT_NAME)
 
 PHANTOM_REDDIT_CLIENT_ID = aaa
