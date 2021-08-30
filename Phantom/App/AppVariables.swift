@@ -101,34 +101,50 @@ extension Bundle {
     
     // MARK: - Default variables
     
-    fileprivate var releaseVersionNumber: String { getString(Bundle.KEY_RELEASE_VERSION_NUMBER)! }
-    fileprivate var buildVersionNumber: String { getString(Bundle.KEY_BUILD_VERSION_NUMBER)! }
+    fileprivate var releaseVersionNumber: String { getString(Bundle.KEY_RELEASE_VERSION_NUMBER) }
+    fileprivate var buildVersionNumber: String { getString(Bundle.KEY_BUILD_VERSION_NUMBER) }
     
     // MARK: - Custom variables
     
-    fileprivate var configName: String { getString(Bundle.KEY_CONFIG_NAME)! }
+    fileprivate var configName: String { getString(Bundle.KEY_CONFIG_NAME) }
     
-    fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID)! }
-    fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI)! }
+    fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID) }
+    fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI) }
     
-    fileprivate var imgurClientId: String { getString(Bundle.KEY_IMGUR_CLIENT_ID)! }
-    fileprivate var imgurClientSecret: String { getString(Bundle.KEY_IMGUR_CLIENT_SECRET)! }
-    fileprivate var imgurRedirectUri: String { getString(Bundle.KEY_IMGUR_REDIRECT_URI)! }
+    fileprivate var imgurClientId: String { getString(Bundle.KEY_IMGUR_CLIENT_ID) }
+    fileprivate var imgurClientSecret: String { getString(Bundle.KEY_IMGUR_CLIENT_SECRET) }
+    fileprivate var imgurRedirectUri: String { getString(Bundle.KEY_IMGUR_REDIRECT_URI) }
     
-    fileprivate var debugSimulateMiddleware: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_MIDDLEWARE)! }
-    fileprivate var debugSimulateReddit: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_REDDIT)! }
-    fileprivate var debugDisableRetry: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_RETRY)! }
-    fileprivate var debugDisableDirectImgurUpload: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)! }
-    fileprivate var debugSimulateError: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_ERROR)! }
-    fileprivate var debugInstantNotifications: Bool { getBool(Bundle.KEY_DEBUG_INSTANT_NOTIFICATIONS)! }
+    fileprivate var debugSimulateMiddleware: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_MIDDLEWARE) }
+    fileprivate var debugSimulateReddit: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_REDDIT) }
+    fileprivate var debugDisableRetry: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_RETRY) }
+    fileprivate var debugDisableDirectImgurUpload: Bool { getBool(Bundle.KEY_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD) }
+    fileprivate var debugSimulateError: Bool { getBool(Bundle.KEY_DEBUG_SIMULATE_ERROR) }
+    fileprivate var debugInstantNotifications: Bool { getBool(Bundle.KEY_DEBUG_INSTANT_NOTIFICATIONS) }
     
     // MARK: - Helper
     
-    private func getString(_ key: String) -> String? {
+    private func getString(_ key: String) -> String {
+        guard let value = getStringMaybe(key) else {
+            fatalError("Invalid value or undefined key")
+        }
+        
+        return value
+    }
+    
+    private func getBool(_ key: String) -> Bool {
+        guard let value = getBoolMaybe(key) else {
+            fatalError("Invalid value or undefined key")
+        }
+        
+        return value
+    }
+    
+    private func getStringMaybe(_ key: String) -> String? {
         return infoDictionary?[key] as? String
     }
     
-    private func getBool(_ key: String) -> Bool? {
-        return getString(key)?.boolValue
+    private func getBoolMaybe(_ key: String) -> Bool? {
+        return getStringMaybe(key)?.boolValue
     }
 }
