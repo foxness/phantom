@@ -1,0 +1,30 @@
+//
+//  Debug.xcconfig
+//  Phantom
+//
+//  Created by River on 2021/08/30.
+//  Copyright © 2021 Rivershy. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+// not commiting actual values to the git repo so this is relevant:
+// - https://stackoverflow.com/a/50222853
+// - https://stackoverflow.com/a/13631525
+
+PHANTOM_CONFIG = debug
+
+PHANTOM_REDDIT_CLIENT_ID = aaa
+PHANTOM_REDDIT_REDIRECT_URI = https:/$()/aaa.com // $() prevents the double slash being recognized as comment
+
+PHANTOM_IMGUR_CLIENT_ID = aaa
+PHANTOM_IMGUR_CLIENT_SECRET = aaa
+PHANTOM_IMGUR_REDIRECT_URI = https:/$()/aaa.com
+
+PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = true
+PHANTOM_DEBUG_SIMULATE_REDDIT = true
+PHANTOM_DEBUG_DISABLE_RETRY = true
+PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = true
+PHANTOM_DEBUG_SIMULATE_ERROR = false
+PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false

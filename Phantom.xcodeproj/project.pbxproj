@@ -117,6 +117,9 @@
 		57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurSignInReceiver.swift; sourceTree = "<group>"; };
 		57C1874326CAAE2000685282 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		57C6352B26544FC90072D130 /* PhantomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomError.swift; sourceTree = "<group>"; };
+		57F3D15226DD4E85004B7559 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		57F3D15326DD5225004B7559 /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Dev.xcconfig; sourceTree = "<group>"; };
+		57F3D15426DD5259004B7559 /* Stable.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Stable.xcconfig; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
 		57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddPresenter.swift; sourceTree = "<group>"; };
 		57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +229,16 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
+		57F3D15126DD4E34004B7559 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				57F3D15226DD4E85004B7559 /* Debug.xcconfig */,
+				57F3D15326DD5225004B7559 /* Dev.xcconfig */,
+				57F3D15426DD5259004B7559 /* Stable.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		71C031A524FA6B5600D6E19F = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +259,7 @@
 		71C031B024FA6B5600D6E19F /* Phantom */ = {
 			isa = PBXGroup;
 			children = (
+				57F3D15126DD4E34004B7559 /* Config */,
 				57540E7726B17E0100712B5F /* App */,
 				9693DCEB252773FE00A4A23E /* Helper */,
 				9693DCE92527736100A4A23E /* Model */,
@@ -545,7 +559,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -557,6 +571,7 @@
 		};
 		5785D98F26D91B9400F4B2C9 /* Dev Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15326DD5225004B7559 /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -570,18 +585,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PHANTOM_CONFIG = dev;
-				PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = false;
-				PHANTOM_DEBUG_DISABLE_RETRY = false;
-				PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false;
-				PHANTOM_DEBUG_SIMULATE_ERROR = false;
-				PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = false;
-				PHANTOM_DEBUG_SIMULATE_REDDIT = false;
-				PHANTOM_IMGUR_CLIENT_ID = e5a0810d22af4d7;
-				PHANTOM_IMGUR_CLIENT_SECRET = 77f8f3f68d03c4a32f1080e36b658aaf23528159;
-				PHANTOM_IMGUR_REDIRECT_URI = "https://localhost/phantom";
-				PHANTOM_REDDIT_CLIENT_ID = XTWjw2332iSmmQ;
-				PHANTOM_REDDIT_REDIRECT_URI = "https://localhost/phantomdev";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
 				PRODUCT_NAME = "$(TARGET_NAME) Dev";
 				SWIFT_VERSION = 5.0;
@@ -640,7 +643,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -652,6 +655,7 @@
 		};
 		5785D99326D91BAB00F4B2C9 /* Stable Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15426DD5259004B7559 /* Stable.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -665,18 +669,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PHANTOM_CONFIG = stable;
-				PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = false;
-				PHANTOM_DEBUG_DISABLE_RETRY = false;
-				PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false;
-				PHANTOM_DEBUG_SIMULATE_ERROR = false;
-				PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = false;
-				PHANTOM_DEBUG_SIMULATE_REDDIT = false;
-				PHANTOM_IMGUR_CLIENT_ID = e5a0810d22af4d7;
-				PHANTOM_IMGUR_CLIENT_SECRET = 77f8f3f68d03c4a32f1080e36b658aaf23528159;
-				PHANTOM_IMGUR_REDIRECT_URI = "https://localhost/phantom";
-				PHANTOM_REDDIT_CLIENT_ID = XTWjw2332iSmmQ;
-				PHANTOM_REDDIT_REDIRECT_URI = "https://localhost/phantomdev";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -729,7 +721,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -741,6 +733,7 @@
 		};
 		5785D99526D91BC000F4B2C9 /* Stable Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15426DD5259004B7559 /* Stable.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -754,18 +747,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PHANTOM_CONFIG = stable;
-				PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = false;
-				PHANTOM_DEBUG_DISABLE_RETRY = false;
-				PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false;
-				PHANTOM_DEBUG_SIMULATE_ERROR = false;
-				PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = false;
-				PHANTOM_DEBUG_SIMULATE_REDDIT = false;
-				PHANTOM_IMGUR_CLIENT_ID = e5a0810d22af4d7;
-				PHANTOM_IMGUR_CLIENT_SECRET = 77f8f3f68d03c4a32f1080e36b658aaf23528159;
-				PHANTOM_IMGUR_REDIRECT_URI = "https://localhost/phantom";
-				PHANTOM_REDDIT_CLIENT_ID = XTWjw2332iSmmQ;
-				PHANTOM_REDDIT_REDIRECT_URI = "https://localhost/phantomdev";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -824,7 +805,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -879,7 +860,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -891,6 +872,7 @@
 		};
 		71C031C324FA6B5700D6E19F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15226DD4E85004B7559 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -904,18 +886,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PHANTOM_CONFIG = debug;
-				PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = true;
-				PHANTOM_DEBUG_DISABLE_RETRY = true;
-				PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false;
-				PHANTOM_DEBUG_SIMULATE_ERROR = false;
-				PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = true;
-				PHANTOM_DEBUG_SIMULATE_REDDIT = true;
-				PHANTOM_IMGUR_CLIENT_ID = e5a0810d22af4d7;
-				PHANTOM_IMGUR_CLIENT_SECRET = 77f8f3f68d03c4a32f1080e36b658aaf23528159;
-				PHANTOM_IMGUR_REDIRECT_URI = "https://localhost/phantom";
-				PHANTOM_REDDIT_CLIENT_ID = XTWjw2332iSmmQ;
-				PHANTOM_REDDIT_REDIRECT_URI = "https://localhost/phantomdev";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.debug;
 				PRODUCT_NAME = "$(TARGET_NAME) Dbg";
 				SWIFT_VERSION = 5.0;
@@ -925,6 +895,7 @@
 		};
 		71C031C424FA6B5700D6E19F /* Dev Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15326DD5225004B7559 /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -938,18 +909,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PHANTOM_CONFIG = dev;
-				PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = false;
-				PHANTOM_DEBUG_DISABLE_RETRY = false;
-				PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false;
-				PHANTOM_DEBUG_SIMULATE_ERROR = false;
-				PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = false;
-				PHANTOM_DEBUG_SIMULATE_REDDIT = false;
-				PHANTOM_IMGUR_CLIENT_ID = e5a0810d22af4d7;
-				PHANTOM_IMGUR_CLIENT_SECRET = 77f8f3f68d03c4a32f1080e36b658aaf23528159;
-				PHANTOM_IMGUR_REDIRECT_URI = "https://localhost/phantom";
-				PHANTOM_REDDIT_CLIENT_ID = XTWjw2332iSmmQ;
-				PHANTOM_REDDIT_REDIRECT_URI = "https://localhost/phantomdev";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
 				PRODUCT_NAME = "$(TARGET_NAME) Dev";
 				SWIFT_VERSION = 5.0;

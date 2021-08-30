@@ -10,6 +10,7 @@ import Foundation
 
 // todo:
 
+// - different api keys for different configs [next]
 // - extract reddit username in useragent [ez]
 
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
