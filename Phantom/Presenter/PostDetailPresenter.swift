@@ -13,8 +13,6 @@ import Foundation
 class PostDetailPresenter {
     private weak var viewDelegate: PostDetailViewDelegate?
     
-    private let database: Database = .instance
-    
     private var post: Post?
     private(set) var isNewPost = false
     
@@ -99,8 +97,7 @@ class PostDetailPresenter {
     private func getDefaultNewPost() -> Post {
         let title = ""
         let url = ""
-        
-        let subreddit = database.newPostDefaultSubreddit ?? ""
+        let subreddit = ""
         
         // TODO: set a realistic new post date
         let date = Date() + 60 * 60 // 1 hour from now

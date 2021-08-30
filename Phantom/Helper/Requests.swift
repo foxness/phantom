@@ -24,14 +24,6 @@ struct Requests {
     
     private init() { }
     
-    static func getUserAgent() -> String {
-        let identifier = Bundle.main.bundleIdentifier!
-        let version = Bundle.main.releaseVersionNumber
-        
-        let userAgent = "iOS:\(identifier):v\(version) (by /u/DeepSpaceSignal)" // todo: extract username [ez]
-        return userAgent
-    }
-    
     static func isResponseOk(_ response: HTTPURLResponse) -> Bool {
         return 200..<300 ~= response.statusCode
     }
@@ -179,7 +171,7 @@ struct Requests {
     }
     
     private static func setUserAgent(for request: inout URLRequest) {
-        let userAgent = getUserAgent()
+        let userAgent = AppVariables.userAgent
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
     }
     

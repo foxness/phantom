@@ -25,6 +25,7 @@ class Database {
         case useImgur = "useImgur"
         case askedForNotificationPermissions = "askedForNotificationPermissions"
         case sendReplies = "sendReplies"
+        case performedOneTimeSetup = "performedOneTimeSetup"
     }
     
     private static let DEFAULT_BULK_ADD_SUBREDDIT = "pics"
@@ -44,11 +45,12 @@ class Database {
     @UserDefaultsBacked(key: Key.useWallhaven.rawValue, defaultValue: false) private var internalUseWallhaven: Bool
     @UserDefaultsBacked(key: Key.useImgur.rawValue, defaultValue: false) private var internalUseImgur: Bool
     @UserDefaultsBacked(key: Key.sendReplies.rawValue, defaultValue: true) private var internalSendReplies: Bool
+    @UserDefaultsBacked(key: Key.performedOneTimeSetup.rawValue, defaultValue: false) private var internalPerformedOneTimeSetup: Bool // very important for default value to be false here
     
     @UserDefaultsBacked(key: Key.posts.rawValue) private var internalPosts: String?
     @UserDefaultsBacked(key: Key.thumbnailResolverCache.rawValue) private var internalThumbnailResolverCache: String?
-    @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue) private var internalBulkAddSubreddit: String?
-    @UserDefaultsBacked(key: Key.bulkAddTime.rawValue) private var internalBulkAddTime: TimeInterval?
+    @UserDefaultsBacked(key: Key.bulkAddSubreddit.rawValue, defaultValue: DEFAULT_BULK_ADD_SUBREDDIT) private var internalBulkAddSubreddit: String
+    @UserDefaultsBacked(key: Key.bulkAddTime.rawValue, defaultValue: DEFAULT_BULK_ADD_TIME) private var internalBulkAddTime: TimeInterval
     
     var redditAuth: Reddit.AuthParams? {
         get { deserializeRedditAuth(internalRedditAuth) }
@@ -86,12 +88,12 @@ class Database {
     }
     
     var bulkAddSubreddit: String {
-        get { internalBulkAddSubreddit ?? Database.DEFAULT_BULK_ADD_SUBREDDIT }
+        get { internalBulkAddSubreddit }
         set { internalBulkAddSubreddit = newValue }
     }
     
     var bulkAddTime: TimeInterval {
-        get { internalBulkAddTime ?? Database.DEFAULT_BULK_ADD_TIME }
+        get { internalBulkAddTime }
         set { internalBulkAddTime = newValue }
     }
     
@@ -105,33 +107,32 @@ class Database {
         set { internalSendReplies = newValue }
     }
     
-    var newPostDefaultSubreddit: String? { get { internalBulkAddSubreddit } }
+    var performedOneTimeSetup: Bool {
+        get { internalPerformedOneTimeSetup }
+        set { internalPerformedOneTimeSetup = newValue }
+    }
     
     var posts: [Post] = []
     
     private init() {
-        if DebugVariable.wipeDatabase {
-            setDefaults()
-        } else {
-            if DebugVariable.wipeAuth {
-                wipeReddit()
-                wipeImgur()
-            }
-            
-            if DebugVariable.wipePosts {
-                posts = []
-            } else {
-                loadPosts()
-            }
-            
-            savePosts()
+        guard performedOneTimeSetup else {
+            performOneTimeSetup()
+            return
         }
+        
+        loadPosts()
     }
     
     func savePosts() {
         internalPosts = serializePosts(posts)
     }
     
+    func performOneTimeSetup() {
+        setDefaults()
+        performedOneTimeSetup = true
+    }
+    
+    // defaults are set twice really, once in @UserDefaultsBacked and once here
     func setDefaults() {
         redditAuth = nil
         imgurAuth = nil
@@ -140,7 +141,7 @@ class Database {
         useWallhaven = false
         useImgur = false
         thumbnailResolverCache = nil
-        internalBulkAddTime = nil // intentionally 'internal'
+        bulkAddTime = Database.DEFAULT_BULK_ADD_TIME
         askedForNotificationPermissions = false
         sendReplies = true
         
@@ -151,21 +152,13 @@ class Database {
     }
     
     func resetBulkAddSubreddit() {
-        internalBulkAddSubreddit = nil // intentionally 'internal'
+        bulkAddSubreddit = Database.DEFAULT_BULK_ADD_SUBREDDIT
     }
     
     private func loadPosts() {
         if let internalPosts = internalPosts {
             posts = deserializePosts(serialized: internalPosts)
         }
-    }
-    
-    private func wipeReddit() {
-        redditAuth = nil
-    }
-    
-    private func wipeImgur() {
-        imgurAuth = nil
     }
     
     private func serializePosts(_ posts: [Post]) -> String {

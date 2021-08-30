@@ -391,7 +391,12 @@ class PostTablePresenter {
             guard reddit == nil else { return }
             
             if let redditAuth = database.redditAuth {
-                reddit = Reddit(auth: redditAuth)
+                let redditClientId = AppVariables.Api.redditClientId
+                let redditRedirectUri = AppVariables.Api.redditRedirectUri
+                
+                reddit = Reddit(clientId: redditClientId,
+                                redirectUri: redditRedirectUri,
+                                auth: redditAuth)
             }
         }
         
@@ -399,7 +404,14 @@ class PostTablePresenter {
             guard imgur == nil else { return }
             
             if let imgurAuth = database.imgurAuth {
-                imgur = Imgur(auth: imgurAuth)
+                let imgurClientId = AppVariables.Api.imgurClientId
+                let imgurClientSecret = AppVariables.Api.imgurClientSecret
+                let imgurRedirectUri = AppVariables.Api.imgurRedirectUri
+                
+                imgur = Imgur(clientId: imgurClientId,
+                              clientSecret: imgurClientSecret,
+                              redirectUri: imgurRedirectUri,
+                              auth: imgurAuth)
             }
         }
     }

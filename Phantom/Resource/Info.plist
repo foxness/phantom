@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>redditPostSubmissionTask</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(PHANTOM_APP_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,15 +13,39 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>$(PHANTOM_APP_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>PhantomConfigName</key>
+	<string>$(PHANTOM_CONFIG_NAME)</string>
+	<key>PhantomDebugDisableDirectImgurUpload</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
+	<key>PhantomDebugDisableRetry</key>
+	<string>$(PHANTOM_DEBUG_DISABLE_RETRY)</string>
+	<key>PhantomDebugInstantNotifications</key>
+	<string>$(PHANTOM_DEBUG_INSTANT_NOTIFICATIONS)</string>
+	<key>PhantomDebugSimulateError</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_ERROR)</string>
+	<key>PhantomDebugSimulateMiddleware</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_MIDDLEWARE)</string>
+	<key>PhantomDebugSimulateReddit</key>
+	<string>$(PHANTOM_DEBUG_SIMULATE_REDDIT)</string>
+	<key>PhantomImgurClientId</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_ID)</string>
+	<key>PhantomImgurClientSecret</key>
+	<string>$(PHANTOM_IMGUR_CLIENT_SECRET)</string>
+	<key>PhantomImgurRedirectUri</key>
+	<string>$(PHANTOM_IMGUR_REDIRECT_URI)</string>
+	<key>PhantomRedditClientId</key>
+	<string>$(PHANTOM_REDDIT_CLIENT_ID)</string>
+	<key>PhantomRedditRedirectUri</key>
+	<string>$(PHANTOM_REDDIT_REDIRECT_URI)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -43,8 +65,6 @@
 			</array>
 		</dict>
 	</dict>
-	<key>UIBackgroundModes</key>
-	<array/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

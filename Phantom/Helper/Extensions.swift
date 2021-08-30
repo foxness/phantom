@@ -153,27 +153,6 @@ extension UITableView {
     }
 }
 
-extension Bundle {
-    private static let KEY_RELEASE_VERSION_NUMBER = "CFBundleShortVersionString"
-    private static let KEY_BUILD_VERSION_NUMBER = "CFBundleVersion"
-    
-    var releaseVersionNumber: String {
-        return getString(Bundle.KEY_RELEASE_VERSION_NUMBER)!
-    }
-    
-    var buildVersionNumber: String {
-        return getString(Bundle.KEY_BUILD_VERSION_NUMBER)!
-    }
-    
-    var prettyAppVersion: String {        
-        return "\(releaseVersionNumber) (\(buildVersionNumber))"
-    }
-    
-    private func getString(_ key: String) -> String? {
-        return infoDictionary?[key] as? String
-    }
-}
-
 // src: https://www.hackingwithswift.com/articles/108/how-to-use-regular-expressions-in-swift
 extension NSRegularExpression {
     convenience init(_ pattern: String) {
@@ -208,7 +187,9 @@ extension String {
         let matches = regex.matches(lhs)
         return matches
     }
-    
+}
+
+extension String {
     func findMiddleKey(startKey: String, endKey: String) -> String? {
         guard let start = self.range(of: startKey)?.upperBound,
               let end = self.range(of: endKey, options: [], range: start..<self.endIndex , locale: nil)?.lowerBound
@@ -222,6 +203,17 @@ extension String {
     
     func trim() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+extension String {
+    // src: https://stackoverflow.com/a/28107487
+    var boolValue: Bool? {
+        switch self {
+        case "true": return true
+        case "false": return false
+        default: return nil
+        }
     }
 }
 

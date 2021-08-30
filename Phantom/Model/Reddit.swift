@@ -37,7 +37,7 @@ class Reddit {
     // MARK: - Symbols
     
     private struct Symbols {
-        static let CLIENT_SECRET = ""
+        static let CLIENT_SECRET = "" // this should actually be an empty string. weird, I know
         static let CODE = "code"
         static let CLIENT_ID = "client_id"
         static let RESPONSE_TYPE = "response_type"
@@ -68,8 +68,6 @@ class Reddit {
     
     // MARK: - Constants
     
-    private static let PARAM_CLIENT_ID = "XTWjw2332iSmmQ"
-    private static let PARAM_REDIRECT_URI = "https://localhost/phantomdev"
     private static let PARAM_DURATION = "permanent"
     private static let PARAM_SCOPE = "identity submit"
     
@@ -83,6 +81,9 @@ class Reddit {
     static let LIMIT_SUBREDDIT_LENGTH = 21
     
     // MARK: - Properties
+    
+    private let clientId: String
+    private let redirectUri: String
     
     private var authState: String?
     private var authCode: String?
@@ -108,9 +109,14 @@ class Reddit {
     
     // MARK: - Constructors
     
-    init() { }
+    init(clientId: String, redirectUri: String) {
+        self.clientId = clientId
+        self.redirectUri = redirectUri
+    }
     
-    init(auth: AuthParams) {
+    convenience init(clientId: String, redirectUri: String, auth: AuthParams) {
+        self.init(clientId: clientId, redirectUri: redirectUri)
+        
         self.refreshToken = auth.refreshToken
         self.accessToken = auth.accessToken
         self.accessTokenExpirationDate = auth.accessTokenExpirationDate
@@ -158,10 +164,10 @@ class Reddit {
          
         authState = Helper.getRandomState()
         
-        let params = [Symbols.CLIENT_ID: Reddit.PARAM_CLIENT_ID,
+        let params = [Symbols.CLIENT_ID: clientId,
                       Symbols.RESPONSE_TYPE: Symbols.CODE,
                       Symbols.STATE: authState!,
-                      Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI,
+                      Symbols.REDIRECT_URI: redirectUri,
                       Symbols.DURATION: Reddit.PARAM_DURATION,
                       Symbols.SCOPE: Reddit.PARAM_SCOPE]
         
@@ -170,7 +176,7 @@ class Reddit {
     }
     
     func getUserResponse(to url: URL) -> UserResponse {
-        guard url.absoluteString.hasPrefix(Reddit.PARAM_REDIRECT_URI) && authState != nil else { return .none }
+        guard url.absoluteString.hasPrefix(redirectUri) && authState != nil else { return .none }
         
         let (state, code) = Reddit.deserializeAuthResponse(url: url, request: "reddit user response")
         authCode = code
@@ -280,7 +286,7 @@ class Reddit {
     // MARK: - Helper methods
     
     private func getAccessTokenRequestUrlAuth() -> (url: URL, auth: Requests.AuthParams) {
-        let username = Reddit.PARAM_CLIENT_ID
+        let username = clientId
         let password = Symbols.CLIENT_SECRET
         
         let auth = Requests.getAuthParams(username: username, password: password, basicAuth: true)
@@ -317,7 +323,7 @@ class Reddit {
     private func getAuthTokenFetchParams() -> Requests.PostParams {
         let dataDict = [Symbols.GRANT_TYPE: Symbols.AUTHORIZATION_CODE,
                         Symbols.CODE: authCode!,
-                        Symbols.REDIRECT_URI: Reddit.PARAM_REDIRECT_URI]
+                        Symbols.REDIRECT_URI: redirectUri]
         
         let data = Requests.getDataParams(dataDict: dataDict)
         let (url, auth) = getAccessTokenRequestUrlAuth()

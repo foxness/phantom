@@ -18,12 +18,17 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     
     @IBOutlet weak var webView: WKWebView!
     
-    var reddit = Reddit()
+    var reddit: Reddit = {
+        let redditClientId = AppVariables.Api.redditClientId
+        let redditRedirectUri = AppVariables.Api.redditRedirectUri
+        
+        return Reddit(clientId: redditClientId, redirectUri: redditRedirectUri)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.customUserAgent = Requests.getUserAgent()
+        webView.customUserAgent = AppVariables.userAgent
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()

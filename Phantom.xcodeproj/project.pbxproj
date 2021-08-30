@@ -40,13 +40,13 @@
 		5768C33B2639CE9C00459260 /* Imgur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5768C33A2639CE9C00459260 /* Imgur.swift */; };
 		576E515B2644708200B0047F /* SlideUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E515A2644708200B0047F /* SlideUpMenu.swift */; };
 		578358E1263C7E0E00320607 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578358E0263C7E0E00320607 /* Helper.swift */; };
+		5785D99726D934FF00F4B2C9 /* AppVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5785D99626D934FF00F4B2C9 /* AppVariables.swift */; };
 		57AE9FAA2641B70600DC1970 /* PostScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AE9FA92641B70600DC1970 /* PostScheduler.swift */; };
 		57B2E6EB26748E9B00123466 /* SignedInAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */; };
 		57B2E6ED2674B5CE00123466 /* SignedOutAccountSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */; };
 		57B3F5B92675F3CA007F5821 /* RedditSignInReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */; };
 		57B3F5BB26760049007F5821 /* ImgurSignInReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */; };
 		57C1874426CAAE2000685282 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C1874326CAAE2000685282 /* AboutViewController.swift */; };
-		57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C43512264AFB4B00226A24 /* DebugVariable.swift */; };
 		57C6352C26544FC90072D130 /* PhantomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C6352B26544FC90072D130 /* PhantomError.swift */; };
 		57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DE8264074B200B10E75 /* BulkAddViewController.swift */; };
 		57F84DEB2640782C00B10E75 /* BulkAddPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */; };
@@ -109,14 +109,17 @@
 		5768C33A2639CE9C00459260 /* Imgur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imgur.swift; sourceTree = "<group>"; };
 		576E515A2644708200B0047F /* SlideUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenu.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		5785D99626D934FF00F4B2C9 /* AppVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVariables.swift; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
 		57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedOutAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B3F5B82675F3CA007F5821 /* RedditSignInReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditSignInReceiver.swift; sourceTree = "<group>"; };
 		57B3F5BA26760049007F5821 /* ImgurSignInReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurSignInReceiver.swift; sourceTree = "<group>"; };
 		57C1874326CAAE2000685282 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		57C43512264AFB4B00226A24 /* DebugVariable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugVariable.swift; sourceTree = "<group>"; };
 		57C6352B26544FC90072D130 /* PhantomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomError.swift; sourceTree = "<group>"; };
+		57F3D15226DD4E85004B7559 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		57F3D15326DD5225004B7559 /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Dev.xcconfig; sourceTree = "<group>"; };
+		57F3D15426DD5259004B7559 /* Stable.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Stable.xcconfig; sourceTree = "<group>"; };
 		57F84DE8264074B200B10E75 /* BulkAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewController.swift; sourceTree = "<group>"; };
 		57F84DEA2640782C00B10E75 /* BulkAddPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddPresenter.swift; sourceTree = "<group>"; };
 		57F84DEC2640789F00B10E75 /* BulkAddViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkAddViewDelegate.swift; sourceTree = "<group>"; };
@@ -163,7 +166,7 @@
 		57540E7726B17E0100712B5F /* App */ = {
 			isa = PBXGroup;
 			children = (
-				57C43512264AFB4B00226A24 /* DebugVariable.swift */,
+				5785D99626D934FF00F4B2C9 /* AppVariables.swift */,
 				71C031B124FA6B5600D6E19F /* AppDelegate.swift */,
 				71C031B324FA6B5600D6E19F /* SceneDelegate.swift */,
 			);
@@ -226,6 +229,16 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
+		57F3D15126DD4E34004B7559 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				57F3D15226DD4E85004B7559 /* Debug.xcconfig */,
+				57F3D15326DD5225004B7559 /* Dev.xcconfig */,
+				57F3D15426DD5259004B7559 /* Stable.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		71C031A524FA6B5600D6E19F = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +259,7 @@
 		71C031B024FA6B5600D6E19F /* Phantom */ = {
 			isa = PBXGroup;
 			children = (
+				57F3D15126DD4E34004B7559 /* Config */,
 				57540E7726B17E0100712B5F /* App */,
 				9693DCEB252773FE00A4A23E /* Helper */,
 				9693DCE92527736100A4A23E /* Model */,
@@ -411,7 +425,6 @@
 				7192A40A24FFD76500CB54A8 /* Notifications.swift in Sources */,
 				57C6352C26544FC90072D130 /* PhantomError.swift in Sources */,
 				960D066225277F7700FFB4AC /* PostTablePresenter.swift in Sources */,
-				57C43513264AFB4B00226A24 /* DebugVariable.swift in Sources */,
 				960D066525277FC100FFB4AC /* PostTableViewDelegate.swift in Sources */,
 				5765CE7626CEDC3800790028 /* AboutItemType.swift in Sources */,
 				718181DA24FBE01D00059658 /* PostDetailViewController.swift in Sources */,
@@ -421,6 +434,7 @@
 				57F84DE9264074B200B10E75 /* BulkAddViewController.swift in Sources */,
 				57626FC4267F586D00850E31 /* ImageDimensionMiddleware.swift in Sources */,
 				5727A52126387BD600CE3FCD /* SubmitterMiddleware.swift in Sources */,
+				5785D99726D934FF00F4B2C9 /* AppVariables.swift in Sources */,
 				57B3F5B92675F3CA007F5821 /* RedditSignInReceiver.swift in Sources */,
 				57F84DED2640789F00B10E75 /* BulkAddViewDelegate.swift in Sources */,
 				57605EF32673590D00E4EE25 /* SettingsSection.swift in Sources */,
@@ -494,6 +508,252 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5785D98E26D91B9400F4B2C9 /* Dev Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Dev Debug";
+		};
+		5785D98F26D91B9400F4B2C9 /* Dev Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15326DD5225004B7559 /* Dev.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J7W8R96J4N;
+				INFOPLIST_FILE = Phantom/Resource/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
+				PRODUCT_NAME = Phantom;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Dev Debug";
+		};
+		5785D99226D91BAB00F4B2C9 /* Stable Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Stable Debug";
+		};
+		5785D99326D91BAB00F4B2C9 /* Stable Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15426DD5259004B7559 /* Stable.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J7W8R96J4N;
+				INFOPLIST_FILE = Phantom/Resource/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
+				PRODUCT_NAME = Phantom;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Stable Debug";
+		};
+		5785D99426D91BC000F4B2C9 /* Stable Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Stable Release";
+		};
+		5785D99526D91BC000F4B2C9 /* Stable Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15426DD5259004B7559 /* Stable.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J7W8R96J4N;
+				INFOPLIST_FILE = Phantom/Resource/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom;
+				PRODUCT_NAME = Phantom;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Stable Release";
+		};
 		71C031C024FA6B5700D6E19F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -545,7 +805,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -555,7 +815,7 @@
 			};
 			name = Debug;
 		};
-		71C031C124FA6B5700D6E19F /* Release */ = {
+		71C031C124FA6B5700D6E19F /* Dev Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -600,7 +860,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -608,14 +868,16 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Dev Release";
 		};
 		71C031C324FA6B5700D6E19F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15226DD4E85004B7559 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
 				INFOPLIST_FILE = Phantom/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -624,19 +886,21 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = me.rivershy.Phantom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.debug;
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		71C031C424FA6B5700D6E19F /* Release */ = {
+		71C031C424FA6B5700D6E19F /* Dev Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57F3D15326DD5225004B7559 /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
 				INFOPLIST_FILE = Phantom/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -645,12 +909,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = me.rivershy.Phantom;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rivershy.phantom.dev;
+				PRODUCT_NAME = Phantom;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = "Dev Release";
 		};
 /* End XCBuildConfiguration section */
 
@@ -659,19 +923,25 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				71C031C024FA6B5700D6E19F /* Debug */,
-				71C031C124FA6B5700D6E19F /* Release */,
+				5785D98E26D91B9400F4B2C9 /* Dev Debug */,
+				5785D99226D91BAB00F4B2C9 /* Stable Debug */,
+				71C031C124FA6B5700D6E19F /* Dev Release */,
+				5785D99426D91BC000F4B2C9 /* Stable Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Dev Release";
 		};
 		71C031C224FA6B5700D6E19F /* Build configuration list for PBXNativeTarget "Phantom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				71C031C324FA6B5700D6E19F /* Debug */,
-				71C031C424FA6B5700D6E19F /* Release */,
+				5785D98F26D91B9400F4B2C9 /* Dev Debug */,
+				5785D99326D91BAB00F4B2C9 /* Stable Debug */,
+				71C031C424FA6B5700D6E19F /* Dev Release */,
+				5785D99526D91BC000F4B2C9 /* Stable Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Dev Release";
 		};
 /* End XCConfigurationList section */
 
