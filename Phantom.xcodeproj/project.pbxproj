@@ -77,6 +77,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		570957B826E486040033F09D /* Debug.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Debug.xcconfig.example; sourceTree = "<group>"; };
+		570957B926E486410033F09D /* Dev.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Dev.xcconfig.example; sourceTree = "<group>"; };
+		570957BA26E486710033F09D /* Stable.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Stable.xcconfig.example; sourceTree = "<group>"; };
 		57145E09264F007D00EFDF03 /* ThumbnailResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailResolver.swift; sourceTree = "<group>"; };
 		571BFACF2649289000536009 /* SlideUpMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuDelegate.swift; sourceTree = "<group>"; };
 		5727A52026387BD600CE3FCD /* SubmitterMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitterMiddleware.swift; sourceTree = "<group>"; };
@@ -235,6 +238,9 @@
 				57F3D15226DD4E85004B7559 /* Debug.xcconfig */,
 				57F3D15326DD5225004B7559 /* Dev.xcconfig */,
 				57F3D15426DD5259004B7559 /* Stable.xcconfig */,
+				570957B826E486040033F09D /* Debug.xcconfig.example */,
+				570957B926E486410033F09D /* Dev.xcconfig.example */,
+				570957BA26E486710033F09D /* Stable.xcconfig.example */,
 			);
 			path = Config;
 			sourceTree = "<group>";

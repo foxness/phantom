@@ -1,5 +1,8 @@
 # River
 .DS_Store
+Phantom/Config/Debug.xcconfig
+Phantom/Config/Dev.xcconfig
+Phantom/Config/Stable.xcconfig
 
 # Xcode
 #
