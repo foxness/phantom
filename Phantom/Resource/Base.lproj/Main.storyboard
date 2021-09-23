@@ -433,7 +433,6 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="ROg-kr-U4F" firstAttribute="centerX" secondItem="ZCf-oI-UNa" secondAttribute="centerX" id="6XJ-z1-9KU"/>
                                 <constraint firstAttribute="bottom" secondItem="WJP-pL-Mvm" secondAttribute="bottom" constant="30" id="Gyz-id-6Hw"/>
@@ -445,7 +444,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="Ids-XB-hao"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="ZCf-oI-UNa" firstAttribute="centerX" secondItem="CzY-Ma-nDJ" secondAttribute="centerX" id="1kb-OS-Gwr"/>
                         <constraint firstItem="ZCf-oI-UNa" firstAttribute="width" secondItem="CzY-Ma-nDJ" secondAttribute="width" id="FMg-0S-ukz"/>
@@ -918,6 +917,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
