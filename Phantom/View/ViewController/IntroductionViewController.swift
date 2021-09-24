@@ -19,8 +19,6 @@ class IntroductionViewController: UIViewController {
         case showRedditSignIn = "introductionShowRedditSignIn"
     }
     
-    private static let BUTTON_CORNER_RADIUS: CGFloat = 9
-    
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var appIconView: UIImageView!
     
@@ -29,7 +27,6 @@ class IntroductionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        styleButton()
         tintAppIcon()
     }
     
@@ -49,29 +46,11 @@ class IntroductionViewController: UIViewController {
         }
     }
     
-    func styleButton() {
-        let highlightTintPercent: CGFloat = 20
-        
-        signInButton.layer.cornerRadius = IntroductionViewController.BUTTON_CORNER_RADIUS
-        signInButton.layer.masksToBounds = true
-        
-        let accentColor = UIColor(named: "AccentColor")!
-        let highlightColor = traitCollection.userInterfaceStyle == .dark ?
-            accentColor.lighter(by: highlightTintPercent) :
-            accentColor.darker(by: highlightTintPercent)
-        
-        signInButton.setBackgroundColor(highlightColor, for: .highlighted)
-    }
-    
     func tintAppIcon() {
         appIconView.makeTintable()
         
         // uncomment for black&white icon
 //        appIconView.tintColor = UIColor.label
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        styleButton()
     }
 }
 
