@@ -252,11 +252,11 @@ extension UIView {
 //    }
 //}
 
-extension UIImageView {
-    func makeTintable() {
-        image = image?.withRenderingMode(.alwaysTemplate)
-    }
-}
+//extension UIImageView { // currently unused but not a bad extension to have?
+//    func makeTintable() {
+//        image = image?.withRenderingMode(.alwaysTemplate)
+//    }
+//}
 
 extension UITableView {
     // source: https://stackoverflow.com/a/45157417

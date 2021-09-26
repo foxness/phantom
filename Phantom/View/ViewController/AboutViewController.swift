@@ -34,7 +34,6 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func setupViews() {
-        tintAppIcon()
         setupTableView()
     }
     
@@ -51,13 +50,6 @@ class AboutViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // do this instead of you want a autolayout sized header (aka normal size)
 //        tableView.layoutTableHeaderView()
-    }
-    
-    func tintAppIcon() {
-        appIconView.makeTintable()
-        
-        // uncomment for black&white icon
-//        appIconView.tintColor = UIColor.label
     }
     
     func showEmailComposer(to email: String, subject: String? = nil, body: String? = nil) {

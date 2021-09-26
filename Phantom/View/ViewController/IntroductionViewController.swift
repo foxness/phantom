@@ -23,12 +23,6 @@ class IntroductionViewController: UIViewController {
     @IBOutlet weak var appIconView: UIImageView!
     
     private let hideNavBar = true
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tintAppIcon()
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -44,13 +38,6 @@ class IntroductionViewController: UIViewController {
         if hideNavBar {
             navigationController?.navigationBar.isHidden = start
         }
-    }
-    
-    func tintAppIcon() {
-        appIconView.makeTintable()
-        
-        // uncomment for black&white icon
-//        appIconView.tintColor = UIColor.label
     }
 }
 

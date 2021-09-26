@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="mOq-bV-CNe" userLabel="App Icon">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="template_app_icon" translatesAutoresizingMaskIntoConstraints="NO" id="mOq-bV-CNe" userLabel="App Icon">
                                 <rect key="frame" x="97.666666666666686" y="240" width="195" height="195"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="mOq-bV-CNe" secondAttribute="height" multiplier="1:1" id="2j9-d8-Uhg"/>
@@ -427,7 +427,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCf-oI-UNa" userLabel="Logo Container">
                             <rect key="frame" x="0.0" y="105.66666666666667" width="390" height="254.33333333333331"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="icon_template" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F" userLabel="App Logo">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="template_app_icon" translatesAutoresizingMaskIntoConstraints="NO" id="ROg-kr-U4F" userLabel="App Logo">
                                     <rect key="frame" x="97.666666666666686" y="0.0" width="195" height="195"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="ROg-kr-U4F" secondAttribute="height" id="2wr-1F-7XE"/>
@@ -909,7 +909,7 @@
     <color key="tintColor" name="AccentColor"/>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
-        <image name="icon_template" width="256" height="256"/>
+        <image name="template_app_icon" width="256" height="256"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
