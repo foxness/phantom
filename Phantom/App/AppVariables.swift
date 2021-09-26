@@ -10,10 +10,8 @@ import Foundation
 
 // todo:
 
-// - add icon to notification action
-// - termly privacy policy
-
-// - fix already logged in as X when changing imgur account (and possibly reddit too) [next]
+// - termly privacy policy [next]
+// - fix already logged in as X when changing imgur account (and possibly reddit too)
 // - extract reddit username in useragent [ez]
 
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload

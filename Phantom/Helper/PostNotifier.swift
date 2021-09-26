@@ -109,9 +109,18 @@ struct PostNotifier {
         let actionTitle = TITLE_SUBMIT_ACTION
         let actionOptions: UNNotificationActionOptions = [.foreground]
         
-        let submitAction = UNNotificationAction(identifier: actionId,
+        let submitAction: UNNotificationAction
+        if #available(iOS 15.0, *) {
+            let actionIcon = UNNotificationActionIcon(systemImageName: "paperplane")
+            submitAction = UNNotificationAction(identifier: actionId,
+                                                title: actionTitle,
+                                                options: actionOptions,
+                                                icon: actionIcon)
+        } else {
+            submitAction = UNNotificationAction(identifier: actionId,
                                                 title: actionTitle,
                                                 options: actionOptions)
+        }
         
         let categoryId = CATEGORY_DUE_POST
         let categoryActions = [submitAction]
