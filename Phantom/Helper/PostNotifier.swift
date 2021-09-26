@@ -25,14 +25,23 @@ struct PostNotifier {
         let postDate = dateToComponents(date)
         
         let title = post.title
-        let body = "Time to submit has come"
+        let body = "It's time to submit your post (long-press on notification to submit)"
         let subtitle: String? = nil
         let userInfo = [KEY_POST_ID: postId]
         let categoryId = CATEGORY_DUE_POST
         let sound = UNNotificationSound.default
         let badgeCount = 1
+        let isTimeSensitive = true
         
-        let content = Notifications.ContentParams(title: title, body: body, subtitle: subtitle, userInfo: userInfo, categoryId: categoryId, sound: sound, badgeCount: badgeCount)
+        let content = Notifications.ContentParams(title: title,
+                                                  body: body,
+                                                  subtitle: subtitle,
+                                                  userInfo: userInfo,
+                                                  categoryId: categoryId,
+                                                  sound: sound,
+                                                  badgeCount: badgeCount,
+                                                  isTimeSensitive: isTimeSensitive)
+        
         let params = Notifications.RequestParams(id: postId, dc: postDate, content: content)
         
         Notifications.request(params: params) { error in

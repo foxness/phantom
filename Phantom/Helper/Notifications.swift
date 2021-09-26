@@ -18,6 +18,7 @@ struct Notifications {
         let categoryId: String?
         let sound: UNNotificationSound?
         let badgeCount: Int?
+        let isTimeSensitive: Bool
     }
     
     struct RequestParams {
@@ -76,6 +77,10 @@ struct Notifications {
         
         if let badgeCount = params.badgeCount {
             content.badge = NSNumber(value: badgeCount)
+        }
+        
+        if #available(iOS 15.0, *) {
+            content.interruptionLevel = params.isTimeSensitive ? .timeSensitive : .active
         }
         
         return content

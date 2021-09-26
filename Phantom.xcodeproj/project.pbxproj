@@ -87,6 +87,7 @@
 		572AA66C2687562B0016BE43 /* TextSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSettingCell.swift; sourceTree = "<group>"; };
 		572D9518265ACB1A00F0D454 /* RetryStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryStrategy.swift; sourceTree = "<group>"; };
 		572D951A265ADA5600F0D454 /* RequiredMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiredMiddleware.swift; sourceTree = "<group>"; };
+		573224BB270070770008C80B /* Phantom.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Phantom.entitlements; sourceTree = "<group>"; };
 		5732365A2678A611004CEB72 /* SlideUpMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuCell.swift; sourceTree = "<group>"; };
 		5732365C2678ADA3004CEB72 /* SlideUpMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenuItem.swift; sourceTree = "<group>"; };
 		5732365E2678CDB3004CEB72 /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +184,7 @@
 				71C031BC24FA6B5700D6E19F /* LaunchScreen.storyboard */,
 				71C031BA24FA6B5700D6E19F /* Assets.xcassets */,
 				71C031BF24FA6B5700D6E19F /* Info.plist */,
+				573224BB270070770008C80B /* Phantom.entitlements */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -581,6 +583,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Phantom/Resource/Phantom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
@@ -665,6 +668,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Phantom/Resource/Phantom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
@@ -743,6 +747,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Phantom/Resource/Phantom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
@@ -882,6 +887,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Phantom/Resource/Phantom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
@@ -905,6 +911,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Phantom/Resource/Phantom.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J7W8R96J4N;
