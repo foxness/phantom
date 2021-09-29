@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>PhantomPrivacyPolicyUrl</key>
+	<string>$(PHANTOM_PRIVACY_POLICY_URL)</string>
+	<key>PhantomDeveloperRedditAccount</key>
+	<string>$(PHANTOM_DEVELOPER_REDDIT_ACCOUNT)</string>
+	<key>PhantomDeveloperContactEmail</key>
+	<string>$(PHANTOM_DEVELOPER_CONTACT_EMAIL)</string>
+	<key>PhantomDeveloperName</key>
+	<string>$(PHANTOM_DEVELOPER_NAME)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

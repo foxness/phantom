@@ -10,9 +10,10 @@ import Foundation
 
 // todo:
 
-// - termly privacy policy [next]
+// - add text size accessibility support
 // - fix already logged in as X when changing imgur account (and possibly reddit too)
 // - extract reddit username in useragent [ez]
+// - privacy policy on custom domain?
 
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // - give all Main.storyboard views better names (like in welcome screen) [ez]
@@ -36,6 +37,8 @@ struct AppVariables {
     
     static var configName: String { Bundle.main.configName }
     
+    static var privacyPolicyUrl: String { Bundle.main.privacyPolicyUrl }
+    
     static var version: String {
         let version = Bundle.main.releaseVersionNumber
         let build = Bundle.main.buildVersionNumber
@@ -51,6 +54,14 @@ struct AppVariables {
         let version = Bundle.main.releaseVersionNumber
         
         return "ios:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
+    }
+    
+    // MARK: - Developer variables
+    
+    struct Developer {
+        static var name: String { Bundle.main.developerName }
+        static var contactEmail: String { Bundle.main.developerContactEmail }
+        static var redditAccount: String { Bundle.main.developerRedditAccount }
     }
     
     // MARK: - API variables
@@ -86,6 +97,12 @@ extension Bundle {
     
     private static let KEY_CONFIG_NAME = "PhantomConfigName"
     
+    private static let KEY_DEVELOPER_NAME = "PhantomDeveloperName"
+    private static let KEY_DEVELOPER_CONTACT_EMAIL = "PhantomDeveloperContactEmail"
+    private static let KEY_DEVELOPER_REDDIT_ACCOUNT = "PhantomDeveloperRedditAccount"
+    
+    private static let KEY_PRIVACY_POLICY_URL = "PhantomPrivacyPolicyUrl"
+    
     private static let KEY_REDDIT_CLIENT_ID = "PhantomRedditClientId"
     private static let KEY_REDDIT_REDIRECT_URI = "PhantomRedditRedirectUri"
     
@@ -108,6 +125,12 @@ extension Bundle {
     // MARK: - Custom variables
     
     fileprivate var configName: String { getString(Bundle.KEY_CONFIG_NAME) }
+    
+    fileprivate var developerName: String { getString(Bundle.KEY_DEVELOPER_NAME) }
+    fileprivate var developerContactEmail: String { getString(Bundle.KEY_DEVELOPER_CONTACT_EMAIL) }
+    fileprivate var developerRedditAccount: String { getString(Bundle.KEY_DEVELOPER_REDDIT_ACCOUNT) }
+    
+    fileprivate var privacyPolicyUrl: String { getString(Bundle.KEY_PRIVACY_POLICY_URL) }
     
     fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID) }
     fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI) }

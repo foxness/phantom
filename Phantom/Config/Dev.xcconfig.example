@@ -16,6 +16,11 @@
 PHANTOM_CONFIG_NAME = dev
 PHANTOM_APP_NAME = $(PRODUCT_NAME)Dev
 
+PHANTOM_DEVELOPER_NAME = aaa bbb
+PHANTOM_DEVELOPER_CONTACT_EMAIL = aaa@bbb.com
+PHANTOM_DEVELOPER_REDDIT_ACCOUNT = aaa
+PHANTOM_PRIVACY_POLICY_URL = https:/$()/aaa.com
+
 PHANTOM_REDDIT_CLIENT_ID = aaa
 PHANTOM_REDDIT_REDIRECT_URI = https:/$()/aaa.com // $() prevents the double slash being recognized as comment
 
