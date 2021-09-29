@@ -31,6 +31,7 @@ import Foundation
 // - let user change retry strategy
 // - MARK code dividers in every source file [ez]
 // - add app store link to about scene
+// - get rid of "TEXT_"-like prefixes in all static variables? [ez]
 
 struct AppVariables {
     // MARK: - Build identifiers
@@ -52,8 +53,9 @@ struct AppVariables {
     static var userAgent: String {
         let identifier = Bundle.main.bundleIdentifier!
         let version = Bundle.main.releaseVersionNumber
+        let reddit = Developer.redditAccount
         
-        return "ios:\(identifier):v\(version) (by /u/DeepSpaceSignal)"
+        return "ios:\(identifier):v\(version) (by /u/\(reddit))"
     }
     
     // MARK: - Developer variables

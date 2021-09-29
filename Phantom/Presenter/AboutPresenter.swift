@@ -16,10 +16,6 @@ import Foundation
 class AboutPresenter {
     // MARK: - Properties
     
-    private static let TEXT_AUTHOR_NAME = "River Deem" // todo: get rid of "TEXT_"-like prefixes in all static variables? [ez]
-    private static let TEXT_AUTHOR_EMAIL = "nymphadriel@gmail.com"
-    private static let URL_PRIVACY_POLICY = "https://foxness.github.io/phantom-privacy-policy/"
-    
     private weak var viewDelegate: AboutViewDelegate?
     
     private var items: [AboutItemType] = []
@@ -47,7 +43,7 @@ class AboutPresenter {
     }
     
     private func contactAuthorPressed() {
-        let email = AboutPresenter.TEXT_AUTHOR_EMAIL
+        let email = AppVariables.Developer.contactEmail
         let subject = "Phantom app"
         let body = "Phantom version: \(AppVariables.version)"
         
@@ -55,7 +51,7 @@ class AboutPresenter {
     }
     
     private func privacyPolicyPressed() {
-        let privacyPolicyUrl = URL(string: AboutPresenter.URL_PRIVACY_POLICY)!
+        let privacyPolicyUrl = URL(string: AppVariables.privacyPolicyUrl)!
         
         viewDelegate?.open(url: privacyPolicyUrl)
     }
@@ -103,7 +99,7 @@ class AboutPresenter {
     
     private func getAuthorItem() -> AboutItemType {
         let title = "Designed & developed by"
-        let text = AboutPresenter.TEXT_AUTHOR_NAME
+        let text = AppVariables.Developer.name
         
         let item = TextAboutItem(title: title, text: text, handler: nil)
         let itemType = AboutItemType.textItem(item: item)
@@ -113,7 +109,7 @@ class AboutPresenter {
     
     private func getContactItem() -> AboutItemType {
         let title = "Contact"
-        let text = AboutPresenter.TEXT_AUTHOR_EMAIL
+        let text = AppVariables.Developer.contactEmail
         
         let handler = { [self] in
             contactAuthorPressed()
