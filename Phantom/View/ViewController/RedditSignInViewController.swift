@@ -51,7 +51,11 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = reddit.getUserResponse(to: url)
-        if response == .allow {
+        
+        switch response {
+        case .none: break
+            
+        case .allow:
             DispatchQueue.global(qos: .userInitiated).async {
                 Log.p("fetching tokens")
                 try! self.reddit.fetchAuthTokens()
@@ -60,6 +64,9 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
                     self.performSegue(withIdentifier: RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
                 }
             }
+            
+        case .decline:
+            Log.p("response is decline")
         }
         
         decisionHandler(.allow)

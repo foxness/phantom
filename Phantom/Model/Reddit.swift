@@ -64,6 +64,7 @@ class Reddit {
         static let URL = "url"
         static let LINK = "link"
         static let NAME = "name"
+        static let ERROR = "error"
     }
     
     // MARK: - Constants
@@ -178,7 +179,19 @@ class Reddit {
     func getUserResponse(to url: URL) -> UserResponse {
         guard url.absoluteString.hasPrefix(redirectUri) && authState != nil else { return .none }
         
-        let (state, code) = Reddit.deserializeAuthResponse(url: url, request: "reddit user response")
+        // good: https://localhost/asd?state=123ASD&code=ASDASD#_
+        // bad: https://localhost/asd?state=123ASD&error=access_denied#_
+        
+        let (state, code, error) = Reddit.deserializeAuthResponse(url: url)
+        
+        if let error = error {
+            if error != "access_denied" {
+                Log.p("unusual error", error) // todo: handle unusual error
+            }
+            
+            return .decline
+        }
+        
         authCode = code
 
         guard state != nil && state == authState else { return .none }
@@ -274,13 +287,14 @@ class Reddit {
         return username
     }
     
-    private static func deserializeAuthResponse(url: URL, request: String) -> (state: String?, code: String?) {
+    private static func deserializeAuthResponse(url: URL) -> (state: String?, code: String?, error: String?) {
         let params = Helper.getQueryItems(url: url)
         
         let state = params[Symbols.STATE]
         let code = params[Symbols.CODE]
+        let error = params[Symbols.ERROR]
         
-        return (state: state, code: code)
+        return (state: state, code: code, error: error)
     }
     
     // MARK: - Helper methods
