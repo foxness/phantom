@@ -34,13 +34,9 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
 
         let url = imgur.getAuthUrl()
         
-        let rememberSignIn = true // todo: remove this or add to debugvariable
-        if rememberSignIn {
-            webView.load(URLRequest(url: url))
-        } else {
-            Helper.deleteCookies(containing: "imgur") {
-                self.webView.load(URLRequest(url: url))
-            }
+        // use just loadUrl(url) instead of you wanna remember sign in (you don't wanna remember sign in tbh)
+        Helper.deleteCookies(containing: "imgur") {
+            self.loadUrl(url)
         }
     }
     
@@ -57,5 +53,9 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let dest = segue.destination as! ImgurSignInReceiver
         dest.imgurSignedIn(with: imgur)
+    }
+    
+    private func loadUrl(_ url: URL) {
+        webView.load(URLRequest(url: url))
     }
 }

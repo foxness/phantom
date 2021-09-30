@@ -10,9 +10,10 @@ import Foundation
 
 // todo:
 
+// - test if I really fixed the imgur logout-login signin remembering (there should be no cookie retention)
+// - ^^^ fix already logged in as X when changing imgur account (and possibly reddit too)
+
 // - add text size accessibility support
-// - fix already logged in as X when changing imgur account (and possibly reddit too)
-// - extract reddit username in useragent [ez]
 // - privacy policy on custom domain?
 
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
