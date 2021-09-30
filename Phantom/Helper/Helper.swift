@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 struct Helper {
     private static let RANDOM_STATE_LENGTH = 10
@@ -185,5 +186,15 @@ struct Helper {
     
     static func getClipboard() -> UIPasteboard {
         return UIPasteboard.general
+    }
+    
+    static func deleteCookies(containing word: String, completion: @escaping () -> Void) {
+        let dataStore = WKWebsiteDataStore.default()
+        let allTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+        
+        dataStore.fetchDataRecords(ofTypes: allTypes) { records in
+            let redditRecords = records.filter { $0.displayName.contains(word) }
+            dataStore.removeData(ofTypes: allTypes, for: redditRecords, completionHandler: completion)
+        }
     }
 }

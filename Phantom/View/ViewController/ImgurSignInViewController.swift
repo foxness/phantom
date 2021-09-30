@@ -38,15 +38,10 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
         if rememberSignIn {
             webView.load(URLRequest(url: url))
         } else {
-            deleteCookies {
+            Helper.deleteCookies(containing: "imgur") {
                 self.webView.load(URLRequest(url: url))
             }
         }
-    }
-    
-    func deleteCookies(completion: @escaping () -> Void) {
-        let dataStore = WKWebsiteDataStore.default()
-        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records.filter { $0.displayName.contains("imgur") }, completionHandler: completion )}
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
