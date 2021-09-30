@@ -18,7 +18,7 @@
 PHANTOM_CONFIG_NAME = debug
 
 PHANTOM_APP_NAME = $(inherited)Dbg
-PHANTOM_BUNDLE_IDENTIFIER = $(inherited).debug
+PRODUCT_BUNDLE_IDENTIFIER = $(inherited).debug // system setting (not user-defined)
 
 PHANTOM_DEVELOPER_NAME = $(inherited)
 PHANTOM_DEVELOPER_CONTACT_EMAIL = $(inherited)
