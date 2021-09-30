@@ -33,13 +33,9 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
 
         let url = reddit.getAuthUrl()
         
-        let rememberSignIn = true // todo: remove this or add to debugvariable
-        if rememberSignIn {
-            webView.load(URLRequest(url: url))
-        } else {
-            Helper.deleteCookies(containing: "reddit") {
-                self.webView.load(URLRequest(url: url))
-            }
+        // use just loadUrl(url) instead of you wanna remember sign in (you don't wanna remember sign in tbh)
+        Helper.deleteCookies(containing: "reddit") {
+            self.loadUrl(url)
         }
     }
     
@@ -61,7 +57,7 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
             }
             
         case .decline:
-            Log.p("response is decline")
+            dismiss(animated: true, completion: nil)
         }
         
         decisionHandler(.allow)
@@ -75,5 +71,9 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
         default:
             fatalError()
         }
+    }
+    
+    private func loadUrl(_ url: URL) {
+        webView.load(URLRequest(url: url))
     }
 }
