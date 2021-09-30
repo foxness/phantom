@@ -16,7 +16,9 @@
 // note: "$()" in "https:/$()/" prevents the double slash being recognized as comment
 
 PHANTOM_CONFIG_NAME = base
+
 PHANTOM_APP_NAME = Phantom
+PHANTOM_BUNDLE_IDENTIFIER = com.aaa.bbb
 
 PHANTOM_DEVELOPER_NAME = aaa bbb
 PHANTOM_DEVELOPER_CONTACT_EMAIL = aaa@bbb.com

@@ -38,6 +38,8 @@ struct AppVariables {
     
     static var configName: String { Bundle.main.configName }
     
+    static var bundleIdentifier: String { Bundle.main.bundleIdentifier! }
+    
     static var privacyPolicyUrl: String { Bundle.main.privacyPolicyUrl }
     
     static var version: String {
@@ -51,7 +53,7 @@ struct AppVariables {
     }
     
     static var userAgent: String {
-        let identifier = Bundle.main.bundleIdentifier!
+        let identifier = bundleIdentifier
         let version = Bundle.main.releaseVersionNumber
         let reddit = Developer.redditAccount
         

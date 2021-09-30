@@ -16,7 +16,9 @@
 #include "Base.xcconfig"
 
 PHANTOM_CONFIG_NAME = dev
+
 PHANTOM_APP_NAME = $(inherited)Dev
+PHANTOM_BUNDLE_IDENTIFIER = $(inherited).dev
 
 PHANTOM_DEVELOPER_NAME = $(inherited)
 PHANTOM_DEVELOPER_CONTACT_EMAIL = $(inherited)
