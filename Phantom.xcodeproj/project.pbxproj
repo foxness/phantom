@@ -114,6 +114,8 @@
 		576E515A2644708200B0047F /* SlideUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpMenu.swift; sourceTree = "<group>"; };
 		578358E0263C7E0E00320607 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		5785D99626D934FF00F4B2C9 /* AppVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVariables.swift; sourceTree = "<group>"; };
+		578CC1D52705F9A0004BC55C /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		578CC1D6270600E7004BC55C /* Base.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Base.xcconfig.example; sourceTree = "<group>"; };
 		57AE9FA92641B70600DC1970 /* PostScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostScheduler.swift; sourceTree = "<group>"; };
 		57B2E6EA26748E9B00123466 /* SignedInAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedInAccountSettingCell.swift; sourceTree = "<group>"; };
 		57B2E6EC2674B5CE00123466 /* SignedOutAccountSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedOutAccountSettingCell.swift; sourceTree = "<group>"; };
@@ -237,9 +239,11 @@
 		57F3D15126DD4E34004B7559 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				578CC1D52705F9A0004BC55C /* Base.xcconfig */,
 				57F3D15226DD4E85004B7559 /* Debug.xcconfig */,
 				57F3D15326DD5225004B7559 /* Dev.xcconfig */,
 				57F3D15426DD5259004B7559 /* Stable.xcconfig */,
+				578CC1D6270600E7004BC55C /* Base.xcconfig.example */,
 				570957B826E486040033F09D /* Debug.xcconfig.example */,
 				570957B926E486410033F09D /* Dev.xcconfig.example */,
 				570957BA26E486710033F09D /* Stable.xcconfig.example */,

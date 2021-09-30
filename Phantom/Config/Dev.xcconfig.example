@@ -6,32 +6,34 @@
 //  Copyright © 2021 Rivershy. All rights reserved.
 //
 
-// Configuration settings file format documentation can be found at:
-// https://help.apple.com/xcode/#/dev745c5c974
+// ------------------------------------------
+// ------------------------------------------
 
-// not commiting actual values to the git repo so this is relevant:
-// - https://stackoverflow.com/a/50222853
-// - https://stackoverflow.com/a/13631525
+// ------------------------------------------
+// ------------------------------------------
+// note: "$()" in "https:/$()/" prevents the double slash being recognized as comment
+
+#include "Base.xcconfig"
 
 PHANTOM_CONFIG_NAME = dev
-PHANTOM_APP_NAME = $(PRODUCT_NAME)Dev
+PHANTOM_APP_NAME = $(inherited)Dev
 
-PHANTOM_DEVELOPER_NAME = aaa bbb
-PHANTOM_DEVELOPER_CONTACT_EMAIL = aaa@bbb.com
-PHANTOM_DEVELOPER_REDDIT_ACCOUNT = aaa
+PHANTOM_DEVELOPER_NAME = $(inherited)
+PHANTOM_DEVELOPER_CONTACT_EMAIL = $(inherited)
+PHANTOM_DEVELOPER_REDDIT_ACCOUNT = $(inherited)
 
-PHANTOM_PRIVACY_POLICY_URL = https:/$()/aaa.com
+PHANTOM_PRIVACY_POLICY_URL = $(inherited)
 
 PHANTOM_REDDIT_CLIENT_ID = aaa
-PHANTOM_REDDIT_REDIRECT_URI = https:/$()/aaa.com // $() prevents the double slash being recognized as comment
+PHANTOM_REDDIT_REDIRECT_URI = https:/$()/aaa.com
 
 PHANTOM_IMGUR_CLIENT_ID = aaa
 PHANTOM_IMGUR_CLIENT_SECRET = aaa
 PHANTOM_IMGUR_REDIRECT_URI = https:/$()/aaa.com
 
-PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = false
-PHANTOM_DEBUG_SIMULATE_REDDIT = false
-PHANTOM_DEBUG_DISABLE_RETRY = false
-PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = false
-PHANTOM_DEBUG_SIMULATE_ERROR = false
-PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = false
+PHANTOM_DEBUG_SIMULATE_MIDDLEWARE = $(inherited)
+PHANTOM_DEBUG_SIMULATE_REDDIT = $(inherited)
+PHANTOM_DEBUG_DISABLE_RETRY = $(inherited)
+PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD = $(inherited)
+PHANTOM_DEBUG_SIMULATE_ERROR = $(inherited)
+PHANTOM_DEBUG_INSTANT_NOTIFICATIONS = $(inherited)
