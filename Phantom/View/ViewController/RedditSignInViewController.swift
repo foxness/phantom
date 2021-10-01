@@ -48,12 +48,12 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
                 try! self.reddit.fetchAuthTokens()
                 try! self.reddit.getIdentity()
                 DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
+                    self.performSignedInSegue()
                 }
             }
             
         case .decline:
-            dismiss(animated: true, completion: nil)
+            dismiss()
         }
         
         decisionHandler(.allow)
@@ -73,5 +73,13 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
         Helper.deleteCookies(containing: "reddit") {
             self.webView.load(URLRequest(url: url))
         }
+    }
+    
+    private func performSignedInSegue() {
+        performSegue(withIdentifier: RedditSignInViewController.Segue.unwindRedditSignedIn.rawValue, sender: nil)
+    }
+    
+    private func dismiss() {
+        dismiss(animated: true, completion: nil)
     }
 }

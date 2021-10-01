@@ -10,9 +10,7 @@ import Foundation
 
 // todo:
 
-// - add dismiss on imgur user auth decline
 // - test welcome screen button on iOS 14.0
-
 // - add text size accessibility support
 // - privacy policy on custom domain?
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload

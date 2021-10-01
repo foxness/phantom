@@ -39,8 +39,13 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url!
         let response = imgur.getUserResponse(to: url)
-        if response == .allow && imgur.isSignedIn {
-            performSegue(withIdentifier: ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue, sender: nil)
+        
+        switch response {
+        case .none: break
+        case .allow:
+            performSignedInSegue()
+        case .decline:
+            dismiss()
         }
         
         decisionHandler(.allow)
@@ -55,5 +60,13 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
         Helper.deleteCookies(containing: "imgur") {
             self.webView.load(URLRequest(url: url))
         }
+    }
+    
+    private func performSignedInSegue() {
+        performSegue(withIdentifier: ImgurSignInViewController.Segue.unwindImgurSignedIn.rawValue, sender: nil)
+    }
+    
+    private func dismiss() {
+        dismiss(animated: true, completion: nil)
     }
 }

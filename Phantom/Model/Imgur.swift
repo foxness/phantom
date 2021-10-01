@@ -31,12 +31,12 @@ class Imgur {
     struct AuthResponse {
         let state: String
         let error: AuthError?
-        let tokenType: String
-        let accountId: String
-        let username: String
-        let accessToken: String
-        let accessTokenExpirationDate: Date
-        let refreshToken: String
+        let tokenType: String?
+        let accountId: String?
+        let username: String?
+        let accessToken: String?
+        let accessTokenExpirationDate: Date?
+        let refreshToken: String?
     }
     
     enum AuthError {
@@ -176,17 +176,16 @@ class Imgur {
     }
     
     func getUserResponse(to url: URL) -> UserResponse {
-        // https://localhost/phantom?state=asd#access_token=asd&expires_in=123&token_type=bearer&refresh_token=asd&account_username=asd&account_id=123
+        // good: https://localhost/asd?state=asd#access_token=asd&expires_in=123&token_type=bearer&refresh_token=asd&account_username=asd&account_id=123
+        // bad: https://localhost/asd?error=access_denied&state=asd
         
-        let fixedUrl = Imgur.getFixedImgurResponse(url: url)
-        guard fixedUrl.absoluteString.hasPrefix(redirectUri) && authState != nil else { return .none }
+        let correctedUrl = Imgur.correctImgurResponse(url: url)
+        guard correctedUrl.absoluteString.hasPrefix(redirectUri) && authState != nil else { return .none }
         
-        let response = try! Imgur.deserializeAuthResponse(url: fixedUrl)
-        
+        let response = try! Imgur.deserializeAuthResponse(url: correctedUrl)
         guard response.state == authState else { return .none }
-        
         guard response.error == nil else {
-            Log.p("imgur auth error", response.error)
+            Log.p("imgur auth error", response.error) // todo: handle non-decline errors
             
             return .decline
         }
@@ -252,9 +251,31 @@ class Imgur {
     
     private static func deserializeAuthResponse(url: URL) throws -> AuthResponse {
         let params = Helper.getQueryItems(url: url)
+        let paramsError = PhantomError.deserialization(request: "imgur auth url query", raw: String(describing: params))
         
-        guard let state = params[Symbols.STATE],
-              let tokenType = params[Symbols.TOKEN_TYPE],
+        guard let state = params[Symbols.STATE] else { throw paramsError }
+        
+        let error: AuthError?
+        if let rawError = params[Symbols.ERROR] {
+            if rawError == Symbols.ACCESS_DENIED {
+                error = .accessDenied
+            } else {
+                error = .other(message: rawError)
+            }
+            
+            return AuthResponse(state: state,
+                                error: error,
+                                tokenType: nil,
+                                accountId: nil,
+                                username: nil,
+                                accessToken: nil,
+                                accessTokenExpirationDate: nil,
+                                refreshToken: nil)
+        } else {
+            error = nil
+        }
+        
+        guard let tokenType = params[Symbols.TOKEN_TYPE],
               let accountId = params[Symbols.ACCOUNT_ID],
               let expiresInRaw = params[Symbols.EXPIRES_IN],
               let accountUsername = params[Symbols.ACCOUNT_USERNAME],
@@ -265,31 +286,19 @@ class Imgur {
               let expiresIn = Int(expiresInRaw)
         
         else {
-            throw PhantomError.deserialization(request: "imgur auth url query", raw: String(describing: params))
+            throw paramsError
         }
         
         let accessTokenExpirationDate = Helper.convertExpiresIn(expiresIn)
         
-        let error: AuthError?
-        if let rawError = params[Symbols.ERROR] {
-            if rawError == Symbols.ACCESS_DENIED {
-                error = .accessDenied
-            } else {
-                error = .other(message: rawError)
-            }
-        } else {
-            error = nil
-        }
-        
-        let response = AuthResponse(state: state,
-                                    error: error,
-                                    tokenType: tokenType,
-                                    accountId: accountId,
-                                    username: accountUsername,
-                                    accessToken: accessToken,
-                                    accessTokenExpirationDate: accessTokenExpirationDate,
-                                    refreshToken: refreshToken)
-        return response
+        return AuthResponse(state: state,
+                            error: error,
+                            tokenType: tokenType,
+                            accountId: accountId,
+                            username: accountUsername,
+                            accessToken: accessToken,
+                            accessTokenExpirationDate: accessTokenExpirationDate,
+                            refreshToken: refreshToken)
     }
     
     // MARK: - Helper methods
@@ -354,7 +363,7 @@ class Imgur {
         return Requests.getAuthParams(username: Symbols.BEARER, password: accessToken!)
     }
     
-    private static func getFixedImgurResponse(url: URL) -> URL {
+    private static func correctImgurResponse(url: URL) -> URL {
         return URL(string: url.absoluteString.replacingOccurrences(of: "#", with: "&"))! // imgur has weird queries
     }
     
