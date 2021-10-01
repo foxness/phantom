@@ -32,11 +32,7 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
 
         let url = reddit.getAuthUrl()
-        
-        // use just loadUrl(url) instead of you wanna remember sign in (you don't wanna remember sign in tbh)
-        Helper.deleteCookies(containing: "reddit") {
-            self.loadUrl(url)
-        }
+        loadUrlNoCookies(url)
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -73,7 +69,9 @@ class RedditSignInViewController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    private func loadUrl(_ url: URL) {
-        webView.load(URLRequest(url: url))
+    private func loadUrlNoCookies(_ url: URL) {
+        Helper.deleteCookies(containing: "reddit") {
+            self.webView.load(URLRequest(url: url))
+        }
     }
 }

@@ -10,12 +10,11 @@ import Foundation
 
 // todo:
 
-// - test if I really fixed the imgur logout-login signin remembering (there should be no cookie retention)
-// - ^^^ fix already logged in as X when changing imgur account (and possibly reddit too)
+// - add dismiss on imgur user auth decline
+// - test welcome screen button on iOS 14.0
 
 // - add text size accessibility support
 // - privacy policy on custom domain?
-
 // - retry after a few unsuccessful non-direct imgur uploads should be direct imgur upload
 // - give all Main.storyboard views better names (like in welcome screen) [ez]
 // - viewWillAppear to all view controllers? I think I'm underutilizing it (only in WelcomeViewController)

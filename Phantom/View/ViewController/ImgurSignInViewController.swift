@@ -33,11 +33,7 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
 
         let url = imgur.getAuthUrl()
-        
-        // use just loadUrl(url) instead of you wanna remember sign in (you don't wanna remember sign in tbh)
-        Helper.deleteCookies(containing: "imgur") {
-            self.loadUrl(url)
-        }
+        loadUrlNoCookies(url)
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -55,7 +51,9 @@ class ImgurSignInViewController: UIViewController, WKNavigationDelegate {
         dest.imgurSignedIn(with: imgur)
     }
     
-    private func loadUrl(_ url: URL) {
-        webView.load(URLRequest(url: url))
+    private func loadUrlNoCookies(_ url: URL) {
+        Helper.deleteCookies(containing: "imgur") {
+            self.webView.load(URLRequest(url: url))
+        }
     }
 }
