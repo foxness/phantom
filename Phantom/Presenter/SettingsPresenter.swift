@@ -317,7 +317,7 @@ class SettingsPresenter {
     }
     
     private func getUseImgurOption() -> SettingsOptionType {
-        let title = "Upload images to Imgur"
+        let title = "Upload image links to Imgur"
         
         let useImgur = database.useImgur
         let isEnabled = database.imgurAuth != nil
@@ -352,7 +352,7 @@ class SettingsPresenter {
     }
     
     private func getUseWallhavenOption() -> SettingsOptionType {
-        let title = "Convert Wallhaven links into image URLs"
+        let title = "Convert Wallhaven links into image links"
         
         let useWallhaven = database.useWallhaven
         

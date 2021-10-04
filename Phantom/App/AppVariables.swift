@@ -10,6 +10,7 @@ import Foundation
 
 // todo:
 
+// - post table inset to account for submission indicator height so that you can see post being submitted
 // - test welcome screen button on iOS 14.0
 // - add text size accessibility support
 // - privacy policy on custom domain?
