@@ -40,9 +40,31 @@ class PostSubmission: Operation {
     private static func getMiddlewares(params: PostSubmitter.SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
         var mw = [RequiredMiddleware]()
         
+        let lowRequirements = true
+        
+        let wallhavenMiddlwareRequired: Bool
+        let imgurMiddlewareRequired: Bool
+        let imageDimensionMiddlewareRequired: Bool
+        let wallpaperModeMiddelwareRequired: Bool
+        
+        if lowRequirements {
+            wallhavenMiddlwareRequired = false
+            imgurMiddlewareRequired = false
+            imageDimensionMiddlewareRequired = false
+            wallpaperModeMiddelwareRequired = false
+        } else {
+            wallhavenMiddlwareRequired = true
+            imgurMiddlewareRequired = params.wallpaperMode
+            imageDimensionMiddlewareRequired = true
+            wallpaperModeMiddelwareRequired = true
+        }
+        
         if params.useWallhaven {
-            let wallhavenMw = RequiredMiddleware(middleware: WallhavenMiddleware(), isRequired: true)
-            mw.append(wallhavenMw)
+            let wallhavenMw = WallhavenMiddleware()
+            let wallhavenRmw = RequiredMiddleware(middleware: wallhavenMw,
+                                                  isRequired: wallhavenMiddlwareRequired)
+            
+            mw.append(wallhavenRmw)
         }
         
         if params.useImgur {
@@ -52,20 +74,26 @@ class PostSubmission: Operation {
                                               directUpload: directUpload,
                                               extractImageDimensions: params.wallpaperMode)
                 
-                let imgurRmw = RequiredMiddleware(middleware: imgurMw, isRequired: params.wallpaperMode)
+                let imgurRmw = RequiredMiddleware(middleware: imgurMw,
+                                                  isRequired: imgurMiddlewareRequired)
+                
                 mw.append(imgurRmw)
             } else {
                 fatalError("Imgur account required")
             }
         } else if params.wallpaperMode {
             let imageDimensionMw = ImageDimensionMiddleware()
-            let imageDimensionRmw = RequiredMiddleware(middleware: imageDimensionMw, isRequired: true)
+            let imageDimensionRmw = RequiredMiddleware(middleware: imageDimensionMw,
+                                                       isRequired: imageDimensionMiddlewareRequired)
+            
             mw.append(imageDimensionRmw)
         }
         
         if params.wallpaperMode {
             let wallpaperModeMw = WallpaperModeMiddleware()
-            let wallpaperModeRmw = RequiredMiddleware(middleware: wallpaperModeMw, isRequired: true)
+            let wallpaperModeRmw = RequiredMiddleware(middleware: wallpaperModeMw,
+                                                      isRequired: wallpaperModeMiddelwareRequired)
+            
             mw.append(wallpaperModeRmw)
         }
         
