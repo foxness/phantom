@@ -284,6 +284,11 @@ class PostTablePresenter {
             return
         }
         
+        guard !database.wallpaperMode || Helper.isImagePost(post) else {
+            viewDelegate?.showWallpaperModeAlert()
+            return
+        }
+        
         submitPost(post)
     }
     

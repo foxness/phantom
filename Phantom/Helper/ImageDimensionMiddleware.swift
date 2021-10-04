@@ -30,8 +30,6 @@ struct ImageDimensionMiddleware: SubmitterMiddleware {
     }
     
     private static func isRightPost(_ post: Post) -> Bool {
-        guard post.type == .link, let url = post.url else { return false }
-        
-        return Helper.isImageUrl(url)
+        return Helper.isImagePost(post)
     }
 }

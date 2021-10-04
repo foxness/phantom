@@ -22,6 +22,7 @@ protocol PostTableViewDelegate: AnyObject {
     func segueToSettings()
     
     func showSignedOutRedditAlert()
+    func showWallpaperModeAlert()
     func showGenericErrorAlert(errorMessage: String)
     func showNotificationPermissionAskAlert(multiplePosts: Bool, _ callback: @escaping (Bool) -> Void) // (userAgreed: Bool) -> Void
     

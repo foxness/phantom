@@ -359,6 +359,12 @@ class PostTableViewController: UITableViewController, PostTableViewDelegate, Sli
         displayOkAlert(title: title, message: message)
     }
     
+    func showWallpaperModeAlert() {
+        let title = "Wallpaper Mode"
+        let message = "You can only submit image links in Wallpaper Mode"
+        displayOkAlert(title: title, message: message)
+    }
+    
     func showGenericErrorAlert(errorMessage: String) { // todo: split into alerts for every situation intead of generic
         let title = "An error has occurred"
         let message = errorMessage

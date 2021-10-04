@@ -105,6 +105,12 @@ struct Helper {
         return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
     }
     
+    static func isImagePost(_ post: Post) -> Bool {
+        guard post.type == .link, let url = post.url else { return false }
+        
+        return Helper.isImageUrl(url)
+    }
+    
     static func isValidUrl(_ url: String) -> Bool {
         guard url.hasPrefix("https://") || url.hasPrefix("http://") else { return false }
         
