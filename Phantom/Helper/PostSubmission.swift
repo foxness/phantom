@@ -40,30 +40,9 @@ class PostSubmission: Operation {
     private static func getMiddlewares(params: PostSubmitter.SubmitParams, imgur: Imgur?) -> [RequiredMiddleware] {
         var mw = [RequiredMiddleware]()
         
-        let lowRequirements = true
-        
-        let wallhavenMiddlwareRequired: Bool
-        let imgurMiddlewareRequired: Bool
-        let imageDimensionMiddlewareRequired: Bool
-        let wallpaperModeMiddelwareRequired: Bool
-        
-        if lowRequirements {
-            wallhavenMiddlwareRequired = false
-            imgurMiddlewareRequired = false
-            imageDimensionMiddlewareRequired = false
-            wallpaperModeMiddelwareRequired = false
-        } else {
-            wallhavenMiddlwareRequired = true
-            imgurMiddlewareRequired = params.wallpaperMode
-            imageDimensionMiddlewareRequired = true
-            wallpaperModeMiddelwareRequired = true
-        }
-        
         if params.useWallhaven {
             let wallhavenMw = WallhavenMiddleware()
-            let wallhavenRmw = RequiredMiddleware(middleware: wallhavenMw,
-                                                  isRequired: wallhavenMiddlwareRequired)
-            
+            let wallhavenRmw = RequiredMiddleware(middleware: wallhavenMw, isRequired: params.wallpaperMode)
             mw.append(wallhavenRmw)
         }
         
@@ -75,7 +54,7 @@ class PostSubmission: Operation {
                                               extractImageDimensions: params.wallpaperMode)
                 
                 let imgurRmw = RequiredMiddleware(middleware: imgurMw,
-                                                  isRequired: imgurMiddlewareRequired)
+                                                  isRequired: params.wallpaperMode)
                 
                 mw.append(imgurRmw)
             } else {
@@ -83,17 +62,13 @@ class PostSubmission: Operation {
             }
         } else if params.wallpaperMode {
             let imageDimensionMw = ImageDimensionMiddleware()
-            let imageDimensionRmw = RequiredMiddleware(middleware: imageDimensionMw,
-                                                       isRequired: imageDimensionMiddlewareRequired)
-            
+            let imageDimensionRmw = RequiredMiddleware(middleware: imageDimensionMw, isRequired: true)
             mw.append(imageDimensionRmw)
         }
         
         if params.wallpaperMode {
             let wallpaperModeMw = WallpaperModeMiddleware()
-            let wallpaperModeRmw = RequiredMiddleware(middleware: wallpaperModeMw,
-                                                      isRequired: wallpaperModeMiddelwareRequired)
-            
+            let wallpaperModeRmw = RequiredMiddleware(middleware: wallpaperModeMw, isRequired: true)
             mw.append(wallpaperModeRmw)
         }
         
