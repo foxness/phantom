@@ -57,21 +57,20 @@ class AboutPresenter {
     }
     
     private func appStoreItemPressed() {
-        let appStoreUrl = URL(string: AppVariables.appStoreUrl)!
-        
-        viewDelegate?.open(url: appStoreUrl)
+        openUrl(AppVariables.appStoreUrl)
     }
     
     private func websiteItemPressed() {
-        let websiteUrl = URL(string: AppVariables.websiteUrl)!
-        
-        viewDelegate?.open(url: websiteUrl)
+        openUrl(AppVariables.websiteUrl)
     }
     
     private func privacyPolicyItemPressed() {
-        let privacyPolicyUrl = URL(string: AppVariables.privacyPolicyUrl)!
-        
-        viewDelegate?.open(url: privacyPolicyUrl)
+        openUrl(AppVariables.privacyPolicyUrl)
+    }
+    
+    private func openUrl(_ url: String) {
+        let urlInFlesh = URL(string: url)!
+        viewDelegate?.open(url: urlInFlesh)
     }
     
     // MARK: - About data source
@@ -121,11 +120,7 @@ class AboutPresenter {
         let title = "Designed & developed by"
         let text = AppVariables.Developer.name
         
-        let handler = { [self] in
-            developerItemPressed()
-        }
-        
-        let item = TextAboutItem(title: title, text: text, handler: handler)
+        let item = TextAboutItem(title: title, text: text, handler: developerItemPressed)
         let itemType = AboutItemType.textItem(item: item)
         
         return itemType
@@ -135,11 +130,7 @@ class AboutPresenter {
         let title = "Contact"
         let text = AppVariables.Developer.contactEmail
         
-        let handler = { [self] in
-            contactItemPressed()
-        }
-        
-        let item = TextAboutItem(title: title, text: text, handler: handler)
+        let item = TextAboutItem(title: title, text: text, handler: contactItemPressed)
         let itemType = AboutItemType.textItem(item: item)
         
         return itemType
@@ -148,11 +139,7 @@ class AboutPresenter {
     private func getAppStoreItem() -> AboutItemType {
         let title = "Rate on the App Store"
         
-        let handler = { [self] in
-            appStoreItemPressed()
-        }
-        
-        let item = LinkAboutItem(title: title, handler: handler)
+        let item = LinkAboutItem(title: title, handler: appStoreItemPressed)
         let itemType = AboutItemType.linkItem(item: item)
         
         return itemType
@@ -161,11 +148,7 @@ class AboutPresenter {
     private func getWebsiteItem() -> AboutItemType {
         let title = "Visit the Website"
         
-        let handler = { [self] in
-            websiteItemPressed()
-        }
-        
-        let item = LinkAboutItem(title: title, handler: handler)
+        let item = LinkAboutItem(title: title, handler: websiteItemPressed)
         let itemType = AboutItemType.linkItem(item: item)
         
         return itemType
@@ -174,11 +157,7 @@ class AboutPresenter {
     private func getPrivacyPolicyItem() -> AboutItemType {
         let title = "Privacy Policy"
         
-        let handler = { [self] in
-            privacyPolicyItemPressed()
-        }
-        
-        let item = LinkAboutItem(title: title, handler: handler)
+        let item = LinkAboutItem(title: title, handler: privacyPolicyItemPressed)
         let itemType = AboutItemType.linkItem(item: item)
         
         return itemType
