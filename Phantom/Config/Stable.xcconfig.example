@@ -23,8 +23,11 @@ PRODUCT_BUNDLE_IDENTIFIER = $(inherited) // system setting (not user-defined)
 PHANTOM_DEVELOPER_NAME = $(inherited)
 PHANTOM_DEVELOPER_CONTACT_EMAIL = $(inherited)
 PHANTOM_DEVELOPER_REDDIT_ACCOUNT = $(inherited)
+PHANTOM_DEVELOPER_TWITTER_URL = $(inherited)
 
+PHANTOM_WEBSITE_URL = $(inherited)
 PHANTOM_PRIVACY_POLICY_URL = $(inherited)
+PHANTOM_APP_STORE_URL = $(inherited)
 
 PHANTOM_REDDIT_CLIENT_ID = $(inherited)
 PHANTOM_REDDIT_REDIRECT_URI = $(inherited)

@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>PhantomPrivacyPolicyUrl</key>
-	<string>$(PHANTOM_PRIVACY_POLICY_URL)</string>
-	<key>PhantomDeveloperRedditAccount</key>
-	<string>$(PHANTOM_DEVELOPER_REDDIT_ACCOUNT)</string>
-	<key>PhantomDeveloperContactEmail</key>
-	<string>$(PHANTOM_DEVELOPER_CONTACT_EMAIL)</string>
-	<key>PhantomDeveloperName</key>
-	<string>$(PHANTOM_DEVELOPER_NAME)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -32,6 +24,20 @@
 	<true/>
 	<key>PhantomConfigName</key>
 	<string>$(PHANTOM_CONFIG_NAME)</string>
+	<key>PhantomDeveloperName</key>
+	<string>$(PHANTOM_DEVELOPER_NAME)</string>
+	<key>PhantomDeveloperContactEmail</key>
+	<string>$(PHANTOM_DEVELOPER_CONTACT_EMAIL)</string>
+	<key>PhantomDeveloperRedditAccount</key>
+	<string>$(PHANTOM_DEVELOPER_REDDIT_ACCOUNT)</string>
+	<key>PhantomDeveloperTwitterUrl</key>
+	<string>$(PHANTOM_DEVELOPER_TWITTER_URL)</string>
+	<key>PhantomWebsiteUrl</key>
+	<string>$(PHANTOM_WEBSITE_URL)</string>
+	<key>PhantomPrivacyPolicyUrl</key>
+	<string>$(PHANTOM_PRIVACY_POLICY_URL)</string>
+	<key>PhantomAppStoreUrl</key>
+	<string>$(PHANTOM_APP_STORE_URL)</string>
 	<key>PhantomDebugDisableDirectImgurUpload</key>
 	<string>$(PHANTOM_DEBUG_DISABLE_DIRECT_IMGUR_UPLOAD)</string>
 	<key>PhantomDebugDisableRetry</key>

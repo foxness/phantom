@@ -39,7 +39,9 @@ struct AppVariables {
     
     static var bundleIdentifier: String { Bundle.main.bundleIdentifier! }
     
+    static var websiteUrl: String { Bundle.main.websiteUrl }
     static var privacyPolicyUrl: String { Bundle.main.privacyPolicyUrl }
+    static var appStoreUrl: String { Bundle.main.appStoreUrl }
     
     static var version: String {
         let version = Bundle.main.releaseVersionNumber
@@ -65,6 +67,7 @@ struct AppVariables {
         static var name: String { Bundle.main.developerName }
         static var contactEmail: String { Bundle.main.developerContactEmail }
         static var redditAccount: String { Bundle.main.developerRedditAccount }
+        static var twitterUrl: String { Bundle.main.developerTwitterUrl }
     }
     
     // MARK: - API variables
@@ -103,8 +106,11 @@ extension Bundle {
     private static let KEY_DEVELOPER_NAME = "PhantomDeveloperName"
     private static let KEY_DEVELOPER_CONTACT_EMAIL = "PhantomDeveloperContactEmail"
     private static let KEY_DEVELOPER_REDDIT_ACCOUNT = "PhantomDeveloperRedditAccount"
+    private static let KEY_DEVELOPER_TWITTER_URL = "PhantomDeveloperTwitterUrl"
     
+    private static let KEY_WEBSITE_URL = "PhantomWebsiteUrl"
     private static let KEY_PRIVACY_POLICY_URL = "PhantomPrivacyPolicyUrl"
+    private static let KEY_APP_STORE_URL = "PhantomAppStoreUrl"
     
     private static let KEY_REDDIT_CLIENT_ID = "PhantomRedditClientId"
     private static let KEY_REDDIT_REDIRECT_URI = "PhantomRedditRedirectUri"
@@ -132,8 +138,11 @@ extension Bundle {
     fileprivate var developerName: String { getString(Bundle.KEY_DEVELOPER_NAME) }
     fileprivate var developerContactEmail: String { getString(Bundle.KEY_DEVELOPER_CONTACT_EMAIL) }
     fileprivate var developerRedditAccount: String { getString(Bundle.KEY_DEVELOPER_REDDIT_ACCOUNT) }
+    fileprivate var developerTwitterUrl: String { getString(Bundle.KEY_DEVELOPER_TWITTER_URL) }
     
+    fileprivate var websiteUrl: String { getString(Bundle.KEY_WEBSITE_URL) }
     fileprivate var privacyPolicyUrl: String { getString(Bundle.KEY_PRIVACY_POLICY_URL) }
+    fileprivate var appStoreUrl: String { getString(Bundle.KEY_APP_STORE_URL) }
     
     fileprivate var redditClientId: String { getString(Bundle.KEY_REDDIT_CLIENT_ID) }
     fileprivate var redditRedirectUri: String { getString(Bundle.KEY_REDDIT_REDIRECT_URI) }

@@ -23,8 +23,11 @@ PRODUCT_BUNDLE_IDENTIFIER = com.aaa.bbb // system setting (not user-defined)
 PHANTOM_DEVELOPER_NAME = aaa bbb
 PHANTOM_DEVELOPER_CONTACT_EMAIL = aaa@bbb.com
 PHANTOM_DEVELOPER_REDDIT_ACCOUNT = aaa
+PHANTOM_DEVELOPER_TWITTER_URL = https:/$()/aaa.com
 
+PHANTOM_WEBSITE_URL = https:/$()/aaa.com
 PHANTOM_PRIVACY_POLICY_URL = https:/$()/aaa.com
+PHANTOM_APP_STORE_URL = https:/$()/aaa.com
 
 PHANTOM_REDDIT_CLIENT_ID = aaa
 PHANTOM_REDDIT_REDIRECT_URI = https:/$()/aaa.com
