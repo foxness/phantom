@@ -42,7 +42,13 @@ class AboutPresenter {
         items = getAboutItems()
     }
     
-    private func contactAuthorPressed() {
+    private func developerItemPressed() {
+        let developerTwitterUrl = URL(string: AppVariables.Developer.twitterUrl)!
+        
+        viewDelegate?.open(url: developerTwitterUrl)
+    }
+    
+    private func contactItemPressed() {
         let email = AppVariables.Developer.contactEmail
         let subject = "Phantom app"
         let body = "Phantom version: \(AppVariables.version)"
@@ -81,7 +87,7 @@ class AboutPresenter {
     private func getAboutItems() -> [AboutItemType] {
         [
             getVersionItem(),
-            getAuthorItem(),
+            getDeveloperItem(),
             getContactItem(),
             getPrivacyPolicyItem()
         ]
@@ -97,11 +103,15 @@ class AboutPresenter {
         return itemType
     }
     
-    private func getAuthorItem() -> AboutItemType {
+    private func getDeveloperItem() -> AboutItemType {
         let title = "Designed & developed by"
         let text = AppVariables.Developer.name
         
-        let item = TextAboutItem(title: title, text: text, handler: nil)
+        let handler = { [self] in
+            developerItemPressed()
+        }
+        
+        let item = TextAboutItem(title: title, text: text, handler: handler)
         let itemType = AboutItemType.textItem(item: item)
         
         return itemType
@@ -112,7 +122,7 @@ class AboutPresenter {
         let text = AppVariables.Developer.contactEmail
         
         let handler = { [self] in
-            contactAuthorPressed()
+            contactItemPressed()
         }
         
         let item = TextAboutItem(title: title, text: text, handler: handler)
