@@ -62,6 +62,12 @@ class AboutPresenter {
         viewDelegate?.open(url: appStoreUrl)
     }
     
+    private func websiteItemPressed() {
+        let websiteUrl = URL(string: AppVariables.websiteUrl)!
+        
+        viewDelegate?.open(url: websiteUrl)
+    }
+    
     private func privacyPolicyItemPressed() {
         let privacyPolicyUrl = URL(string: AppVariables.privacyPolicyUrl)!
         
@@ -96,6 +102,7 @@ class AboutPresenter {
             getDeveloperItem(),
             getContactItem(),
             getAppStoreItem(),
+            getWebsiteItem(),
             getPrivacyPolicyItem()
         ]
     }
@@ -143,6 +150,19 @@ class AboutPresenter {
         
         let handler = { [self] in
             appStoreItemPressed()
+        }
+        
+        let item = LinkAboutItem(title: title, handler: handler)
+        let itemType = AboutItemType.linkItem(item: item)
+        
+        return itemType
+    }
+    
+    private func getWebsiteItem() -> AboutItemType {
+        let title = "Visit the Website"
+        
+        let handler = { [self] in
+            websiteItemPressed()
         }
         
         let item = LinkAboutItem(title: title, handler: handler)
