@@ -56,7 +56,13 @@ class AboutPresenter {
         viewDelegate?.showEmailComposer(to: email, subject: subject, body: body)
     }
     
-    private func privacyPolicyPressed() {
+    private func appStoreItemPressed() {
+        let appStoreUrl = URL(string: AppVariables.appStoreUrl)!
+        
+        viewDelegate?.open(url: appStoreUrl)
+    }
+    
+    private func privacyPolicyItemPressed() {
         let privacyPolicyUrl = URL(string: AppVariables.privacyPolicyUrl)!
         
         viewDelegate?.open(url: privacyPolicyUrl)
@@ -89,6 +95,7 @@ class AboutPresenter {
             getVersionItem(),
             getDeveloperItem(),
             getContactItem(),
+            getAppStoreItem(),
             getPrivacyPolicyItem()
         ]
     }
@@ -131,11 +138,24 @@ class AboutPresenter {
         return itemType
     }
     
+    private func getAppStoreItem() -> AboutItemType {
+        let title = "Rate on the App Store"
+        
+        let handler = { [self] in
+            appStoreItemPressed()
+        }
+        
+        let item = LinkAboutItem(title: title, handler: handler)
+        let itemType = AboutItemType.linkItem(item: item)
+        
+        return itemType
+    }
+    
     private func getPrivacyPolicyItem() -> AboutItemType {
         let title = "Privacy Policy"
         
         let handler = { [self] in
-            privacyPolicyPressed()
+            privacyPolicyItemPressed()
         }
         
         let item = LinkAboutItem(title: title, handler: handler)
