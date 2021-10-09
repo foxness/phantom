@@ -10,6 +10,7 @@ import Foundation
 
 struct SettingsSection {
     let title: String
+    let footerText: String?
     var options: [SettingsOptionType]
 }
 

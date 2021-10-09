@@ -10,6 +10,9 @@ import Foundation
 
 // todo:
 
+// - add text post support to bulk add
+// - remove spellcheck (and maybe other things like capitalization) in bulk add
+
 // - post table inset to account for submission indicator height so that you can see post being submitted
 // - test welcome screen button on iOS 14.0
 // - add text size accessibility support

@@ -52,6 +52,10 @@ class SettingsPresenter {
         return sections[section].title
     }
     
+    func getSectionFooterText(section: Int) -> String? {
+        return sections[section].footerText
+    }
+    
     func getSectionCount() -> Int {
         return sections.count
     }
@@ -178,23 +182,28 @@ class SettingsPresenter {
     // MARK: - Settings sections
     
     private func getSettingsSections() -> [SettingsSection] {
-        let generalSectionTitle = "" // was "General"
-        let imgurSectionTitle = "" // was "Imgur"
-        let wallpaperModeSectionTitle = "" // was "Wallpaper Mode"
+        let redditSectionTitle = "Reddit"
+        let imgurSectionTitle = "Imgur"
+        
+        let wallpaperModeSectionTitle = "Wallpaper Mode"
+        let wallpaperModeFooterText = "Wallpaper Mode adds image resolution to the post title."
+        
         let bulkAddSectionTitle = "Bulk Add"
         let aboutSectionTitle = ""
         
         var sections: [SettingsSection] = []
         
-        // General section ------------------------------------------------
+        // Reddit section -------------------------------------------------
         
-        let generalOptions = [
+        let redditOptions = [
             getRedditAccountOption(),
             getSendRepliesOption()
         ]
         
-        let generalSection = SettingsSection(title: generalSectionTitle, options: generalOptions)
-        sections.append(generalSection)
+        let redditSection = SettingsSection(title: redditSectionTitle,
+                                            footerText: nil,
+                                            options: redditOptions)
+        sections.append(redditSection)
         
         // Imgur section --------------------------------------------------
         
@@ -203,7 +212,9 @@ class SettingsPresenter {
             getUseImgurOption()
         ]
         
-        let imgurSection = SettingsSection(title: imgurSectionTitle, options: imgurOptions)
+        let imgurSection = SettingsSection(title: imgurSectionTitle,
+                                           footerText: nil,
+                                           options: imgurOptions)
         sections.append(imgurSection)
         
         // Wallpaper Mode section -----------------------------------------
@@ -213,7 +224,9 @@ class SettingsPresenter {
             getUseWallhavenOption()
         ]
         
-        let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle, options: wallpaperModeOptions)
+        let wallpaperModeSection = SettingsSection(title: wallpaperModeSectionTitle,
+                                                   footerText: wallpaperModeFooterText,
+                                                   options: wallpaperModeOptions)
         sections.append(wallpaperModeSection)
         
         // Bulk Add section -----------------------------------------------
@@ -223,7 +236,9 @@ class SettingsPresenter {
             getBulkAddTimeOption()
         ]
         
-        let bulkAddSection = SettingsSection(title: bulkAddSectionTitle, options: bulkAddOptions)
+        let bulkAddSection = SettingsSection(title: bulkAddSectionTitle,
+                                             footerText: nil,
+                                             options: bulkAddOptions)
         sections.append(bulkAddSection)
         
         // About section --------------------------------------------------
@@ -232,7 +247,9 @@ class SettingsPresenter {
             getAboutOption()
         ]
         
-        let aboutSection = SettingsSection(title: aboutSectionTitle, options: aboutOptions)
+        let aboutSection = SettingsSection(title: aboutSectionTitle,
+                                           footerText: nil,
+                                           options: aboutOptions)
         sections.append(aboutSection)
         
         // ----------------------------------------------------------------

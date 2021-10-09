@@ -157,6 +157,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return presenter.getSectionTitle(section: section)
     }
     
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return presenter.getSectionFooterText(section: section)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
