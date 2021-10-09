@@ -20,7 +20,6 @@ class IntroductionViewController: UIViewController {
     private static let HIGHLIGHT_TINT_PERCENT_IOS14: CGFloat = 20
     
     @IBOutlet weak var signInButton: UIButton!
-    @IBOutlet weak var appIconView: UIImageView!
     
     private let hideNavBar = true
     

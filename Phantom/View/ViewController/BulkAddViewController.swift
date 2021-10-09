@@ -15,6 +15,13 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
         case unwindBulkAdded = "unwindBulkAdded"
     }
     
+    // MARK: - Constants
+    
+    private static let textColor = UIColor.label
+    private static let placeholderColor = UIColor.secondaryLabel
+    
+    private static let placeholderText = "Majestic cat Minnie\nhttps://i.imgur.com/8sDuIVu.jpeg\n\nCool video\nhttps://www.youtube.com/watch?v=dQw4w9WgXcQ\n\nTitle goes here\nLink goes here\n\n...\n..."
+    
     // MARK: - Views
     
     @IBOutlet var keyboardHeightConstraint: NSLayoutConstraint!
@@ -46,7 +53,9 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     private func setupViews() {
         bottomLeewayHeight = keyboardHeightConstraint.constant
         
+        BulkAddViewController.placeholderify(bulkView)
         bulkView.becomeFirstResponder()
+        
         bulkView.delegate = self
     }
     
@@ -88,8 +97,18 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     // MARK: - Bulk Add view delegate
     
     var bulkText: String? {
-        get { bulkView.text }
-        set { bulkView.text = newValue }
+        get {
+            return bulkView.textColor == BulkAddViewController.placeholderColor ? "" : bulkView.text
+        }
+        
+        set {
+            if newValue == nil || newValue == "" {
+                BulkAddViewController.placeholderify(bulkView)
+            } else {
+                bulkView.textColor = BulkAddViewController.textColor
+                bulkView.text = newValue
+            }
+        }
     }
     
     func setAddButton(enabled: Bool) {
@@ -144,7 +163,45 @@ class BulkAddViewController: UIViewController, BulkAddViewDelegate, UITextViewDe
     
     // MARK: - Text view delegate
     
-    func textViewDidChange(_ textView: UITextView) {
+    // Bulk Add text view placeholder
+    // src: https://stackoverflow.com/a/27652289/1412924
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText: String = textView.text
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        if updatedText.isEmpty {
+            BulkAddViewController.placeholderify(textView)
+            
+            presenter.textChanged() // do not move this because it should be after changing textColor
+            return false
+        }
+        else if textView.textColor == BulkAddViewController.placeholderColor && !text.isEmpty {
+            textView.textColor = BulkAddViewController.textColor
+            textView.text = text
+            
+            presenter.textChanged() // do not move this
+            return false
+        }
+        
         presenter.textChanged()
+        return true
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        guard view.window != nil else { return }
+        guard textView.textColor == BulkAddViewController.placeholderColor else { return }
+        
+        BulkAddViewController.moveCursorToBeginning(textView)
+    }
+    
+    private static func placeholderify(_ textView: UITextView) {
+        textView.textColor = BulkAddViewController.placeholderColor
+        textView.text = BulkAddViewController.placeholderText
+        BulkAddViewController.moveCursorToBeginning(textView)
+    }
+    
+    private static func moveCursorToBeginning(_ textView: UITextView) {
+        textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
+                                                        to: textView.beginningOfDocument)
     }
 }
