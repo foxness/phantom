@@ -284,9 +284,19 @@ class PostTablePresenter {
             return
         }
         
-        guard !database.wallpaperMode || Helper.isImagePost(post) else {
-            viewDelegate?.showWallpaperModeAlert()
-            return
+        if database.wallpaperMode {
+            let isImageUrlPost = Helper.isImageUrlPost(post)
+            var isImagePost = isImageUrlPost
+            
+            if database.useWallhaven {
+                let isWallhavenPost = post.type == .link && post.url != nil && Wallhaven.isIndirectUrl(post.url!)
+                isImagePost = isImagePost || isWallhavenPost // makes isImagePost true if isWallhavenPost is true
+            }
+            
+            if !isImagePost {
+                viewDelegate?.showWallpaperModeAlert()
+                return
+            }
         }
         
         submitPost(post)

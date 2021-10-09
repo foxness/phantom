@@ -105,7 +105,7 @@ struct Helper {
         return [".jpg", ".jpeg", ".png"].contains { url.hasSuffix($0) }
     }
     
-    static func isImagePost(_ post: Post) -> Bool {
+    static func isImageUrlPost(_ post: Post) -> Bool {
         guard post.type == .link, let url = post.url else { return false }
         
         return Helper.isImageUrl(url)
