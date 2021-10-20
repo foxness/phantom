@@ -10,6 +10,9 @@ import Foundation
 
 // todo:
 
+// - add custom error message when you try to submit non-wallhaven image
+// link when wallpaper mode and use wallhaven are both on [next]
+
 // - add text post support to bulk add
 // - remove spellcheck (and maybe other things like capitalization) in bulk add
 

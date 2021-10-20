@@ -83,12 +83,12 @@ class PostTablePresenter {
         viewDelegate?.showSlideUpMenu()
     }
     
-    func redditAccountChanged(_ newReddit: Reddit?) { // is called when the account is changed settings
+    func redditAccountChanged(_ newReddit: Reddit?) { // is called when the account is changed in settings
         submitter.reddit.mutate { $0 = newReddit }
         saveRedditAuth()
     }
     
-    func imgurAccountChanged(_ newImgur: Imgur?) { // is called when the account is changed settings
+    func imgurAccountChanged(_ newImgur: Imgur?) { // is called when the account is changed in settings
         submitter.imgur.mutate { $0 = newImgur }
         saveImgurAuth()
     }
